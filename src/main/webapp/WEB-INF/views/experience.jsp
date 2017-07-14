@@ -5,9 +5,14 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<html>
-<body>
-<h2>experience.jsp in WEB-INF/views folder</h2>
-<a href="<c:url value='/' />">back to home</a>
-</body>
-</html>
+<jsp:include page="templates/header.jsp" />
+
+<!-- 
+<script>
+$('#nav-experience').addClass('active');
+</script>
+ -->
+
+<h1>experience.jsp</h1>
+
+<jsp:include page="templates/footer.jsp" />
