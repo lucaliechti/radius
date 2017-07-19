@@ -24,4 +24,10 @@
 	dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
 	est Lorem ipsum dolor sit amet.
 	</h4>
+	
+	<spring:message code="example"/><p>
+	
+	<%= new java.util.Date() %>
+	
+	
 <jsp:include page="templates/footer.jsp" />

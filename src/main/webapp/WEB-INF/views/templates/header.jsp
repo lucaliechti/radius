@@ -89,10 +89,10 @@
 
   										<li class="dropdown-submenu"><a tabindex="-1" href="#">Language</a>
   											<ul class="dropdown-menu">
-  										    	<li><a tabindex="-1" href="#">German</a></li>
-  										    	<li><a href="#">French</a></li>
-  										    	<li><a href="#">Italian</a></li>
-  										    	<li><a href="#">English</a></li>
+  										    	<li><a tabindex="-1" href="?lang=de">German</a></li>
+  										    	<li><a href="?lang=fr">FR</a></li>
+  										    	<li><a href="?lang=it">Italian</a></li>
+  										    	<li><a href="?lang=en">English</a></li>
   										    </ul>
   										</li>
 										

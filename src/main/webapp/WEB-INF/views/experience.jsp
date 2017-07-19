@@ -13,6 +13,7 @@ $('#nav-experience').addClass('active');
 </script>
  -->
 
-<h1>experience.jsp</h1>
+<h1>experience.jsp</h1><p>
+<spring:message code="example.experience"/>
 
 <jsp:include page="templates/footer.jsp" />
