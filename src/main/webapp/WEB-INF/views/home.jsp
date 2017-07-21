@@ -1,5 +1,4 @@
-<%@ page language="java" pageEncoding="UTF-8"
-	contentType="text/html;charset=utf-8"%>
+<%@ page language="java" pageEncoding="UTF-8" contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -7,27 +6,11 @@
 
 <jsp:include page="templates/header.jsp" />
 
-<!-- 
-<script>
-	$('#nav-home').addClass('active');
-</script>
- -->
+<script> $('#nav-home').addClass('active'); </script>
 
-<h1>home.jsp</h1>
-<h4>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-	diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-	erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-	ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-	ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-	elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-	aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-	dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-	est Lorem ipsum dolor sit amet.
-	</h4>
-	
-	<spring:message code="example"/><p>
-	
-	<%= new java.util.Date() %>
-	
-	
+<h1><spring:message code="home.title"/></h1>
+
+<a href="<c:url value='/login' />"><spring:message code="login.title"/></a><p>
+<a href="<c:url value='/register' />"><spring:message code="register.title"/></a>
+
 <jsp:include page="templates/footer.jsp" />

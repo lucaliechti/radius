@@ -6,8 +6,6 @@
 
 <jsp:include page="templates/header.jsp" />
 
-<script> $('#nav-talk').addClass('active'); </script>
-
-<h1><spring:message code="experience.title"/></h1>
+<h1><spring:message code="login.title"/></h1>
 
 <jsp:include page="templates/footer.jsp" />

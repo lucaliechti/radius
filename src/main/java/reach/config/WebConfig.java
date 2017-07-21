@@ -32,10 +32,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 	
 	@Override
-	public void configureDefaultServletHandling(
-		DefaultServletHandlerConfigurer configurer) {
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
+	
+	//i18n: http://www.concretepage.com/spring-4/spring-4-mvc-internationalization-i18n-
+	//	and-localization-l10n-annotation-example
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
