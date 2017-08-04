@@ -22,7 +22,7 @@
 </h4>
 
 <c:forEach items="${experiences}" var="exp" >
-	<li id="exp_<c:out value="experience.exp_id"/>">
+	<div class="well well-sm" id="exp_<c:out value="experience_${exp.id}"/>">
 		<div class="experience">
 			Exp: <c:out value="${exp.experience}" />
 		</div>
@@ -30,7 +30,7 @@
 		<div class="experienceTime">
 			Time: <c:out value="${exp.date}" />
 		</div>
-	</li>
+	</div>
 </c:forEach>
 
 <jsp:include page="templates/footer.jsp" />
