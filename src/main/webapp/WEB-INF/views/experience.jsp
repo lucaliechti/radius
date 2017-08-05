@@ -23,13 +23,23 @@
 
 <c:forEach items="${experiences}" var="exp" >
 	<div class="well well-sm" id="exp_<c:out value="experience_${exp.id}"/>">
-		<div class="experience">
-			Exp: <c:out value="${exp.experience}" />
+
+		<div class="experienceName">
+			Name: <c:out value="${exp.name}" />
+		</div>
+		
+		<div class="experiencePlace">
+			Place: <c:out value="${exp.place}" />
 		</div>
 		
 		<div class="experienceTime">
 			Time: <c:out value="${exp.date}" />
 		</div>
+		
+		<div class="experience">
+			Experience: <c:out value="${exp.experience}" />
+		</div>
+		
 	</div>
 </c:forEach>
 

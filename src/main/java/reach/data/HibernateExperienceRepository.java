@@ -26,4 +26,10 @@ public class HibernateExperienceRepository implements ExperienceRepository {
 		return null;
 	}
 
+	@Override
+	public Experience findExperienceById(long exp_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

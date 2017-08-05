@@ -11,4 +11,6 @@ public interface ExperienceRepository {
 	
 	public List<Experience> allExperiences();
 	
+	public Experience findExperienceById(long exp_id);
+	
 }

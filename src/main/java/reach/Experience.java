@@ -8,20 +8,21 @@ public class Experience {
 	private final Long exp_id;
 	private final String experience;
 	private final Date time;
+	private final String name;
+	private final String place;
 	
-	public Experience() {
-		this(null, null);
+	//constructor without time; for creating experiences
+	public Experience(Long _id, String _exp, String _place, String _name) {
+		this(_id, _exp, new java.util.Date(), _place, _name);
 	}
 	
-	public Experience(String _exp) {
-		this(null, _exp);
-		
-	}
-	
-	public Experience(Long _id, String _exp) {
+	//constructor with time; for retrieving experiences from database
+	public Experience(Long _id, String _exp, Date _time, String _place, String _name) {
 		this.exp_id = _id;
 		this.experience = _exp;
-		this.time = new java.util.Date();
+		this.time = _time;
+		this.name = _name;
+		this.place = _place;
 	}
 	
 	public Long getId() {
@@ -36,9 +37,17 @@ public class Experience {
 		return time;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public String getPlace() {
+		return place;
+	}
+	
 	@Override
 	public boolean equals(Object that) {
-		String[] exclude = {"experience", "time"};
+		String[] exclude = {"experience", "time", "user", "place"};
 		return EqualsBuilder.reflectionEquals(this, that, exclude);
 	}
 }

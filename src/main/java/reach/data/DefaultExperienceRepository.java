@@ -14,14 +14,20 @@ public class DefaultExperienceRepository implements ExperienceRepository {
 	public List<Experience> allExperiences() {
 		System.out.print("In the ExperienceRepo. Adding ");
 		List<Experience> experiences = new ArrayList<Experience>();
-		Experience exp1 = new Experience(1l, "1st experience");
-		Experience exp2 = new Experience(2l, "2nd experience");
-		Experience exp3 = new Experience(3l, "3rd experience");
-		experiences.add(exp1);
-		experiences.add(exp2);
-		experiences.add(exp3);
+//		Experience exp1 = new Experience(1l, "1st experience");
+//		Experience exp2 = new Experience(2l, "2nd experience");
+//		Experience exp3 = new Experience(3l, "3rd experience");
+//		experiences.add(exp1);
+//		experiences.add(exp2);
+//		experiences.add(exp3);
 		System.out.println(experiences.size() + " experiences manually");
 		
 		return experiences;
+	}
+
+	@Override
+	public Experience findExperienceById(long exp_id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -2,12 +2,16 @@ package reach.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import reach.data.DefaultExperienceRepository;
+import reach.Experience;
+//import reach.data.DefaultExperienceRepository;
 import reach.data.ExperienceRepository;
 import reach.data.JDBCExperienceRepository;
 //import reach.data.HibernateExperienceRepository;
@@ -26,8 +30,10 @@ public class ExperienceController {
 	
 	@RequestMapping(method=GET)
 	public String experience(Model model) {
-		System.out.println("preparing the experience model");
-		model.addAttribute("experiences", repo.allExperiences());
+		List<Experience> experiences = new ArrayList<Experience>();
+//		experiences.add(repo.findExperienceById(1l));
+		experiences = repo.allExperiences();
+		model.addAttribute("experiences", experiences);
 		return "experience";
 	}
 	

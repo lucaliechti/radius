@@ -1,11 +1,14 @@
 package reach.data;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import reach.Experience;
@@ -16,6 +19,8 @@ import reach.Experience;
 public class JDBCExperienceRepository implements ExperienceRepository {
 
 	private JdbcTemplate jdbcTemplate;
+	private static final String FIND_ALL_EXPERIENCES = 			"SELECT exp_id, experience, exptime, place, name FROM experiences";
+	private static final String FIND_EXPERIENCE_BY_ID = 		"SELECT exp_id, experience, exptime, place, name FROM experiences WHERE exp_id = ?";
 
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -24,10 +29,23 @@ public class JDBCExperienceRepository implements ExperienceRepository {
 
 	@Override
 	public List<Experience> allExperiences() {
-		int rowCount = this.jdbcTemplate.queryForObject("select count(*) from reachtest", Integer.class);
-		System.out.println("in the 'allExperiences' method of JDBCExperienceController. Found " + rowCount + " experiences" +
-				" in the postgres database");
-		return null;
+		return jdbcTemplate.query(FIND_ALL_EXPERIENCES, new ExperienceRowMapper());
+	}
+	
+	public Experience findExperienceById(long exp_id) {
+		return jdbcTemplate.queryForObject(FIND_EXPERIENCE_BY_ID, new ExperienceRowMapper(), exp_id);
+	}
+	
+	private static final class ExperienceRowMapper implements RowMapper<Experience> {
+			public Experience mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new Experience(
+					rs.getLong("exp_id"),
+					rs.getString("experience"),
+					rs.getDate("exptime"),
+					rs.getString("place"),
+					rs.getString("name")
+			);
+		}
 	}
     
 }
