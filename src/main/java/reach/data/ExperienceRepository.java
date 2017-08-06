@@ -13,4 +13,6 @@ public interface ExperienceRepository {
 	
 	public Experience findExperienceById(long exp_id);
 	
+	public void saveExperience(Experience e);
+	
 }

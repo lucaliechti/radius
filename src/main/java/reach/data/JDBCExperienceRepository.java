@@ -19,8 +19,9 @@ import reach.Experience;
 public class JDBCExperienceRepository implements ExperienceRepository {
 
 	private JdbcTemplate jdbcTemplate;
-	private static final String FIND_ALL_EXPERIENCES = 			"SELECT exp_id, experience, exptime, place, name FROM experiences";
-	private static final String FIND_EXPERIENCE_BY_ID = 		"SELECT exp_id, experience, exptime, place, name FROM experiences WHERE exp_id = ?";
+	private static final String FIND_ALL_EXPERIENCES =	"SELECT exp_id, experience, exptime, place, name FROM experiences";
+	private static final String FIND_EXPERIENCE_BY_ID =	"SELECT exp_id, experience, exptime, place, name FROM experiences WHERE exp_id = ?";
+	private static final String SAVE_EXPERIENCE = "INSERT INTO experiences(exp_id, experience, exptime, place, name) VALUES (?, ?, ?, ?, ?)";
 
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -46,6 +47,12 @@ public class JDBCExperienceRepository implements ExperienceRepository {
 					rs.getString("name")
 			);
 		}
+	}
+
+	@Override
+	public void saveExperience(Experience e) {
+		jdbcTemplate.update(SAVE_EXPERIENCE, e.getId(), e.getExperience(), e.getDate(), e.getPlace(), e.getName());
+		
 	}
     
 }

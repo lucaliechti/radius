@@ -32,4 +32,10 @@ public class HibernateExperienceRepository implements ExperienceRepository {
 		return null;
 	}
 
+	@Override
+	public void saveExperience(Experience e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

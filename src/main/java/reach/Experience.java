@@ -5,11 +5,11 @@ import java.util.Date;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class Experience {
-	private final Long exp_id;
-	private final String experience;
-	private final Date time;
-	private final String name;
-	private final String place;
+	private Long exp_id;
+	private String experience;
+	private Date time;
+	private String name;
+	private String place;
 	
 	//constructor without time; for creating experiences
 	public Experience(Long _id, String _exp, String _place, String _name) {
@@ -25,6 +25,10 @@ public class Experience {
 		this.place = _place;
 	}
 	
+	public Experience() {
+		this(null, null, null, null);
+	}
+
 	public Long getId() {
 		return exp_id;
 	}
@@ -43,6 +47,22 @@ public class Experience {
 	
 	public String getPlace() {
 		return place;
+	}
+	
+	public void setId(Long id) {
+		this.exp_id = id;
+	}
+	
+	public void setExperience(String exp) {
+		this.experience = exp;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setPlace(String place) {
+		this.place = place;
 	}
 	
 	@Override
