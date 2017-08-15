@@ -6,6 +6,8 @@
 
 <jsp:include page="templates/header.jsp" />
 
+<script> $('#nav-login').addClass('active'); </script>
+
 <h1><spring:message code="register.title"/></h1>
 
 <jsp:include page="templates/footer.jsp" />

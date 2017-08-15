@@ -10,7 +10,7 @@
 
 <h1><spring:message code="experience.title"/></h1>
 
-<a href="<c:url value='/myexperience' />"><spring:message code="experience.writeExperience"/></a><p>
+<a href="<c:url value='/writeexperience' />"><spring:message code="experience.writeExperience"/></a><p>
 
 <c:forEach items="${experiences}" var="exp" >
 	<div class="well well-sm" id="exp_<c:out value="experience_${exp.id}"/>">

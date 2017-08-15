@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <head>
 	<meta charset="utf-8">
@@ -38,7 +39,6 @@
 								<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 							</button>
-
 						</div>
 
 						<div class="collapse navbar-collapse" id="menu">
@@ -70,6 +70,17 @@
 									</a>
 								</li>
 								
+								<!-- if not logged in -->
+								<sec:authorize access="!isAuthenticated()">
+								<li id="nav-login">
+									<a href="<c:url value='/login' />">
+										<font color="green"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> <spring:message code="login.title.short"/></font>
+									</a>
+								</li>
+								</sec:authorize>
+								
+								<!-- if logged in -->
+								<sec:authorize access="isAuthenticated()">
 								<li id="nav-account" class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 										<span class="glyphicon glyphicon-user" aria-hidden="true"></span> <spring:message code="account.title.short"/> <span class="caret"></span>
@@ -88,11 +99,12 @@
   										    </ul>
   										</li>
 										
+										<!-- This doesn't yet look like a normal link -->
 										<li role="separator" class="divider"></li>
-										<li><a href="#"><font color="red"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> <spring:message code="logout.title.short"/></font></a></li>
+										<li><form action="<c:url value='/logout' />" method="post"><button name="logout" value="logout" class="btn btn-link"><sec:csrfInput /><font color="red"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> <spring:message code="logout.title.short"/></font></button></form></li>
 									</ul>
 								</li>
-								
+								</sec:authorize>
 							</ul>
 						</div>
 					</div>
@@ -101,6 +113,11 @@
 			</div>
 		</div>
 		
+
+		
 		<!-- will be closed in footer -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+				<sec:authorize access="isAuthenticated()">
+    				authenticated as <c:out value="${username}"/>
+				</sec:authorize>

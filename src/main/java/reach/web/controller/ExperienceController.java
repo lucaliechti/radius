@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,6 +37,8 @@ public class ExperienceController {
 		List<Experience> experiences = new ArrayList<Experience>();
 		experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.addAttribute("username", username);
 		return "experience";
 	}
 	
@@ -50,6 +53,8 @@ public class ExperienceController {
 		List<Experience> experiences = new ArrayList<Experience>();
 		experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.addAttribute("username", username);
 		return "experience";
 	}
 	

@@ -7,15 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import reach.Experience;
+
 @Controller
-@RequestMapping(value="/history")
-public class HistoryController {
+@RequestMapping(value="/writeexperience")
+public class WriteExperienceController {
 
 	@RequestMapping(method=GET)
-	public String history(Model model) {
-		System.out.println("in the HistoryController class");
+	public String writeexperience(Model model) {
+		Experience experienceForm = new Experience();
+		model.addAttribute("experienceForm", experienceForm);
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		model.addAttribute("username", username);
-		return "history";
+		return "writeexperience";
 	}
 }
