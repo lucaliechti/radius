@@ -30,6 +30,13 @@
 
 				<!-- fancy header: http://www.newthinktank.com/2015/11/learn-bootstrap-one-video/ -->
 				
+				<sec:authorize access="isAuthenticated()">
+    				Authenticated as <c:out value="${username}"/>
+				</sec:authorize>
+				<sec:authorize access="!isAuthenticated()">
+    				Not authenticated
+				</sec:authorize>
+				
 				<nav class="navbar navbar-default">
 					<div class="container-fluid">
 						<div class="navbar-header">
@@ -118,6 +125,3 @@
 		<!-- will be closed in footer -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-				<sec:authorize access="isAuthenticated()">
-    				authenticated as <c:out value="${username}"/>
-				</sec:authorize>

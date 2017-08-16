@@ -11,6 +11,12 @@
 
 <h1><spring:message code="login.title"/></h1>
 
+<c:if test="${loginerror}">
+<div class="alert alert-danger" role="alert">
+	Wrong username or password. Try again.
+</div>
+</c:if>
+
 <form name="loginForm" action="login" method="POST">
 	<div class="form-group">
   		<label for="name" class="col-2 col-form-label">Username</label>
@@ -31,5 +37,6 @@
 	
 	<sec:csrfInput />
 </form>
+
 
 <jsp:include page="templates/footer.jsp" />

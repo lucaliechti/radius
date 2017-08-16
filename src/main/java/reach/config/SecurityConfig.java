@@ -38,7 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		//login
 		http
-			.formLogin().loginPage("/login") //TODO: landing page etc
+			.formLogin().loginPage("/login")
+			.defaultSuccessUrl("/profile")
+			.failureUrl("/login?error=true")
 			.and().rememberMe().tokenValiditySeconds(2419200).key("ReachId") //four weeks
 			.and().csrf();
 		
@@ -48,5 +50,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutUrl("/logout")
 				.logoutSuccessUrl("/");
 	}
-	
 }
