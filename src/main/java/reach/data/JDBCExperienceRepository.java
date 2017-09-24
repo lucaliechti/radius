@@ -19,9 +19,10 @@ import reach.Experience;
 public class JDBCExperienceRepository implements ExperienceRepository {
 
 	private JdbcTemplate jdbcTemplate;
-	private static final String FIND_ALL_EXPERIENCES =	"SELECT exp_id, experience, exptime, place, name FROM experiences";
-	private static final String FIND_EXPERIENCE_BY_ID =	"SELECT exp_id, experience, exptime, place, name FROM experiences WHERE exp_id = ?";
-	private static final String SAVE_EXPERIENCE = "INSERT INTO experiences(exp_id, experience, exptime, place, name) VALUES (?, ?, ?, ?, ?)";
+	private static final String FIND_ALL_EXPERIENCES =	"SELECT * FROM experiences";
+	private static final String FIND_EXPERIENCE_BY_ID =	"SELECT * FROM experiences WHERE pkey = ?";
+	private static final String SAVE_EXPERIENCE = "INSERT INTO experiences(datecreate, datemodify, experience, user_email) VALUES (?, ?, ?, ?)";
+	private static final String UPDATE_EXPERIENCE = "UPDATE experiences SET experience = ?, datemodify = now() WHERE pkey = ?";
 
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -33,6 +34,7 @@ public class JDBCExperienceRepository implements ExperienceRepository {
 		return jdbcTemplate.query(FIND_ALL_EXPERIENCES, new ExperienceRowMapper());
 	}
 	
+	//nothing to see here
 	public Experience findExperienceById(long exp_id) {
 		return jdbcTemplate.queryForObject(FIND_EXPERIENCE_BY_ID, new ExperienceRowMapper(), exp_id);
 	}
@@ -40,18 +42,29 @@ public class JDBCExperienceRepository implements ExperienceRepository {
 	private static final class ExperienceRowMapper implements RowMapper<Experience> {
 			public Experience mapRow(ResultSet rs, int rowNum) throws SQLException {
 				return new Experience(
-					rs.getLong("exp_id"),
+					rs.getLong("pkey"),
 					rs.getString("experience"),
-					rs.getDate("exptime"),
-					rs.getString("place"),
-					rs.getString("name")
+					rs.getDate("datecreate"),
+					rs.getDate("datemodify"),
+					rs.getString("user_email")
 			);
 		}
 	}
 
 	@Override
-	public void saveExperience(Experience e) {
-		jdbcTemplate.update(SAVE_EXPERIENCE, e.getId(), e.getExperience(), e.getDate(), e.getPlace(), e.getName());
+	public void saveNewExperience(Experience e) {
+		jdbcTemplate.update(SAVE_EXPERIENCE, new java.util.Date(), new java.util.Date(), e.getExperience(), e.getUseremail());
+		
+	}
+	
+	@Override
+	public void updateExperience(long id, Experience e) {
+		jdbcTemplate.update(UPDATE_EXPERIENCE, e.getExperience(), new java.util.Date());
+	}
+
+	@Override
+	public void deleteExperience(long id) {
+		//stub, TODO
 		
 	}
     

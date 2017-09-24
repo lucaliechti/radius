@@ -22,8 +22,6 @@ import reach.data.JDBCExperienceRepository;
 @RequestMapping(value="/experience")
 public class ExperienceController {
 	
-	//TODO: Think about id generation
-	Long i = 11l;
 	private ExperienceRepository repo;
 	
 	//specify here which implementation of ExperienceRepository will be used
@@ -37,24 +35,17 @@ public class ExperienceController {
 		List<Experience> experiences = new ArrayList<Experience>();
 		experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//		model.addAttribute("username", username);
 		return "experience";
 	}
 	
 	@RequestMapping(method=POST)
 	public String addExperience(@ModelAttribute("experienceForm") Experience experienceForm, Model model) {
 		String exp = experienceForm.getExperience();
-		String place = experienceForm.getPlace();
-		String name = experienceForm.getName();
-		Experience e = new Experience(i++, exp, place, name);
-		repo.saveExperience(e);
-		//Does this have to be here two times (GET / POST)?
-		List<Experience> experiences = new ArrayList<Experience>();
-		experiences = repo.allExperiences();
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		Experience e = new Experience(exp, name);
+		repo.saveNewExperience(e);
+		List<Experience> experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//		model.addAttribute("username", username);
 		return "experience";
 	}
 	

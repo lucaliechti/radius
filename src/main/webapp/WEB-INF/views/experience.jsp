@@ -16,15 +16,13 @@
 	<div class="well well-sm" id="exp_<c:out value="experience_${exp.id}"/>">
 
 		<div class="experienceName">
-			Name: <c:out value="${exp.name}" />
+			Name: <c:out value="${exp.useremail}" />
 		</div>
 		
-		<div class="experiencePlace">
-			Place: <c:out value="${exp.place}" />
-		</div>
+
 		
 		<div class="experienceTime">
-			Time: <c:out value="${exp.date}" />
+			Time: <c:out value="${exp.datecreate}" />
 		</div>
 		
 		<div class="experience">

@@ -5,54 +5,56 @@ import java.util.Date;
 //import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class Experience {
-	private Long exp_id;
+	private long id;
 	private String experience;
-	private Date time;
-	private String name;
-	private String place;
+	private Date datecreate;
+	private Date datemodify;
+	private String userEmail;
+	
+	//whole PLACE logic discarded for the moment!
 	
 	//constructor without time; for creating experiences
-	public Experience(Long _id, String _exp, String _place, String _name) {
-		this(_id, _exp, new java.util.Date(), _place, _name);
-	}
-	//constructor with time; for retrieving experiences from database
-	public Experience(Long _id, String _exp, Date _time, String _place, String _name) {
-		this.exp_id = _id;
+	public Experience(String _exp, String _user_email) {
 		this.experience = _exp;
-		this.time = _time;
-		this.name = _name;
-		this.place = _place;
+		this.userEmail = _user_email;
+	}
+	
+	//constructor with time; for retrieving experiences from database
+	public Experience(long _id, String _exp, Date _datecreate, Date _datemodify, String _user_email) {
+		this.id = _id;
+		this.experience = _exp;
+		this.datecreate = _datecreate;
+		this.datemodify = _datemodify;
+		this.userEmail = _user_email;
 	}
 	//noarg constructor
 	public Experience() {
 	}
 	
-	public Long getId() {
-		return exp_id;
+	public long getId() {
+		return id;
 	}
 	public String getExperience(){
 		return experience;
 	}
-	public Date getDate() {
-		return time;
+	public String getUseremail() {
+		return userEmail;
 	}
-	public String getName() {
-		return name;
+	public Date getDatecreate() {
+		return datecreate;
 	}
-	public String getPlace() {
-		return place;
+	public Date getDatemodify() {
+		return datemodify;
 	}
-	public void setId(Long id) {
-		this.exp_id = id;
-	}
+	
 	public void setExperience(String exp) {
 		this.experience = exp;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUseremail(String userEmail) {
+		this.userEmail = userEmail;
 	}
-	public void setPlace(String place) {
-		this.place = place;
+	public void setDatemodify(Date _mod) {
+		this.datemodify = _mod;
 	}
 	
 //	@Override

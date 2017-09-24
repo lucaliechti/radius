@@ -13,20 +13,6 @@
 
 <form:form method="POST" action="/reach/experience" commandName="experienceForm">
 <!-- why doesn't  action="<c:url value='/experience' />" work here? -->
-	<div class="form-group">
-  		<label for="name" class="col-2 col-form-label">Name</label>
-  		<div class="col-10">
-    		<form:input path="name" class="form-control" type="text" />
-  		</div>
-	</div>
-	
-	<div class="form-group">
-  		<label for="place" class="col-2 col-form-label">Place</label>
-  		<div class="col-10">
-    		<form:input class="form-control" type="text" path="place" />
-  		</div>
-	</div>
-	
  	<div class="form-group">
     	<label for="experience">Your Experience</label>
     	<form:textarea class="form-control" path="experience" rows="4" />

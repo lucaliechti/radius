@@ -11,8 +11,12 @@ public interface ExperienceRepository {
 	
 	public List<Experience> allExperiences();
 	
-	public Experience findExperienceById(long exp_id);
+	public Experience findExperienceById(long id);
 	
-	public void saveExperience(Experience e);
+	public void saveNewExperience(Experience e);
+	
+	public void updateExperience(long id, Experience e);
+	
+	public void deleteExperience(long id);
 	
 }
