@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -23,6 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth
 			.jdbcAuthentication()
 			.dataSource(dataSource)
+			.usersByUsernameQuery("SELECT email AS principal, password AS credentials, enabled FROM users WHERE email=?")
+			.authoritiesByUsernameQuery("SELECT email AS principal, authority AS role FROM authorities WHERE email=?")
 			;//.passwordEncoder(new StandardPasswordEncoder("53cr3t"));
 	}
 	

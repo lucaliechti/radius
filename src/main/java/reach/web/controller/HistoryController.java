@@ -14,8 +14,8 @@ public class HistoryController {
 	@RequestMapping(method=GET)
 	public String history(Model model) {
 		System.out.println("in the HistoryController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "history";
 	}
 }

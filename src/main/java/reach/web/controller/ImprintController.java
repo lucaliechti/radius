@@ -14,8 +14,8 @@ public class ImprintController {
 	@RequestMapping(method=GET)
 	public String imprint(Model model) {
 		System.out.println("in the ImprintController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "imprint";
 	}
 }

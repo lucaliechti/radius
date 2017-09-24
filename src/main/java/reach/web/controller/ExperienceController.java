@@ -37,8 +37,8 @@ public class ExperienceController {
 		List<Experience> experiences = new ArrayList<Experience>();
 		experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "experience";
 	}
 	
@@ -53,8 +53,8 @@ public class ExperienceController {
 		List<Experience> experiences = new ArrayList<Experience>();
 		experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "experience";
 	}
 	

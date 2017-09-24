@@ -19,14 +19,14 @@
 
 <form name="loginForm" action="login" method="POST">
 	<div class="form-group">
-  		<label for="name" class="col-2 col-form-label">Username</label>
+  		<label for="username" class="col-2 col-form-label">Email</label>
   		<div class="col-10">
     		<input id="username" name="username" type="text" class="form-control" value=""/>
   		</div>
 	</div>
 	
 	<div class="form-group">
-  	<label for="place" class="col-2 col-form-label">Password</label>
+  	<label for="password" class="col-2 col-form-label">Password</label>
   		<div class="col-10">
     		<input id="password" name="password" type="password" class="form-control" value=""/>
   		</div>

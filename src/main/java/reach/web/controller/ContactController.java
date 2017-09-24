@@ -14,8 +14,8 @@ public class ContactController {
 	@RequestMapping(method=GET)
 	public String contact(Model model) {
 		System.out.println("in the ContactController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "contact";
 	}
 }

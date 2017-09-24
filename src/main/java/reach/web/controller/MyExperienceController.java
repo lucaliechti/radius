@@ -17,8 +17,8 @@ public class MyExperienceController {
 	public String contact(Model model) {
 //		Experience experienceForm = new Experience();			this is now in the writeExperience page
 //		model.addAttribute("experienceForm", experienceForm);
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "myexperience";
 	}
 }

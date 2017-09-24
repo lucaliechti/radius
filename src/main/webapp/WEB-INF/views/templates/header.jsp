@@ -31,7 +31,7 @@
 				<!-- fancy header: http://www.newthinktank.com/2015/11/learn-bootstrap-one-video/ -->
 				
 				<sec:authorize access="isAuthenticated()">
-    				Authenticated as <c:out value="${username}"/>
+    				Authenticated as <sec:authentication property="principal.username" />
 				</sec:authorize>
 				<sec:authorize access="!isAuthenticated()">
     				Not authenticated

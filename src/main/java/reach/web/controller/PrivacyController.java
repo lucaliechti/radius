@@ -14,8 +14,8 @@ public class PrivacyController {
 	@RequestMapping(method=GET)
 	public String privacy(Model model) {
 		System.out.println("in the PrivacyController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "privacy";
 	}
 }

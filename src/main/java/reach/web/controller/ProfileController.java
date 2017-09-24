@@ -14,8 +14,8 @@ public class ProfileController {
 	@RequestMapping(method=GET)
 	public String profile(Model model) {
 		System.out.println("in the ProfileController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "profile";
 	}
 }

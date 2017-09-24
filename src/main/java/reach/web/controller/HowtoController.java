@@ -14,8 +14,8 @@ public class HowtoController {
 	@RequestMapping(method=GET)
 	public String howto(Model model) {
 		System.out.println("in the HowtoController class");
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "howto";
 	}
 }

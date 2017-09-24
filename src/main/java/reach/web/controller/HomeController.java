@@ -18,8 +18,8 @@ public class HomeController {
 	public String home(Locale loc, Model model) {
 		System.out.println("in the HomeController class");
 		System.out.println("Locale = " + loc);
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username", username);
+//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//		model.addAttribute("username", username);
 		return "home";
 	}
 }

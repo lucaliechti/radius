@@ -11,8 +11,6 @@ public interface UserRepository {
 
 	public List<User> allUsers();
 	
-	public User findUserByUsername(String username);
-	
 	public User findUserByEmail(String email);
 	
 	public void saveUser(User u);
