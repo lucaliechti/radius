@@ -2,13 +2,23 @@ package reach;
 
 import java.util.Date;
 
+//import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+//import org.hibernate.validator.constraints.NotEmpty;
+
 //import org.apache.commons.lang.builder.EqualsBuilder;
 
+//@SuppressWarnings("deprecation")
 public class Experience {
+	
 	private long id;
+	@NotBlank(message="{error.notBlank}")
 	private String experience;
 	private Date datecreate;
 	private Date datemodify;
+	
+//	@Email
+//	@NotBlank
 	private String userEmail;
 	
 	//whole PLACE logic discarded for the moment!

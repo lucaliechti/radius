@@ -17,8 +17,6 @@ public class WriteExperienceController {
 	public String writeexperience(Model model) {
 		Experience experienceForm = new Experience();
 		model.addAttribute("experienceForm", experienceForm);
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//		model.addAttribute("username", username);
 		return "writeexperience";
 	}
 }

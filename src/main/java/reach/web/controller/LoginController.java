@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
 	@RequestMapping(method=GET)
-	public String login(@RequestParam(value = "error", required = false) Boolean loginerror, Model model) {
+	public String login(@RequestParam(value = "error", required = false) String loginerror, Model model) {
 		System.out.println("in the LoginController class");
-		model.addAttribute("loginerror", loginerror);
+		if(loginerror != null) {
+			model.addAttribute("loginerror", "login failed");
+		}
 		return "login";
 	}
 }

@@ -8,6 +8,13 @@
 
 <script> $('#nav-home').addClass('active'); </script>
 
+<c:if test="${loggedout != null}">
+	<div class="alert alert-success fade in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+  		You have been successfully logged out.
+	</div>
+</c:if>
+
 <h1><spring:message code="home.title"/></h1>
 
 <a href="<c:url value='/login' />"><spring:message code="login.title"/></a><p>

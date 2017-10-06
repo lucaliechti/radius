@@ -2,11 +2,17 @@ package reach;
 
 import java.util.ArrayList;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+
 public class User {
 	private long id;
 	private String firstname;
 	private String lastname;
+	@Email(message="{error.Email}")
 	private String email;
+	@Size(min=8, message="{error.sizePW}")
 	private String password;
 	private String location;
 	private userStatus status;

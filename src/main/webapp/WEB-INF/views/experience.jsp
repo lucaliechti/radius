@@ -19,8 +19,6 @@
 			Name: <c:out value="${exp.useremail}" />
 		</div>
 		
-
-		
 		<div class="experienceTime">
 			Time: <c:out value="${exp.datecreate}" />
 		</div>

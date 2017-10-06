@@ -11,11 +11,14 @@
 
 <h1><spring:message code="writeexperience.title"/></h1><br>
 
+<!-- style errors: https://www.mkyong.com/spring-mvc/spring-mvc-form-errors-tag-example/ -->
+
 <form:form method="POST" action="/reach/experience" commandName="experienceForm">
 <!-- why doesn't  action="<c:url value='/experience' />" work here? -->
  	<div class="form-group">
-    	<label for="experience">Your Experience</label>
+    	<form:label path="experience">Your Experience</form:label>
     	<form:textarea class="form-control" path="experience" rows="4" />
+  		<form:errors path="experience"/>
   	</div>
   	<input type="submit" class="btn btn-primary" value="Submit" />
 </form:form>

@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//login
 		http
 			.formLogin().loginPage("/login")
-			.defaultSuccessUrl("/profile")
-			.failureUrl("/login?error=true")
+			.defaultSuccessUrl("/profile?login")
+			.failureUrl("/login?error")
 			.and().rememberMe().tokenValiditySeconds(2419200).key("ReachId") //four weeks
 			.and().csrf();
 		
@@ -50,6 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.logout()
 				.logoutUrl("/logout")
-				.logoutSuccessUrl("/");
+				.logoutSuccessUrl("/home?logout");
 	}
 }

@@ -8,6 +8,13 @@
 
 <script> $('#nav-account').addClass('active'); </script>
 
+<c:if test="${loggedin != null}">
+	<div class="alert alert-success fade-in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+  		You have been successfully logged in.
+	</div>
+</c:if>
+
 <h1><spring:message code="profile.title"/></h1>
 
 <jsp:include page="templates/footer.jsp" />

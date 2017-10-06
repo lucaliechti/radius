@@ -9,13 +9,14 @@
 
 <script> $('#nav-login').addClass('active'); </script>
 
-<h1><spring:message code="login.title"/></h1>
-
-<c:if test="${loginerror}">
-<div class="alert alert-danger" role="alert">
+<c:if test="${loginerror != null}">
+<div class="alert alert-danger fade-in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
 	Wrong username or password. Try again.
 </div>
 </c:if>
+
+<h1><spring:message code="login.title"/></h1>
 
 <form name="loginForm" action="login" method="POST">
 	<div class="form-group">

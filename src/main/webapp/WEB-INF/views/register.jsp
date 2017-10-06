@@ -10,25 +10,48 @@
 <script> $('#nav-login').addClass('active'); </script>
 
 <h1><spring:message code="register.title"/></h1>
-
+<!-- 
 <form name="registrationForm" action="register" method="POST">
 	<div class="form-group">
-  		<label for="name" class="col-2 col-form-label">Email</label>
+  		<label for="email" class="col-2 col-form-label">Email</label>
   		<div class="col-10">
     		<input id="email" name="email" type="email" class="form-control" value=""/>
   		</div>
+  		<form:errors path="email"/>
 	</div>
 	
 	<div class="form-group">
-  	<label for="email" class="col-2 col-form-label">Password</label>
+  	<label for="password" class="col-2 col-form-label">Password</label>
   		<div class="col-10">
     		<input id="password" name="password" type="password" class="form-control" value=""/>
   		</div>
+  		<form:errors path="password"/>
 	</div>
 	
 	<input type="submit" class="btn btn-primary" value="Register" />
 	
 	<sec:csrfInput />
 </form>
+ -->
+ 
+<form:form method="POST" action="register" commandName="registrationForm">
+	<div class="form-group">
+		<form:label path="email" class="col-2 col-form-label">Email</form:label>
+		<div class="col-10">
+			<form:input path="email" class="form-control"/>
+		</div>
+		<form:errors path="email"/>
+	</div>
 
+	<div class="form-group">
+		<form:label path="password" class="col-2 col-form-label">Password</form:label>
+		<div class="col-10">
+			<form:input path="password" type="password" class="form-control"/>
+		</div>
+		<form:errors path="password"/>
+	</div>	
+	
+	<input type="submit" class="btn btn-primary" value="Register" />
+</form:form>
+ 
 <jsp:include page="templates/footer.jsp" />
