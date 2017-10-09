@@ -72,6 +72,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     	return resolver;
     }
     
+    //display dateFormats according to locale:
+    //http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/fmt/formatDate.html
+    //https://docs.oracle.com/javase/tutorial/i18n/format/dateFormat.html
+    //e.g. <fmt:formatDate value="${date}" type="both" dateStyle="full" timeStyle="short" />
+    
     @Bean
     public Validator validator() {
     	LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();

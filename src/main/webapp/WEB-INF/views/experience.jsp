@@ -20,7 +20,7 @@
 		</div>
 		
 		<div class="experienceTime">
-			Time: <c:out value="${exp.datecreate}" />
+			Date: <fmt:formatDate value="${exp.datecreate}" type="date" dateStyle="medium"/>
 		</div>
 		
 		<div class="experience">
