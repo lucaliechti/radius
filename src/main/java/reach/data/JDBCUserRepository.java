@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -19,10 +20,11 @@ import reach.User.userStatus;
 public class JDBCUserRepository implements UserRepository{
 	
 	private JdbcTemplate jdbcTemplate;
-	private static final String FIND_ALL_USERS =	"SELECT * FROM users";
-	private static final String FIND_USER_BY_EMAIL = "SELECT username, email FROM users WHERE email = ?";
-	private static final String SAVE_NEW_USER = "INSERT INTO users(email, password, enabled) VALUES (?, ?, ?)";
-	private static final String GRANT_USER_RIGHTS = "INSERT INTO authorities(email, authority) VALUES (?, ?)";
+	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
+	private static final String FIND_USER_BY_EMAIL = 	"SELECT email, password FROM users WHERE email = ?";
+	private static final String SAVE_NEW_USER = 		"INSERT INTO users(email, password, enabled) VALUES (?, ?, ?)";
+	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(email, authority) VALUES (?, ?)";
+	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -41,22 +43,23 @@ public class JDBCUserRepository implements UserRepository{
 	
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-			ArrayList<Boolean> questions = new ArrayList<Boolean>();
-			questions.add(rs.getBoolean("q1"));
-			questions.add(rs.getBoolean("q2"));
-			questions.add(rs.getBoolean("q3"));
-			questions.add(rs.getBoolean("q4"));
-			questions.add(rs.getBoolean("q5"));
+//			ArrayList<Boolean> questions = new ArrayList<Boolean>();
+//			questions.add(rs.getBoolean("q1"));
+//			questions.add(rs.getBoolean("q2"));
+//			questions.add(rs.getBoolean("q3"));
+//			questions.add(rs.getBoolean("q4"));
+//			questions.add(rs.getBoolean("q5"));
 			
 			return new User(
-				rs.getString("firstname"),
-				rs.getString("lastname"),
+//				rs.getString("firstname"),
+//				rs.getString("lastname"),
 				rs.getString("email"),
-				rs.getString("location"),
-				convertStatus(rs.getString("status")),
-				rs.getBoolean("enabled"),
-				rs.getBoolean("answered"),
-				questions
+				rs.getString("password")//,
+//				rs.getString("location"),
+//				convertStatus(rs.getString("status")),
+//				rs.getBoolean("enabled"),
+//				rs.getBoolean("answered"),
+//				questions
 			);
 		}
 
@@ -91,4 +94,26 @@ public class JDBCUserRepository implements UserRepository{
 	public void grantUserRights(String email){
 		jdbcTemplate.update(GRANT_USER_RIGHTS, email, "ROLE_USER");
 	}
+
+	@Override
+	public List<String> findAuthoritiesByEmail(String email) {
+		ArrayList<String> roles = new ArrayList<String>();
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(FIND_AUTH_BY_EMAIL, email); 
+		for (Map<String, Object> row: rows) {
+			roles.add(row.get("authority").toString());
+		}
+		return roles;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

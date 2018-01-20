@@ -23,19 +23,19 @@
 <body>
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-
+	
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
 
 				<!-- fancy header: http://www.newthinktank.com/2015/11/learn-bootstrap-one-video/ -->
-				
 				<sec:authorize access="isAuthenticated()">
-    				Authenticated as <sec:authentication property="principal.username" />
+    				 Authenticated as <sec:authentication property="principal.username"/>
 				</sec:authorize>
 				<sec:authorize access="!isAuthenticated()">
     				Not authenticated
 				</sec:authorize>
+
 				
 				<nav class="navbar navbar-default">
 					<div class="container-fluid">

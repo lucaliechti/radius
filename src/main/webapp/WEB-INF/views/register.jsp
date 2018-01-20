@@ -10,6 +10,7 @@
 <script> $('#nav-login').addClass('active'); </script>
 
 <h1><spring:message code="register.title"/></h1>
+
 <!-- 
 <form name="registrationForm" action="register" method="POST">
 	<div class="form-group">
@@ -52,6 +53,7 @@
 	</div>	
 	
 	<input type="submit" class="btn btn-primary" value="Register" />
+	<sec:csrfInput />
 </form:form>
  
 <jsp:include page="templates/footer.jsp" />

@@ -17,4 +17,6 @@ public interface UserRepository {
 	
 	public void updateUser(User u);
 	
+	public List<String> findAuthoritiesByEmail(String email);
+	
 }

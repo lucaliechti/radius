@@ -6,6 +6,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +23,9 @@ import reach.data.JDBCUserRepository;
 public class RegistrationController {
 	
 	private JDBCUserRepository userRepo;
+	
+	@Autowired
+	PasswordEncoder encoder;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
@@ -42,7 +47,7 @@ public class RegistrationController {
 		}
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
-		User user = new User(email, password);
+		User user = new User(email, encoder.encode(password));
 		
 		//TODO: Do this much nicer
 		try {
