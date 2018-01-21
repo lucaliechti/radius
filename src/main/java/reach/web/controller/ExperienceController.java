@@ -48,13 +48,11 @@ public class ExperienceController {
 			return "writeexperience";
 		}
 		String exp = experienceForm.getExperience();
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-		String name = SecurityContextHolder.getContext().getAuthentication().getName(); ///////// this doesn't work with custom authorisation
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
 		Experience e = new Experience(exp, name);
 		repo.saveNewExperience(e);
 		List<Experience> experiences = repo.allExperiences();
 		model.addAttribute("experiences", experiences);
 		return "experience";
 	}
-	
 }

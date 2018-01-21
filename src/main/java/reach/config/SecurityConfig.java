@@ -1,7 +1,5 @@
 package reach.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,23 +19,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	DataSource dataSource;
 	
 	@Autowired
 	UserDetailsService userDetailsService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth
-//			.jdbcAuthentication()
-//			.dataSource(dataSource)
-//			.passwordEncoder(passwordEncoder())//////////////////////////////////////////////////
-//			.usersByUsernameQuery("SELECT email AS principal, password AS credentials, enabled FROM users WHERE email=?")
-//			.authoritiesByUsernameQuery("SELECT email AS principal, authority AS role FROM authorities WHERE email=?");
 		auth.authenticationProvider(authProvider());
-		
 	}
 	
 	@Override
@@ -75,13 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return encoder;
 	}
 	
-	////////////// NEW
     @Bean
     public DaoAuthenticationProvider authProvider() {
-        ////////////// make one
     	final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        //authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
