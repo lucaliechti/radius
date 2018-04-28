@@ -20,4 +20,39 @@
 <a href="<c:url value='/login' />"><spring:message code="login.title"/></a><p>
 <a href="<c:url value='/register' />"><spring:message code="register.title"/></a>
 
+
+
+<!-- BEGIN TEST LEAFLET -->
+<script type="text/javascript" src="js/geotest.js"></script> <!-- load three random geojson areas -->
+
+<div id="mapid"></div>
+<script>
+var mymap = L.map('mapid').setView([46.75, 8.25], 7);
+//alert(testgj.features[0].geometry.type);
+var tl = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
+	maxZoom: 9,
+	minZoom: 7,
+	attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+}).addTo(mymap);
+
+var myStyle = {
+	    "color": "#ff4400",
+	    "weight": 2,
+	    "opacity": 0.65
+	};
+
+L.geoJson(testgj,{
+	style: myStyle
+}).addTo(mymap);
+
+var locs = ${locs}
+alert(locs[0])
+</script>
+
+<c:out value="${locs}" />
+
+<!-- END TEST LEAFLET -->
+
+
+
 <jsp:include page="templates/footer.jsp" />
