@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
+//import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 
 public class User {
 	private long id;
@@ -14,29 +15,36 @@ public class User {
 	private String email;
 	@Size(min=8, message="{error.sizePW}")
 	private String password;
-	private String location;
+	private String canton;
 	private userStatus status;
 	private Boolean enabled; 	//if email has been confirmed
 	private Boolean answered; 	//if questions have been answered
+	private ArrayList<Integer> locations;
+	private ArrayList<String> languages;
 	private ArrayList<Boolean> questions;
 	
-	public User(String _firstname, String _lastname, String _email, String _location, userStatus string, Boolean _enabled, Boolean _answered, ArrayList<Boolean> _questions) {
+	public User(String _firstname, String _lastname, String _email, String _canton, userStatus status, Boolean _enabled, Boolean _answered, ArrayList<Integer> _locations, ArrayList<String> _languages, ArrayList<Boolean> _questions) {
 		this.firstname = _firstname;
 		this.lastname = _lastname;
 		this.email = _email;
-		this.location = _location;
-		this.status = string;
+		this.canton = _canton;
+		this.status = status;
 		this.enabled = _enabled;
 		this.answered = _answered;
+		this.locations = _locations;
+		this.languages = _languages;
 		this.questions = _questions;
 	}
-	public User(String _email, String _password) {
+	//for first time registration
+	public User(String _firstName, String _lastName, String _canton, String _email, String _password) {
+		this.firstname = _firstName;
+		this.lastname = _lastName;
+		this.canton = _canton;
 		this.email = _email;
 		this.password = _password;
 	}
 	public User() {
 	}
-	
 	public long getId() {
 		return id;
 	}
@@ -52,12 +60,9 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
-	public String getLocation() {
-		return location;
+	public String getCanton() {
+		return canton;
 	}
-//	public String getLanguage() {
-//		return language;
-//	}
 	public userStatus getStatus() {
 		return status;
 	}
@@ -85,12 +90,9 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setCanton(String canton) {
+		this.canton = canton;
 	}
-//	public void setLanguage(String language) {
-//		this.language = language;
-//	}
 	public void setStatus(userStatus status) {
 		this.status = status;
 	}
@@ -106,7 +108,19 @@ public class User {
 		}
 		this.questions = questions;
 	}
-	
+	public ArrayList<Integer> getLocations() {
+		return locations;
+	}
+	public void setLocations(ArrayList<Integer> locations) {
+		this.locations = locations;
+	}
+	public ArrayList<String> getLanguages() {
+		return languages;
+	}
+	public void setLanguages(ArrayList<String> languages) {
+		this.languages = languages;
+	}
+
 	//new: only username and password provided
 	//waiting: email confirmed and questions answered
 	//matched: match found, waiting to radius

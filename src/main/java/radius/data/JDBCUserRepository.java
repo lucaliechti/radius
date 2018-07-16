@@ -2,6 +2,7 @@ package radius.data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,8 @@ public class JDBCUserRepository implements UserRepository{
 	private JdbcTemplate jdbcTemplate;
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT email, password FROM users WHERE email = ?";
-	private static final String SAVE_NEW_USER = 		"INSERT INTO users(email, password, enabled) VALUES (?, ?, ?)";
-	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(email, authority) VALUES (?, ?)";
+	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	
     @Autowired
@@ -51,11 +52,11 @@ public class JDBCUserRepository implements UserRepository{
 //			questions.add(rs.getBoolean("q5"));
 			
 			return new User(
-//				rs.getString("firstname"),
-//				rs.getString("lastname"),
+				rs.getString("firstname"),
+				rs.getString("lastname"),
+				rs.getString("canton"),
 				rs.getString("email"),
-				rs.getString("password")//,
-//				rs.getString("location"),
+				rs.getString("password")
 //				convertStatus(rs.getString("status")),
 //				rs.getBoolean("enabled"),
 //				rs.getBoolean("answered"),
@@ -82,7 +83,10 @@ public class JDBCUserRepository implements UserRepository{
 	//TODO: Check if username already exists etc.
 	@Override
 	public void saveUser(User u) {
-		jdbcTemplate.update(SAVE_NEW_USER, u.getEmail(), u.getPassword(), false);
+		if(u.getCanton().equals("NONE")) {
+			u.setCanton(null);
+		}
+		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false);
 		grantUserRights(u.getEmail());
 	}
 	
@@ -92,7 +96,7 @@ public class JDBCUserRepository implements UserRepository{
 	}
 	
 	public void grantUserRights(String email){
-		jdbcTemplate.update(GRANT_USER_RIGHTS, email, "ROLE_USER");
+		jdbcTemplate.update(GRANT_USER_RIGHTS, OffsetDateTime.now(), OffsetDateTime.now(), email, "ROLE_USER");
 	}
 
 	@Override

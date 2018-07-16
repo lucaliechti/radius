@@ -10,32 +10,34 @@
 <script> $('#nav-login').addClass('active'); </script>
 
 <h1><spring:message code="register.title"/></h1>
-
-<!-- 
-<form name="registrationForm" action="register" method="POST">
-	<div class="form-group">
-  		<label for="email" class="col-2 col-form-label">Email</label>
-  		<div class="col-10">
-    		<input id="email" name="email" type="email" class="form-control" value=""/>
-  		</div>
-  		<form:errors path="email"/>
-	</div>
-	
-	<div class="form-group">
-  	<label for="password" class="col-2 col-form-label">Password</label>
-  		<div class="col-10">
-    		<input id="password" name="password" type="password" class="form-control" value=""/>
-  		</div>
-  		<form:errors path="password"/>
-	</div>
-	
-	<input type="submit" class="btn btn-primary" value="Register" />
-	
-	<sec:csrfInput />
-</form>
- -->
  
 <form:form method="POST" action="register" commandName="registrationForm">
+	<div class="form-group">
+		<form:label path="firstName" class="col-2 col-form-label">First Name</form:label>
+		<div class="col-10">
+			<form:input path="firstName" class="form-control"/>
+		</div>
+		<form:errors path="firstName"/>
+	</div>
+	
+	<div class="form-group">
+		<form:label path="lastName" class="col-2 col-form-label">Last Name</form:label>
+		<div class="col-10">
+			<form:input path="lastName" class="form-control"/>
+		</div>
+		<form:errors path="lastName"/>
+	</div>
+	
+	<div class="form-group">
+		<form:label path="canton" class="col-2 col-form-label">Canton</form:label>
+		<div class="col-10">
+			<form:select path="canton"> 
+   				<form:option value="NONE" label="---"/>
+   				<form:options items="${cantons}" />
+			</form:select>
+		</div>
+	</div>
+	
 	<div class="form-group">
 		<form:label path="email" class="col-2 col-form-label">Email</form:label>
 		<div class="col-10">

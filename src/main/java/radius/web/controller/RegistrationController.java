@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.User;
 import radius.UserForm;
+import radius.data.JDBCCantonRepository;
 import radius.data.JDBCUserRepository;
 
 @Controller
@@ -22,19 +23,22 @@ import radius.data.JDBCUserRepository;
 public class RegistrationController {
 	
 	private JDBCUserRepository userRepo;
+	private JDBCCantonRepository cantonRepo;
 	
 	@Autowired
 	PasswordEncoder encoder;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
-	public RegistrationController(JDBCUserRepository _repo) {
-		this.userRepo = _repo;
+	public RegistrationController(JDBCUserRepository _userRepo, JDBCCantonRepository _cantonRepo) {
+		this.userRepo = _userRepo;
+		this.cantonRepo = _cantonRepo;
 	}
 
 	@RequestMapping(method=GET)
 	public String registrationPage(Model model) {
 		model.addAttribute("registrationForm", new UserForm());
+		model.addAttribute("cantons", cantonRepo.allCantons());
 		return "register";
 	}
 	
@@ -44,9 +48,12 @@ public class RegistrationController {
 			System.out.println("RegistrationController: Error registering");
 			return "register";
 		}
+		String firstName = registrationForm.getFirstName();
+		String lastName = registrationForm.getLastName();
+		String canton = registrationForm.getCanton();
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
-		User user = new User(email, encoder.encode(password));
+		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
 		
 		//TODO: Do this much nicer
 		try {
