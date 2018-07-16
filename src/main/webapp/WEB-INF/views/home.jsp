@@ -45,8 +45,9 @@ L.geoJson(testgj,{
 	style: myStyle
 }).addTo(mymap);
 
-var locs = ${locs}
-alert(locs[0])
+//works
+//var locs = ${locs}
+//alert(locs[0])
 </script>
 
 <c:out value="${locs}" />

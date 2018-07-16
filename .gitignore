@@ -1,0 +1,5 @@
+*.html
+.metadata/*
+Servers/*
+*bootstrap*
+target/*
