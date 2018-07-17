@@ -3,5 +3,6 @@
 Servers/*
 *bootstrap*
 target/*
+.settings/*
 
 \.settings/*

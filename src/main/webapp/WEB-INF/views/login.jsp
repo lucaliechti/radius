@@ -16,6 +16,13 @@
 </div>
 </c:if>
 
+<c:if test="${waitForEmailConfirmation != null}">
+<div class="alert alert-success fade-in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	Success! You have received an email. You can login as soon as you have confirmed your email address.
+</div>
+</c:if>
+
 <h1><spring:message code="login.title"/></h1>
 
 <form name="loginForm" action="login" method="POST">

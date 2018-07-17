@@ -17,6 +17,7 @@ import radius.User;
 import radius.UserForm;
 import radius.data.JDBCCantonRepository;
 import radius.data.JDBCUserRepository;
+import radius.exceptions.EmailAlreadyExistsException;
 
 @Controller
 @RequestMapping(value="/register")
@@ -54,17 +55,24 @@ public class RegistrationController {
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
 		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
-		
-		//TODO: Do this much nicer
+
 		try {
 			System.out.println("saving user...");
 			userRepo.saveUser(user);
 			System.out.println("success");
 		}
-		catch (Exception e) {
-			System.out.println("RegistrationController: error saving new user!!");
-			e.printStackTrace();
+		catch (EmailAlreadyExistsException eaee) {
+			System.out.println(eaee.getMessage());
+			model.addAttribute("emailExistsError", new Boolean(true));
+			return "register";
 		}
+		catch (Exception e) {
+			System.out.println("RegistrationController: error saving new user!");
+			e.printStackTrace();
+			model.addAttribute("registrationError", new Boolean(true));
+			return "register";
+		}
+		model.addAttribute("waitForEmailConfirmation", new Boolean(true));
 		return "login";
 	}
 }

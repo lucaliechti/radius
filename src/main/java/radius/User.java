@@ -1,6 +1,7 @@
 package radius;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.Size;
 
@@ -17,24 +18,31 @@ public class User {
 	private String password;
 	private String canton;
 	private userStatus status;
-	private Boolean enabled; 	//if email has been confirmed
-	private Boolean answered; 	//if questions have been answered
-	private ArrayList<Integer> locations;
-	private ArrayList<String> languages;
-	private ArrayList<Boolean> questions;
+	private userModus modus;
+	private boolean enabled; 	//if email has been confirmed
+	private boolean answered; 	//if questions have been answered
+	private String motivation;
+	private List<Integer> locations;
+	private List<String> languages;
+	private List<Boolean> questions;
 	
-	public User(String _firstname, String _lastname, String _email, String _canton, userStatus status, Boolean _enabled, Boolean _answered, ArrayList<Integer> _locations, ArrayList<String> _languages, ArrayList<Boolean> _questions) {
+	
+	public User(String _firstname, String _lastname, String _email, String _password, String _canton, userModus _modus, userStatus _status, String _motivation, boolean _enabled, boolean _answered, ArrayList<Integer> _locations, ArrayList<String> _languages, ArrayList<Boolean> _questions) {
 		this.firstname = _firstname;
 		this.lastname = _lastname;
 		this.email = _email;
+		this.password = _password;
 		this.canton = _canton;
-		this.status = status;
+		this.modus = _modus;
+		this.status = _status;
+		this.motivation = _motivation;
 		this.enabled = _enabled;
 		this.answered = _answered;
 		this.locations = _locations;
 		this.languages = _languages;
 		this.questions = _questions;
 	}
+	
 	//for first time registration
 	public User(String _firstName, String _lastName, String _canton, String _email, String _password) {
 		this.firstname = _firstName;
@@ -45,6 +53,7 @@ public class User {
 	}
 	public User() {
 	}
+	
 	public long getId() {
 		return id;
 	}
@@ -72,7 +81,7 @@ public class User {
 	public Boolean getAnswered() {
 		return answered;
 	}
-	public ArrayList<Boolean> getQuestions() {
+	public List<Boolean> getQuestions() {
 		return questions;
 	}
 	public void setId(long id) {
@@ -93,8 +102,8 @@ public class User {
 	public void setCanton(String canton) {
 		this.canton = canton;
 	}
-	public void setStatus(userStatus status) {
-		this.status = status;
+	public void setStatus(String _status) {
+		this.status = convertStatus(_status);
 	}
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
@@ -102,33 +111,111 @@ public class User {
 	public void setAnswered(Boolean answered) {
 		this.answered = answered;
 	}
-	public void setQ1(ArrayList<Boolean> questions) throws Exception {
+	public void setQuestions(ArrayList<Boolean> questions) throws Exception {
 		if(questions.size() != 5) {
 			throw new Exception("An array of != 5 Boolean values has been passed.");
 		}
 		this.questions = questions;
 	}
-	public ArrayList<Integer> getLocations() {
+	public List<Integer> getLocations() {
 		return locations;
 	}
 	public void setLocations(ArrayList<Integer> locations) {
 		this.locations = locations;
 	}
-	public ArrayList<String> getLanguages() {
+	public List<String> getLanguages() {
 		return languages;
 	}
-	public void setLanguages(ArrayList<String> languages) {
-		this.languages = languages;
+	public void setLanguages(List<String> list) {
+		this.languages = list;
+	}
+	public userModus getModus() {
+		return modus;
+	}
+	public void setModus(String _modus) {
+		this.modus = convertModus(_modus.toUpperCase());
+		System.out.println(this.modus);
 	}
 
-	//new: only username and password provided
-	//waiting: email confirmed and questions answered
-	//matched: match found, waiting to radius
-	//inactive: user checked the "inactive" flag
+	public String getMotivation() {
+		return motivation;
+	}
+	public void setMotivation(String motivation) {
+		this.motivation = motivation;
+	}
+
+	public static userStatus convertStatus(String status) {
+		if(status == null) {
+			return null;
+		}
+		switch (status) {
+			case "NEW":
+				return userStatus.NEW;
+			case "WAITING":
+				return userStatus.WAITING;	
+			case "MATCHED":
+				return userStatus.MATCHED;
+			case "INACTIVE":
+				return userStatus.INACTIVE;
+			default:
+				return null;
+		}
+	}
+	
+	public static String convertStatusToString(userStatus _status) {
+		switch (_status) {
+		case NEW:
+			return "NEW";
+		case WAITING:
+			return "WAITING";	
+		case MATCHED:
+			return "MATCHED";
+		case INACTIVE:
+			return "INACTIVE";
+		default:
+			return null;
+		}
+	}
+	
+	public static userModus convertModus(String modus) {
+		if(modus == null) {
+			return null;
+		}
+		switch (modus) {
+		case "SINGLE":
+			return userModus.SINGLE;
+		case "PAIR":
+			return userModus.PAIR;	
+		case "EITHER":
+			return userModus.EITHER;
+		default:
+			return null;
+		}
+	}
+	
+	public static String convertModusToString(userModus _modus) {
+		switch (_modus) {
+		case SINGLE:
+			return "SINGLE";
+		case PAIR:
+			return "PAIR";	
+		case EITHER:
+			return "EITHER";
+		default:
+			return null;
+		}
+	}
+	
 	public enum userStatus {
 		NEW,
 		WAITING,
 		MATCHED,
 		INACTIVE
+	}
+	
+	public enum userModus {
+		SINGLE,
+		PAIR,
+		EITHER
 	}
 }

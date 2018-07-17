@@ -11,6 +11,21 @@
 
 <h1><spring:message code="register.title"/></h1>
  
+<c:if test="${registrationError != null}">
+<div class="alert alert-danger fade-in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	Something went wrong. Try again.
+</div>
+</c:if>
+
+<c:if test="${emailExistsError != null}">
+<div class="alert alert-danger fade-in" role="alert">
+	<a href="#" class="close" data-dismiss="alert">&times;</a>
+	A user with this email already exists. Try another email.
+</div>
+</c:if>
+
+
 <form:form method="POST" action="register" commandName="registrationForm">
 	<div class="form-group">
 		<form:label path="firstName" class="col-2 col-form-label">First Name</form:label>

@@ -42,28 +42,21 @@
    Not authenticated
 </sec:authorize>
 
+<a href="?lang=de">DE</a>
+<a href="?lang=fr">FR</a>
+<a href="?lang=it">IT</a>
+<a href="?lang=en">EN</a>
 				
 <a href="<c:url value='/' />"><spring:message code="home.title.short"/></a>
 <a href="<c:url value='/contact' />"><spring:message code="contact.title.short"/></a>
 <a href="<c:url value='/privacy' />"><spring:message code="privacy.title.short"/></a>
 <a href="<c:url value='/imprint' />"><spring:message code="imprint.title.short"/></a>
-
-
-
-<a href="<c:url value='/howto' />">
-	<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> <spring:message code="howto.title.short"/>
-</a>
-
-
-<a href="<c:url value='/experience' />">
-	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <spring:message code="experience.title.short"/>
-</a>
+<a href="<c:url value='/howto' />"><spring:message code="howto.title.short"/></a>
+<a href="<c:url value='/experience' />"><spring:message code="experience.title.short"/></a>
 								
 <!-- if not logged in -->
 <sec:authorize access="!isAuthenticated()">
-	<a href="<c:url value='/login' />">
-		<font color="green"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> <spring:message code="login.title.short"/></font>
-	</a>
+	<a href="<c:url value='/login' />">		<font color="green"><spring:message code="login.title.short"/></font></a>
 </sec:authorize>
 								
 <!-- if logged in -->
@@ -71,9 +64,5 @@
 	<a href="<c:url value='/profile' />"><spring:message code="profile.title.short"/></a>
 	<a href="<c:url value='/myexperience' />"><spring:message code="myexperience.title.short"/></a>
 	<a href="<c:url value='/history' />"><spring:message code="history.title.short"/></a>
-	<a href="?lang=de">DE</a>
-	<a href="?lang=fr">FR</a>
-	<a href="?lang=it">IT</a>
-	<a href="?lang=en">EN</a>
-	<form action="<c:url value='/logout' />" method="post"><button name="logout" value="logout" class="btn btn-link"><sec:csrfInput /><font color="red"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> <spring:message code="logout.title.short"/></font></button></form>
+	<form action="<c:url value='/logout' />" method="post"><button name="logout" value="logout" class="btn btn-link"><sec:csrfInput /><font color="red"><spring:message code="logout.title.short"/></font></button></form>
 </sec:authorize>

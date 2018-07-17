@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 @Controller
 @RequestMapping(value="/login")
 public class LoginController {
@@ -15,7 +16,7 @@ public class LoginController {
 	public String login(@RequestParam(value = "error", required = false) String loginerror, Model model) {
 		System.out.println("in the LoginController class");
 		if(loginerror != null) {
-			model.addAttribute("loginerror", "login failed");
+			model.addAttribute("loginerror", new Boolean(true));
 		}
 		return "login";
 	}

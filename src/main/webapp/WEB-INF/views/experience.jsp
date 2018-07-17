@@ -26,7 +26,9 @@
 		<div class="experience">
 			Experience: <c:out value="${exp.experience}" />
 		</div>
-		
+		<br>
+		-----------------
+		<br><br>
 	</div>
 </c:forEach>
 
