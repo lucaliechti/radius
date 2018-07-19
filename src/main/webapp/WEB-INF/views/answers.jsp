@@ -8,7 +8,6 @@
 <jsp:include page="templates/header.jsp" />
 
 <h1><spring:message code="answers.title"/></h1>
- 
 
 <form:form method="POST" action="answers" commandName="answerForm">
 	<div class="form-group">
@@ -58,9 +57,19 @@
 		</form:select>
 		<form:errors path="modus"/>
 	</div>
+
+	Select ur location()s):
+	<div id="map"></div>
+	<form:hidden path="locations" />
+	<form:errors path="locations"/>
+	
 	
 	<input type="submit" class="btn btn-primary" value="Answer" />
 	<sec:csrfInput />
 </form:form>
+
+<script src="css/custom.css"></script>
+<script type="text/javascript" src="js/ms.js"></script>
+<script type="text/javascript" src="js/map.js"></script>
  
 <jsp:include page="templates/footer.jsp" />

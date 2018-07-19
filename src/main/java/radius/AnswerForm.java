@@ -31,7 +31,8 @@ public class AnswerForm {
 	@NotEmpty(message="{error.atLeastOne}")
 	private List<String> languages = new ArrayList<String>();
 	
-	private List<Integer> locations = new ArrayList<Integer>();
+	@NotEmpty(message="{error.atLeastOne}")
+	private String locations;
 	
 	public String getMotivation() {
 		return motivation;
@@ -65,7 +66,7 @@ public class AnswerForm {
 		return languages;
 	}
 
-	public List<Integer> getLocations() {
+	public String getLocations() {
 		return locations;
 	}
 
@@ -101,7 +102,7 @@ public class AnswerForm {
 		this.languages = languages;
 	}
 
-	public void setLocations(List<Integer> locations) {
+	public void setLocations(String locations) {
 		this.locations = locations;
 	}
 }

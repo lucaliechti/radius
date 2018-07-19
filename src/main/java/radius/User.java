@@ -27,7 +27,7 @@ public class User {
 	private List<Boolean> questions;
 	
 	
-	public User(String _firstname, String _lastname, String _email, String _password, String _canton, userModus _modus, userStatus _status, String _motivation, boolean _enabled, boolean _answered, ArrayList<Integer> _locations, ArrayList<String> _languages, ArrayList<Boolean> _questions) {
+	public User(String _firstname, String _lastname, String _email, String _password, String _canton, userModus _modus, userStatus _status, String _motivation, boolean _enabled, boolean _answered, List<Integer> _locations, ArrayList<String> _languages, List<Boolean> _questions) {
 		this.firstname = _firstname;
 		this.lastname = _lastname;
 		this.email = _email;
@@ -111,7 +111,7 @@ public class User {
 	public void setAnswered(Boolean answered) {
 		this.answered = answered;
 	}
-	public void setQuestions(ArrayList<Boolean> questions) throws Exception {
+	public void setQuestions(List<Boolean> questions) throws Exception {
 		if(questions.size() != 5) {
 			throw new Exception("An array of != 5 Boolean values has been passed.");
 		}
@@ -120,7 +120,7 @@ public class User {
 	public List<Integer> getLocations() {
 		return locations;
 	}
-	public void setLocations(ArrayList<Integer> locations) {
+	public void setLocations(List<Integer> locations) {
 		this.locations = locations;
 	}
 	public List<String> getLanguages() {

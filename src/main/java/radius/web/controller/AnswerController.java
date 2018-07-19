@@ -4,6 +4,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -50,13 +51,26 @@ public class AnswerController {
 		u.setAnswered(true);
 		u.setLanguages(answerForm.getLanguages());
 		u.setModus(answerForm.getModus());
-		u.setMotivation(answerForm.getMotivation());
+		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
 		ArrayList<Boolean> questions = new ArrayList<Boolean>();
 		questions.add(answerForm.getQ1());
 		questions.add(answerForm.getQ2());
 		questions.add(answerForm.getQ3());
 		questions.add(answerForm.getQ4());
 		questions.add(answerForm.getQ5());
+		try {
+			String[] loc = answerForm.getLocations().split(";");
+			Integer[] locint = new Integer[loc.length];
+			for(int i = 0; i < loc.length; i++) {
+				locint[i] = Integer.parseInt(loc[i]);
+			}
+			List<Integer> locations = Arrays.asList(locint);
+			u.setLocations(locations);
+			System.out.println("AnswerController has successfully parsed " + answerForm.getLocations());
+			System.out.println(locations.toString());
+		}
+		catch (NumberFormatException nfe) { System.out.print("Answercontroller: "); nfe.printStackTrace(); }
+		
 		try {
 			u.setQuestions(questions);
 		} catch (Exception e) {

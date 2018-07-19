@@ -25,8 +25,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
 	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	//TODO: locations
-	private static final String UPDATE_USER = 			"UPDATE users SET languages = ?, motivation = ?, modus = ?, answered = TRUE, q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, datemodify = ? WHERE email = ?";
+	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, datemodify = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
@@ -57,8 +56,21 @@ public class JDBCUserRepository implements UserRepository {
 			questions.add(rs.getBoolean("q4"));
 			questions.add(rs.getBoolean("q5"));
 
-			//TODO locations
-			ArrayList<Integer> locations = new ArrayList<Integer>();
+			List<Integer> locations = null;
+			String[] loc = new String[0];
+			String rs_loc = rs.getString("locations");
+			if(rs_loc != null) {
+				loc = rs.getString("locations").split(";");
+			}
+			Integer[] locint = new Integer[loc.length];
+			try {
+				for(int i = 0; i < loc.length; i++) {
+					locint[i] = Integer.parseInt(loc[i]);
+				}
+			}
+			catch(NumberFormatException nfe) {nfe.printStackTrace();} 
+			locations = Arrays.asList(locint);
+			System.out.println(loc);
 			ArrayList<String> languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
 
 			return new User(
@@ -97,7 +109,17 @@ public class JDBCUserRepository implements UserRepository {
 	public void updateUser(User u) {
 		List<Boolean> questions = u.getQuestions();
 		String lang = String.join(";", u.getLanguages());
-		jdbcTemplate.update(UPDATE_USER, lang, u.getMotivation(), User.convertModusToString(u.getModus()), 
+		String loc = "";
+		for(Integer locid : u.getLocations()) {
+			if(loc==""){
+				loc += locid;//.toString();
+			}
+			else {
+				loc += ";"+locid;
+			}
+		}
+		//String loc = String.join(";", u.getLocations());
+		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()), 
 				questions.get(0), questions.get(1), questions.get(2), questions.get(3), 
 				questions.get(4), OffsetDateTime.now(), u.getEmail());
 	}
