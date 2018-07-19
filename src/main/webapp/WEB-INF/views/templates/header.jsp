@@ -31,15 +31,15 @@
 
 <html>
 <body>
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<!-- <script src="js/bootstrap.min.js"></script>  -->
 	
 <!-- fancy header: http://www.newthinktank.com/2015/11/learn-bootstrap-one-video/ -->
 <sec:authorize access="isAuthenticated()">
-    Authenticated as <sec:authentication property="principal.username"/>
+    Authenticated as <sec:authentication property="principal.username"/><br>
 </sec:authorize>
 <sec:authorize access="!isAuthenticated()">
-   Not authenticated
+   Not authenticated<br>
 </sec:authorize>
 
 <a href="?lang=de">DE</a>
