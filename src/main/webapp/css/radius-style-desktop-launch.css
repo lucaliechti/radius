@@ -1,0 +1,316 @@
+@font-face {
+	font-family: Fira Sans Condensed;
+	src: url(FiraSansCondensed-Light.woff);
+}
+
+html,
+body * {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background-color: #ffffff;
+	height: 100%;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.firstcontainer {
+	/*min-height: 100%;
+  margin-bottom: -65px;*/
+}
+
+.container {
+	margin: 5%;
+	padding: 20px;
+	border: 2px solid;
+	flex: 1 0 auto;
+}
+
+#primary-menubar,
+#secondary-menubar,
+#footer p {
+	/*padding: 20px 5% 20px 5%;*/
+	background-color: #006F68;
+}
+
+#primary-menubar {
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+}
+
+.language-selector,
+#home {
+	display: inline-block;
+}
+
+#home {
+	margin: 20px 5vw;
+	flex: 1 0 auto;
+}
+
+#loginout,
+#menu {
+	/*position: relative;*/
+	/*float: right;*/
+	/*display: inline;*/
+	/*list-style-type: none;*/
+}
+
+#menuToggle {
+	display: inline-block;
+	flex: 0 0 auto;
+}
+
+ul#menu li {
+	margin: 0;
+	padding: 0;
+}
+
+
+/*Fonts*/
+
+h1,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 32px;
+	color: #006F68;
+	margin: 12 0 10 0px;
+	/*Vor- und Nachbreiten der Absätze*/
+	padding: 0;
+}
+
+h2,
+ul,
+li {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 24px;
+	color: #006F68;
+	margin: 20 0 10 0px;
+	/*Vor- und Nachbreiten der Absätze*/
+	padding: 0;
+}
+
+p,
+a,
+label,
+input,
+input[type="radio"] {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 18px;
+	color: #000000;
+	border: none;
+	line-height: 1.4;
+	margin: 0 0 10 0px;
+	/*Vor- und Nachbreiten der Absätze*/
+	padding: 0 0 10 0px;
+}
+
+p.interested {
+	margin: 0 0 0 0px;
+	/*Vor- und Nachbreiten der Absätze*/
+	padding: 0 0 0 0px;
+}
+
+a {
+	color: #006F68;
+}
+
+#menu a,
+ul#menu {
+	text-decoration: none;
+	list-style: none;
+}
+
+#footer,
+#footer p {
+	border: none;
+}
+
+b {
+	color: #006F68;
+	font-weight: 600;
+}
+
+a {
+	text-decoration: underline;
+	font-size: inherit!important;
+}
+
+a:hover {
+	color: #006F68;
+}
+
+#menu {
+	margin: auto 5vw;
+}
+
+#menu li,
+#menu a li {
+	display: inline;
+	text-decoration: none;
+	font-size: 18px!important;
+	line-height: 1.4;
+	font-family: 'Fira Sans Condensed', sans-serif;
+	color: #ffffff;
+	border: none;
+	line-height: 1.4;
+	margin: 0 0 10 0px;
+	/*Vor- und Nachbreiten der Absätze*/
+	padding: 0 0 10 0px;
+}
+
+#menu li:hover,
+#menu a li:hover,
+#menu a:hover li {
+	color: #006F68;
+}
+
+.language-selector a {
+	padding: 0.01em 0.27em 0.13em 0.28em;
+	margin-left: -6px;
+	color: #ffffff;
+	background-color: #006F68;
+	border: 2px solid #ffffff;
+}
+
+.language-selector a:hover {
+	color: #006F68;
+	background-color: #ffffff;
+	border: 2px solid #ffffff;
+}
+
+
+/*hide mobile menu*/
+
+#menuToggle input {
+	display: none;
+}
+
+#secondary-menubar,
+#footer,
+footer p {
+	background-color: #006F68;
+	color: white;
+	border: none;
+}
+
+footer a {
+	color: white;
+}
+
+footer a:hover {
+	color:white;
+}
+
+
+/*Sticky Footer*/
+
+.push {
+	height: 65px;
+}
+
+#footer {
+	padding: 20px 5vw;
+	flex: 0 0 auto;
+}
+
+#footer p {
+	margin: 0;
+	padding: 0;
+}
+
+input[type="text"] {
+	border: #006F68 solid 2px;
+	padding: 5px;
+	width: 17em;
+}
+
+form,
+fieldset {
+	border: none;
+}
+
+input[type="submit"],
+input[type="button"] {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 18px;
+	color: #ffffff;
+	background-color: #006F68;
+	padding: 7 10 7 10px;
+}
+
+#logo-home {
+	width: auto;
+	height: 24px;
+}
+
+
+/*ul.ul-big li::before {
+    content: '̶';
+    margin-right: 0.3em;
+  }
+ 
+  ul.ul-big li {
+    margin: 0;
+  }
+   
+   
+  ul.ul-big{
+    list-style-type: none;
+ 
+}*/
+
+::selection {
+	background: #006F68;
+	/* WebKit/Blink Browsers */
+	color: white;
+}
+
+::-moz-selection {
+	background: #006F68;
+	/* Gecko Browsers */
+	color: white;
+}
+
+div#feedback {
+	margin-top: 0.2em;
+}
+
+#feedback p {
+	width: 100%;
+}
+
+#feedback p.success {
+	background-color: #3EAB70;
+	color: white;
+	padding: 5 8 5px;
+}
+
+#feedback p.error {
+	background-color: #D02643;
+	color: white;
+	padding: 5 8 5px;
+}
+
+#form {
+	display: flex;
+	margin-top: 10px;
+}
+
+#form input {
+	flex: 0 1 400px;
+	/*flex: 1 0 auto;*/
+}
+
+#form input[type="submit"] {
+	flex: 0 0 auto;
+}
+

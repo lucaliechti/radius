@@ -5,37 +5,39 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header.jsp" />
+<jsp:include page="templates/header_new.jsp" />
 
-<script> $('#nav-login').addClass('active'); </script>
+<main class="firstcontainer container">
+   <h1><spring:message code="index.title"/></h1>
+   <p><spring:message code="index.subtitle"/></p>
+   <h2><spring:message code="index.about.title"/></h2>
+   <p><spring:message code="index.about"/></p>
+   <h2><spring:message code="index.works.title"/></h2>
+   <p><spring:message code="index.works"/></p>
+   <h2><spring:message code="index.interested"/></h2>
+   <p class=interested><spring:message code="index.interested.1"/>: <a href="www.link.ch">www.link.ch</a></p>
+   <p class=interested><spring:message code="index.interested.2"/>:</p>
+   <spring:message code="index.send" var="send"/>
+      <div id="feedback">
+      <c:choose>
+         <c:when test="${success == 0}">
+            <p class="error"><spring:message code="index.error"/></p>
+         </c:when>
+         <c:when test="${success == 1}">
+            <p class="success"><spring:message code="index.success"/></p>
+         </c:when>
+         <c:otherwise>
+         </c:otherwise>
+      </c:choose>
+   </div>
 
-<h1><spring:message code="register.title"/></h1>
+   <form:form method="POST" action="" commandName="reminderForm" id="form">
+      <form:input path="email" type="text" placeholder="your@email.ch"/>
+      <input type="submit" value="${send}"/><br>
+ 	  <sec:csrfInput />
+<!--  <form:errors path="email" /> -->
+   </form:form>
 
-<c:choose>
-  <c:when test="${success == 0}">
-	<div class="alert alert-danger fade-in" role="alert">
-		<a href="#" class="close" data-dismiss="alert">&times;</a>
-		Something went wrong. Try again.
-	</div>
-  </c:when>
-  <c:when test="${success == 1}">
-	<div class="alert alert-success fade-in" role="alert">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
-  		Your email has successfully been added to the reminder list.
-	</div>
-  </c:when>
-  <c:otherwise>
-  </c:otherwise>
-</c:choose>
+</main>
 
-<form:form method="POST" action="home" commandName="reminderForm">
-	<div class="form-group">
-		<form:label path="email" class="col-2 col-form-label">Email</form:label>
-		<div class="col-10">
-			<form:input path="email" class="form-control"/>
-		</div>
-		<form:errors path="email"/>
-	</div>
-	<input type="submit" class="btn btn-primary" value="send me a reminder" />
-	<sec:csrfInput />
-</form:form>
+<jsp:include page="templates/footer_new.jsp" />
