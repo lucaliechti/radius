@@ -15,7 +15,7 @@
    <h2><spring:message code="index.works.title"/></h2>
    <p><spring:message code="index.works"/></p>
    <h2><spring:message code="index.interested"/></h2>
-   <p class=interested><spring:message code="index.interested.1"/>: <a href="www.link.ch">www.link.ch</a></p>
+   <p class=interested><spring:message code="index.interested.1"/>: <a href="https://wemakeit.com/projects/radius"><spring:message code="index.interested.1.link"/></a></p>
    <p class=interested><spring:message code="index.interested.2"/>:</p>
    <spring:message code="index.send" var="send"/>
       <div id="feedback">

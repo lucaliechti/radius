@@ -5,3 +5,6 @@ Servers/*
 target/*
 \.settings/*
 *.js
+*.ico
+*.woff
+*.png

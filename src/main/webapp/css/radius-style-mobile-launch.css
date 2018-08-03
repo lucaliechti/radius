@@ -10,15 +10,22 @@
 		overflow-x: hidden;
 		height: auto!important;
 	}
-	/*
+	@media all and (max-width: 600px) {
+		#form {
+			flex-direction: column/* oder row */
+			;
+			align-items: stretch;
+		}
+		#form input {
+			flex: 1 0 auto !important;
+		}
+	}
+	
+/*
  * Made by Erik Terwan
  * 24th of November 2015
  * MIT License
  *
- *
- * If you are thinking of using this in
- * production code, beware of the browser
- * prefixes.
  */
 	#primary-menubar {
 		background-color: #006F68;
@@ -39,14 +46,18 @@
 		background-color: #006F68;
 		border: none;
 	}
+	
+	.language-selector a:last-child { /*******************************************************/
+	padding:0;
+}
 	a {
 		transition: color 0.3s ease;
 	}
 	#menuToggle {
 		display: inline-flex;
 		/*position: relative;*/
-		/*top: -20px;
-  left: 90%;*/
+		/*top: -20px;*/
+  		/*left: 90%;*/
 		z-index: 1;
 		-webkit-user-select: none;
 		user-select: none;
@@ -58,8 +69,8 @@
 		width: 40px;
 		height: calc(40px + 20px);
 		/*2x padding + 1x Logo Height*/
-		/*top: 0px;
-  left: 0px;*/
+		/*top: 0px;*/
+  		/*left: 0px;*/
 		right: calc(5vw - 3px);
 		position: absolute;
 		cursor: pointer;
@@ -75,7 +86,7 @@
 		align-self: center;
 		margin-right: 5vw;
 	}
-	/*
+/*
  * Just a quick hamburger
  */
 	#menuToggle span {
@@ -96,45 +107,48 @@
 	#menuToggle span:nth-last-child(2) {
 		transform-origin: 0% 100%;
 	}
-	/* 
+/* 
  * Transform all the slices of hamburger
  * into a crossmark.
  */
 	#menuToggle input:checked~#burger span {
 		opacity: 1;
 		transform: rotate(45deg) translate(-5px, -12px);
+		/*transform: rotate(-45deg) translate(-2px, -1px);*/
 		background: #ffffff;
 	}
-	/*transform: rotate(-45deg) translate(-2px, -1px);*/
-	/*
+
+/*
  * But let's hide the middle one.
  */
 	#menuToggle input:checked~#burger span:nth-last-child(3) {
 		opacity: 0;
 		transform: rotate(0deg) scale(0.2, 0.2);
 	}
-	/*
+
+/*
  * Ohyeah and the last one should go the other direction
  */
 	#menuToggle input:checked~#burger span:nth-last-child(2) {
 		transform: rotate(-45deg) translate(-6px, 13px);
+		/*transform: rotate(45deg) translate(0px, -1px);*/
 	}
-	/*transform: rotate(45deg) translate(0px, -1px);*/
-	/*
+	
+/*
  * Make this absolute positioned
  * at the top left of the screen
  */
 	#menu {
 		position: absolute;
 		right: 0;
-		top: calc(40px + 20px);
+		top: calc(40px + 24px);
 		/* Top Höhe */
 		/*left: -20%;*/
 		/*top: -25px;*/
-		width: 9em;
+		width: 5.5em;
 		margin: 0;
-		/*padding: 20px;
-  padding-top: 25px;*/
+		/*padding: 20px;*/
+  		/*padding-top: 25px;*/
 		background: #006F68;
 		list-style-type: none;
 		-webkit-font-smoothing: antialiased;
@@ -155,7 +169,7 @@
 	#menu li:hover {
 		background-color: rgba(255, 255, 255, 0.7);
 	}
-	/*
+/*
  * And let's slide it in from the left
  */
 	#menuToggle input:checked~ul {

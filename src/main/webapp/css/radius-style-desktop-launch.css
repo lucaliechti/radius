@@ -19,8 +19,8 @@ body {
 }
 
 .firstcontainer {
-	/*min-height: 100%;
-  margin-bottom: -65px;*/
+	/*min-height: 100%;*/
+  	/*margin-bottom: -65px;*/
 }
 
 .container {
@@ -46,6 +46,11 @@ body {
 .language-selector,
 #home {
 	display: inline-block;
+}
+
+.language-selector a:last child {
+	margin: 0;
+	padding:0.01em 0.27em 0.13em 0.28em; /**************************************************/
 }
 
 #home {
@@ -175,7 +180,7 @@ a:hover {
 
 .language-selector a {
 	padding: 0.01em 0.27em 0.13em 0.28em;
-	margin-left: -6px;
+	margin-left: -2px;
 	color: #ffffff;
 	background-color: #006F68;
 	border: 2px solid #ffffff;
@@ -207,9 +212,8 @@ footer a {
 }
 
 footer a:hover {
-	color:white;
+	color: white;
 }
-
 
 /*Sticky Footer*/
 
@@ -230,7 +234,7 @@ footer a:hover {
 input[type="text"] {
 	border: #006F68 solid 2px;
 	padding: 5px;
-	width: 17em;
+	width: auto;
 }
 
 form,
