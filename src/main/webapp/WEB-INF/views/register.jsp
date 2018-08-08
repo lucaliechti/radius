@@ -5,9 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header.jsp" />
-
-<script> $('#nav-login').addClass('active'); </script>
+<jsp:include page="templates/header_new.jsp" />
+<main class="firstcontainer container">
 
 <h1><spring:message code="register.title"/></h1>
  
@@ -72,5 +71,5 @@
 	<input type="submit" class="btn btn-primary" value="Register" />
 	<sec:csrfInput />
 </form:form>
- 
+</main>
 <jsp:include page="templates/footer.jsp" />

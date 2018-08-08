@@ -1,4 +1,4 @@
-package radius.test.controller;
+/*package radius.test.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -17,4 +17,4 @@ public class HomeControllerTest {
 		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}
 	
-}
+}*/

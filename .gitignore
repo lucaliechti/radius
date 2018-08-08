@@ -1,10 +1,11 @@
 *.html
 .metadata/*
 Servers/*
-*bootstrap*
+RemoteSystemsTempFiles*
 target/*
 \.settings/*
-*.js
 *.ico
 *.woff
 *.png
+src/main/resources/config*
+*ms.js

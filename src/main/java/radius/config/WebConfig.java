@@ -65,6 +65,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Bean
     public LocaleResolver localeResolver(){
+//TODO: We would like to change the locale depending on which site a user is on: schweiz, svizzera, suisse. This works, but gives Exceptions.
+//    	System.out.println(r.getRequestURL().toString());
     	CookieLocaleResolver resolver = new CookieLocaleResolver();
     	resolver.setDefaultLocale(new Locale("de"));
 //    	resolver.setCookieName("radiusLocale");

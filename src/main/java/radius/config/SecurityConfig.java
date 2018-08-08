@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//login
 		http
 			.formLogin().loginPage("/login")
-				.defaultSuccessUrl("/profile?login")
-				.failureUrl("/login?error")
+				.defaultSuccessUrl("/status?login")
+				.failureUrl("/status?error")
 				.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId") //four weeks
 				.and().csrf();
 		

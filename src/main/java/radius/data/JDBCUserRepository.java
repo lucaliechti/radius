@@ -71,7 +71,10 @@ public class JDBCUserRepository implements UserRepository {
 			catch(NumberFormatException nfe) {nfe.printStackTrace();} 
 			locations = Arrays.asList(locint);
 			System.out.println(loc);
-			ArrayList<String> languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
+			ArrayList<String> languages = new ArrayList<String>();
+			if(rs.getString("languages") != null){
+				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
+			}
 
 			return new User(
 				rs.getString("firstname"),
@@ -109,6 +112,8 @@ public class JDBCUserRepository implements UserRepository {
 	public void updateUser(User u) {
 		List<Boolean> questions = u.getQuestions();
 		String lang = String.join(";", u.getLanguages());
+		String loc = User.createLocString(u.getLocations());
+		/*can be deleted if the above works
 		String loc = "";
 		for(Integer locid : u.getLocations()) {
 			if(loc==""){
@@ -117,7 +122,7 @@ public class JDBCUserRepository implements UserRepository {
 			else {
 				loc += ";"+locid;
 			}
-		}
+		}*/
 		//String loc = String.join(";", u.getLocations());
 		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()), 
 				questions.get(0), questions.get(1), questions.get(2), questions.get(3), 

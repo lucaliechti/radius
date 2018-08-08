@@ -34,9 +34,17 @@ public class AnswerController {
 
 	@RequestMapping(method=GET)
 	public String answer(Model model) {
-		System.out.println("in the AnswerController class");
+		System.out.println("in the AnswerController class after GET request");
+		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		if(!userRepo.userHasAnswered(email)) {
+			model.addAttribute("newUser", true);
+			model.addAttribute("answerForm", new AnswerForm());
+		}
+		else {
+			AnswerForm f = newFormFromUser(userRepo.findUserByEmail(email));
+			model.addAttribute("answerForm", f);
+		}
 		addListsTo(model);
-		model.addAttribute("answerForm", new AnswerForm());
 		return "answers";
 	}
 	
@@ -48,7 +56,55 @@ public class AnswerController {
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		User u = userRepo.findUserByEmail(email);
+		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
+		userRepo.updateUser(u);
+		return "status";
+	}
+	
+	private void addListsTo(Model model) {
+		List<String> lang = new ArrayList<String>();
+		lang.add("DE");
+		lang.add("FR");
+		lang.add("IT");
+		lang.add("EN");
+		model.addAttribute("lang", lang);
+		
+		List<String> modus = new ArrayList<String>();
+		modus.add("Single");
+		modus.add("Pair");
+		modus.add("Either");
+		model.addAttribute("modi", modus);
+	}
+	
+	private AnswerForm newFormFromUser(User u) {
+		AnswerForm f = new AnswerForm();
+		f.setMotivation(u.getMotivation());
+		f.setModus(u.getModusAsString()); // TODO: this has to be re-done with tri-lingual modi
+		f.setLanguages(u.getLanguages());
+		/* TESTING
+		String loc = "";
+		for(Integer locid : u.getLocations()) {
+			if(loc==""){
+				loc += locid;
+			}
+			else {
+				loc += ";"+locid;
+			}
+		}
+		f.setLocations(loc);
+		*/
+		f.setLocations(User.createLocString(u.getLocations()));
+		f.setQ1(u.getQuestions().get(0));
+		f.setQ2(u.getQuestions().get(1));
+		f.setQ3(u.getQuestions().get(2));
+		f.setQ4(u.getQuestions().get(3));
+		f.setQ5(u.getQuestions().get(4));
+		
+		return f;
+	}
+	
+	private User updateUserFromForm(User u, AnswerForm answerForm) {
 		u.setLanguages(answerForm.getLanguages());
 		u.setModus(answerForm.getModus());
 		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
@@ -66,8 +122,6 @@ public class AnswerController {
 			}
 			List<Integer> locations = Arrays.asList(locint);
 			u.setLocations(locations);
-			System.out.println("AnswerController has successfully parsed " + answerForm.getLocations());
-			System.out.println(locations.toString());
 		}
 		catch (NumberFormatException nfe) { System.out.print("Answercontroller: "); nfe.printStackTrace(); }
 		
@@ -77,22 +131,8 @@ public class AnswerController {
 			// If not exactly 5 answers are given; this should never happen.
 			e.printStackTrace();
 		}
-		userRepo.updateUser(u);
-		return "profile";
+		return u;
 	}
-	
-	private void addListsTo(Model model) {
-		List<String> lang = new ArrayList<String>();
-		lang.add("DE");
-		lang.add("FR");
-		lang.add("IT");
-		lang.add("EN");
-		model.addAttribute("lang", lang);
-		
-		List<String> modus = new ArrayList<String>();
-		modus.add("Single");
-		modus.add("Pair");
-		modus.add("Either");
-		model.addAttribute("modi", modus);
-	}
+
+
 }

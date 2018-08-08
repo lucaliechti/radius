@@ -5,7 +5,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header.jsp" />
+<jsp:include page="templates/header_new.jsp" />
+<main class="firstcontainer container">
+
+<c:if test="${newUser != null}">
+  		Almost done! Just answer the following questions:
+</c:if>
 
 <h1><spring:message code="answers.title"/></h1>
 
@@ -69,7 +74,8 @@
 </form:form>
 
 <script src="css/custom.css"></script>
+<script type="text/javascript" src="js/lozern.js"></script>
 <script type="text/javascript" src="js/ms.js"></script>
 <script type="text/javascript" src="js/map.js"></script>
- 
-<jsp:include page="templates/footer.jsp" />
+</main>
+<jsp:include page="templates/footer_new.jsp" />

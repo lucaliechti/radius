@@ -4,38 +4,46 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 
 import radius.ReminderForm;
-import radius.data.JDBCCantonRepository;
 import radius.data.JDBCReminderRepository;
-import radius.data.JDBCUserRepository;
-
-//import com.fasterxml.jackson.databind.ObjectMapper; //TEST
 
 @Controller
 @RequestMapping(value={"/", "/home"})
+@ComponentScan("radius.config")
 public class HomeController {
 
 	private JDBCReminderRepository reminderRepo;
+	private LocaleResolver lr;
 	
 	@Autowired
-	public HomeController(JDBCReminderRepository _reminderRepo) {
+	public HomeController(JDBCReminderRepository _reminderRepo, LocaleResolver _lr) {
 		this.reminderRepo = _reminderRepo;
+		this.lr = _lr;
 	}
 	
 	@RequestMapping(method=GET)
-	public String home(@RequestParam(value = "logout", required = false) String loggedout, Locale loc, Model model) {
-//		System.out.println("in the HomeController class");
-//		System.out.println("Locale = " + loc);
+	public String home(@RequestParam(value = "logout", required = false) String loggedout, Model model, HttpServletRequest req, HttpServletResponse res) {
+		/*
+		String url = req.getRequestURL().toString();
+		//only setting locale for the index page at the moment
+		if(url.contains("radius-schweiz")) { lr.setLocale(req, res, new Locale("de")); }
+		else if(url.contains("radius-suisse")) { lr.setLocale(req, res, new Locale("fr")); }
+		else if(url.contains("radius-svizzera")) { lr.setLocale(req, res, new Locale("it")); }
+		*/
 		if(loggedout != null) {
 			model.addAttribute("loggedout", "user sees this page right after logging out");
 		}

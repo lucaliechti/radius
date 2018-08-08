@@ -26,7 +26,6 @@ public class User {
 	private List<String> languages;
 	private List<Boolean> questions;
 	
-	
 	public User(String _firstname, String _lastname, String _email, String _password, String _canton, userModus _modus, userStatus _status, String _motivation, boolean _enabled, boolean _answered, List<Integer> _locations, ArrayList<String> _languages, List<Boolean> _questions) {
 		this.firstname = _firstname;
 		this.lastname = _lastname;
@@ -132,6 +131,11 @@ public class User {
 	public userModus getModus() {
 		return modus;
 	}
+	
+	public String getModusAsString() {
+		return convertModusToString(this.modus);
+	}
+	
 	public void setModus(String _modus) {
 		this.modus = convertModus(_modus.toUpperCase());
 		System.out.println(this.modus);
@@ -204,6 +208,19 @@ public class User {
 		default:
 			return null;
 		}
+	}
+	
+	public static String createLocString(List<Integer> locs){
+		String loc = "";
+		for(Integer locid : locs) {
+			if(loc==""){
+				loc += locid;
+			}
+			else {
+				loc += ";"+locid;
+			}
+		}
+		return loc;
 	}
 	
 	public enum userStatus {
