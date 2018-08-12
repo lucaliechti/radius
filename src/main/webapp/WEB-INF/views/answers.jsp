@@ -85,7 +85,7 @@
 
 	Select ur location()s):
 	<div id="map"></div>
-	<form:hidden path="locations" />
+	<form:hidden path="locations"/>
 	<form:errors path="locations"/>
 	
 	
@@ -93,8 +93,19 @@
 	<sec:csrfInput />
 </form:form>
 
+<script>
+	var locationes = $('#locations').val();
+	var split = locationes.split(';');
+</script>
+
 <script src="css/custom.css"></script>
 <script type="text/javascript" src="js/ms.js"></script>
 <script type="text/javascript" src="js/map.js"></script>
+<script>
+for(var i = 0; i < split.length; i++) {
+    var region = gl.getLayer("radius_" + split[i]);
+    selectDeselect(region);
+}
+</script>
 </main>
 <jsp:include page="templates/footer_new.jsp" />
