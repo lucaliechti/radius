@@ -1,21 +1,26 @@
 var map = L.map('map').setView([46.75, 8.25], 8);
 
-var tl = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png', {
-    maxZoom: 9,
-    minZoom: 7,
-    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+var tl = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
+	maxZoom: 10,
+    minZoom: 8,
+	maxBoundsViscosity: 1,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 }).addTo(map);
 
+map.setMaxBounds([[45.22, 4.95], [48.24, 11.55]]); //map has to be 800x1200 for this to look good!
+
 var styleUnselected = {
-    "color": "#ff4400",
+    "color": "#006F68",
+    "fillOpacity": 0.2,
     "weight": 2,
-    "opacity": 0.65
+    "opacity": 1
 };
 
 var styleSelected = {
-    "color": "#00FFFF",
+    "color": "#FFFFFF",
+    "fillOpacity": 0.6,
     "weight": 2,
-    "opacity": 0.65
+    "opacity": 1
 };
 $('#locations').val(""); //just to be sure
 var selectedRegions = new Set();

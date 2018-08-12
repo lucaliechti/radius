@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.AnswerForm;
 import radius.User;
+import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 
 @Controller
@@ -26,10 +27,12 @@ import radius.data.JDBCUserRepository;
 public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
+	private JDBCStaticResourceRepository staticRepo;
 	
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo) {
+	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
 		this.userRepo = _userRepo;
+		this.staticRepo = _staticRepo;
 	}
 
 	@RequestMapping(method=GET)
@@ -63,24 +66,17 @@ public class AnswerController {
 	}
 	
 	private void addListsTo(Model model) {
-		List<String> lang = new ArrayList<String>();
-		lang.add("DE");
-		lang.add("FR");
-		lang.add("IT");
-		lang.add("EN");
+		List<String> lang = staticRepo.languages();
 		model.addAttribute("lang", lang);
 		
-		List<String> modus = new ArrayList<String>();
-		modus.add("Single");
-		modus.add("Pair");
-		modus.add("Either");
-		model.addAttribute("modi", modus);
+		List<String> modi = staticRepo.modi();
+		model.addAttribute("modi", modi);
 	}
 	
 	private AnswerForm newFormFromUser(User u) {
 		AnswerForm f = new AnswerForm();
 		f.setMotivation(u.getMotivation());
-		f.setModus(u.getModusAsString()); // TODO: this has to be re-done with tri-lingual modi
+		f.setModus(u.getModusAsString());
 		f.setLanguages(u.getLanguages());
 		/* TESTING
 		String loc = "";
@@ -133,6 +129,4 @@ public class AnswerController {
 		}
 		return u;
 	}
-
-
 }

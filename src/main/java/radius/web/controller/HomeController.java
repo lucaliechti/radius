@@ -3,6 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,19 +21,22 @@ import org.springframework.web.servlet.LocaleResolver;
 
 import radius.ReminderForm;
 import radius.data.JDBCReminderRepository;
+import radius.data.JDBCStaticResourceRepository;
 
 @Controller
 @RequestMapping(value={"/", "/home"})
 @ComponentScan("radius.config")
 public class HomeController {
 
+	private JDBCStaticResourceRepository staticRepo;
 	private JDBCReminderRepository reminderRepo;
-	private LocaleResolver lr;
+//	private LocaleResolver lr;
 	
 	@Autowired
-	public HomeController(JDBCReminderRepository _reminderRepo, LocaleResolver _lr) {
+	public HomeController(JDBCStaticResourceRepository _staticRepo, JDBCReminderRepository _reminderRepo/*, LocaleResolver _lr*/) {
+		this.staticRepo = _staticRepo;
 		this.reminderRepo = _reminderRepo;
-		this.lr = _lr;
+//		this.lr = _lr;
 	}
 	
 	@RequestMapping(method=GET)

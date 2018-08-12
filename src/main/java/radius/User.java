@@ -137,8 +137,7 @@ public class User {
 	}
 	
 	public void setModus(String _modus) {
-		this.modus = convertModus(_modus.toUpperCase());
-		System.out.println(this.modus);
+		this.modus = convertModus(_modus);
 	}
 
 	public String getMotivation() {

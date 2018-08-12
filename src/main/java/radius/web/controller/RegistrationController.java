@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.User;
 import radius.UserForm;
-import radius.data.JDBCCantonRepository;
+import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 import radius.exceptions.EmailAlreadyExistsException;
 
@@ -24,22 +24,22 @@ import radius.exceptions.EmailAlreadyExistsException;
 public class RegistrationController {
 	
 	private JDBCUserRepository userRepo;
-	private JDBCCantonRepository cantonRepo;
+	private JDBCStaticResourceRepository staticResourceRepo;
 	
 	@Autowired
 	PasswordEncoder encoder;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
-	public RegistrationController(JDBCUserRepository _userRepo, JDBCCantonRepository _cantonRepo) {
+	public RegistrationController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
 		this.userRepo = _userRepo;
-		this.cantonRepo = _cantonRepo;
+		this.staticResourceRepo = _staticRepo;
 	}
 
 	@RequestMapping(method=GET)
 	public String registrationPage(Model model) {
 		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", cantonRepo.allCantons());
+		model.addAttribute("cantons", staticResourceRepo.cantons());
 		return "register";
 	}
 	
