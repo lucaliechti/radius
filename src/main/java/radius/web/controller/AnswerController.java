@@ -78,18 +78,6 @@ public class AnswerController {
 		f.setMotivation(u.getMotivation());
 		f.setModus(u.getModusAsString());
 		f.setLanguages(u.getLanguages());
-		/* TESTING
-		String loc = "";
-		for(Integer locid : u.getLocations()) {
-			if(loc==""){
-				loc += locid;
-			}
-			else {
-				loc += ";"+locid;
-			}
-		}
-		f.setLocations(loc);
-		*/
 		f.setLocations(User.createLocString(u.getLocations()));
 		f.setQ1(u.getQuestions().get(0));
 		f.setQ2(u.getQuestions().get(1));

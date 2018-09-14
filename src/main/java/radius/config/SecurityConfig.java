@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//authorization
 		http
 			.authorizeRequests()
-				.antMatchers("/history", "/myexperience", "/profile", "/answers").authenticated()
+				.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status").authenticated()
+				.antMatchers("/monitoring/**", "/admin/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.POST, "/experience").authenticated()
 				.anyRequest().permitAll()
 				;//.and().requiresChannel().antMatchers("/login", "/register").requiresSecure(); //what else?
@@ -44,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin().loginPage("/login")
 				.defaultSuccessUrl("/status?login")
 				.failureUrl("/status?error")
-				.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId") //four weeks
+				.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
 				.and().csrf();
 		
 		

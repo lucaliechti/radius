@@ -20,8 +20,8 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 	<!-- additional CSS -->
-    <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-launch.css">
-    <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-launch.css">
+    <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css"> <!-- was -desktop-launch -->
+    <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css"> <!-- was -mobile-launch -->
     <link href="css/custom.css" rel="stylesheet">
 	
 	<!-- Leaflet -->
@@ -41,6 +41,7 @@
 	   Not authenticated<br>
 	</sec:authorize>
 	 -->
+	 <!-- 
 	<nav role="navigation" id="primary-menubar">
 	   <div id="home">
 	      <a href="<c:url value='/' />"><img src="img/logo-radius-white.png" id="logo-home"></a>
@@ -59,5 +60,31 @@
 	         <a href="?lang=en"> <li>EN</li> </a>
 	      </ul>
 	   </div>
-	</nav>
+	</nav> -->
+<nav role="navigation" id="primary-menubar">
+   <div id="home">
+      <a href="index.html"><img src="img/logo-radius.png" id="logo-home"></a>
+   </div>
+   <div id="menuToggle">
+      <input type="checkbox" />
+      <div id="burger">
+         <span></span>
+         <span></span>
+         <span></span>
+      </div>
+      <ul id="menu" class="menupoint navigations">
+         <li><a href="#">über Radius</a></li>
+         <li><a href="#">Spielregeln</a></li>
+         <li><a href="<c:url value='/experience' />">Experiences</a></li>
+         <li>
+            <ul id="language-select" class="menupoint navigations">
+               <li><a href="?lang=de">DE</a></li>
+               <li><a href="?lang=fr">FR</a></li>
+               <li><a href="?lang=it">IT</a></li>
+               <li><a href="?lang=en">EN</a></li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</nav>
 	

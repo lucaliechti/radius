@@ -6,19 +6,26 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="templates/header_new.jsp" />
-<main class="firstcontainer container">
 
+<main class="firstcontainer container">
+<section class="fullwidth-section-only-vertical">
+<!-- 
 <c:if test="${newUser != null}">
   		Almost done! Just answer the following questions:
 </c:if>
-
+ -->
+ 
 <h1><spring:message code="answers.title"/></h1>
+<p><spring:message code="answers.subtitle"/></p>
 
-<form:form method="POST" action="answers" commandName="answerForm">
-	<div class="form-group">
-		<form:label path="motivation">Motivation</form:label>
+<!-- preparing variables -->
+<spring:message code="answers.motivation.ph" var="answers.motivation.ph" />
+
+<form:form method="POST" action="answers" commandName="answerForm" accept-charset="ISO-8859-1">
+	<div class="form-group leftsection-content-element" id="register-motivation">
+		<form:label path="motivation" class="label-title"><spring:message code="answers.motivation"/></form:label>
 		<div class="col-10">
-			<form:input path="motivation" class="form-control"/>
+			<form:textarea path="motivation" placeholder='${answers.motivation.ph}' class="input-paragraph form-control"/>
 		</div>
 	</div>
 	<!-- 
@@ -28,12 +35,12 @@
 		<form:errors path="languages"/> <br>
 	</div>
 	 -->
-	<div class="form-group">
-		<form:label path="languages">Languages<br></form:label>
+	<div class="form-group leftsection-content-element" id="register-languages">
+		<form:label path="languages" class="label-title"><spring:message code="answers.languages"/></form:label>
 		<c:forEach items="${lang}" var="l" >
-			<spring:message code="language.${l}"/> <form:checkbox id="lang_${l}" path="languages" value="${l}"/>
+			<p><form:checkbox id="lang_${l}" path="languages" value="${l}"/> <spring:message code="language.${l}"/></p>
 		</c:forEach>
-		<form:errors path="languages"/> <br>
+		<form:errors path="languages"/>
 	</div>
 	<!-- 
 	<div class="form-group">
@@ -44,68 +51,73 @@
 		<form:errors path="modus"/>
 	</div>
 	-->
-	<div class="form-group">
-		<form:label path="modus">Modus </form:label>
-		<form:select path="modus">
+	<div class="form-group leftsection-content-element" id="register-modus">
+		<p><form:label path="modus" class="label-title"><spring:message code="modus"/></form:label></p>
 		<c:forEach items="${modi}" var="m" >
-			<form:option id="modus_${m}" value="${m}"><spring:message code="modus.${m}"/></form:option>
+			<label class="radio-button-label-no"><spring:message code="modus.${m}"/></label><form:radiobutton path="modus" id="modus_${m}" value="${m}" />
 		</c:forEach>
-		</form:select>
 		<form:errors path="modus"/>
-	</div>	
+	</div>
 	
-	<br><br>
+	<div class="form-group leftsection-content-element" id="register-questions">
+	<label for="questions" class="label-title">deine Meinungen</label>
 	
-	<spring:message code="q1"/>
-	<form:radiobutton path="q1" value="false"/><spring:message code="question.false"/>
-	<form:radiobutton path="q1" value="true"/><spring:message code="question.true"/>
-	<form:errors path="q1"/> <br>
+	<p><spring:message code="q1"/></p>
+	<form:radiobutton path="q1" value="true"/><label class="radio-button-label-yes"><spring:message code="question.true"/></label>
+	<form:radiobutton path="q1" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
+	<form:errors path="q1"/>
 
-	<spring:message code="q2"/>
-	<form:radiobutton path="q2" value="false"/><spring:message code="question.false"/>
-	<form:radiobutton path="q2" value="true"/><spring:message code="question.true"/>
-	<form:errors path="q2"/><br>
+	<p><spring:message code="q2"/></p>
+	<form:radiobutton path="q2" value="true"/><label class="radio-button-label-yes"><spring:message code="question.true"/></label>
+	<form:radiobutton path="q2" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
+	<form:errors path="q2"/>
 	
-	<spring:message code="q3"/>
-	<form:radiobutton path="q3" value="false"/><spring:message code="question.false"/>
-	<form:radiobutton path="q3" value="true"/><spring:message code="question.true"/>
-	<form:errors path="q3"/> <br>
+	<p><spring:message code="q3"/></p>
+	<form:radiobutton path="q3" value="true"/><label class="radio-button-label-yes"><spring:message code="question.true"/></label>
+	<form:radiobutton path="q3" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
+	<form:errors path="q3"/>
 	
-	<spring:message code="q4"/>
-	<form:radiobutton path="q4" value="false"/><spring:message code="question.false"/>
-	<form:radiobutton path="q4" value="true"/><spring:message code="question.true"/>
-	<form:errors path="q4"/> <br>
+	<p><spring:message code="q4"/></p>
+	<form:radiobutton path="q4" value="true"/><label class="radio-button-label-yes"><spring:message code="question.true"/></label>
+	<form:radiobutton path="q4" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
+	<form:errors path="q4"/>
 	
-	<spring:message code="q5"/>
-	<form:radiobutton path="q5" value="false"/><spring:message code="question.false"/>
-	<form:radiobutton path="q5" value="true"/><spring:message code="question.true"/>
-	<form:errors path="q5"/> <br>
+	<p><spring:message code="q5"/></p>
+	<form:radiobutton path="q5" value="true"/><label class="radio-button-label-yes"><spring:message code="question.true"/></label>
+	<form:radiobutton path="q5" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
+	<form:errors path="q5"/>
+	</div>
 	
-	<br>
+	
 
-	Select ur location()s):
-	<div id="map"></div>
-	<form:hidden path="locations"/>
-	<form:errors path="locations"/>
-	
+	<div class="form-group leftsection-content-element" id="register-locations">
+	<form:label path="locations" class="label-title"><spring:message code="answers.location"/></form:label>
+	<p><spring:message code="answers.location.detail"/></p>
+	<section class="map-section">
+		<div id="map"></div>
+		<form:hidden path="locations"/>
+		<form:errors path="locations"/>
+		<div id="register-map-locations"> </div>
+	</section>
+	</div>
 	
 	<input type="submit" class="btn btn-primary" value="Answer" />
 	<sec:csrfInput />
 </form:form>
 
 <script>
-	var locationes = $('#locations').val();
-	var split = locationes.split(';');
+   var locationes = $('#locations').val();
+   var split = locationes.split(';');
 </script>
-
-<script src="css/custom.css"></script>
+<!-- <script src="css/custom.css"></script> -->
 <script type="text/javascript" src="js/ms.js"></script>
 <script type="text/javascript" src="js/map.js"></script>
 <script>
-for(var i = 0; i < split.length; i++) {
-    var region = gl.getLayer("radius_" + split[i]);
-    selectDeselect(region);
-}
+   for(var i = 0; i < split.length; i++) {
+       var region = gl.getLayer("radius_" + split[i]);
+       selectDeselect(region);
+   }
 </script>
+</section>
 </main>
 <jsp:include page="templates/footer_new.jsp" />

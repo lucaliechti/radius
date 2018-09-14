@@ -51,13 +51,12 @@ function selectDeselect(region) {
     if (region.feature.properties.selected) {
 		selectedRegions.delete(region.feature.id);
         region.setStyle(styleUnselected);
-        var correspondingDiv = document.getElementById("region_" + region.feature.id);
-        correspondingDiv.parentNode.removeChild(correspondingDiv);
+        $("#region_" + region.feature.id).remove();
     } else {
         region.setStyle(styleSelected);
 		selectedRegions.add(region.feature.id)
         var reg = document.createElement('a');
-        document.body.appendChild(reg);
+		$('#register-map-locations').append(reg);
         reg.id = 'region_' + region.feature.id;
         $("#" + reg.id).click(function() {
             region = gl.getLayer("radius_" + region.feature.id);

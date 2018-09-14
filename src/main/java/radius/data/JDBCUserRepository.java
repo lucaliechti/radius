@@ -30,6 +30,8 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 	private static final String USER_ANSWERED = 		"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND answered = TRUE)";
+	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
+	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
 	
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -159,8 +161,14 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public void enableUser(String email) {
-		// TODO Auto-generated method stub
-		
+		jdbcTemplate.update(ENABLE_USER, email);
+	}
+
+	@Override
+	public boolean userIsEnabled(String email) {
+		// guess what, also super ugly
+		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ENABLED, email);
+		return (boolean)users.get("exists");
 	}
 }
 

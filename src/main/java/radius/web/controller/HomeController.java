@@ -49,6 +49,7 @@ public class HomeController {
 		else if(url.contains("radius-svizzera")) { lr.setLocale(req, res, new Locale("it")); }
 		*/
 		if(loggedout != null) {
+			model.addAttribute("reminderForm", new ReminderForm());
 			model.addAttribute("loggedout", "user sees this page right after logging out");
 		}
 		else {

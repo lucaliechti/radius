@@ -7,19 +7,22 @@
 
 <jsp:include page="templates/header.jsp" />
 
-<script> $('#nav-login').addClass('active'); </script>
-
 <c:if test="${loginerror != null}">
-<div class="alert alert-danger fade-in" role="alert">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
+<div>
 	Wrong username or password. Try again.
 </div>
 </c:if>
 
 <c:if test="${waitForEmailConfirmation != null}">
-<div class="alert alert-success fade-in" role="alert">
-	<a href="#" class="close" data-dismiss="alert">&times;</a>
+<div>
 	Success! You have received an email. You can login as soon as you have confirmed your email address.
+</div>
+</c:if>
+
+
+<c:if test="${not_enabled != null}">
+<div>
+	You can log in as soon as you confirm your email address. (Check spam folder).
 </div>
 </c:if>
 

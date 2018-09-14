@@ -39,8 +39,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		configurer.enable();
 	}
 	
-	//i18n: http://www.concretepage.com/spring-4/spring-4-mvc-internationalization-i18n-
-	//	and-localization-l10n-annotation-example
+	//i18n: http://www.concretepage.com/spring-4/spring-4-mvc-internationalization-i18n-and-localization-l10n-annotation-example
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -69,8 +68,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //    	System.out.println(r.getRequestURL().toString());
     	CookieLocaleResolver resolver = new CookieLocaleResolver();
     	resolver.setDefaultLocale(new Locale("de"));
-//    	resolver.setCookieName("radiusLocale");
-//    	resolver.setCookieMaxAge(3600);
+    	resolver.setCookieName("radiusLocale");
+    	resolver.setCookieMaxAge(2419200); //four weeks
     	return resolver;
     }
     

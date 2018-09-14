@@ -26,4 +26,6 @@ public interface UserRepository {
 	
 	public boolean userHasAnswered(String email);
 	
+	public boolean userIsEnabled(String email);
+	
 }
