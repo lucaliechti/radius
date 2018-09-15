@@ -2,7 +2,7 @@ var map = L.map('map').setView([46.75, 8.25], 8);
 
 var tl = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
 	maxZoom: 10,
-    minZoom: 8,
+    minZoom: 6,
 	maxBoundsViscosity: 1,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 }).addTo(map);

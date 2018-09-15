@@ -7,11 +7,37 @@
 
 <jsp:include page="templates/header_new.jsp" />
 
-<!-- 
-   <c:if test="${loggedout != null}">
-     		You have been successfully logged out.
-   </c:if>
-    -->
+<c:if test="${loginerror != null}">
+<div>
+	Wrong username or password. Try again.
+</div>
+</c:if>
+
+<c:if test="${waitForEmailConfirmation != null}">
+<div>
+	Success! You have received an email. You can login as soon as you have confirmed your email address.
+</div>
+</c:if>
+
+<c:if test="${not_enabled != null}">
+<div>
+	You can log in as soon as you confirm your email address. (Check spam folder).
+</div>
+</c:if>
+
+<c:if test="${loggedout != null}">
+<div>
+	You can log in as soon as you confirm your email address. (Check spam folder).
+</div>
+</c:if>
+
+<c:if test="${delete_success != null}">
+<div>
+	Account successfully deleted.
+</div>
+</c:if>
+
+
 <main class="firstcontainer container">
    <section id="leftsection">
       <section class="leftsection-title" id="page-title">
@@ -78,70 +104,83 @@
       </section>
       
       <section id="profile-deco" class="profile-resume">
-          <h2>
+         <h2>
             <spring:message code="home.register.title"/>
          </h2>
-
-<form:form method="POST" action="register" commandName="registrationForm">
-	<div class="form-group">
-		<form:label path="firstName"><spring:message code="home.register.fn"/></form:label>
-		<div class="col-10">
-			<form:input path="firstName" class="form-control"/>
-		</div>
-		<form:errors path="firstName"/>
-	</div>
-	
-	<div class="form-group">
-		<form:label path="lastName"><spring:message code="home.register.ln"/></form:label>
-		<div>
-			<form:input path="lastName" class="form-control"/>
-		</div>
-		<form:errors path="lastName"/>
-	</div>
-	
-	<div class="form-group">
-		<form:label path="canton"><spring:message code="home.register.canton"/></form:label>
-		<div>
-			<form:select class="dropdown-input" path="canton"> 
-   				<form:option value="NONE" label="---"/>
-   				<form:options items="${cantons}" />
-			</form:select>
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<form:label path="email"><spring:message code="home.register.email"/></form:label>
-		<div>
-			<form:input path="email" class="form-control"/>
-		</div>
-		<form:errors path="email"/>
-	</div>
-
-	<div class="form-group">
-		<form:label path="password"><spring:message code="home.register.pw"/></form:label>
-		<div>
-			<form:input path="password" type="password" class="form-control"/>
-		</div>
-		<form:errors path="password"/>
-	</div>	
-	
-	<input type="submit" class="btn btn-primary" value='${register}' />
-	<sec:csrfInput />
-</form:form>
-
-<p><spring:message code="home.register.hint"/></p>
-
-<c:if test="${registrationError != null}">
-<p class="error"><spring:message code="home.register.error.general"/></p>
-</c:if>
-
-<c:if test="${emailExistsError != null}">
-<p class="error"><spring:message code="home.register.error.emailexists"/></p>
-</c:if>
-
- </section>
-</section>
-   
+         <form:form method="POST" action="register" commandName="registrationForm">
+            <div class="form-group">
+               <form:label path="firstName">
+                  <spring:message code="home.register.fn"/>
+               </form:label>
+               <div class="col-10">
+                  <form:input path="firstName" class="form-control"/>
+               </div>
+               <div class="feedback-error" id="register-feedback-email">
+                  <form:errors path="firstName"/>
+               </div>
+            </div>
+            <div class="form-group">
+               <form:label path="lastName">
+                  <spring:message code="home.register.ln"/>
+               </form:label>
+               <div>
+                  <form:input path="lastName" class="form-control"/>
+               </div>
+               <div class="feedback-error" id="register-feedback-email">
+                  <form:errors path="lastName"/>
+               </div>
+            </div>
+            <div class="form-group">
+               <form:label path="canton">
+                  <spring:message code="home.register.canton"/>
+               </form:label>
+               <div>
+                  <form:select class="dropdown-input" path="canton">
+                     <form:option value="NONE" label="---"/>
+                     <form:options items="${cantons}" />
+                  </form:select>
+               </div>
+            </div>
+            <div class="form-group">
+               <form:label path="email">
+                  <spring:message code="home.register.email"/>
+               </form:label>
+               <div>
+                  <form:input path="email" class="form-control"/>
+               </div>
+               <div class="feedback-error" id="register-feedback-email">
+                  <form:errors path="email"/>
+               </div>
+            </div>
+            <div class="form-group">
+               <form:label path="password">
+                  <spring:message code="home.register.pw"/>
+               </form:label>
+               <div>
+                  <form:input path="password" type="password" class="form-control"/>
+               </div>
+               <div class="feedback-error" id="register-feedback-email">
+                  <form:errors path="password"/>
+               </div>
+            </div>
+            <input type="submit" class="btn btn-primary" value='${register}' />
+            <sec:csrfInput />
+         </form:form>
+         <p>
+            <spring:message code="home.register.hint"/>
+         </p>
+         <c:if test="${registrationError != null}">
+            <p class="error">
+               <spring:message code="home.register.error.general"/>
+            </p>
+         </c:if>
+         <c:if test="${emailExistsError != null}">
+            <p class="error">
+               <spring:message code="home.register.error.emailexists"/>
+            </p>
+         </c:if>
+      </section>
+   </section>
 </main>
 <jsp:include page="templates/footer_new.jsp" />
 

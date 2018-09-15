@@ -33,9 +33,12 @@
 </head>
 <body>
 
+<!-- preparing variables -->
+<spring:message code="logout.title.short" var="logout" />
+
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="index.html"><img src="img/logo-radius.png" id="logo-home"></a>
+      <a href="home"><img src="img/logo-radius.png" id="logo-home"></a>
    </div>
    <div id="menuToggle">
       <input type="checkbox" />
@@ -46,6 +49,8 @@
       </div>
       <ul id="menu" class="menupoint navigations">
          <li><a href="#">über Radius</a></li>
+         <!-- <li><a href="#">Spielregeln</a></li> -->
+         <!-- <li><a href="<c:url value='/experience' />">Experiences</a></li> -->
          <li><a href="#">Spielregeln</a></li>
          <li><a href="<c:url value='/experience' />">Experiences</a></li>
          <li>
@@ -58,14 +63,10 @@
          </li>
       </ul>
    </div>
+   <sec:authorize access="isAuthenticated()">
+      <form action="<c:url value='/logout' />" method="post">
+         <input id="button-logout" type="submit" class="btn btn-primary" value='${logout}' >
+         <sec:csrfInput />
+      </form>
+   </sec:authorize>
 </nav>
-	
-	<sec:authorize access="isAuthenticated()">
-	    <p>Authenticated as <sec:authentication property="principal.username"/></p>
-	</sec:authorize>
-	<sec:authorize access="!isAuthenticated()">
-	   <p>Not authenticated</p>
-	</sec:authorize>
-	<sec:authorize access="isAuthenticated()">
-	<form action="<c:url value='/logout' />" method="post"><button name="logout" value="logout" class="btn btn-link"><sec:csrfInput /><font color="red"><spring:message code="logout.title.short"/></font></button></form>
-	</sec:authorize>

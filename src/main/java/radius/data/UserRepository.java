@@ -28,4 +28,12 @@ public interface UserRepository {
 	
 	public boolean userIsEnabled(String email);
 	
+	public boolean userIsActive(String email);
+	
+	public void activateUser(String email);
+	
+	public void deactivateUser(String email);
+	
+	public void deleteUser(String email);
+	
 }

@@ -152,8 +152,8 @@ public class User {
 			return null;
 		}
 		switch (status) {
-			case "NEW":
-				return userStatus.NEW;
+		/*case "NEW":
+				return userStatus.NEW;*/
 			case "WAITING":
 				return userStatus.WAITING;	
 			case "MATCHED":
@@ -167,8 +167,8 @@ public class User {
 	
 	public static String convertStatusToString(userStatus _status) {
 		switch (_status) {
-		case NEW:
-			return "NEW";
+		/*case NEW:
+			return "NEW";*/
 		case WAITING:
 			return "WAITING";	
 		case MATCHED:
@@ -223,7 +223,7 @@ public class User {
 	}
 	
 	public enum userStatus {
-		NEW,
+		/*NEW,*/
 		WAITING,
 		MATCHED,
 		INACTIVE

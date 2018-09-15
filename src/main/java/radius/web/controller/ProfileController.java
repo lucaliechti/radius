@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import radius.AnswerForm;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
@@ -32,10 +33,19 @@ public class ProfileController {
 
 	@RequestMapping(method=GET)
 	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model) {
+		if(loggedin != null) {
+			model.addAttribute("loggedin", "user has just logged in");
+		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		if(!userRepo.userHasAnswered(email)) {
-			//user has not yet answered the questions
-			model.addAttribute("noAnswers", true);
+		if(!userRepo.userIsEnabled(email)) {
+			model.addAttribute("not_enabled", true);
+			return "home";
+		}
+		else if(!userRepo.userHasAnswered(email)) {
+			model.addAttribute("lang", staticRepo.languages());
+			model.addAttribute("modi", staticRepo.modi());
+			model.addAttribute("answerForm", new AnswerForm());
+			return "answers";
 		}
 		else {
 			User u = userRepo.findUserByEmail(email);

@@ -606,6 +606,11 @@ p.error {
 	color: white;
 	padding: 5 8 5px;
 }
+/*LL: New, because if I use p.error I get problems with the padding*/
+.feedback-error {
+	color: #D02643;
+	font-family: 'Fira Sans Condensed', sans-serif;
+}
 #form {
 	display: flex;
 	margin-top: 10px;

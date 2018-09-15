@@ -5,13 +5,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="templates/header_new.jsp" />
+
 <main class="firstcontainer container">
+
+<!-- 
 <c:if test="${loggedin != null}">
 	<div class="alert alert-success fade-in" role="alert">
 	<a href="#" class="close" data-dismiss="alert">&times;</a>
   		You have been successfully logged in.
 	</div>
 </c:if>
+ -->
 
 <h1><spring:message code="status.title"/></h1>
 </main>

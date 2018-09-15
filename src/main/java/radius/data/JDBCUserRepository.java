@@ -32,6 +32,10 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_ANSWERED = 		"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND answered = TRUE)";
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
 	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
+	private static final String ACTIVATE_USER =			"UPDATE users SET status = WAITING WHERE email = ?";
+	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = INACTIVE WHERE email = ?";
+	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
+	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 	
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -169,6 +173,28 @@ public class JDBCUserRepository implements UserRepository {
 		// guess what, also super ugly
 		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ENABLED, email);
 		return (boolean)users.get("exists");
+	}
+
+	@Override
+	public boolean userIsActive(String email) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void activateUser(String email) {
+		jdbcTemplate.update(ACTIVATE_USER, email);
+	}
+
+	@Override
+	public void deactivateUser(String email) {
+		jdbcTemplate.update(DEACTIVATE_USER, email);
+	}
+
+	@Override
+	public void deleteUser(String email) {
+		jdbcTemplate.update(DELETE_AUTHORITIES, email);
+		jdbcTemplate.update(DELETE_USER, email);
 	}
 }
 
