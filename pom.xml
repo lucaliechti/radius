@@ -103,19 +103,53 @@
     	<artifactId>javamelody-core</artifactId>
     	<version>1.73.1</version>
     </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-json-org</artifactId>
+        <version>2.9.6</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>26.0-jre</version>
+    </dependency>
+      <dependency>
+          <groupId>com.google.auto.value</groupId>
+          <artifactId>auto-value-annotations</artifactId>
+          <version>1.6.2</version>
+      </dependency>
+      <dependency>
+          <groupId>com.google.auto.value</groupId>
+          <artifactId>auto-value</artifactId>
+          <version>1.6.2</version>
+          <scope>provided</scope>
+      </dependency>
   </dependencies>
   <build>
     <finalName>radius</finalName>
         <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-war-plugin</artifactId>
-            <version>2.6</version>
-            <configuration>
-                <failOnMissingWebXml>false</failOnMissingWebXml>
-            </configuration>
-        </plugin>
-    </plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <version>2.4</version>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals><goal>copy</goal></goals>
+          <configuration>
+            <artifactItems>
+              <artifactItem>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-runner</artifactId>
+                <version>9.4.9.v20180320</version>
+                <destFileName>jetty-runner.jar</destFileName>
+              </artifactItem>
+            </artifactItems>
+          </configuration>
+        </execution>
+       </executions>
+    </plugin>
+  </plugins>
   </build>
   <properties>
     <maven.compiler.target>1.8</maven.compiler.target>

@@ -1,16 +1,18 @@
 package radius.data;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
-
 import radius.User;
+import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
+
+import java.util.List;
 
 @Repository
 public interface UserRepository {
 
 	public List<User> allUsers();
+
+	public List<User> usersToMatch();
 	
 	public User findUserByEmail(String email);
 	
@@ -25,6 +27,8 @@ public interface UserRepository {
 	public boolean userExists(String email);
 	
 	public boolean userHasAnswered(String email);
+
+	public void match(UserPair userPair);
 	
 	public boolean userIsEnabled(String email);
 	
