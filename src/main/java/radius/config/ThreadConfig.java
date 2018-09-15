@@ -16,7 +16,7 @@ public class ThreadConfig {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(4);
-        executor.setThreadNamePrefix("sgfgd");
+        executor.setThreadNamePrefix("worker");
         executor.initialize();
 
         return executor;
