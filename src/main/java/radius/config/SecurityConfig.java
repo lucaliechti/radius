@@ -36,8 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status").authenticated()
 				.antMatchers("/monitoring/**", "/admin/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.POST, "/experience").authenticated()
-				.anyRequest().permitAll()
-				;//.and().requiresChannel().antMatchers("/login", "/register").requiresSecure(); //what else?
+				.anyRequest().permitAll();
 		
 		//TODO: Custom login handler
 		//login

@@ -47,6 +47,40 @@ body {
 	margin: 20px 5vw;
 	flex: 1 0 auto;
 }
+/*footer*/
+
+#footer {
+	display: flex;
+	}
+#contact {
+	margin: 20px 5vw;
+	flex: 1 0 auto;
+	display: inline;
+}
+
+ul #s-icons,  #s-icons{
+	display: inline-block;
+	flex: 0 0 auto;
+	margin: 0;
+	
+}
+#s-icons a {
+	text-decoration: none;}
+
+#s-icons a li {
+	display: inline-block;
+	margin: 0;
+	padding: 0px;
+}
+
+.icon {
+	height: 23px;
+	margin-left: 10px;}
+
+/*footer END*/
+
+
+
 
 #loginout,
 #menu {
@@ -315,4 +349,3 @@ div#feedback {
 #form input[type="submit"] {
 	flex: 0 0 auto;
 }
-

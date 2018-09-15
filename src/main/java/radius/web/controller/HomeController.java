@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 
 import radius.ReminderForm;
+import radius.UserForm;
 import radius.data.JDBCReminderRepository;
 import radius.data.JDBCStaticResourceRepository;
 
@@ -30,6 +31,7 @@ public class HomeController {
 
 	private JDBCStaticResourceRepository staticRepo;
 	private JDBCReminderRepository reminderRepo;
+//	private JDBCStaticResourceRepository staticResourceRepo;
 //	private LocaleResolver lr;
 	
 	@Autowired
@@ -48,6 +50,10 @@ public class HomeController {
 		else if(url.contains("radius-suisse")) { lr.setLocale(req, res, new Locale("fr")); }
 		else if(url.contains("radius-svizzera")) { lr.setLocale(req, res, new Locale("it")); }
 		*/
+		
+		model.addAttribute("registrationForm", new UserForm());
+		model.addAttribute("cantons", staticRepo.cantons());
+		
 		if(loggedout != null) {
 			model.addAttribute("reminderForm", new ReminderForm());
 			model.addAttribute("loggedout", "user sees this page right after logging out");
@@ -58,7 +64,7 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", -1);
 		}
-		return "index";
+		return "home";
 	}
 	
 	@RequestMapping(method=POST)

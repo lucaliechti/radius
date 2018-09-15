@@ -28,13 +28,6 @@
 			<form:textarea path="motivation" placeholder='${answers.motivation.ph}' class="input-paragraph form-control"/>
 		</div>
 	</div>
-	<!-- 
-	<div class="form-group">
-		<form:label path="languages">Languages</form:label>
-		<form:checkboxes items="${lang}" path="languages" />
-		<form:errors path="languages"/> <br>
-	</div>
-	 -->
 	<div class="form-group leftsection-content-element" id="register-languages">
 		<form:label path="languages" class="label-title"><spring:message code="answers.languages"/></form:label>
 		<c:forEach items="${lang}" var="l" >
@@ -42,15 +35,6 @@
 		</c:forEach>
 		<form:errors path="languages"/>
 	</div>
-	<!-- 
-	<div class="form-group">
-		<form:label path="modus">Modus </form:label>
-		<form:select path="modus"> 
-   			<form:options items="${modi}" />
-		</form:select>
-		<form:errors path="modus"/>
-	</div>
-	-->
 	<div class="form-group leftsection-content-element" id="register-modus">
 		<p><form:label path="modus" class="label-title"><spring:message code="modus"/></form:label></p>
 		<c:forEach items="${modi}" var="m" >
@@ -87,8 +71,6 @@
 	<form:radiobutton path="q5" value="false"/><label class="radio-button-label-yes"><spring:message code="question.false"/></label>
 	<form:errors path="q5"/>
 	</div>
-	
-	
 
 	<div class="form-group leftsection-content-element" id="register-locations">
 	<form:label path="locations" class="label-title"><spring:message code="answers.location"/></form:label>

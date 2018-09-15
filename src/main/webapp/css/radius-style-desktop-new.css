@@ -192,6 +192,9 @@ section .leftsection-content-element:first-child {
 	text-align: right;
 }
 
+.dropdown-input {
+	width: 100%;
+}
 
 /*footer*/
 
@@ -490,7 +493,9 @@ footer a {
 	color: white;
 }
 
-footer a:hover {
+footer a:hover,
+footer a:active, 
+footer a:visited {
 	color: white;
 }
 
@@ -512,6 +517,7 @@ footer a:hover {
 }
 
 input[type="text"],
+input[type="password"],
 textarea {
 	border: #006F68 solid 2px;
 	padding: 5px;
@@ -585,19 +591,21 @@ input[type="button"] {
 
 #feedback p {
 	width: 100%;
-}
+}*/
 
-#feedback p.success {
+
+/*LL: I am using these in some places, but not in feedback elements*/
+p.success {
 	background-color: #3EAB70;
 	color: white;
 	padding: 5 8 5px;
 }
 
-#feedback p.error {
+p.error {
 	background-color: #D02643;
 	color: white;
 	padding: 5 8 5px;
-}*/
+}
 #form {
 	display: flex;
 	margin-top: 10px;
@@ -701,7 +709,8 @@ div #register-locations {}
 .radio-button-label-yes {}
 
 /*login-balken deko*/
+/*LL: auskommentiert, weil ich dort jetzt das Registrier-Formular hingetan habe. TBD 
 #profile-deco {
 	text-align: center;
 }
-
+*/

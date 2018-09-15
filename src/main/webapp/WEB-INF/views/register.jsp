@@ -27,7 +27,7 @@
 
 <form:form method="POST" action="register" commandName="registrationForm">
 	<div class="form-group">
-		<form:label path="firstName" class="col-2 col-form-label">First Name</form:label>
+		<form:label path="firstName">First Name</form:label>
 		<div class="col-10">
 			<form:input path="firstName" class="form-control"/>
 		</div>
@@ -35,16 +35,16 @@
 	</div>
 	
 	<div class="form-group">
-		<form:label path="lastName" class="col-2 col-form-label">Last Name</form:label>
-		<div class="col-10">
+		<form:label path="lastName">Last Name</form:label>
+		<div>
 			<form:input path="lastName" class="form-control"/>
 		</div>
 		<form:errors path="lastName"/>
 	</div>
 	
 	<div class="form-group">
-		<form:label path="canton" class="col-2 col-form-label">Canton</form:label>
-		<div class="col-10">
+		<form:label path="canton">Canton</form:label>
+		<div>
 			<form:select path="canton"> 
    				<form:option value="NONE" label="---"/>
    				<form:options items="${cantons}" />
@@ -53,16 +53,16 @@
 	</div>
 	
 	<div class="form-group">
-		<form:label path="email" class="col-2 col-form-label">Email</form:label>
-		<div class="col-10">
+		<form:label path="email">Email</form:label>
+		<div>
 			<form:input path="email" class="form-control"/>
 		</div>
 		<form:errors path="email"/>
 	</div>
 
 	<div class="form-group">
-		<form:label path="password" class="col-2 col-form-label">Password</form:label>
-		<div class="col-10">
+		<form:label path="password">Password</form:label>
+		<div>
 			<form:input path="password" type="password" class="form-control"/>
 		</div>
 		<form:errors path="password"/>

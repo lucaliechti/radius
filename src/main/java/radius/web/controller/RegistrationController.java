@@ -24,7 +24,7 @@ import radius.exceptions.EmailAlreadyExistsException;
 public class RegistrationController {
 	
 	private JDBCUserRepository userRepo;
-	private JDBCStaticResourceRepository staticResourceRepo;
+	private JDBCStaticResourceRepository staticResourceRepo; //leftover from when this was an own page
 	
 	@Autowired
 	PasswordEncoder encoder;
@@ -35,19 +35,22 @@ public class RegistrationController {
 		this.userRepo = _userRepo;
 		this.staticResourceRepo = _staticRepo;
 	}
-
+	
+	/* LL: now moved to home page. this cannot be GETed.
 	@RequestMapping(method=GET)
 	public String registrationPage(Model model) {
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticResourceRepo.cantons());
 		return "register";
-	}
+	}*/
 	
 	@RequestMapping(method=POST)
 	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model) {
+		//all kinds of errors
 		if(result.hasErrors()) {
 			System.out.println("RegistrationController: Error registering");
-			return "register";
+			model.addAttribute("cantons", staticResourceRepo.cantons());
+			return "home";
 		}
 		String firstName = registrationForm.getFirstName();
 		String lastName = registrationForm.getLastName();
@@ -55,7 +58,6 @@ public class RegistrationController {
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
 		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
-
 		try {
 			System.out.println("saving user...");
 			userRepo.saveUser(user);
@@ -64,15 +66,17 @@ public class RegistrationController {
 		catch (EmailAlreadyExistsException eaee) {
 			System.out.println(eaee.getMessage());
 			model.addAttribute("emailExistsError", new Boolean(true));
-			return "register";
 		}
 		catch (Exception e) {
 			System.out.println("RegistrationController: error saving new user!");
 			e.printStackTrace();
-			model.addAttribute("registrationError", new Boolean(true));
-			return "register";
+			model.addAttribute("registrationError", true);
 		}
+		
+		//success
 		model.addAttribute("waitForEmailConfirmation", new Boolean(true));
-		return "login";
+		model.addAttribute("registrationForm", new UserForm());
+		model.addAttribute("cantons", staticResourceRepo.cantons());
+		return "home";
 	}
 }

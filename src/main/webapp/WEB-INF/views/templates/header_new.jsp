@@ -31,36 +31,8 @@
 	<!-- favicon -->
 	<link rel="shortcut icon" href="img/favicon.ico" />
 </head>
-
 <body>
-	<!-- 
-	<sec:authorize access="isAuthenticated()">
-	    Authenticated as <sec:authentication property="principal.username"/><br>
-	</sec:authorize>
-	<sec:authorize access="!isAuthenticated()">
-	   Not authenticated<br>
-	</sec:authorize>
-	 -->
-	 <!-- 
-	<nav role="navigation" id="primary-menubar">
-	   <div id="home">
-	      <a href="<c:url value='/' />"><img src="img/logo-radius-white.png" id="logo-home"></a>
-	   </div>
-	   <div id="menuToggle">
-	      <input type="checkbox" />
-	      <div id="burger">
-	         <span></span>
-	         <span></span>
-	         <span></span>
-	      </div>
-	      <ul id="menu" class="menupoint language-selector">
-	         <a href="?lang=de"> <li>DE</li> </a>
-	         <a href="?lang=fr"> <li>FR</li> </a>
-	         <a href="?lang=it"> <li>IT</li> </a>
-	         <a href="?lang=en"> <li>EN</li> </a>
-	      </ul>
-	   </div>
-	</nav> -->
+
 <nav role="navigation" id="primary-menubar">
    <div id="home">
       <a href="index.html"><img src="img/logo-radius.png" id="logo-home"></a>
@@ -88,3 +60,12 @@
    </div>
 </nav>
 	
+	<sec:authorize access="isAuthenticated()">
+	    <p>Authenticated as <sec:authentication property="principal.username"/></p>
+	</sec:authorize>
+	<sec:authorize access="!isAuthenticated()">
+	   <p>Not authenticated</p>
+	</sec:authorize>
+	<sec:authorize access="isAuthenticated()">
+	<form action="<c:url value='/logout' />" method="post"><button name="logout" value="logout" class="btn btn-link"><sec:csrfInput /><font color="red"><spring:message code="logout.title.short"/></font></button></form>
+	</sec:authorize>
