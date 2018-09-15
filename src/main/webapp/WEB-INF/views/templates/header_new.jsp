@@ -48,11 +48,9 @@
          <span></span>
       </div>
       <ul id="menu" class="menupoint navigations">
-         <li><a href="#">über Radius</a></li>
-         <!-- <li><a href="#">Spielregeln</a></li> -->
+         <li><a href="<c:url value='/about' />"><spring:message code="about.title"/></a></li>
+         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/profile' />"><spring:message code="profile.title"/></a></li></sec:authorize>
          <!-- <li><a href="<c:url value='/experience' />">Experiences</a></li> -->
-         <li><a href="#">Spielregeln</a></li>
-         <li><a href="<c:url value='/experience' />">Experiences</a></li>
          <li>
             <ul id="language-select" class="menupoint navigations">
                <li><a href="?lang=de">DE</a></li>

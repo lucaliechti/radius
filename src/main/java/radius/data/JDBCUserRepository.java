@@ -24,7 +24,7 @@ public class JDBCUserRepository implements UserRepository {
 	private JdbcTemplate jdbcTemplate;
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
-	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE)";
 	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, datemodify = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
