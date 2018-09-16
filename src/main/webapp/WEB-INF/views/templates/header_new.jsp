@@ -55,7 +55,7 @@
             <ul id="language-select" class="menupoint navigations">
                <li><a href="?lang=de">DE</a></li>
                <li><a href="?lang=fr">FR</a></li>
-               <li><a href="?lang=it">IT</a></li>
+               <!-- <li><a href="?lang=it">IT</a></li> -->
                <li><a href="?lang=en">EN</a></li>
             </ul>
          </li>

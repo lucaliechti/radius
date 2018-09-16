@@ -7,7 +7,17 @@
 
 <jsp:include page="templates/header_new.jsp" />
 
-<h1><spring:message code="imprint.title"/></h1>
-<h4><spring:message code="imprint.imprint"/></h4>
+<main class="firstcontainer container">
+   <section class="fullwidth-section">
+         <section class="leftsection-content-element" id="">
+            <h2>
+               <spring:message code="imprint.title"/>
+            </h2>
+            <p>
+               <spring:message code="imprint.imprint"/>
+            </p>
+         </section>
+      </section>
+</main>
 
-<jsp:include page="templates/footer.jsp" />
+<jsp:include page="templates/footer_new.jsp" />

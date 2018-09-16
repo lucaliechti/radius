@@ -39,6 +39,7 @@ public class ConfirmEmailController {
 		}		
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());
+		model.addAttribute("emailconfirmed", true);
 		return "home";
 	}
 

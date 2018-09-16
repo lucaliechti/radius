@@ -3,11 +3,14 @@ package radius.web.controller;
 //import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,9 @@ public class RegistrationController {
 	private UUIDRepository uuidRepo;
 	private EmailService emailService;
 	
+    @Autowired
+    private MessageSource messageSource;
+	
 	@Autowired
 	PasswordEncoder encoder;
 	
@@ -57,18 +63,18 @@ public class RegistrationController {
 	}*/
 	
 	@RequestMapping(method=POST)
-	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model) {
+	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
 		//all kinds of errors
 		if(result.hasErrors()) {
 			System.out.println("RegistrationController: Error registering");
 			model.addAttribute("cantons", staticResourceRepo.cantons());
 			return "home";
 		}
-		String firstName = registrationForm.getFirstName();
-		String lastName = registrationForm.getLastName();
+		String firstName = new String(registrationForm.getFirstName().getBytes("ISO-8859-1"), "UTF-8");
+		String lastName = new String(registrationForm.getLastName().getBytes("ISO-8859-1"), "UTF-8");
 		String canton = registrationForm.getCanton();
-		String email = registrationForm.getEmail();
-		String password = registrationForm.getPassword();
+		String email = new String(registrationForm.getEmail().getBytes("ISO-8859-1"), "UTF-8");
+		String password = new String(registrationForm.getPassword().getBytes("ISO-8859-1"), "UTF-8");
 		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
 		UUID uuid = UUID.randomUUID();
 		try {
@@ -95,7 +101,7 @@ public class RegistrationController {
 		System.out.println(uuidRepo.findUserByUUID(uuid.toString()));
 		
 		try {
-			emailService.sendSimpleMessage("hello", email, "willkommen!", "willkommen bei Radius! Gehen Sie mal auf https://radius-schweiz.ch/confirm?uuid=" + uuid.toString() + ", dann sind Sie registriert.");
+			emailService.sendSimpleMessage("hello", email, messageSource.getMessage("email.confirm.title", new Object[]{}, locale), messageSource.getMessage("email.confirm.content", new Object[]{firstName, lastName, "https://radius-schweiz.ch/confirm?uuid=" + uuid.toString()}, locale));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

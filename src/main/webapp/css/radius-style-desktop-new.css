@@ -83,6 +83,17 @@ main {
 	margin-right: 5%;
 }
 
+#broadrightsection {
+	display: inline-block;
+	flex: 0 0 25%;
+	border: 2px solid black;
+	padding: 20px;
+	margin-top: calc(3*20px);
+	margin-bottom: 5%;
+	margin-left: 10px;
+	margin-right: 5%;
+}
+
 .fullwidth-section {
 	display: flex;
 	flex: 1 0 auto;

@@ -11,25 +11,25 @@
    <section id="leftsection">
       <section class="leftsection-title" id="page-title">         
          <h2>
-            <spring:message code="about.title"/>
+            <spring:message code="support.thankyou"/>
          </h2>
       </section>
       
 	<section class="leftsection-content">
 	   <section class="leftsection-content-element" id="">
 	      <h2>
-	         <spring:message code="about.works"/>
+	         <spring:message code="support.helpers.title"/>
 	      </h2>
 	      <p>
-	         <spring:message code="about.works.detail"/>
+	         <spring:message code="support.helpers.detail"/> <spring:message code="support.helpers"/>
 	      </p>
 	   </section>
 	   <section class="leftsection-content-element" id="">
 	      <h2>
-	         <spring:message code="about.rules"/>
+	         <spring:message code="support.crowdfunding.title"/>
 	      </h2>
 	      <p>
-	         <spring:message code="about.rules.detail"/>
+	         <spring:message code="support.crowdfunding.detail"/> <spring:message code="support.crowdfunding"/>
 	      </p>
 	   </section>
 	</section>
@@ -38,9 +38,12 @@
       <section id="broadrightsection">
       <section>
          <h2>
-            <spring:message code="about.legal"/>
+            <spring:message code="support.title"/>
          </h2>
-         <p><spring:message code="about.legal.detail"/></p>
+         <p><spring:message code="support.intro"/></p><br>
+         <p><b><spring:message code="support.iban"/>:</b> <spring:message code="support.iban.iban"/>
+         <p><b><spring:message code="support.receiver"/>:</b> <spring:message code="support.receiver.detail"/><br><br>
+         <spring:message code="support.thanks"/>
       </section>
    </section>
 </main>

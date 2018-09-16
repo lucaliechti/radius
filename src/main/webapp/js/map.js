@@ -1,4 +1,4 @@
-var map = L.map('map').setView([46.75, 8.25], 8);
+var map = L.map('map').setView([46.75, 8.25], 7);
 
 var tl = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
 	maxZoom: 10,

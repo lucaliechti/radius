@@ -21,7 +21,13 @@
                <spring:message code="home.feedback.success.logout"/><br>
             </p>
          </c:if>
-         
+
+         <c:if test="${emailconfirmed != null}">
+            <p class="success" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.mailconfirmed"/><br>
+            </p>
+         </c:if>
+                  
          <c:if test="${loginerror != null}">
             <p class="error" style="margin-bottom: 1%;">
                <spring:message code="home.feedback.success.loginerror"/><br>
@@ -97,10 +103,10 @@
             </label>
             <input type="submit" class="btn btn-primary" value='${login}' />
             <sec:csrfInput />
-         </form>
-         <a href="#">
+         </form><!-- 
+         <a href="#"> kommt noch!
             <spring:message code="home.login.forgot"/>
-         </a>
+         </a> -->
       </section>
       
       <section id="profile-deco" class="profile-resume">
@@ -113,7 +119,7 @@
                   <spring:message code="home.register.fn"/>
                </form:label>
                <div class="col-10">
-                  <form:input path="firstName" class="form-control"/>
+                  <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
                   <form:errors path="firstName"/>
@@ -124,7 +130,7 @@
                   <spring:message code="home.register.ln"/>
                </form:label>
                <div>
-                  <form:input path="lastName" class="form-control"/>
+                  <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
                   <form:errors path="lastName"/>
@@ -146,7 +152,7 @@
                   <spring:message code="home.register.email"/>
                </form:label>
                <div>
-                  <form:input path="email" class="form-control"/>
+                  <form:input path="email" class="form-control"  accept-charset="ISO-8859-1"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
                   <form:errors path="email"/>
@@ -157,7 +163,7 @@
                   <spring:message code="home.register.pw"/>
                </form:label>
                <div>
-                  <form:input path="password" type="password" class="form-control"/>
+                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
                   <form:errors path="password"/>
