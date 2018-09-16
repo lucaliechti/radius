@@ -50,6 +50,7 @@ public class HomeController {
 		else if(url.contains("radius-suisse")) { lr.setLocale(req, res, new Locale("fr")); }
 		else if(url.contains("radius-svizzera")) { lr.setLocale(req, res, new Locale("it")); }
 		*/
+		System.out.println("In the HomeController class");
 		
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());

@@ -31,9 +31,10 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 	private static final String USER_ANSWERED = 		"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND answered = TRUE)";
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
+	private static final String USER_ACTIVE = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND NOT status = 'INACTIVE')";
 	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
-	private static final String ACTIVATE_USER =			"UPDATE users SET status = WAITING WHERE email = ?";
-	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = INACTIVE WHERE email = ?";
+	private static final String ACTIVATE_USER =			"UPDATE users SET status = 'WAITING' WHERE email = ?";
+	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = 'INACTIVE' WHERE email = ?";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 	
@@ -76,7 +77,7 @@ public class JDBCUserRepository implements UserRepository {
 			}
 			catch(NumberFormatException nfe) {nfe.printStackTrace();} 
 			locations = Arrays.asList(locint);
-			System.out.println(loc);
+//			System.out.println(loc);
 			ArrayList<String> languages = new ArrayList<String>();
 			if(rs.getString("languages") != null){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
@@ -177,8 +178,9 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public boolean userIsActive(String email) {
-		// TODO Auto-generated method stub
-		return false;
+		// still plenty of chances to do it the ugly way
+		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ACTIVE, email);
+		return (boolean)users.get("exists");
 	}
 
 	@Override

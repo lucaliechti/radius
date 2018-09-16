@@ -22,6 +22,13 @@
       <!-- 	
          <div class="editing-icons-div"><a href="#"><img src="img/icon-edit.png" class="editing-icons"></a>				
          <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a></div>-->
+   </div><br>
+   <p><b><spring:message code="profile.status"/>:</b> <spring:message code="status.${status}"/> <a href="toggleStatus"><spring:message code="status.${status}.toggle"/></a><br>
+   <spring:message code="status.${status}.detail"/>
+   <br><br>
+   <div class="editable">
+      <h2><spring:message code="profile.personaldata"/></h2>
+   	  <!-- <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div> -->
    </div>
    <p><b><spring:message code="profile.fn"/>:</b> ${firstName}
    <p><b><spring:message code="profile.ln"/>:</b> ${lastName}
@@ -51,7 +58,7 @@
    <br><br>		
    <div class="editable">
       <h2>
-         <spring:message code="profile.personaldata"/>
+         <spring:message code="profile.additionaldata"/>
       </h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
@@ -59,13 +66,6 @@
    <p><b><spring:message code="profile.modus"/>:</b> <spring:message code="modus.${modus}"/>
    <p><b><spring:message code="profile.locations"/>:</b> <c:forEach items="${locations}" var="item" varStatus="loop">${item}${!loop.last ? ', ' : ''}</c:forEach>
    <br><br>
-   <div class="editable">
-      <h2><spring:message code="profile.inactive"/></h2>
-   </div>
-   <form action="<c:url value='/inactive' />" method="post">
-   	  <input type="submit" class="btn btn-primary" value='${inactive}' >
-   	  <sec:csrfInput />
-   </form><p><spring:message code="profile.inactive.detail"/></p><br>
    <div class="editable">
       <h2><spring:message code="profile.delete"/></h2>
    </div>

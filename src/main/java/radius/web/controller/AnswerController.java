@@ -28,11 +28,13 @@ public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
 	private JDBCStaticResourceRepository staticRepo;
+	private ProfileController pc;
 	
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, ProfileController _pc) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
+		this.pc = _pc;
 	}
 
 	@RequestMapping(method=GET)
@@ -62,7 +64,7 @@ public class AnswerController {
 		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
 		userRepo.updateUser(u);
-		return "status";
+		return pc.profile(null, model); //wow, neat
 	}
 	
 	private void addListsTo(Model model) {

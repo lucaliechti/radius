@@ -24,11 +24,13 @@ public class ProfileController {
 	
 	private JDBCUserRepository userRepo;
 	private StaticResourceRepository staticRepo;
+	private HomeController hc;
 	
 	@Autowired
-	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, HomeController _hc) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
+		this.hc = _hc;
 	}
 
 	@RequestMapping(method=GET)
@@ -39,7 +41,7 @@ public class ProfileController {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		if(!userRepo.userIsEnabled(email)) {
 			model.addAttribute("not_enabled", true);
-			return "home";
+			return hc.home(null, null, model, null, null);
 		}
 		else if(!userRepo.userHasAnswered(email)) {
 			model.addAttribute("lang", staticRepo.languages());
@@ -67,7 +69,8 @@ public class ProfileController {
 				locations.add(staticRepo.regions().get(l));
 			}
 			model.addAttribute("languages", u.getLanguages());
-			model.addAttribute("locations", locations);			
+			model.addAttribute("locations", locations);
+			model.addAttribute("status", u.getStatus().toString());
 		}
 		return "profile";
 	}

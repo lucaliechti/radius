@@ -7,40 +7,40 @@
 
 <jsp:include page="templates/header_new.jsp" />
 
-<c:if test="${loginerror != null}">
-<div>
-	Wrong username or password. Try again.
-</div>
-</c:if>
-
-<c:if test="${waitForEmailConfirmation != null}">
-<div>
-	Success! You have received an email. You can login as soon as you have confirmed your email address.
-</div>
-</c:if>
-
-<c:if test="${not_enabled != null}">
-<div>
-	You can log in as soon as you confirm your email address. (Check spam folder).
-</div>
-</c:if>
-
-<c:if test="${loggedout != null}">
-<div>
-	You can log in as soon as you confirm your email address. (Check spam folder).
-</div>
-</c:if>
-
-<c:if test="${delete_success != null}">
-<div>
-	Account successfully deleted.
-</div>
-</c:if>
-
-
 <main class="firstcontainer container">
    <section id="leftsection">
-      <section class="leftsection-title" id="page-title">
+   
+         <c:if test="${waitForEmailConfirmation != null}">
+            <p class="success" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.waitforemail"/><br>
+            </p>
+         </c:if>
+         
+         <c:if test="${loggedout != null}">
+            <p class="success" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.logout"/><br>
+            </p>
+         </c:if>
+         
+         <c:if test="${loginerror != null}">
+            <p class="error" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.loginerror"/><br>
+            </p>
+         </c:if>
+         
+         <c:if test="${delete_success != null}">
+            <p class="success" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.delete"/><br>
+            </p>
+         </c:if>
+         
+         <c:if test="${not_enabled != null}">
+            <p class="error" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.error.notenabled"/><br>
+            </p>
+         </c:if>
+         
+      <section class="leftsection-title" id="page-title">         
          <h2>
             <spring:message code="home.title"/>
          </h2>
