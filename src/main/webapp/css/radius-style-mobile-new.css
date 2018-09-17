@@ -38,6 +38,16 @@
 		display: block;
 		flex: 0 1 auto;
 	}
+	#broadrightsection {
+		display: inline-block;
+		flex: 0 0 25%;
+		border: 2px solid black;
+		padding: 20px;
+		margin-top: 10px;
+		margin-bottom: 5%;
+		margin-left: 5%;
+		margin-right: 5%;
+	}
 	section .profile-resume {
 		border-bottom: none;
 	}
@@ -56,7 +66,7 @@
 		padding-top: 20px;
 	}
 	#logo-home {
-		content: url(logo-radius-white.png)
+		content: url(../img/logo-radius-white.png);
 	}
 	#form {
 		flex-direction: column;

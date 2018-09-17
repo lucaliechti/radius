@@ -48,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
 				.and().csrf();
 
+		/*
 		//TODO: Custom logout handler
 		//logout
 		http
@@ -55,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutUrl("/logout")
 				.deleteCookies("JSESSIONID")
 				.logoutSuccessUrl("/home?logout");
+				*/
 	}
 	
 	@Bean
@@ -70,5 +72,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    
 }

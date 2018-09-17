@@ -29,7 +29,7 @@
          <spring:message code="answers.motivation"/>
       </form:label>
       <div class="col-10">
-         <form:textarea path="motivation" placeholder='${answers.motivation.ph}' class="input-paragraph form-control"/>
+         <form:textarea path="motivation" placeholder='${answers.motivation.ph}' class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
       </div>
    </div>
    <div class="form-group leftsection-content-element" id="register-languages">
@@ -150,14 +150,16 @@
          <div id="map"></div>
          <form:hidden path="locations"/>
          <div id="register-map-locations"> </div>
-      </section>
+      </section><br>
       <div class="feedback-error">
          <form:errors path="locations"/>
       </div>
+        <input type="submit" class="btn btn-primary" value="Answer" />
+   		<sec:csrfInput />
+   		</form:form>
    </div>
-   <input type="submit" class="btn btn-primary" value="Answer" />
-   <sec:csrfInput />
-</form:form>
+
+
 
 
 

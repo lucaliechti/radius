@@ -96,7 +96,7 @@ main {
 
 .fullwidth-section {
 	display: flex;
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 	border: 2px solid black;
 	padding: 20px;
 	margin: 5%;
@@ -377,7 +377,7 @@ a:visited {
 
 #register-map-locations a:before {
 	/* Ortschaften bei registration */
-	background-image: url('../img/icon-close.png');
+	background-image: url('/img/icon-close.png');
 	background-size: 15px 15px;
 	display: inline-block;
 	width: 15px;
@@ -563,10 +563,7 @@ input[type="button"] {
 #logo-home {
 	width: auto;
 	height: 24px;
-	content: url(logo-radius.png);
-}
-
-
+	content: url(../img/logo-radius.png);
 }
 
 /*ul.ul-big li::before {

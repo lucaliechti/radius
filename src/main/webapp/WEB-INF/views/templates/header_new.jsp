@@ -22,7 +22,6 @@
 	<!-- additional CSS -->
     <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css"> <!-- was -desktop-launch -->
     <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css"> <!-- was -mobile-launch -->
-    <link href="css/custom.css" rel="stylesheet">
 	
 	<!-- Leaflet -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"><link/>
@@ -38,7 +37,7 @@
 
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="home"><img src="img/logo-radius.png" id="logo-home"></a>
+      <a href="home"><img id="logo-home" /></a> <!-- src="img/logo-radius.png" -->
    </div>
    <div id="menuToggle">
       <input type="checkbox" />
@@ -51,6 +50,7 @@
          <li><a href="<c:url value='/about' />"><spring:message code="about.title"/></a></li>
          <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/profile' />"><spring:message code="profile.title"/></a></li></sec:authorize>
          <!-- <li><a href="<c:url value='/experience' />">Experiences</a></li> -->
+         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/logout' />"><spring:message code="logout.title.short"/></a></li></sec:authorize>
          <li>
             <ul id="language-select" class="menupoint navigations">
                <li><a href="?lang=de">DE</a></li>
@@ -60,11 +60,11 @@
             </ul>
          </li>
       </ul>
-   </div>
+   </div><!-- 
    <sec:authorize access="isAuthenticated()">
       <form action="<c:url value='/logout' />" method="post">
          <input id="button-logout" type="submit" class="btn btn-primary" value='${logout}' >
          <sec:csrfInput />
       </form>
-   </sec:authorize>
+   </sec:authorize> -->
 </nav>
