@@ -94,7 +94,11 @@ public class AnswerController {
 	private User updateUserFromForm(User u, AnswerForm answerForm) throws UnsupportedEncodingException {
 		u.setLanguages(answerForm.getLanguages());
 		u.setModus(answerForm.getModus());
-		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
+		String m = answerForm.getMotivation();
+//		System.out.println(m); //good
+//		System.out.println(new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8")); //bad
+//		System.out.println(new String(answerForm.getMotivation().getBytes("UTF-8"), "ISO-8859-1")); //bad
+		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());//new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8"));
 		ArrayList<Boolean> questions = new ArrayList<Boolean>();
 		questions.add(answerForm.getQ1());
 		questions.add(answerForm.getQ2());

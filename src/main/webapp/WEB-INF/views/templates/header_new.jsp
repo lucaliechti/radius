@@ -37,7 +37,7 @@
 
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="home"><img id="logo-home" /></a> <!-- src="img/logo-radius.png" -->
+      <a href="home"><img id="logo-home" src="img/logo-radius.png"/></a>
    </div>
    <div id="menuToggle">
       <input type="checkbox" />

@@ -169,7 +169,7 @@
                   <form:errors path="password"/>
                </div>
             </div>
-            <input type="submit" class="btn btn-primary" value='${register}' />
+            <input type="submit" class="btn btn-primary" value="${register}" />
             <sec:csrfInput />
          </form:form>
          <p>

@@ -34,6 +34,6 @@ public class LogoutController {
 	        new SecurityContextLogoutHandler().logout(request, response, auth);
 	    }
 	    return hc.home("loggedout", null, model, request, response);
-//	    return "home?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+//	    return "home?logout";
 	}
 }
