@@ -1,14 +1,6 @@
 package radius.web.controller;
 
 //import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,18 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import radius.User;
 import radius.UserForm;
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.JDBCUUIDRepository;
-import radius.data.JDBCUserRepository;
-import radius.data.StaticResourceRepository;
-import radius.data.UUIDRepository;
-import radius.data.UserRepository;
+import radius.data.*;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.web.components.EmailService;
-import radius.web.components.SimpleEmailService;
+
+import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.util.Locale;
+import java.util.UUID;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping(value="/register")
@@ -47,7 +39,7 @@ public class RegistrationController {
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
-	public RegistrationController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, SimpleEmailService _ses, JDBCUUIDRepository uuid) {
+	public RegistrationController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, EmailService _ses, JDBCUUIDRepository uuid) {
 		this.userRepo = _userRepo;
 		this.staticResourceRepo = _staticRepo;
 		this.emailService = _ses;
