@@ -39,18 +39,18 @@ public class ProfileController {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		if(!userRepo.userIsEnabled(email)) {
+		User u = userRepo.findUserByEmail(email);
+		if(!u.getEnabled()) {
 			model.addAttribute("not_enabled", true);
 			return hc.home(null, null, model, null, null);
 		}
-		else if(!userRepo.userHasAnswered(email)) {
+		else if(!u.getAnswered()) {
 			model.addAttribute("lang", staticRepo.languages());
 			model.addAttribute("modi", staticRepo.modi());
 			model.addAttribute("answerForm", new AnswerForm());
 			return "answers";
 		}
 		else {
-			User u = userRepo.findUserByEmail(email);
 			model.addAttribute("firstName", u.getFirstname());
 			model.addAttribute("lastName", u.getLastname());
 			model.addAttribute("email", u.getEmail());
@@ -68,9 +68,10 @@ public class ProfileController {
 			for (int l : loc) {
 				locations.add(staticRepo.regions().get(l));
 			}
-			model.addAttribute("languages", u.getLanguages());
+
 			model.addAttribute("locations", locations);
-			model.addAttribute("status", u.getStatus().toString());
+			model.addAttribute("languages", u.getLanguages());
+//			model.addAttribute("status", u.getStatus().toString());
 		}
 		return "profile";
 	}

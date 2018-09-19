@@ -9,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.AnswerForm;
+import radius.MeetingFeedbackForm;
+import radius.User;
+//import radius.AnswerForm;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 
@@ -18,13 +20,15 @@ import radius.data.JDBCUserRepository;
 public class StatusController {
 	
 	private JDBCUserRepository userRepo;
-	private JDBCStaticResourceRepository staticRepo;
+//	private JDBCStaticResourceRepository staticRepo;
+	private AnswerController ac;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
-	public StatusController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public StatusController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, AnswerController _ac) {
 		this.userRepo = _userRepo;
-		this.staticRepo = _staticRepo;
+//		this.staticRepo = _staticRepo;
+		this.ac = _ac;
 	}
 	
 	@RequestMapping(method=GET)
@@ -34,18 +38,21 @@ public class StatusController {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		if(!userRepo.userIsEnabled(email)) {
+		User user = userRepo.findUserByEmail(email);
+		if(!user.getEnabled()) {
 			model.addAttribute("not_enabled", true);
 			return "login";
 		}
-		if(!userRepo.userHasAnswered(email)) {
-			model.addAttribute("lang", staticRepo.languages());
-			model.addAttribute("modi", staticRepo.modi());
-			model.addAttribute("answerForm", new AnswerForm());
-			return "answers";
+		if(!user.getAnswered()) {
+//			model.addAttribute("lang", staticRepo.languages());
+//			model.addAttribute("modi", staticRepo.modi());
+//			model.addAttribute("answerForm", new AnswerForm());
+//			return "answers";
+			return ac.answer(model);
 		}
 		else {
-			//complex; grab matches etc.
+			model.addAttribute("user", user);
+			model.addAttribute("feedbackForm", new MeetingFeedbackForm());
 		}
 		return "status";
 	}

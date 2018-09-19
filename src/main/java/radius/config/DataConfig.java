@@ -18,7 +18,7 @@ public class DataConfig {
 		Properties dbProperties = new Properties();
 		BufferedInputStream in;
 		try {
-			in = (BufferedInputStream) DataConfig.class.getResourceAsStream("/config/database_prod.properties");
+			in = (BufferedInputStream) DataConfig.class.getResourceAsStream("/config/database_dev.properties");
 			dbProperties.load(in);
 			in.close();
 		} catch (IOException e) {
