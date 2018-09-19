@@ -136,7 +136,6 @@ public class User {
 	public boolean isBanned() {
 		return banned;
 	}
-
 	public Timestamp getDateModified() {
 		return dateModified;
 	}
