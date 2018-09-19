@@ -10,46 +10,36 @@
 <!-- preparing variables -->
 <spring:message code="profile.delete" var="delete" />
 <spring:message code="profile.inactive" var="inactive" />
-<spring:message code="profile.delete.confirm" var="confirm" />
-
+<spring:message code="profile.confirm" var="confirm" />
 
 <main class="firstcontainer container">
-<section id="leftsection">
-<section id="leftsection-content">
-   <section class="leftsection-title" id="page-title">    
+<section class="fullwidth-section">
+<section id="edit-profile-leftsection">
+   <div class="editable">
       <h1>
          <spring:message code="profile.title"/>
       </h1>
       <!-- 	
          <div class="editing-icons-div"><a href="#"><img src="img/icon-edit.png" class="editing-icons"></a>				
          <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a></div>-->
-   </section>
-   <section class="leftsection-content">
-   <section class="leftsection-content-element" id="">
+   </div><br>
    <p><b><spring:message code="profile.status"/>:</b> <spring:message code="status.${status}"/> <a href="toggleStatus"><spring:message code="status.${status}.toggle"/></a><br>
-   <spring:message code="status.${status}.detail"/><br><br>
-
-   <c:if test="${status == 'INACTIVE'}">
-   <p><b></b><spring:message code="profile.status.active"/></b></p>
-   </c:if>
-   
-   </section>
-   <section class="leftsection-content-element" id="">
+   <spring:message code="status.${status}.detail"/>
+   <br><br>
+   <div class="editable">
       <h2><spring:message code="profile.personaldata"/></h2>
    	  <!-- <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div> -->
-   
+   </div>
    <p><b><spring:message code="profile.fn"/>:</b> ${firstName}
    <p><b><spring:message code="profile.ln"/>:</b> ${lastName}
    <p><b><spring:message code="profile.email"/>:</b> ${email}
    <p><b><spring:message code="profile.canton"/>:</b> <c:if test="${canton != null}"><spring:message code="canton.${canton}"/></c:if>
-   <p><b><spring:message code="profile.motivation"/>:</b> ${motivation}	
-   </section>
-   <section class="leftsection-content-element" id="">
-      <div class="editable">
+   <p><b><spring:message code="profile.motivation"/>:</b> ${motivation}				
+   <br><br>
+   <div class="editable">
       <h2><spring:message code="profile.radiusdata"/></h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
-   
    <p><b><spring:message code="q1"/></b>
       <br>
       <spring:message code="question.${q1}"/>
@@ -65,20 +55,17 @@
    <p><b><spring:message code="q5"/></b>
       <br>
       <spring:message code="question.${q5}"/>
-   </section>	
-   <section class="leftsection-content-element" id="">
-         <div class="editable">
+   <br><br>		
+   <div class="editable">
       <h2>
          <spring:message code="profile.additionaldata"/>
       </h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
-   
    <p><b><spring:message code="profile.languages"/>:</b> <c:forEach items="${languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach>
    <p><b><spring:message code="profile.modus"/>:</b> <spring:message code="modus.${modus}"/>
    <p><b><spring:message code="profile.locations"/>:</b> <c:forEach items="${locations}" var="item" varStatus="loop">${item}${!loop.last ? ', ' : ''}</c:forEach>
-   </section>
-   <section class="leftsection-content-element" id="">
+   <br><br>
    <div class="editable">
       <h2><spring:message code="profile.delete"/></h2>
    </div>
@@ -86,11 +73,9 @@
    	  <input type="submit" class="btn btn-primary" value='${delete}' onClick="return confirm('${confirm}');">
    	  <sec:csrfInput />
    </form><p><spring:message code="profile.delete.detail"/></p>
-   </section>
+   
 </section>
-</section>
-</section>
-<section id="rightsection">
+<section id="edit-profile-rightsection">
    <section id="profile-history" class="profile-resume">
       <h2><spring:message code="profile.history"/></h2>
       <p><spring:message code="profile.history.none"/></p>

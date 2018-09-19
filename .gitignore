@@ -9,3 +9,7 @@ target/*
 *.png
 src/main/resources/config*
 *ms.js
+
+src/main/webapp/WEB-INF/views/templates/header\.jsp
+
+src/main/webapp/WEB-INF/views/about\.jsp

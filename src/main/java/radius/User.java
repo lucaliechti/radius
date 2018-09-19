@@ -11,15 +11,15 @@ public class User {
 	private long id;
 	private String firstname;
 	private String lastname;
-	@Email(message = "{error.Email}")
+	@Email(message="{error.Email}")
 	private String email;
-	@Size(min = 8, message = "{error.sizePW}")
+	@Size(min=8, message="{error.sizePW}")
 	private String password;
 	private String canton;
 	private userStatus status;
 	private userModus modus;
-	private boolean enabled;    //if email has been confirmed
-	private boolean answered;    //if questions have been answered
+	private boolean enabled; 	//if email has been confirmed
+	private boolean answered; 	//if questions have been answered
 	private boolean banned;
 	private String motivation;
 	private List<Integer> locations;
@@ -69,90 +69,63 @@ public class User {
 		this.email = _email;
 		this.password = _password;
 	}
-
 	public User() {
 	}
-
+	
 	public long getId() {
 		return id;
 	}
-
 	public String getFirstname() {
 		return firstname;
 	}
-
 	public String getLastname() {
 		return lastname;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public String getCanton() {
 		return canton;
 	}
-
 	public userStatus getStatus() {
 		return status;
 	}
-
 	public Boolean getEnabled() {
 		return enabled;
 	}
-
 	public Boolean getAnswered() {
 		return answered;
 	}
-
-	public Boolean getBanned() {
-		return banned;
-	}
-
 	public List<Boolean> getQuestions() {
 		return questions;
 	}
-
-	public Timestamp getDateModified() {
-		return dateModified;
-	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
-
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public void setCanton(String canton) {
 		this.canton = canton;
 	}
-
 	public void setStatus(String _status) {
 		this.status = convertStatus(_status);
 	}
-
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-
 	public void setAnswered(Boolean answered) {
 		this.answered = answered;
 	}
@@ -160,38 +133,40 @@ public class User {
 	public void setBanned(Boolean banned) {
 		this.banned = banned;
 	}
+	public boolean isBanned() {
+		return banned;
+	}
+
+	public Timestamp getDateModified() {
+		return dateModified;
+	}
 
 	public void setQuestions(List<Boolean> questions) throws Exception {
-		if (questions.size() != 5) {
+		if(questions.size() != 5) {
 			throw new Exception("An array of != 5 Boolean values has been passed.");
 		}
 		this.questions = questions;
 	}
-
 	public List<Integer> getLocations() {
 		return locations;
 	}
-
 	public void setLocations(List<Integer> locations) {
 		this.locations = locations;
 	}
-
 	public List<String> getLanguages() {
 		return languages;
 	}
-
 	public void setLanguages(List<String> list) {
 		this.languages = list;
 	}
-
 	public userModus getModus() {
 		return modus;
 	}
-
+	
 	public String getModusAsString() {
 		return convertModusToString(this.modus);
 	}
-
+	
 	public void setModus(String _modus) {
 		this.modus = convertModus(_modus);
 	}
@@ -199,20 +174,19 @@ public class User {
 	public String getMotivation() {
 		return motivation;
 	}
-
 	public void setMotivation(String motivation) {
 		this.motivation = motivation;
 	}
 
 	public static userStatus convertStatus(String status) {
-		if (status == null) {
+		if(status == null) {
 			return null;
 		}
 		switch (status) {
-			case "NEW":
-				return userStatus.NEW;
+		/*case "NEW":
+				return userStatus.NEW;*/
 			case "WAITING":
-				return userStatus.WAITING;
+				return userStatus.WAITING;	
 			case "MATCHED":
 				return userStatus.MATCHED;
 			case "INACTIVE":
@@ -221,70 +195,71 @@ public class User {
 				return null;
 		}
 	}
-
+	
 	public static String convertStatusToString(userStatus _status) {
 		switch (_status) {
-			case NEW:
-				return "NEW";
-			case WAITING:
-				return "WAITING";
-			case MATCHED:
-				return "MATCHED";
-			case INACTIVE:
-				return "INACTIVE";
-			default:
-				return null;
+		/*case NEW:
+			return "NEW";*/
+		case WAITING:
+			return "WAITING";	
+		case MATCHED:
+			return "MATCHED";
+		case INACTIVE:
+			return "INACTIVE";
+		default:
+			return null;
 		}
 	}
-
+	
 	public static userModus convertModus(String modus) {
-		if (modus == null) {
+		if(modus == null) {
 			return null;
 		}
 		switch (modus) {
-			case "SINGLE":
-				return userModus.SINGLE;
-			case "PAIR":
-				return userModus.PAIR;
-			case "EITHER":
-				return userModus.EITHER;
-			default:
-				return null;
+		case "SINGLE":
+			return userModus.SINGLE;
+		case "PAIR":
+			return userModus.PAIR;	
+		case "EITHER":
+			return userModus.EITHER;
+		default:
+			return null;
 		}
 	}
-
+	
 	public static String convertModusToString(userModus _modus) {
 		switch (_modus) {
-			case SINGLE:
-				return "SINGLE";
-			case PAIR:
-				return "PAIR";
-			case EITHER:
-				return "EITHER";
-			default:
-				return null;
+		case SINGLE:
+			return "SINGLE";
+		case PAIR:
+			return "PAIR";	
+		case EITHER:
+			return "EITHER";
+		default:
+			return null;
 		}
 	}
-
-	public static String createLocString(List<Integer> locs) {
+	
+	public static String createLocString(List<Integer> locs){
 		String loc = "";
-		for (Integer locid : locs) {
-			if (loc == "") {
+		for(Integer locid : locs) {
+			if(loc==""){
 				loc += locid;
-			} else {
-				loc += ";" + locid;
+			}
+			else {
+				loc += ";"+locid;
 			}
 		}
 		return loc;
 	}
-
+	
 	public enum userStatus {
-		NEW,
+		/*NEW,*/
 		WAITING,
 		MATCHED,
 		INACTIVE
 	}
-
+	
 	public enum userModus {
 		SINGLE,
 		PAIR,

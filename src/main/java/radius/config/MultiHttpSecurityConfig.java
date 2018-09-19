@@ -31,30 +31,30 @@ public class MultiHttpSecurityConfig {
 			//authorization
 			http
 					.authorizeRequests()
-					.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status").authenticated()
+					.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status", "/toggleStatus").authenticated()
 					.antMatchers("/monitoring/**", "/admin/**").hasRole("ADMIN")
 					.antMatchers(HttpMethod.POST, "/experience").authenticated()
-					.antMatchers("/api/**").denyAll()
-					.anyRequest().permitAll()
-			;//.and().requiresChannel().antMatchers("/login", "/register").requiresSecure(); //what else?
+					.anyRequest().permitAll();
 
 			//TODO: Custom login handler
 			//login
 			http
 					.formLogin().loginPage("/login")
-					.defaultSuccessUrl("/status?login")
-					.failureUrl("/status?error")
+					.defaultSuccessUrl("/answers")
+					//.loginProcessingUrl("/answers")
+					.failureUrl("/home?error")
 					.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
 					.and().csrf();
 
-
+			/*
 			//TODO: Custom logout handler
 			//logout
 			http
-					.logout()
+				.logout()
 					.logoutUrl("/logout")
 					.deleteCookies("JSESSIONID")
 					.logoutSuccessUrl("/home?logout");
+					*/
 		}
 
 		@Autowired
@@ -80,8 +80,8 @@ public class MultiHttpSecurityConfig {
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.inMemoryAuthentication()
-					.passwordEncoder(encoder())
-					.withUser(env.getProperty("matcher.user")).password(encoder().encode(env.getProperty("matcher.pass"))).roles("MATCHER");
+					.passwordEncoder(passwordEncoder())
+					.withUser(env.getProperty("matcher.user")).password(passwordEncoder().encode(env.getProperty("matcher.pass"))).roles("MATCHER");
 		}
 
 		@Override
@@ -96,7 +96,7 @@ public class MultiHttpSecurityConfig {
 	}
 
 	@Bean
-	public static PasswordEncoder encoder() {
+	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 }

@@ -1,20 +1,22 @@
 package radius.web.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import radius.AnswerForm;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 import radius.data.StaticResourceRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 @RequestMapping(value="/profile")
@@ -22,19 +24,30 @@ public class ProfileController {
 	
 	private JDBCUserRepository userRepo;
 	private StaticResourceRepository staticRepo;
-	
+	private HomeController hc;
+
 	@Autowired
-	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, HomeController _hc) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
+		this.hc = _hc;
 	}
 
 	@RequestMapping(method=GET)
 	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model) {
+		if(loggedin != null) {
+			model.addAttribute("loggedin", "user has just logged in");
+		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		if(!userRepo.userHasAnswered(email)) {
-			//user has not yet answered the questions
-			model.addAttribute("noAnswers", true);
+		if(!userRepo.userIsEnabled(email)) {
+			model.addAttribute("not_enabled", true);
+			return hc.home(null, null, model, null, null);
+		}
+		else if(!userRepo.userHasAnswered(email)) {
+			model.addAttribute("lang", staticRepo.languages());
+			model.addAttribute("modi", staticRepo.modi());
+			model.addAttribute("answerForm", new AnswerForm());
+			return "answers";
 		}
 		else {
 			User u = userRepo.findUserByEmail(email);
@@ -56,7 +69,8 @@ public class ProfileController {
 				locations.add(staticRepo.regions().get(l));
 			}
 			model.addAttribute("languages", u.getLanguages());
-			model.addAttribute("locations", locations);			
+			model.addAttribute("locations", locations);
+			model.addAttribute("status", u.getStatus().toString());
 		}
 		return "profile";
 	}

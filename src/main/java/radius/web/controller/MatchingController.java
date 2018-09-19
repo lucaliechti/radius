@@ -172,7 +172,7 @@ public class MatchingController {
 			return new MatchResponse(match, 404, "One of the users was not found.");
 		}
 
-		if (user1.getBanned() || user2.getBanned()) {
+		if (user1.isBanned() || user2.isBanned()) {
 			return new MatchResponse(match, 403, "One of the users is banned.");
 		}
 
@@ -196,7 +196,7 @@ public class MatchingController {
 
 	private void emailUserAboutMatch(User user, User matchingPartner) {
 		try {
-			emailService.sendSimpleMessage(user.getEmail(), "You have been matched",
+			emailService.sendSimpleMessage("info", user.getEmail(), "You have been matched",
 					"Hi, you have been matched with " + matchingPartner.getEmail());
 		} catch (Exception ignored) {
 		}

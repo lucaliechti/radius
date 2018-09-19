@@ -15,7 +15,7 @@ public class SimpleEmailService implements EmailService {
 	private EmailProperties p;
 
 	@Override
-	public void sendSimpleMessage(String[] recipients, String subject, String message) {
+	public void sendSimpleMessage(String account, String[] recipients, String subject, String message) {
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setFrom(p.getUser());
 		email.setTo(recipients);
@@ -25,7 +25,7 @@ public class SimpleEmailService implements EmailService {
 	}
 
 	@Override
-	public void sendSimpleMessage(String recipient, String subject, String message) {
+	public void sendSimpleMessage(String account, String recipient, String subject, String message) {
 		SimpleMailMessage email = new SimpleMailMessage();
 		email.setFrom(p.getUser());
 		email.setTo(recipient);

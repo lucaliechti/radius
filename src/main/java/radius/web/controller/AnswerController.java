@@ -3,6 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,11 +29,13 @@ public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
 	private JDBCStaticResourceRepository staticRepo;
+	private ProfileController pc;
 	
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, ProfileController _pc) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
+		this.pc = _pc;
 	}
 
 	@RequestMapping(method=GET)
@@ -52,7 +55,7 @@ public class AnswerController {
 	}
 	
 	@RequestMapping(method=POST)
-	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model) {
+	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model) throws UnsupportedEncodingException {
 		if(result.hasErrors()) {
 			addListsTo(model);
 			return "answers";
@@ -62,7 +65,7 @@ public class AnswerController {
 		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
 		userRepo.updateUser(u);
-		return "status";
+		return pc.profile(null, model); //wow, neat
 	}
 	
 	private void addListsTo(Model model) {
@@ -88,10 +91,14 @@ public class AnswerController {
 		return f;
 	}
 	
-	private User updateUserFromForm(User u, AnswerForm answerForm) {
+	private User updateUserFromForm(User u, AnswerForm answerForm) throws UnsupportedEncodingException {
 		u.setLanguages(answerForm.getLanguages());
 		u.setModus(answerForm.getModus());
-		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
+		String m = answerForm.getMotivation();
+//		System.out.println(m); //good
+//		System.out.println(new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8")); //bad
+//		System.out.println(new String(answerForm.getMotivation().getBytes("UTF-8"), "ISO-8859-1")); //bad
+		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());//new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8"));
 		ArrayList<Boolean> questions = new ArrayList<Boolean>();
 		questions.add(answerForm.getQ1());
 		questions.add(answerForm.getQ2());

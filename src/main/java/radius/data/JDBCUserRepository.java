@@ -5,7 +5,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import radius.User;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 @Repository
 public class JDBCUserRepository implements UserRepository {
-
+	
 	private JdbcTemplate jdbcTemplate;
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USERS_TO_MATCH =   "SELECT * FROM users WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
@@ -33,15 +32,20 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 	private static final String USER_ANSWERED = 		"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND answered = TRUE)";
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
+	private static final String USER_ACTIVE = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND NOT status = 'INACTIVE')";
 	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
+	private static final String ACTIVATE_USER =			"UPDATE users SET status = 'WAITING' WHERE email = ?";
+	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = 'INACTIVE' WHERE email = ?";
+	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
+	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 
 	private static final String SET_USER_STATUS =		"UPDATE users SET status = ? WHERE email = ?";
 	private static final String CREATE_MATCH =			"INSERT INTO matches(datecreated, email1, email2, active, meetingconfirmed) VALUES (?, ?, ?, TRUE, FALSE)";
 
 	@Autowired
-	public void init(DataSource jdbcdatasource) {
-		this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
-	}
+    public void init(DataSource jdbcdatasource) {
+        this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
+    }
 
 	@Override
 	public List<User> allUsers() {
@@ -62,7 +66,7 @@ public class JDBCUserRepository implements UserRepository {
 		}
 
 	}
-
+	
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String email = rs.getString("email");
@@ -76,21 +80,20 @@ public class JDBCUserRepository implements UserRepository {
 			List<Integer> locations = null;
 			String[] loc = new String[0];
 			String rs_loc = rs.getString("locations");
-			if (rs_loc != null) {
+			if(rs_loc != null) {
 				loc = rs.getString("locations").split(";");
 			}
 			Integer[] locint = new Integer[loc.length];
 			try {
-				for (int i = 0; i < loc.length; i++) {
+				for(int i = 0; i < loc.length; i++) {
 					locint[i] = Integer.parseInt(loc[i]);
 				}
-			} catch (NumberFormatException nfe) {
-				nfe.printStackTrace();
 			}
+			catch(NumberFormatException nfe) {nfe.printStackTrace();} 
 			locations = Arrays.asList(locint);
-			System.out.println(loc);
+//			System.out.println(loc);
 			ArrayList<String> languages = new ArrayList<String>();
-			if (rs.getString("languages") != null) {
+			if(rs.getString("languages") != null){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
 			}
 
@@ -113,22 +116,21 @@ public class JDBCUserRepository implements UserRepository {
 			);
 		}
 	}
-
+	
 	@Override
 	public void saveUser(User u) throws EmailAlreadyExistsException {
-		if (userExists(u.getEmail())) {
+		if(userExists(u.getEmail())) {
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
-		if (u.getCanton().equals("NONE")) {
+		if(u.getCanton().equals("NONE")) {
 			u.setCanton(null);
 		}
-
+		
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false);
 		grantUserRights(u.getEmail());
 	}
-
+	
 	//TODO: locations
-	@Transactional
 	@Override
 	public void updateUser(User u) {
 		List<Boolean> questions = u.getQuestions();
@@ -145,20 +147,20 @@ public class JDBCUserRepository implements UserRepository {
 			}
 		}*/
 		//String loc = String.join(";", u.getLocations());
-		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()),
-				questions.get(0), questions.get(1), questions.get(2), questions.get(3),
+		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()), 
+				questions.get(0), questions.get(1), questions.get(2), questions.get(3), 
 				questions.get(4), OffsetDateTime.now(), u.getEmail());
 	}
-
-	public void grantUserRights(String email) {
+	
+	public void grantUserRights(String email){
 		jdbcTemplate.update(GRANT_USER_RIGHTS, OffsetDateTime.now(), OffsetDateTime.now(), email, "ROLE_USER");
 	}
 
 	@Override
 	public List<String> findAuthoritiesByEmail(String email) {
 		ArrayList<String> roles = new ArrayList<String>();
-		List<Map<String, Object>> rows = jdbcTemplate.queryForList(FIND_AUTH_BY_EMAIL, email);
-		for (Map<String, Object> row : rows) {
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(FIND_AUTH_BY_EMAIL, email); 
+		for (Map<String, Object> row: rows) {
 			roles.add(row.get("authority").toString());
 		}
 		return roles;
@@ -168,14 +170,14 @@ public class JDBCUserRepository implements UserRepository {
 	public boolean userExists(String email) {
 		// super ugly
 		Map<String, Object> users = jdbcTemplate.queryForMap(USER_EXISTS, email);
-		return (boolean) users.get("exists");
+		return (boolean)users.get("exists");
 	}
 
 	@Override
 	public boolean userHasAnswered(String email) {
 		// also super ugly
 		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ANSWERED, email);
-		return (boolean) users.get("exists");
+		return (boolean)users.get("exists");
 	}
 
 	@Override
@@ -187,7 +189,7 @@ public class JDBCUserRepository implements UserRepository {
 	public boolean userIsEnabled(String email) {
 		// guess what, also super ugly
 		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ENABLED, email);
-		return (boolean) users.get("exists");
+		return (boolean)users.get("exists");
 	}
 
 	@Override
@@ -196,6 +198,29 @@ public class JDBCUserRepository implements UserRepository {
 		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.userStatus.MATCHED), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user1().getEmail(), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(), userPair.user1().getEmail());
+	}
+
+	@Override
+	public boolean userIsActive(String email) {
+		// still plenty of chances to do it the ugly way
+		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ACTIVE, email);
+		return (boolean)users.get("exists");
+	}
+
+	@Override
+	public void activateUser(String email) {
+		jdbcTemplate.update(ACTIVATE_USER, email);
+	}
+
+	@Override
+	public void deactivateUser(String email) {
+		jdbcTemplate.update(DEACTIVATE_USER, email);
+	}
+
+	@Override
+	public void deleteUser(String email) {
+		jdbcTemplate.update(DELETE_AUTHORITIES, email);
+		jdbcTemplate.update(DELETE_USER, email);
 	}
 }
 

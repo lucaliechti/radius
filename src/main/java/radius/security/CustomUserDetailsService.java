@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             System.out.println("auth: " + grantedAuthorities);
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new AuthenticationServiceException("error");
         }
 	}
 }

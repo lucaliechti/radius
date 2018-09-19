@@ -22,7 +22,6 @@
 	<!-- additional CSS -->
     <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css"> <!-- was -desktop-launch -->
     <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css"> <!-- was -mobile-launch -->
-    <link href="css/custom.css" rel="stylesheet">
 	
 	<!-- Leaflet -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"><link/>
@@ -31,39 +30,14 @@
 	<!-- favicon -->
 	<link rel="shortcut icon" href="img/favicon.ico" />
 </head>
-
 <body>
-	<!-- 
-	<sec:authorize access="isAuthenticated()">
-	    Authenticated as <sec:authentication property="principal.username"/><br>
-	</sec:authorize>
-	<sec:authorize access="!isAuthenticated()">
-	   Not authenticated<br>
-	</sec:authorize>
-	 -->
-	 <!-- 
-	<nav role="navigation" id="primary-menubar">
-	   <div id="home">
-	      <a href="<c:url value='/' />"><img src="img/logo-radius-white.png" id="logo-home"></a>
-	   </div>
-	   <div id="menuToggle">
-	      <input type="checkbox" />
-	      <div id="burger">
-	         <span></span>
-	         <span></span>
-	         <span></span>
-	      </div>
-	      <ul id="menu" class="menupoint language-selector">
-	         <a href="?lang=de"> <li>DE</li> </a>
-	         <a href="?lang=fr"> <li>FR</li> </a>
-	         <a href="?lang=it"> <li>IT</li> </a>
-	         <a href="?lang=en"> <li>EN</li> </a>
-	      </ul>
-	   </div>
-	</nav> -->
+
+<!-- preparing variables -->
+<spring:message code="logout.title.short" var="logout" />
+
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="index.html"><img src="img/logo-radius.png" id="logo-home"></a>
+      <a href="home"><img id="logo-home" src="img/logo-radius.png"/></a>
    </div>
    <div id="menuToggle">
       <input type="checkbox" />
@@ -73,18 +47,24 @@
          <span></span>
       </div>
       <ul id="menu" class="menupoint navigations">
-         <li><a href="#">über Radius</a></li>
-         <li><a href="#">Spielregeln</a></li>
-         <li><a href="<c:url value='/experience' />">Experiences</a></li>
+         <li><a href="<c:url value='/about' />"><spring:message code="about.title"/></a></li>
+         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/profile' />"><spring:message code="profile.title"/></a></li></sec:authorize>
+         <!-- <li><a href="<c:url value='/experience' />">Experiences</a></li> -->
+         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/logout' />"><spring:message code="logout.title.short"/></a></li></sec:authorize>
          <li>
             <ul id="language-select" class="menupoint navigations">
                <li><a href="?lang=de">DE</a></li>
                <li><a href="?lang=fr">FR</a></li>
-               <li><a href="?lang=it">IT</a></li>
+               <!-- <li><a href="?lang=it">IT</a></li> -->
                <li><a href="?lang=en">EN</a></li>
             </ul>
          </li>
       </ul>
-   </div>
+   </div><!-- 
+   <sec:authorize access="isAuthenticated()">
+      <form action="<c:url value='/logout' />" method="post">
+         <input id="button-logout" type="submit" class="btn btn-primary" value='${logout}' >
+         <sec:csrfInput />
+      </form>
+   </sec:authorize> -->
 </nav>
-	
