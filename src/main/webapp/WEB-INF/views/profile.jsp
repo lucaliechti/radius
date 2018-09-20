@@ -26,15 +26,6 @@
    </section>
    <section class="leftsection-content">
    <section class="leftsection-content-element" id="">
-   <p><b><spring:message code="profile.status"/>:</b> <spring:message code="status.${status}"/> <a href="toggleStatus"><spring:message code="status.${status}.toggle"/></a><br>
-   <spring:message code="status.${status}.detail"/><br><br>
-
-   <c:if test="${status == 'INACTIVE'}">
-   <p><b></b><spring:message code="profile.status.active"/></b></p>
-   </c:if>
-   
-   </section>
-   <section class="leftsection-content-element" id="">
       <h2><spring:message code="profile.personaldata"/></h2>
    	  <!-- <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div> -->
    

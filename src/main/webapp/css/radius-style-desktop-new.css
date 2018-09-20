@@ -377,7 +377,7 @@ a:visited {
 
 #register-map-locations a:before {
 	/* Ortschaften bei registration */
-	background-image: url('/img/icon-close.png');
+	background-image: url('../img/icon-close.png');
 	background-size: 15px 15px;
 	display: inline-block;
 	width: 15px;

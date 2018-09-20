@@ -32,6 +32,9 @@ public class AnswerController {
 	private ProfileController pc;
 	
 	@Autowired
+	private StatusController sc;
+	
+	@Autowired
 	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, ProfileController _pc) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
@@ -65,7 +68,8 @@ public class AnswerController {
 		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
 		userRepo.updateUser(u);
-		return pc.profile(null, model); //wow, neat
+//		return pc.profile(null, model); //wow, neat
+		return sc.statusPage(null, model);
 	}
 	
 	private void addListsTo(Model model) {
@@ -94,11 +98,7 @@ public class AnswerController {
 	private User updateUserFromForm(User u, AnswerForm answerForm) throws UnsupportedEncodingException {
 		u.setLanguages(answerForm.getLanguages());
 		u.setModus(answerForm.getModus());
-		String m = answerForm.getMotivation();
-//		System.out.println(m); //good
-//		System.out.println(new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8")); //bad
-//		System.out.println(new String(answerForm.getMotivation().getBytes("UTF-8"), "ISO-8859-1")); //bad
-		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());//new String(answerForm.getMotivation().getBytes("ISO-8859-1"), "UTF-8"));
+		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
 		ArrayList<Boolean> questions = new ArrayList<Boolean>();
 		questions.add(answerForm.getQ1());
 		questions.add(answerForm.getQ2());

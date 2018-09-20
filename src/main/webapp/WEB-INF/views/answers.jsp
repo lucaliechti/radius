@@ -19,8 +19,8 @@
 <p><spring:message code="answers.subtitle"/></p>
 
 <!-- preparing variables -->
-<spring:message code="answers.motivation.ph" var="answers.motivation.ph" />
-
+<spring:message code="answers.motivation.ph" var="motivationph" />
+<spring:message code="answers.modus.explain" var="explain" />
 
 
 <form:form method="POST" action="answers" commandName="answerForm" accept-charset="ISO-8859-1">
@@ -29,7 +29,7 @@
          <spring:message code="answers.motivation"/>
       </form:label>
       <div class="col-10">
-         <form:textarea path="motivation" placeholder='${answers.motivation.ph}' class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
+         <form:textarea path="motivation" placeholder='${motivationph}' class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
       </div>
    </div>
    <div class="form-group leftsection-content-element" id="register-languages">
@@ -49,14 +49,16 @@
    <div class="form-group leftsection-content-element" id="register-modus">
       <p>
          <form:label path="modus" class="label-title">
-            <spring:message code="modus"/>
+         <spring:message code="modus"/>
          </form:label>
+         <span title="${explain}">(?)</span>
       </p>
       <c:forEach items="${modi}" var="m" >
+      <form:radiobutton path="modus" id="modus_${m}" value="${m}" />
          <label class="radio-button-label-no">
             <spring:message code="modus.${m}"/>
          </label>
-         <form:radiobutton path="modus" id="modus_${m}" value="${m}" />
+         
       </c:forEach>
       <div class="feedback-error" id="register-feedback-email">
          <form:errors path="modus"/>

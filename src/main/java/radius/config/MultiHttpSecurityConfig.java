@@ -40,7 +40,7 @@ public class MultiHttpSecurityConfig {
 			//login
 			http
 					.formLogin().loginPage("/login")
-					.defaultSuccessUrl("/answers")
+					.defaultSuccessUrl("/status")
 					//.loginProcessingUrl("/answers")
 					.failureUrl("/home?error")
 					.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
