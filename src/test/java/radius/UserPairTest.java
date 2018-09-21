@@ -6,9 +6,13 @@ import radius.web.controller.MatchingController;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static radius.User.userModus.EITHER;
+import static radius.User.userModus.PAIR;
+import static radius.User.userModus.SINGLE;
 
 public class UserPairTest {
 	@Test
@@ -47,5 +51,18 @@ public class UserPairTest {
 
 		assertEquals(1, userPair.numberOfDisagreements());
 		assertFalse(MatchingController.Edge.optFromUserPair(userPair, Instant.ofEpochSecond(0)).isPresent());
+	}
+
+	@Test
+	public void commonModus() {
+		assertEquals(Optional.of(SINGLE), UserPair.commonModus(SINGLE, SINGLE));
+		assertEquals(Optional.empty(), UserPair.commonModus(SINGLE, PAIR));
+		assertEquals(Optional.of(SINGLE), UserPair.commonModus(SINGLE, EITHER));
+		assertEquals(Optional.empty(), UserPair.commonModus(PAIR, SINGLE));
+		assertEquals(Optional.of(PAIR), UserPair.commonModus(PAIR, PAIR));
+		assertEquals(Optional.of(PAIR), UserPair.commonModus(PAIR, EITHER));
+		assertEquals(Optional.of(SINGLE), UserPair.commonModus(EITHER, SINGLE));
+		assertEquals(Optional.of(PAIR), UserPair.commonModus(EITHER, PAIR));
+		assertEquals(Optional.of(EITHER), UserPair.commonModus(EITHER, EITHER));
 	}
 }

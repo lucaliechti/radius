@@ -1,12 +1,16 @@
 package radius;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableSet;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Immutable class containing a pair of users which could potentially be matched.
@@ -19,13 +23,13 @@ public abstract class UserPair {
 
 	public abstract User user2();
 
-	Set<String> commonLanguages() {
+	public Set<String> commonLanguages() {
 		Set<String> commonLanguages = new HashSet<>(user1().getLanguages());
 		commonLanguages.retainAll(user2().getLanguages());
 		return commonLanguages;
 	}
 
-	Set<Integer> commonLocations() {
+	public Set<Integer> commonLocations() {
 		Set<Integer> commonLocations = new HashSet<Integer>(user1().getLocations());
 		commonLocations.retainAll(user2().getLocations());
 		return commonLocations;
@@ -46,13 +50,31 @@ public abstract class UserPair {
 		return nDisagreements;
 	}
 
+	public static Optional<User.userModus> commonModus(User.userModus modus1, User.userModus modus2) {
+		Set<User.userModus> available = new HashSet<>(availableModi(modus1));
+		available.retainAll(availableModi(modus2));
+
+		if (available.size() == 2) {
+			return Optional.of(User.userModus.EITHER);
+		}
+		else if (available.size() == 1) {
+			return Optional.of(available.iterator().next());
+		}
+		else {
+			return Optional.empty();
+		}
+	}
+
 	boolean compatibleModi() {
-		if (user1().getModus() == null || user2().getModus() == null) {
-			return false;
-		} else if (user1().getModus() == User.userModus.EITHER || user2().getModus() == User.userModus.EITHER) {
-			return true;
-		} else {
-			return (user1().getModus() == user2().getModus());
+		return commonModus(user1().getModus(), user2().getModus()).isPresent();
+	}
+
+	private static Set<User.userModus> availableModi(User.userModus modus) {
+		if (modus == User.userModus.EITHER) {
+			return ImmutableSet.of(User.userModus.SINGLE, User.userModus.PAIR);
+		}
+		else {
+			return ImmutableSet.of(modus);
 		}
 	}
 
@@ -83,6 +105,9 @@ public abstract class UserPair {
 	}
 
 	public static UserPair of(User user1, User user2) {
+		checkNotNull(user1);
+		checkNotNull(user2);
+
 		return new AutoValue_UserPair(user1, user2);
 	}
 }
