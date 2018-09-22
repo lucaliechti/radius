@@ -56,7 +56,15 @@ public class ToggleStatusController {
 			return sc.statusPage(null, model);
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		matchRepo.deactiveOldMatchesFor(email);
+		
+		if(feedbackForm.getConfirmed()) {
+			matchRepo.confirmHalfEdge(email);
+		}
+		else {
+			matchRepo.unconfirmHalfEdge(email);
+		}
+		
+		matchRepo.deactivateOldMatchesFor(email);
 		
 		switch(feedbackForm.getNextState()) {
 		case "WAITING":
@@ -70,9 +78,7 @@ public class ToggleStatusController {
 		default:
 			model.addAttribute("success", 0);
 		}
-		if(feedbackForm.getConfirmed()) {
-			//TODO: confirm half-edge
-		}
+
 		return sc.statusPage(null, model);
 	}
 }

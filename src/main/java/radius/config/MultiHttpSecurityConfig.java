@@ -44,7 +44,7 @@ public class MultiHttpSecurityConfig {
 					//.loginProcessingUrl("/answers")
 					.failureUrl("/home?error")
 					.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
-					.and().csrf();
+					.and().csrf();//.ignoringAntMatchers("/home", "/");
 
 			/*
 			//TODO: Custom logout handler

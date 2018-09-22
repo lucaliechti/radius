@@ -98,7 +98,8 @@
             </div>
             <div class="subsection">
                <div class="editable">
-                  <h2><spring:message code="status.yoursearch"/></h2> <img src="img/icon-edit.png" class="editing-icons">
+                  <h2><spring:message code="status.yoursearch"/></h2> 
+                  <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
                </div>
                <p><spring:message code="status.search.modus"/>: <b><spring:message code="modus.${user.modus}"/></b><br>
                <spring:message code="status.search.languages"/>: <b><c:forEach items="${user.languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach></b><br>
@@ -108,25 +109,12 @@
       </section>
    </section>
    <section id="rightsection">
-      <section id="profile-name" class="profile-resume">
-         <div class="editable-rightsection">
-            <h2><spring:message code="status.profile" /></h2><div><a href="#"><img src="img/icon-edit.png" class="editing-icons"></a><!-- <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a>--></div>
-         </div>
-         <p> ${user.firstname} ${user.lastname}
-         </p>
-      </section>
-      <section id="profile-history" class="profile-resume">
-         <h2>Verlauf</h2>
-         <p> bla <br>bla <br>bla <br>bla <br>
-         </p>
-         <input type="submit"  value="show all"/>
-      </section>
-      <section id="profile-experiences" class="profile-resume">
-         <h2>veröffentlichte Erfahrungen</h2>
-         <p>bla <br>bla <br>bla <br>bla <br>
-         </p>
-         <input type="submit"  value="show all"/>
-      </section>
+
+
+<jsp:include page="temp_history.jsp" /><!-- TODO: separate history and testimonials page -->
+
+
+
    </section>
 </main>
 

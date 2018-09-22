@@ -13,11 +13,11 @@ public abstract class HalfEdge {
 	public abstract String email1();
 	public abstract String email2();
 	public abstract Boolean active();
-	public abstract Boolean meetingConfirmed();
+	public abstract Optional<Boolean> meetingConfirmed();
 	public abstract Timestamp dateCreated();
 	public abstract Optional<Timestamp> dateInactive();
 
-	public static HalfEdge of(String email1, String email2, boolean active, boolean meetingConfirmed, Timestamp dateCreated, Optional<Timestamp> dateInactive) {
+	public static HalfEdge of(String email1, String email2, boolean active, Optional<Boolean> meetingConfirmed, Timestamp dateCreated, Optional<Timestamp> dateInactive) {
 		checkNotNull(email1);
 		checkNotNull(email2);
 		checkNotNull(dateCreated);

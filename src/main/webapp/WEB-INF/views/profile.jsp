@@ -81,7 +81,7 @@
 </section>
 </section>
 </section>
-<section id="rightsection">
+<section id="rightsection"><!-- 
    <section id="profile-history" class="profile-resume">
       <h2><spring:message code="profile.history"/></h2>
       <p><spring:message code="profile.history.none"/></p>
@@ -89,7 +89,8 @@
    <section id="profile-experiences" class="profile-resume">
       <h2><spring:message code="profile.experiences"/></h2>
       <p><spring:message code="profile.experiences.none"/></p>
-   </section>
+   </section> -->
+   <jsp:include page="temp_history.jsp" />
 </section>
 
 </main>

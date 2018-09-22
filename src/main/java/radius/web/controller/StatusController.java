@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import radius.HalfEdge;
 import radius.MeetingFeedbackForm;
 import radius.User;
 import radius.User.userModus;
@@ -76,9 +77,14 @@ public class StatusController {
 				model.addAttribute("commonlocations", String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))));
 				model.addAttribute("commonlanguages", up.commonLanguages());
 			}
+			model.addAttribute("history", usersMatches(email));
 			model.addAttribute("feedbackForm", new MeetingFeedbackForm());
 			model.addAttribute("userlocations", staticRepo.prettyLocations(user.getLocations()));
 		}
 		return "status";
+	}
+	
+	public List<HalfEdge> usersMatches(String email) {
+		return userRepo.allMatchesForUser(email);
 	}
 }

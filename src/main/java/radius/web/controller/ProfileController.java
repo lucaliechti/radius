@@ -13,14 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.AnswerForm;
+import radius.HalfEdge;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
+import radius.data.MatchingRepository;
 import radius.data.StaticResourceRepository;
 
 @Controller
 @RequestMapping(value="/profile")
 public class ProfileController {
+	
+	@Autowired
+	private MatchingRepository matchRepo;
 	
 	private JDBCUserRepository userRepo;
 	private static StaticResourceRepository staticRepo;
@@ -63,6 +68,7 @@ public class ProfileController {
 			model.addAttribute("q4", q.get(3));
 			model.addAttribute("q5", q.get(4));
 			model.addAttribute("modus", u.getModusAsString());
+			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
 //			List<Integer> loc = u.getLocations();
 //			ArrayList<String> locations = new ArrayList<String>();
 //			for (int l : loc) {
@@ -73,10 +79,15 @@ public class ProfileController {
 			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
 			model.addAttribute("languages", u.getLanguages());
 //			model.addAttribute("status", u.getStatus().toString());
+			model.addAttribute("history", usersMatches(email));
 		}
 		return "profile";
 	}
 	
+	//TODO: This is 1:1 the same as in StatusController. I can't inject a StatusController here because of circularity. Make nicer.
+	public List<HalfEdge> usersMatches(String email) {
+		return userRepo.allMatchesForUser(email);
+	}
 
 }
 

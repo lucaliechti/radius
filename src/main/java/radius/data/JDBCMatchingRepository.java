@@ -1,5 +1,7 @@
 package radius.data;
 
+import java.time.OffsetDateTime;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ public class JDBCMatchingRepository implements MatchingRepository {
 
 	private JdbcTemplate jdbcTemplate;
 	private static final String GET_CURRENT_MATCH_EMAIL =		"SELECT email2 FROM matches WHERE email1 = ? AND active = TRUE";
-	private static final String DEACTIVATE_OLD_MATCHES =	 	"UPDATE matches SET active = FALSE WHERE email1 = ?";
+	private static final String DEACTIVATE_OLD_MATCHES =	 	"UPDATE matches SET active = FALSE, dateinactive = ? WHERE email1 = ?";
+	private static final String CONFIRM_HALF_EDGE = 			"UPDATE matches SET meetingconfirmed = TRUE WHERE email1 = ? AND active = TRUE";
+	private static final String UNCONFIRM_HALF_EDGE = 			"UPDATE matches SET meetingconfirmed = FALSE WHERE email1 = ? AND active = TRUE";
     
 	@Autowired
     public void init(DataSource jdbcdatasource) {
@@ -30,8 +34,18 @@ public class JDBCMatchingRepository implements MatchingRepository {
 	}
 
 	@Override
-	public void deactiveOldMatchesFor(String email) {
-		jdbcTemplate.update(DEACTIVATE_OLD_MATCHES, email);
+	public void deactivateOldMatchesFor(String email) {
+		jdbcTemplate.update(DEACTIVATE_OLD_MATCHES, OffsetDateTime.now(), email);
+	}
+	
+	@Override
+	public void confirmHalfEdge(String email) {
+		jdbcTemplate.update(CONFIRM_HALF_EDGE, email);
+	}
+	
+	@Override
+	public void unconfirmHalfEdge(String email) {
+		jdbcTemplate.update(UNCONFIRM_HALF_EDGE, email);
 	}
 
 }

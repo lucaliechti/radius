@@ -32,8 +32,8 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
 	private static final String USER_ACTIVE = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND NOT status = 'INACTIVE')";
 	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
-	private static final String ACTIVATE_USER =			"UPDATE users SET status = 'WAITING' WHERE email = ?";
-	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = 'INACTIVE' WHERE email = ?";
+//	private static final String ACTIVATE_USER =			"UPDATE users SET status = 'WAITING' WHERE email = ?";
+//	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = 'INACTIVE' WHERE email = ?";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 
@@ -124,7 +124,7 @@ public class JDBCUserRepository implements UserRepository {
 					rs.getString("email1"),
 					rs.getString("email2"),
 					rs.getBoolean("active"),
-					rs.getBoolean("meetingconfirmed"),
+					Optional.ofNullable(rs.getBoolean("meetingconfirmed")),
 					rs.getTimestamp("datecreated"),
 					Optional.ofNullable(rs.getTimestamp("dateinactive"))
 			);
@@ -233,12 +233,12 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public void activateUser(String email) {
-		jdbcTemplate.update(ACTIVATE_USER, email);
+		jdbcTemplate.update(SET_USER_STATUS, "WAITING", email);
 	}
 
 	@Override
 	public void deactivateUser(String email) {
-		jdbcTemplate.update(DEACTIVATE_USER, email);
+		jdbcTemplate.update(SET_USER_STATUS, "INACTIVE", email);
 	}
 
 	@Override
