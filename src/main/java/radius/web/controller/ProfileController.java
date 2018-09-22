@@ -23,7 +23,7 @@ import radius.data.StaticResourceRepository;
 public class ProfileController {
 	
 	private JDBCUserRepository userRepo;
-	private StaticResourceRepository staticRepo;
+	private static StaticResourceRepository staticRepo;
 	private HomeController hc;
 
 	@Autowired
@@ -63,17 +63,20 @@ public class ProfileController {
 			model.addAttribute("q4", q.get(3));
 			model.addAttribute("q5", q.get(4));
 			model.addAttribute("modus", u.getModusAsString());
-			List<Integer> loc = u.getLocations();
-			ArrayList<String> locations = new ArrayList<String>();
-			for (int l : loc) {
-				locations.add(staticRepo.regions().get(l));
-			}
+//			List<Integer> loc = u.getLocations();
+//			ArrayList<String> locations = new ArrayList<String>();
+//			for (int l : loc) {
+//				locations.add(staticRepo.regions().get(l));
+//			}
 
-			model.addAttribute("locations", locations);
+//			model.addAttribute("locations", locations);
+			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
 			model.addAttribute("languages", u.getLanguages());
 //			model.addAttribute("status", u.getStatus().toString());
 		}
 		return "profile";
 	}
+	
+
 }
 

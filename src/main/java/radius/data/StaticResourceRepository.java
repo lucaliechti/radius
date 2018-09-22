@@ -14,4 +14,6 @@ public interface StaticResourceRepository {
 	public List<String> modi();
 	
 	public List<String> languages();
+	
+	public List<String> prettyLocations(List<Integer> locs);
 }

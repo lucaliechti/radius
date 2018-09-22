@@ -217,8 +217,8 @@ public class MatchingController {
 
 	private void emailUserAboutMatch(User user, User matchingPartner) {
 		try {
-			emailService.sendSimpleMessage("info", user.getEmail(), "You have been matched",
-					"Hi, you have been matched with " + matchingPartner.getEmail());
+//			emailService.sendSimpleMessage("info", user.getEmail(), "You have been matched", "Hi, you have been matched with " + matchingPartner.getEmail());
+			System.out.println("We would send an email to " + user.getEmail() + " now.");
 		} catch (Exception ignored) {
 		}
 	}

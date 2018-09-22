@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.MeetingFeedbackForm;
 import radius.data.JDBCUserRepository;
+import radius.data.MatchingRepository;
 import radius.data.UserRepository;
 
 @Controller
@@ -23,6 +24,9 @@ public class ToggleStatusController {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private MatchingRepository matchRepo;
 	
 	@Autowired
 	private StatusController sc;
@@ -52,6 +56,8 @@ public class ToggleStatusController {
 			return sc.statusPage(null, model);
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		matchRepo.deactiveOldMatchesFor(email);
+		
 		switch(feedbackForm.getNextState()) {
 		case "WAITING":
 			model.addAttribute("success", 1);

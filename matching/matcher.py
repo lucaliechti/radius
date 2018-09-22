@@ -76,8 +76,9 @@ def match(edges: List[Edge]) -> List[Match]:
 
 def get_graph() -> List[Edge]:
     graph_response = requests.get(urljoin(radius_url, "graph"),
-                                  auth=(radius_user, radius_pass),
-                                  verify=radius_cert).json()
+                                  auth=(radius_user, radius_pass),verify=False
+                                  #, verify=radius_cert
+								  ).json()
 
     return [Edge.from_dict(edge_dict) for edge_dict in graph_response]
 
@@ -88,8 +89,8 @@ def send_matches(matches: List[Match]) -> List[MatchResponse]:
 
     match_response = requests.post(urljoin(radius_url, "match"),
                                    json=matches_dicts,
-                                   auth=(radius_user, radius_pass),
-                                   verify=radius_cert)
+                                   auth=(radius_user, radius_pass),verify=False)
+                                   #verify=radius_cert)
     if not match_response.ok:
         raise Exception("Submission unsuccessful.")
     

@@ -2,6 +2,9 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,22 +14,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.MeetingFeedbackForm;
 import radius.User;
+import radius.User.userModus;
+import radius.User.userStatus;
+import radius.UserPair;
 //import radius.AnswerForm;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
+import radius.data.MatchingRepository;
+import radius.data.StaticResourceRepository;
+import radius.data.UserRepository;
 
 @Controller
 @RequestMapping(value="/status")
 public class StatusController {
 	
-	private JDBCUserRepository userRepo;
+	@Autowired
+	private UserRepository userRepo;
+	
+	@Autowired
+	private MatchingRepository matchRepo;
+	
+	@Autowired
+	private StaticResourceRepository staticRepo;
+	
 //	private JDBCStaticResourceRepository staticRepo;
 	private AnswerController ac;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
-	public StatusController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, AnswerController _ac) {
-		this.userRepo = _userRepo;
+	public StatusController(JDBCStaticResourceRepository _staticRepo, AnswerController _ac) {
 //		this.staticRepo = _staticRepo;
 		this.ac = _ac;
 	}
@@ -52,7 +68,16 @@ public class StatusController {
 		}
 		else {
 			model.addAttribute("user", user);
+			if(user.getStatus() == userStatus.MATCHED){
+				User match = matchRepo.getCurrentMatchFor(email);
+				model.addAttribute("match", match);
+				UserPair up = UserPair.of(user, match);
+				model.addAttribute("modi", User.convertModusToString(UserPair.commonModus(user.getModus(), match.getModus()).get()));
+				model.addAttribute("commonlocations", String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))));
+				model.addAttribute("commonlanguages", up.commonLanguages());
+			}
 			model.addAttribute("feedbackForm", new MeetingFeedbackForm());
+			model.addAttribute("userlocations", staticRepo.prettyLocations(user.getLocations()));
 		}
 		return "status";
 	}

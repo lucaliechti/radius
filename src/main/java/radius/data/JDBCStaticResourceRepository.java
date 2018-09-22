@@ -95,4 +95,12 @@ public class JDBCStaticResourceRepository implements StaticResourceRepository {
 		lang.add("EN");
 		return lang;
 	}
+	
+	public List<String> prettyLocations(List<Integer> locs) {
+		ArrayList<String> locations = new ArrayList<String>();
+		for (int l : locs) {
+			locations.add(regions().get(l));
+		}
+		return locations;
+	}
 }
