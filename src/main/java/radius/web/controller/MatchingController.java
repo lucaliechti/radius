@@ -7,15 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.data.JDBCUserRepository;
 import radius.web.components.EmailService;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -142,10 +141,32 @@ public class MatchingController {
 		return new ResponseEntity<>(edges, HttpStatus.OK);
 	}
 
+	private Map<String, Set<String>> alreadyMatched() {
+		Map<String, Set<String>> result = new HashMap<>();
+
+		for (HalfEdge halfEdge : userRepo.allMatches()) {
+			if (!result.containsKey(halfEdge.email1())) {
+				result.put(halfEdge.email1(), new HashSet<>());
+			}
+
+			result.get(halfEdge.email1()).add(halfEdge.email2());
+		}
+
+		return result;
+	}
+
 	private List<Edge> allEdges(List<User> users, Instant now) {
+		Map<String, Set<String>> existingMatches = alreadyMatched();
+
 		List<Edge> edges = new ArrayList<>();
 		for (int i = 0; i < users.size(); i++) {
 			for (int j = 0; j < i; j++) {
+				if (existingMatches.containsKey(users.get(i).getEmail()) &&
+						existingMatches.get(users.get(i).getEmail()).contains(users.get(j).getEmail())) {
+					// users were already matched before
+					continue;
+				}
+
 				Edge.optFromUserPair(UserPair.of(users.get(i), users.get(j)), now).ifPresent(edges::add);
 			}
 		}

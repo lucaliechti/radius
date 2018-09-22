@@ -2,6 +2,7 @@ package radius.data;
 
 import org.springframework.stereotype.Repository;
 import radius.User;
+import radius.HalfEdge;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
 
@@ -19,7 +20,9 @@ public interface UserRepository {
 	public void saveUser(User u) throws EmailAlreadyExistsException;
 	
 	public void updateUser(User u);
-	
+
+	public List<HalfEdge> allMatchesForUser(String email);
+
 	public void enableUser(String email);
 	
 	public List<String> findAuthoritiesByEmail(String email);
@@ -27,6 +30,8 @@ public interface UserRepository {
 	public boolean userExists(String email);
 	
 	public boolean userHasAnswered(String email);
+
+	public List<HalfEdge> allMatches();
 
 	public void match(UserPair userPair);
 	

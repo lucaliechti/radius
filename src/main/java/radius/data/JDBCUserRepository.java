@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
@@ -13,10 +14,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JDBCUserRepository implements UserRepository {
@@ -41,6 +39,9 @@ public class JDBCUserRepository implements UserRepository {
 
 	private static final String SET_USER_STATUS =		"UPDATE users SET status = ? WHERE email = ?";
 	private static final String CREATE_MATCH =			"INSERT INTO matches(datecreated, email1, email2, active, meetingconfirmed) VALUES (?, ?, ?, TRUE, FALSE)";
+
+	private static final String ALL_MATCHES =			"SELECT * FROM matches";
+	private static final String ALL_MATCHES_FOR_USER = 	"SELECT * FROM matches WHERE email1 = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource) {
@@ -116,6 +117,19 @@ public class JDBCUserRepository implements UserRepository {
 			);
 		}
 	}
+
+	private static final class MatchRowMapper implements RowMapper<HalfEdge> {
+		public HalfEdge mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return HalfEdge.of(
+					rs.getString("email1"),
+					rs.getString("email2"),
+					rs.getBoolean("active"),
+					rs.getBoolean("meetingconfirmed"),
+					rs.getTimestamp("datecreated"),
+					Optional.ofNullable(rs.getTimestamp("dateinactive"))
+			);
+		}
+	}
 	
 	@Override
 	public void saveUser(User u) throws EmailAlreadyExistsException {
@@ -178,6 +192,16 @@ public class JDBCUserRepository implements UserRepository {
 		// also super ugly
 		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ANSWERED, email);
 		return (boolean)users.get("exists");
+	}
+
+	@Override
+	public List<HalfEdge> allMatches() {
+		return jdbcTemplate.query(ALL_MATCHES, new MatchRowMapper());
+	}
+
+	@Override
+	public List<HalfEdge> allMatchesForUser(String email) {
+		return jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
 	}
 
 	@Override
