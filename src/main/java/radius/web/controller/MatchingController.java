@@ -2,6 +2,7 @@ package radius.web.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
+import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
+import radius.data.StaticResourceRepository;
 import radius.web.components.EmailService;
 
 import java.time.Instant;
@@ -25,11 +28,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class MatchingController {
 	private final JDBCUserRepository userRepo;
 	private final EmailService emailService;
+	private final StaticResourceRepository staticRepo;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@Autowired
-	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService) {
+	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService, JDBCStaticResourceRepository _staticRepo) {
 		this.userRepo = _userRepo;
 		this.emailService = _emailService;
+		this.staticRepo = _staticRepo;
 	}
 
 	/**
@@ -209,17 +217,50 @@ public class MatchingController {
 
 		userRepo.match(userPair);
 
-		emailUserAboutMatch(user1, user2);
-		emailUserAboutMatch(user2, user1);
+		////////TEST////////////
+		emailUserAboutMatch(user1, user2, usersLocale(user1));
+		emailUserAboutMatch(user2, user1, usersLocale(user1));
+		////////END OF TEST/////
+		
+//		emailUserAboutMatch(user1, user2);
+//		emailUserAboutMatch(user2, user1);
 
 		return new MatchResponse(match, 201, "The users were successfully matched.");
 	}
-
-	private void emailUserAboutMatch(User user, User matchingPartner) {
+	
+	////////////////////////
+	////////TEST////////////
+	////////////////////////
+	@SuppressWarnings("static-access")
+	private void emailUserAboutMatch(User user, User match, Locale locale) {
 		try {
-//			emailService.sendSimpleMessage("info", user.getEmail(), "You have been matched", "Hi, you have been matched with " + matchingPartner.getEmail());
-			System.out.println("We would send an email to " + user.getEmail() + " now.");
+			UserPair up = UserPair.of(user, match);
+			String matchingLanguages = matchingLanguages(up, user);
+			emailService.sendSimpleMessage("info", 
+					user.getEmail(), 
+					messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)), 
+					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, messageSource.getMessage("status.modi." + User.convertModusToString(up.commonModus(user.getModus(), match.getModus()).get()), new Object[]{}, usersLocale(user)), match.getEmail()}, usersLocale(user)));
 		} catch (Exception ignored) {
+		}
+	}
+	
+	private String matchingLanguages(UserPair up, User user) {
+		ArrayList<String> languages = new ArrayList<String>();
+		for(String lang : up.commonLanguages()){
+			languages.add(messageSource.getMessage("language." + lang, new Object[]{}, usersLocale(user)));
+		}
+		return String.join(", ", languages);
+	}
+
+	private Locale usersLocale(User u) {
+		if(u.getLanguages().contains("DE")){
+			return new Locale("de");
+		}
+		else if(u.getLanguages().contains("FR")){
+			return new Locale("fr");
+		}
+		else {
+			return new Locale("en");
 		}
 	}
 }

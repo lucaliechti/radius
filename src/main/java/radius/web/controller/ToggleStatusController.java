@@ -3,6 +3,8 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.Locale;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class ToggleStatusController {
 //	}
 	
 	@RequestMapping(method=GET)
-	public String toggle(Model model) {
+	public String toggle(Model model, Locale locale) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		if(userRepo.userIsActive(email)) {
 			userRepo.deactivateUser(email);
@@ -45,15 +47,15 @@ public class ToggleStatusController {
 		else {
 			userRepo.activateUser(email);
 		}
-		return sc.statusPage(null, model);
+		return sc.statusPage(null, model, locale);
 	}
 	
 	@RequestMapping(method=POST)
-	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm, BindingResult result, Model model) {
+	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm, BindingResult result, Model model, Locale locale) {
 		if(result.hasErrors()) {
 			System.out.println("ToggleStatusController: Error toggling");
 			model.addAttribute("success", 0);
-			return sc.statusPage(null, model);
+			return sc.statusPage(null, model, locale);
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		
@@ -79,6 +81,6 @@ public class ToggleStatusController {
 			model.addAttribute("success", 0);
 		}
 
-		return sc.statusPage(null, model);
+		return sc.statusPage(null, model, locale);
 	}
 }

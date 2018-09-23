@@ -4,8 +4,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import radius.data.JDBCUserRepository;
 import radius.data.MatchingRepository;
 import radius.data.StaticResourceRepository;
 import radius.data.UserRepository;
+import radius.web.components.EmailService;
 
 @Controller
 @RequestMapping(value="/status")
@@ -38,6 +41,13 @@ public class StatusController {
 	@Autowired
 	private StaticResourceRepository staticRepo;
 	
+	@Autowired
+	private EmailService emailService;
+	
+	//this child will be moved out
+    @Autowired
+    private MessageSource messageSource;
+	
 //	private JDBCStaticResourceRepository staticRepo;
 	private AnswerController ac;
 	
@@ -49,7 +59,7 @@ public class StatusController {
 	}
 	
 	@RequestMapping(method=GET)
-	public String statusPage(@RequestParam(value = "login", required = false) String loggedin, Model model) {
+	public String statusPage(@RequestParam(value = "login", required = false) String loggedin, Model model, Locale locale) {
 		System.out.println("in the StatusController class");
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
@@ -75,7 +85,7 @@ public class StatusController {
 				UserPair up = UserPair.of(user, match);
 				model.addAttribute("modi", User.convertModusToString(UserPair.commonModus(user.getModus(), match.getModus()).get()));
 				model.addAttribute("commonlocations", String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))));
-				model.addAttribute("commonlanguages", up.commonLanguages());
+				model.addAttribute("commonlanguages", up.commonLanguages());		
 			}
 			model.addAttribute("history", usersMatches(email));
 			model.addAttribute("feedbackForm", new MeetingFeedbackForm());
@@ -87,4 +97,6 @@ public class StatusController {
 	public List<HalfEdge> usersMatches(String email) {
 		return userRepo.allMatchesForUser(email);
 	}
+	
+
 }

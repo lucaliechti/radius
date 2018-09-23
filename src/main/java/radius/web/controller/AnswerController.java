@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.validation.Valid;
 
@@ -58,7 +59,7 @@ public class AnswerController {
 	}
 	
 	@RequestMapping(method=POST)
-	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model) throws UnsupportedEncodingException {
+	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
 		if(result.hasErrors()) {
 			addListsTo(model);
 			return "answers";
@@ -69,7 +70,7 @@ public class AnswerController {
 		u.setAnswered(true);
 		userRepo.updateUser(u);
 //		return pc.profile(null, model); //wow, neat
-		return sc.statusPage(null, model);
+		return sc.statusPage(null, model, locale);
 	}
 	
 	private void addListsTo(Model model) {
