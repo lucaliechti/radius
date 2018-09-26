@@ -2,6 +2,8 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import javax.annotation.Resource;
+
 //import java.util.Locale;
 //import java.util.Map;
 
@@ -10,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 //import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 //import org.springframework.validation.BindingResult;
@@ -23,33 +28,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.UserForm;
 //import radius.data.JDBCReminderRepository;
 import radius.data.JDBCStaticResourceRepository;
+import radius.web.components.EmailService;
 
 @Controller
 @RequestMapping(value={"/", "/home"})
-@ComponentScan("radius.config")
+@ComponentScan("radius.config") 
 public class HomeController {
 
 	private JDBCStaticResourceRepository staticRepo;
-//	private JDBCReminderRepository reminderRepo;
-//	private JDBCStaticResourceRepository staticResourceRepo;
-//	private LocaleResolver lr;
+	
+	@Qualifier("helloMailSender")
+	@Autowired
+	private JavaMailSenderImpl helloMailSender;
+	
+	@Qualifier("matchingMailSender")
+	@Autowired
+	private JavaMailSenderImpl matchingMailSender;
 	
 	@Autowired
-	public HomeController(JDBCStaticResourceRepository _staticRepo/*, JDBCReminderRepository _reminderRepo, LocaleResolver _lr*/) {
+	private EmailService emailService;
+	
+	@Autowired
+	public HomeController(JDBCStaticResourceRepository _staticRepo) {
 		this.staticRepo = _staticRepo;
-//		this.reminderRepo = _reminderRepo;
-//		this.lr = _lr;
 	}
 	
 	@RequestMapping(method=GET)
 	public String home(@RequestParam(value = "logout", required = false) String loggedout, @RequestParam(value = "error", required = false) String error, Model model, HttpServletRequest req, HttpServletResponse res) {
-		/*
-		String url = req.getRequestURL().toString();
-		//only setting locale for the index page at the moment
-		if(url.contains("radius-schweiz")) { lr.setLocale(req, res, new Locale("de")); }
-		else if(url.contains("radius-suisse")) { lr.setLocale(req, res, new Locale("fr")); }
-		else if(url.contains("radius-svizzera")) { lr.setLocale(req, res, new Locale("it")); }
-		*/
+
 		System.out.println("In the HomeController class");
 		
 		model.addAttribute("registrationForm", new UserForm());
@@ -66,6 +72,9 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", -1);
 		}
+		emailService.sendSimpleMessage("luca.liechti@gmail.com", "hi from hello", "this is a message from hello@radius-schweiz.ch", helloMailSender);
+		emailService.sendSimpleMessage("luca.liechti@gmail.com", "hi from matching", "this is a message from matching@radius-schweiz.ch", matchingMailSender);
+		
 		return "home";
 	}
 	/*

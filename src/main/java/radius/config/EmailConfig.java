@@ -2,10 +2,8 @@ package radius.config;
 
 import java.util.Properties;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import radius.web.components.EmailProperties;
@@ -13,13 +11,24 @@ import radius.web.components.EmailProperties;
 @Configuration
 public class EmailConfig {
 	
-	@Autowired
-	private EmailProperties p;
-	
     @Bean
-    public JavaMailSender getJavaMailSender() {
-	
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+    public JavaMailSenderImpl helloMailSender() {
+    	
+    	EmailProperties p = new EmailProperties("/config/email_hello.properties");
+    	JavaMailSenderImpl mailSender = createFromProperties(p);
+        return mailSender;
+    }
+    
+    @Bean
+    public JavaMailSenderImpl matchingMailSender() {
+    	
+    	EmailProperties p = new EmailProperties("/config/email_matching.properties");
+    	JavaMailSenderImpl mailSender = createFromProperties(p);
+        return mailSender;
+    }
+
+	private JavaMailSenderImpl createFromProperties(EmailProperties p) {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(p.getHost());
         mailSender.setPort(p.getPort());
         mailSender.setUsername(p.getUser());
@@ -36,6 +45,6 @@ public class EmailConfig {
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
          
         return mailSender;
-    }
+	}
 
 }

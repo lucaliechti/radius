@@ -2,9 +2,11 @@ package radius.web.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,10 @@ public class MatchingController {
 	private final JDBCUserRepository userRepo;
 	private final EmailService emailService;
 	private final StaticResourceRepository staticRepo;
+	
+	@Qualifier("matchingMailSender")
+	@Autowired
+	private JavaMailSenderImpl matchingMailSender;
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -217,13 +223,8 @@ public class MatchingController {
 
 		userRepo.match(userPair);
 
-		////////TEST////////////
 		emailUserAboutMatch(user1, user2, usersLocale(user1));
-		emailUserAboutMatch(user2, user1, usersLocale(user1));
-		////////END OF TEST/////
-		
-//		emailUserAboutMatch(user1, user2);
-//		emailUserAboutMatch(user2, user1);
+		emailUserAboutMatch(user2, user1, usersLocale(user2));
 
 		return new MatchResponse(match, 201, "The users were successfully matched.");
 	}
@@ -236,10 +237,12 @@ public class MatchingController {
 		try {
 			UserPair up = UserPair.of(user, match);
 			String matchingLanguages = matchingLanguages(up, user);
-			emailService.sendSimpleMessage("info", 
-					user.getEmail(), 
+			emailService.sendSimpleMessage(
+					user.getEmail(),
 					messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)), 
-					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, messageSource.getMessage("status.modi." + User.convertModusToString(up.commonModus(user.getModus(), match.getModus()).get()), new Object[]{}, usersLocale(user)), match.getEmail()}, usersLocale(user)));
+					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, messageSource.getMessage("status.modi." + User.convertModusToString(up.commonModus(user.getModus(), match.getModus()).get()), new Object[]{}, usersLocale(user)), match.getEmail()}, usersLocale(user)),
+					matchingMailSender
+				);
 		} catch (Exception ignored) {
 		}
 	}

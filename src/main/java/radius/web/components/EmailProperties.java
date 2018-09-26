@@ -4,9 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 
-@Component
 public class EmailProperties {
 	
 	private String host;
@@ -14,11 +13,16 @@ public class EmailProperties {
 	private String user;
 	private String pass;
 	
-	public EmailProperties() {
+	public EmailProperties(String file) {
+		readFromFile(file);
+	}
+	
+	private void readFromFile(String file) {
 		Properties p = new Properties();
 		BufferedInputStream in;
 		try {
-			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream("/config/email.properties");
+//			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream("/config/email.properties");
+			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream(file);
 			p.load(in);
 			in.close();
 		} catch (IOException e) {
@@ -33,7 +37,7 @@ public class EmailProperties {
 		user = p.getProperty("user");
 		pass = p.getProperty("pass");
 	}
-	
+
 	public String getHost() {
 		return host;
 	}

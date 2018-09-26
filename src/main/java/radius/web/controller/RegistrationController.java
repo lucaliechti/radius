@@ -1,8 +1,9 @@
 package radius.web.controller;
 
-//import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,11 @@ public class RegistrationController {
 	private UserRepository userRepo;
 	private StaticResourceRepository staticResourceRepo; //leftover from when this was an own page
 	private UUIDRepository uuidRepo;
+	
+	@Qualifier("helloMailSender")
+	@Autowired
+	private JavaMailSenderImpl helloMailSender;
+	
 	private EmailService emailService;
 	
     @Autowired
@@ -45,14 +51,6 @@ public class RegistrationController {
 		this.emailService = _ses;
 		this.uuidRepo = uuid;
 	}
-	
-	/* LL: now moved to home page. this cannot be GETed.
-	@RequestMapping(method=GET)
-	public String registrationPage(Model model) {
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticResourceRepo.cantons());
-		return "register";
-	}*/
 	
 	@RequestMapping(method=POST)
 	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
@@ -93,7 +91,12 @@ public class RegistrationController {
 		System.out.println(uuidRepo.findUserByUUID(uuid.toString()));
 		
 		try {
-			emailService.sendSimpleMessage("hello", email, messageSource.getMessage("email.confirm.title", new Object[]{}, locale), messageSource.getMessage("email.confirm.content", new Object[]{firstName, lastName, "https://radius-schweiz.ch/confirm?uuid=" + uuid.toString()}, locale));
+			emailService.sendSimpleMessage(
+					email, 
+					messageSource.getMessage("email.confirm.title", new Object[]{}, locale), 
+					messageSource.getMessage("email.confirm.content", new Object[]{firstName, lastName, "https://radius-schweiz.ch/confirm?uuid=" + uuid.toString()}, locale),
+					helloMailSender
+				);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
