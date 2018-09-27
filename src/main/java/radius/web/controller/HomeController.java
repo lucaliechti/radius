@@ -37,17 +37,6 @@ public class HomeController {
 
 	private JDBCStaticResourceRepository staticRepo;
 	
-	@Qualifier("helloMailSender")
-	@Autowired
-	private JavaMailSenderImpl helloMailSender;
-	
-	@Qualifier("matchingMailSender")
-	@Autowired
-	private JavaMailSenderImpl matchingMailSender;
-	
-	@Autowired
-	private EmailService emailService;
-	
 	@Autowired
 	public HomeController(JDBCStaticResourceRepository _staticRepo) {
 		this.staticRepo = _staticRepo;
@@ -72,8 +61,6 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", -1);
 		}
-		emailService.sendSimpleMessage("luca.liechti@gmail.com", "hi from hello", "this is a message from hello@radius-schweiz.ch", helloMailSender);
-		emailService.sendSimpleMessage("luca.liechti@gmail.com", "hi from matching", "this is a message from matching@radius-schweiz.ch", matchingMailSender);
 		
 		return "home";
 	}

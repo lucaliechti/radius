@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import radius.security.CustomAuthenticationProvider;
 
 @EnableWebSecurity
@@ -43,18 +45,16 @@ public class MultiHttpSecurityConfig {
 					.defaultSuccessUrl("/status")
 					//.loginProcessingUrl("/answers")
 					.failureUrl("/home?error")
-					.and().rememberMe().tokenValiditySeconds(2419200).key("RadiusId").userDetailsService(userDetailsService) //four weeks
+					.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks
 					.and().csrf();//.ignoringAntMatchers("/home", "/");
 
-			/*
+			
 			//TODO: Custom logout handler
 			//logout
 			http
 				.logout()
-					.logoutUrl("/logout")
-					.deleteCookies("JSESSIONID")
-					.logoutSuccessUrl("/home?logout");
-					*/
+					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+					
 		}
 
 		@Autowired
