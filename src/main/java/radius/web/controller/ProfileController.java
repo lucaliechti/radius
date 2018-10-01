@@ -2,8 +2,8 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,18 +17,14 @@ import radius.HalfEdge;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
-import radius.data.MatchingRepository;
 import radius.data.StaticResourceRepository;
 
 @Controller
 @RequestMapping(value="/profile")
 public class ProfileController {
 	
-	@Autowired
-	private MatchingRepository matchRepo;
-	
 	private JDBCUserRepository userRepo;
-	private static StaticResourceRepository staticRepo;
+	private StaticResourceRepository staticRepo;
 	private HomeController hc;
 
 	@Autowired
@@ -39,7 +35,7 @@ public class ProfileController {
 	}
 
 	@RequestMapping(method=GET)
-	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model) {
+	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model, Locale locale) {
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
@@ -47,7 +43,7 @@ public class ProfileController {
 		User u = userRepo.findUserByEmail(email);
 		if(!u.getEnabled()) {
 			model.addAttribute("not_enabled", true);
-			return hc.home(null, null, model, null, null);
+			return hc.home(null, null, model, null, null, locale);
 		}
 		else if(!u.getAnswered()) {
 			model.addAttribute("lang", staticRepo.languages());

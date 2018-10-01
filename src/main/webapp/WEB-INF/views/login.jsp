@@ -43,8 +43,8 @@
   		</div>
 	</div>
 	
-	<input type="submit" class="btn btn-primary" value="Submit" /> <input id="remember_me" name="remember-me" type="checkbox"/>
-	<label for="remember_me">Remember me</label>
+	<input type="submit" class="btn btn-primary" value="Submit" /> <input id="remember-me" name="remember-me" type="checkbox"/>
+	<label for="remember-me">Remember me</label>
 	
 	<sec:csrfInput />
 </form>

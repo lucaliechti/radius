@@ -9,6 +9,7 @@ import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.exceptions.UserHasMatchesException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -32,8 +33,6 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
 	private static final String USER_ACTIVE = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND NOT status = 'INACTIVE')";
 	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
-//	private static final String ACTIVATE_USER =			"UPDATE users SET status = 'WAITING' WHERE email = ?";
-//	private static final String DEACTIVATE_USER = 		"UPDATE users SET status = 'INACTIVE' WHERE email = ?";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 
@@ -242,9 +241,15 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public void deleteUser(String email) {
+	public void deleteUser(String email) throws UserHasMatchesException {
+		//TODO: This has quite some implications - make nice
+		List<HalfEdge> matches = jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
+		if(matches.size()!=0){
+			throw new UserHasMatchesException(email + " has matches and cannot be deleted.");
+		}
 		jdbcTemplate.update(DELETE_AUTHORITIES, email);
 		jdbcTemplate.update(DELETE_USER, email);
+		
 	}
 }
 

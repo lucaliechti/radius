@@ -3,21 +3,27 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header.jsp" />
+<jsp:include page="templates/header_new.jsp" />
 
-<script> $('#nav-home').addClass('active'); </script>
+<main class="firstcontainer container">
+   <section class="fullwidth-section">
+         <section class="leftsection-content-element" id="">
+            <h2><spring:message code="privacy.title"/></h2>
+            <p><spring:message code="privacy.main"/></p><br>
+            <p><b><spring:message code="privacy.info.title"/></b></p><br>
+            <p><spring:message code="privacy.info.detail"/></p><br>
+            <p><b><spring:message code="privacy.cookies.title"/></b></p><br>
+            <p><spring:message code="privacy.cookies.detail"/></p><br>
+            <p><b><spring:message code="privacy.log.title"/></b></p><br>
+            <p><spring:message code="privacy.log.detail"/></p><br>            
+            <p><b><spring:message code="privacy.location.title"/></b></p><br>
+            <p><spring:message code="privacy.location.detail"/></p><br>
+            <p><b><spring:message code="privacy.external.title"/></b></p><br>
+            <p><spring:message code="privacy.external.detail"/></p>
+         </section>
+      </section>
+</main>
 
-<h1><spring:message code="privacy.title"/></h1>
-<h4>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-	diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-	erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et
-	ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-	ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-	elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-	aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-	dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-	est Lorem ipsum dolor sit amet.
-</h4>
-
-<jsp:include page="templates/footer.jsp" />
+<jsp:include page="templates/footer_new.jsp" />

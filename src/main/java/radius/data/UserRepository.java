@@ -5,6 +5,7 @@ import radius.User;
 import radius.HalfEdge;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.exceptions.UserHasMatchesException;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public interface UserRepository {
 	
 	public void deactivateUser(String email);
 	
-	public void deleteUser(String email);
+	//TODO: It shouldn't be a problem if the user has matches. Make nice in the future.
+	public void deleteUser(String email) throws UserHasMatchesException;
 	
 }

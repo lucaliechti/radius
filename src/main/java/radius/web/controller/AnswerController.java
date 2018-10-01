@@ -30,16 +30,14 @@ public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
 	private JDBCStaticResourceRepository staticRepo;
-	private ProfileController pc;
 	
 	@Autowired
 	private StatusController sc;
 	
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, ProfileController _pc) {
+	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
-		this.pc = _pc;
 	}
 
 	@RequestMapping(method=GET)
@@ -69,8 +67,7 @@ public class AnswerController {
 		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
 		userRepo.updateUser(u);
-//		return pc.profile(null, model); //wow, neat
-		return sc.statusPage(null, model, locale);
+		return sc.statusPage(model, locale);
 	}
 	
 	private void addListsTo(Model model) {

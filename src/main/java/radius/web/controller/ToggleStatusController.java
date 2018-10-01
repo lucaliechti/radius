@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.MeetingFeedbackForm;
-import radius.data.JDBCUserRepository;
 import radius.data.MatchingRepository;
 import radius.data.UserRepository;
 
@@ -33,11 +32,6 @@ public class ToggleStatusController {
 	@Autowired
 	private StatusController sc;
 	
-//	public ToggleStatusController(JDBCUserRepository _userRepo, StatusController _sc) {
-//		this.userRepo = _userRepo;
-//		this.sc = _sc;
-//	}
-	
 	@RequestMapping(method=GET)
 	public String toggle(Model model, Locale locale) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
@@ -47,7 +41,7 @@ public class ToggleStatusController {
 		else {
 			userRepo.activateUser(email);
 		}
-		return sc.statusPage(null, model, locale);
+		return sc.statusPage(model, locale);
 	}
 	
 	@RequestMapping(method=POST)
@@ -55,7 +49,7 @@ public class ToggleStatusController {
 		if(result.hasErrors()) {
 			System.out.println("ToggleStatusController: Error toggling");
 			model.addAttribute("success", 0);
-			return sc.statusPage(null, model, locale);
+			return sc.statusPage(model, locale);
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		
@@ -81,6 +75,6 @@ public class ToggleStatusController {
 			model.addAttribute("success", 0);
 		}
 
-		return sc.statusPage(null, model, locale);
+		return sc.statusPage(model, locale);
 	}
 }

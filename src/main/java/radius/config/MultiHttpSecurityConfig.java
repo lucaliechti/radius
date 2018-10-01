@@ -43,10 +43,9 @@ public class MultiHttpSecurityConfig {
 			http
 					.formLogin().loginPage("/login")
 					.defaultSuccessUrl("/status")
-					//.loginProcessingUrl("/answers")
 					.failureUrl("/home?error")
 					.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks
-					.and().csrf();//.ignoringAntMatchers("/home", "/");
+					.and().csrf();
 
 			
 			//TODO: Custom logout handler

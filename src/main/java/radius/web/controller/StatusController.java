@@ -7,26 +7,19 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.HalfEdge;
 import radius.MeetingFeedbackForm;
 import radius.User;
-import radius.User.userModus;
 import radius.User.userStatus;
 import radius.UserPair;
-//import radius.AnswerForm;
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.JDBCUserRepository;
 import radius.data.MatchingRepository;
 import radius.data.StaticResourceRepository;
 import radius.data.UserRepository;
-import radius.web.components.EmailService;
 
 @Controller
 @RequestMapping(value="/status")
@@ -41,29 +34,12 @@ public class StatusController {
 	@Autowired
 	private StaticResourceRepository staticRepo;
 	
-	@Autowired
-	private EmailService emailService;
-	
-	//this child will be moved out
     @Autowired
-    private MessageSource messageSource;
-	
-//	private JDBCStaticResourceRepository staticRepo;
 	private AnswerController ac;
 	
-	//specify here which implementation of UserRepository will be used
-	@Autowired
-	public StatusController(JDBCStaticResourceRepository _staticRepo, AnswerController _ac) {
-//		this.staticRepo = _staticRepo;
-		this.ac = _ac;
-	}
-	
 	@RequestMapping(method=GET)
-	public String statusPage(@RequestParam(value = "login", required = false) String loggedin, Model model, Locale locale) {
+	public String statusPage(Model model, Locale locale) {
 		System.out.println("in the StatusController class");
-		if(loggedin != null) {
-			model.addAttribute("loggedin", "user has just logged in");
-		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {
@@ -71,10 +47,6 @@ public class StatusController {
 			return "login";
 		}
 		if(!user.getAnswered()) {
-//			model.addAttribute("lang", staticRepo.languages());
-//			model.addAttribute("modi", staticRepo.modi());
-//			model.addAttribute("answerForm", new AnswerForm());
-//			return "answers";
 			return ac.answer(model);
 		}
 		else {

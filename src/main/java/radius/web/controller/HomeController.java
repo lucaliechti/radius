@@ -2,33 +2,22 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import javax.annotation.Resource;
-
-//import java.util.Locale;
-//import java.util.Map;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-//import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-//import org.springframework.validation.BindingResult;
-//import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.servlet.LocaleResolver;
 
-//import radius.ReminderForm;
 import radius.UserForm;
-//import radius.data.JDBCReminderRepository;
 import radius.data.JDBCStaticResourceRepository;
-import radius.web.components.EmailService;
 
 @Controller
 @RequestMapping(value={"/", "/home"})
@@ -38,14 +27,21 @@ public class HomeController {
 	private JDBCStaticResourceRepository staticRepo;
 	
 	@Autowired
+	private StatusController sc;
+	
+	@Autowired
 	public HomeController(JDBCStaticResourceRepository _staticRepo) {
 		this.staticRepo = _staticRepo;
 	}
 	
 	@RequestMapping(method=GET)
-	public String home(@RequestParam(value = "logout", required = false) String loggedout, @RequestParam(value = "error", required = false) String error, Model model, HttpServletRequest req, HttpServletResponse res) {
+	public String home(@RequestParam(value = "logout", required = false) String loggedout, @RequestParam(value = "error", required = false) String error, Model model, HttpServletRequest req, HttpServletResponse res, Locale locale) {
 
 		System.out.println("In the HomeController class");
+		
+		if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated() && !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) ) {
+			return sc.statusPage(model, locale);
+		}
 		
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());
@@ -64,24 +60,4 @@ public class HomeController {
 		
 		return "home";
 	}
-	/*
-	 * LL: This was only for the reminder registration.
-	@RequestMapping(method=POST)
-	public String home(@ModelAttribute("reminderForm") @Valid ReminderForm reminderForm, BindingResult result, Model model) {
-		if(result.hasErrors()){
-			model.addAttribute("success", 0);
-			return "index";
-		}
-		try {
-			reminderRepo.saveReminder(reminderForm.getEmail());
-			model.addAttribute("success", 1);
-		}
-		catch(Error e) {
-			e.printStackTrace();
-		}
-		model.addAttribute("reminderForm", new ReminderForm());
-
-		return "index";
-	}
-	*/
 }
