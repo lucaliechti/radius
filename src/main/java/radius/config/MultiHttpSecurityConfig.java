@@ -41,7 +41,7 @@ public class MultiHttpSecurityConfig {
 			//TODO: Custom login handler
 			//login
 			http
-					.formLogin().loginPage("/login")
+					.formLogin().loginPage("/home")
 					.defaultSuccessUrl("/status")
 					.failureUrl("/home?error")
 					.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks

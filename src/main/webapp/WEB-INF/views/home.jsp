@@ -46,6 +46,12 @@
             </p>
          </c:if>
          
+         <c:if test="${confirmation_error != null}">
+            <p class="error" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.error.confirmation"/><br>
+            </p>
+         </c:if>
+         
       <section class="leftsection-title" id="page-title">         
          <h2>
             <spring:message code="home.title"/>
@@ -80,7 +86,7 @@
          <h2>
             <spring:message code="home.login.title"/>
          </h2>
-         <form name="loginForm" action="login" method="POST">
+         <form name="loginForm" action="home" method="POST">
             <div class="form-group">
                <label for="username" class="col-2 col-form-label">
                   <spring:message code="home.login.email"/>

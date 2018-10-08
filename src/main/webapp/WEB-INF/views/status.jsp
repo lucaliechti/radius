@@ -26,7 +26,7 @@
 <spring:message code="status.meeting.confirm" var="confirm" />
 <spring:message code="status.modi.${modi}" var="compatiblemodi" />
 <c:forEach items="${commonlanguages}" var="lang" varStatus="stat">
-  <c:set var="languages">${stat.first ? "" : languages}${stat.last ? "" : ", "}<spring:message code="language.${lang}"/></c:set>
+  <c:set var="languages">${stat.first ? "" : languages}<spring:message code="language.${lang}"/>${stat.last ? "" : ", "}</c:set>
 </c:forEach>
   
       <section class="leftsection-title" id="page-title">

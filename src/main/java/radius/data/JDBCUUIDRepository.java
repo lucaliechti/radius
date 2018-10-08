@@ -3,6 +3,7 @@ package radius.data;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +31,7 @@ public class JDBCUUIDRepository implements UUIDRepository {
 	}
 
 	@Override
-	public String findUserByUUID(String uuid) {
+	public String findUserByUUID (String uuid) throws IncorrectResultSizeDataAccessException {
 		String email = (String) jdbcTemplate.queryForObject(FIND_USER_BY_UUID, new Object[] { uuid }, String.class);
 		return email;
 	}

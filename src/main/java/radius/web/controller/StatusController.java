@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.HalfEdge;
 import radius.MeetingFeedbackForm;
 import radius.User;
+import radius.UserForm;
 import radius.User.userStatus;
 import radius.UserPair;
 import radius.data.MatchingRepository;
@@ -37,14 +41,16 @@ public class StatusController {
     @Autowired
 	private AnswerController ac;
 	
-	@RequestMapping(method=GET)
+	@RequestMapping(method=GET) //are all these spam parameters needed?
 	public String statusPage(Model model, Locale locale) {
 		System.out.println("in the StatusController class");
 		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {
 			model.addAttribute("not_enabled", true);
-			return "login";
+			model.addAttribute("registrationForm", new UserForm());
+			model.addAttribute("cantons", staticRepo.cantons());
+			return "home";
 		}
 		if(!user.getAnswered()) {
 			return ac.answer(model);
@@ -57,7 +63,7 @@ public class StatusController {
 				UserPair up = UserPair.of(user, match);
 				model.addAttribute("modi", User.convertModusToString(UserPair.commonModus(user.getModus(), match.getModus()).get()));
 				model.addAttribute("commonlocations", String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))));
-				model.addAttribute("commonlanguages", up.commonLanguages());		
+				model.addAttribute("commonlanguages", up.commonLanguages());
 			}
 			model.addAttribute("history", usersMatches(email));
 			model.addAttribute("feedbackForm", new MeetingFeedbackForm());
@@ -69,6 +75,4 @@ public class StatusController {
 	public List<HalfEdge> usersMatches(String email) {
 		return userRepo.allMatchesForUser(email);
 	}
-	
-
 }

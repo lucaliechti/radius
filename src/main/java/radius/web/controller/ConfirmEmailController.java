@@ -2,6 +2,7 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,17 @@ public class ConfirmEmailController {
 	
 	@RequestMapping(method=GET)
 	public String confirm(@RequestParam(value = "uuid", required = true) String uuid, Model model) {
-		String userEmail = uuidRepo.findUserByUUID(uuid);
+		String userEmail;
+		try {
+			userEmail = uuidRepo.findUserByUUID(uuid);
+		}
+		catch (IncorrectResultSizeDataAccessException irsdae) {
+			model.addAttribute("registrationForm", new UserForm());
+			model.addAttribute("cantons", staticRepo.cantons());
+			model.addAttribute("confirmation_error", true);
+			//this could be done nicer by a homecontroller
+			return "home";
+		}
 		if(userEmail != null) {
 			userRepo.enableUser(userEmail);
 			uuidRepo.removeUser(userEmail);
@@ -42,5 +53,4 @@ public class ConfirmEmailController {
 		model.addAttribute("emailconfirmed", true);
 		return "home";
 	}
-
 }
