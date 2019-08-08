@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 //import org.hibernate.validator.constraints.Email;
 
@@ -25,6 +26,7 @@ public class User {
 	private List<Integer> locations;
 	private List<String> languages;
 	private List<Boolean> questions;
+	private String uuid;
 	private Timestamp dateModified;
 
 	public User(
@@ -68,6 +70,7 @@ public class User {
 		this.canton = _canton;
 		this.email = _email;
 		this.password = _password;
+		this.uuid = UUID.randomUUID().toString();
 	}
 	public User() {
 	}
@@ -251,6 +254,12 @@ public class User {
 		}
 		return loc;
 	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String _uuid) {uuid = _uuid;}
 	
 	public enum userStatus {
 		/*NEW,*/

@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header_new.jsp" />
+<jsp:include page="templates/header.jsp" />
 
 <main class="firstcontainer container">
    <section class="fullwidth-section">
@@ -26,4 +26,4 @@
       </section>
 </main>
 
-<jsp:include page="templates/footer_new.jsp" />
+<jsp:include page="templates/footer.jsp" />

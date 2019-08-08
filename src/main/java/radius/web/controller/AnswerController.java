@@ -66,6 +66,7 @@ public class AnswerController {
 		User u = userRepo.findUserByEmail(email);
 		u = updateUserFromForm(u, answerForm);
 		u.setAnswered(true);
+		u.setStatus("WAITING"); //new
 		userRepo.updateUser(u);
 		return sc.statusPage(model, locale);
 	}

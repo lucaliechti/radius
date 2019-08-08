@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.Locale;
@@ -29,6 +30,11 @@ public class DeleteController {
 	
 	@Autowired
 	private ProfileController pc;
+
+	@RequestMapping(method=GET)
+	public String reset() {
+		return "home";
+	}
 
 	@RequestMapping(method=POST)
 	public String contact(Model model, HttpServletRequest req, HttpServletResponse res, Locale locale) {

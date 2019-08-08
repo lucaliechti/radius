@@ -24,8 +24,11 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USERS_TO_MATCH =   "SELECT * FROM users WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
-	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE)";
+	private static final String FIND_USER_BY_UUID =		"SELECT * FROM users WHERE uuid = ?";
+	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
+	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
 	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, datemodify = ? WHERE email = ?";
+	private static final String UPDATE_PASSWORD = 		"UPDATE users SET password = ?, uuid = ?, datemodify = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
@@ -64,7 +67,6 @@ public class JDBCUserRepository implements UserRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
-
 	}
 	
 	private static final class UserRowMapper implements RowMapper<User> {
@@ -139,7 +141,7 @@ public class JDBCUserRepository implements UserRepository {
 			u.setCanton(null);
 		}
 		
-		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false);
+		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
 	
@@ -164,7 +166,13 @@ public class JDBCUserRepository implements UserRepository {
 				questions.get(0), questions.get(1), questions.get(2), questions.get(3), 
 				questions.get(4), OffsetDateTime.now(), u.getEmail());
 	}
-	
+
+	@Override
+	public void updatePassword(String password, String uuid, String email) {
+		jdbcTemplate.update(UPDATE_PASSWORD, password, uuid, OffsetDateTime.now(), email);
+	}
+
+	@Override
 	public void grantUserRights(String email){
 		jdbcTemplate.update(GRANT_USER_RIGHTS, OffsetDateTime.now(), OffsetDateTime.now(), email, "ROLE_USER");
 	}
@@ -249,7 +257,26 @@ public class JDBCUserRepository implements UserRepository {
 		}
 		jdbcTemplate.update(DELETE_AUTHORITIES, email);
 		jdbcTemplate.update(DELETE_USER, email);
-		
+	}
+
+	@Override
+	public User findUserByUuid(String uuid) {
+		try {
+			return jdbcTemplate.queryForObject(FIND_USER_BY_UUID, new UserRowMapper(), uuid);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public String findUuidByEmail(String email) {
+		try {
+			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_UUID_BY_EMAIL, email);
+			return result.get("uuid").toString();
+		}
+		catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 }
 

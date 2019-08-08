@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header_new.jsp" />
+<jsp:include page="templates/header.jsp" />
 
 <main class="firstcontainer container">
    <section id="leftsection">
@@ -13,6 +13,12 @@
          <c:if test="${waitForEmailConfirmation != null}">
             <p class="success" style="margin-bottom: 1%;">
                <spring:message code="home.feedback.success.waitforemail"/><br>
+            </p>
+         </c:if>
+
+         <c:if test="${passwordReset != null}">
+            <p class="success" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.success.passwordreset"/><br>
             </p>
          </c:if>
          
@@ -51,7 +57,13 @@
                <spring:message code="home.feedback.error.confirmation"/><br>
             </p>
          </c:if>
-         
+
+         <c:if test="${passwordreset_error != null}">
+            <p class="error" style="margin-bottom: 1%;">
+               <spring:message code="home.feedback.error.generic"/><br>
+            </p>
+         </c:if>
+
       <section class="leftsection-title" id="page-title">         
          <h2>
             <spring:message code="home.title"/>
@@ -109,17 +121,17 @@
             </label>
             <input type="submit" class="btn btn-primary" value='${login}' />
             <sec:csrfInput />
-         </form><!-- 
-         <a href="#"> kommt noch!
-            <spring:message code="home.login.forgot"/>
-         </a> -->
+         </form>
+         <a href="#">
+            <a href="<c:url value='/forgot' />"><spring:message code="home.login.forgot"/></a>
+         </a>
       </section>
       
       <section id="profile-deco" class="profile-resume">
          <h2>
             <spring:message code="home.register.title"/>
          </h2>
-         <form:form method="POST" action="register" commandName="registrationForm">
+         <form:form method="POST" action="register" modelAttribute="registrationForm">
             <div class="form-group">
                <form:label path="firstName">
                   <spring:message code="home.register.fn"/>
@@ -194,5 +206,5 @@
       </section>
    </section>
 </main>
-<jsp:include page="templates/footer_new.jsp" />
+<jsp:include page="templates/footer.jsp" />
 

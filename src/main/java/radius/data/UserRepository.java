@@ -22,6 +22,10 @@ public interface UserRepository {
 	
 	public void updateUser(User u);
 
+	public void grantUserRights(String email);
+
+	public void updatePassword(String password, String uuid, String email);
+
 	public List<HalfEdge> allMatchesForUser(String email);
 
 	public void enableUser(String email);
@@ -46,5 +50,9 @@ public interface UserRepository {
 	
 	//TODO: It shouldn't be a problem if the user has matches. Make nice in the future.
 	public void deleteUser(String email) throws UserHasMatchesException;
+
+	public User findUserByUuid(String uuid);
+
+	public String findUuidByEmail(String email);
 	
 }

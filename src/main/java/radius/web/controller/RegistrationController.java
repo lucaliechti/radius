@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.UUID;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
@@ -51,6 +52,11 @@ public class RegistrationController {
 		this.emailService = _ses;
 		this.uuidRepo = uuid;
 	}
+
+	@RequestMapping(method=GET)
+	public String reset() {
+		return "home";
+	}
 	
 	@RequestMapping(method=POST)
 	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
@@ -75,7 +81,7 @@ public class RegistrationController {
 		}
 		catch (EmailAlreadyExistsException eaee) {
 			System.out.println(eaee.getMessage());
-			model.addAttribute("emailExistsError", new Boolean(true));
+			model.addAttribute("emailExistsError", Boolean.TRUE);
 			model.addAttribute("registrationForm", new UserForm());
 			model.addAttribute("cantons", staticResourceRepo.cantons());
 			return "home";
@@ -88,8 +94,8 @@ public class RegistrationController {
 			model.addAttribute("cantons", staticResourceRepo.cantons());
 			return "home";
 		}
-		System.out.println(uuidRepo.findUserByUUID(uuid.toString()));
-		
+		System.out.println("email confirmation uuid: " + uuidRepo.findUserByUUID(uuid.toString()));
+
 		try {
 			emailService.sendSimpleMessage(
 					email, 
@@ -102,9 +108,9 @@ public class RegistrationController {
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
 		}
-			
+
 		//success
-		model.addAttribute("waitForEmailConfirmation", new Boolean(true));
+		model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticResourceRepo.cantons());
 		return "home";

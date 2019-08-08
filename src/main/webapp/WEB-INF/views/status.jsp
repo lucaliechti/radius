@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header_new.jsp" />
+<jsp:include page="templates/header.jsp" />
 
 
 <main class="firstcontainer container">
@@ -58,7 +58,7 @@
             <a href="#" onClick="document.getElementById('inactive').style.display = 'block';document.getElementById('next').style.display = 'none';"><spring:message code="status.MATCHED.toggle.inactive"/></a><br><br>
             <div id="next" style="display: none;">
             	<p><spring:message code="status.${user.status}.confirmed" arguments="${match.firstname};${match.lastname}" argumentSeparator=";"/>
-            	<form:form action="toggleStatus" method="post" commandName="feedbackForm">
+            	<form:form action="toggleStatus" method="post" modelAttribute="feedbackForm">
             		<form:hidden path="nextState" value="WAITING" />
             		<form:radiobutton path="confirmed" value="true" />
 		    		<label class="radio-button-label-no">
@@ -74,7 +74,7 @@
             </div>
 		    <div id="inactive" style="display: none;">
 		    	<p><spring:message code="status.${user.status}.confirmed" arguments="${match.firstname};${match.lastname}" argumentSeparator=";"/>
-		    	<form:form action="toggleStatus" method="post" commandName="feedbackForm">
+		    	<form:form action="toggleStatus" method="post" modelAttribute="feedbackForm">
 		    	<form:hidden path="nextState" value="INACTIVE" />
 		    		<form:radiobutton path="confirmed" value="true" />
 		    		<label class="radio-button-label-no">
@@ -122,4 +122,4 @@
 
 
 
-<jsp:include page="templates/footer_new.jsp" />
+<jsp:include page="templates/footer.jsp" />

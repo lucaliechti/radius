@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header_new.jsp" />
+<jsp:include page="templates/header.jsp" />
 <main class="firstcontainer container">
 
 <h1><spring:message code="register.title"/></h1>
@@ -25,7 +25,7 @@
 </c:if>
 
 
-<form:form method="POST" action="register" commandName="registrationForm">
+<form:form method="POST" action="register" modelAttribute="registrationForm">
 	<div class="form-group">
 		<form:label path="firstName">First Name</form:label>
 		<div class="col-10">

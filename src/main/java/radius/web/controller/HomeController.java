@@ -65,7 +65,7 @@ public class HomeController {
 	public String login(@RequestParam(value = "error", required = false) String loginerror, Model model) {
 		System.out.println("in the HomeController class after HTTP POST");
 		if(loginerror != null) {
-			model.addAttribute("loginerror", new Boolean(true));
+			model.addAttribute("loginerror", Boolean.TRUE);
 		}
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());

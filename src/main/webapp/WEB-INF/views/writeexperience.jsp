@@ -13,7 +13,7 @@
 
 <!-- style errors: https://www.mkyong.com/spring-mvc/spring-mvc-form-errors-tag-example/ -->
 
-<form:form method="POST" action="/radius/experience" commandName="experienceForm">
+<form:form method="POST" action="/radius/experience" modelAttribute="experienceForm">
 <!-- why doesn't  action="<c:url value='/experience' />" work here? -->
  	<div class="form-group">
     	<form:label path="experience">Your Experience</form:label>

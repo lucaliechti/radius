@@ -1,6 +1,6 @@
 package radius.web.components;
 
-import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -19,10 +19,10 @@ public class EmailProperties {
 	
 	private void readFromFile(String file) {
 		Properties p = new Properties();
-		BufferedInputStream in;
+		InputStream in;
 		try {
 //			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream("/config/email.properties");
-			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream(file);
+			in = EmailProperties.class.getResourceAsStream(file);
 			p.load(in);
 			in.close();
 		} catch (IOException e) {

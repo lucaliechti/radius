@@ -28,7 +28,7 @@
 	<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
 
 	<!-- favicon -->
-	<link rel="shortcut icon" href="img/favicon.ico" />
+	<link rel="shortcut icon" href="favicon.ico" />
 </head>
 <body>
 

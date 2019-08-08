@@ -5,7 +5,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<jsp:include page="templates/header_new.jsp" />
+<jsp:include page="templates/header.jsp" />
 
 <main class="firstcontainer container">
 <section class="fullwidth-section-only-vertical">
@@ -23,7 +23,7 @@
 <spring:message code="answers.modus.explain" var="explain" />
 
 
-<form:form method="POST" action="answers" commandName="answerForm" accept-charset="ISO-8859-1">
+<form:form method="POST" action="answers" modelAttribute="answerForm" accept-charset="ISO-8859-1">
    <div class="form-group leftsection-content-element" id="register-motivation">
       <form:label path="motivation" class="label-title">
          <spring:message code="answers.motivation"/>
@@ -169,7 +169,6 @@
    var locationes = $('#locations').val();
    var split = locationes.split(';');
 </script>
-<!-- <script src="css/custom.css"></script> -->
 <script type="text/javascript" src="js/ms.js"></script>
 <script type="text/javascript" src="js/map.js"></script>
 <script>
@@ -180,4 +179,4 @@
 </script>
 </section>
 </main>
-<jsp:include page="templates/footer_new.jsp" />
+<jsp:include page="templates/footer.jsp" />

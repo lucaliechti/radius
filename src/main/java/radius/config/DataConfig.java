@@ -4,7 +4,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -16,9 +16,9 @@ public class DataConfig {
 	@Bean
 	public BasicDataSource datasource() {
 		Properties dbProperties = new Properties();
-		BufferedInputStream in;
+		/*Buffered*/ InputStream in;
 		try {
-			in = (BufferedInputStream) DataConfig.class.getResourceAsStream("/config/database_prod.properties");
+			in = /*(BufferedInputStream)*/ DataConfig.class.getResourceAsStream("/config/database_prod.properties");
 			dbProperties.load(in);
 			in.close();
 		} catch (IOException e) {
