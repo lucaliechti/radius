@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import radius.UserForm;
+import radius.data.JDBCStaticResourceRepository;
 import radius.data.UserRepository;
 import radius.exceptions.UserHasMatchesException;
 
@@ -31,8 +33,13 @@ public class DeleteController {
 	@Autowired
 	private ProfileController pc;
 
+	@Autowired
+	private JDBCStaticResourceRepository staticRepo;
+
 	@RequestMapping(method=GET)
-	public String reset() {
+	public String reset(Model model) {
+		model.addAttribute("registrationForm", new UserForm());
+		model.addAttribute("cantons", staticRepo.cantons());
 		return "home";
 	}
 

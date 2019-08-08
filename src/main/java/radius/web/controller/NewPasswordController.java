@@ -34,7 +34,9 @@ public class NewPasswordController {
     UserRepository userRepo;
 
     @RequestMapping(method=GET)
-    public String reset() {
+    public String reset(Model model) {
+        model.addAttribute("registrationForm", new UserForm());
+        model.addAttribute("cantons", staticRepo.cantons());
         return "home";
     }
 

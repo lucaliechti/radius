@@ -54,7 +54,9 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(method=GET)
-	public String reset() {
+	public String reset(Model model) {
+		model.addAttribute("registrationForm", new UserForm());
+		model.addAttribute("cantons", staticResourceRepo.cantons());
 		return "home";
 	}
 	
