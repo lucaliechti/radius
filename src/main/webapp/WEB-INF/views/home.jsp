@@ -11,55 +11,55 @@
    <section id="leftsection">
    
          <c:if test="${waitForEmailConfirmation != null}">
-            <p class="success" style="margin-bottom: 1%;">
+            <p class="result success">
                <spring:message code="home.feedback.success.waitforemail"/><br>
             </p>
          </c:if>
 
          <c:if test="${passwordReset != null}">
-            <p class="success" style="margin-bottom: 1%;">
+            <p class="result success">
                <spring:message code="home.feedback.success.passwordreset"/><br>
             </p>
          </c:if>
          
          <c:if test="${loggedout != null}">
-            <p class="success" style="margin-bottom: 1%;">
+            <p class="result success">
                <spring:message code="home.feedback.success.logout"/><br>
             </p>
          </c:if>
 
          <c:if test="${emailconfirmed != null}">
-            <p class="success" style="margin-bottom: 1%;">
+            <p class="result success">
                <spring:message code="home.feedback.success.mailconfirmed"/><br>
             </p>
          </c:if>
                   
          <c:if test="${loginerror != null}">
-            <p class="error" style="margin-bottom: 1%;">
+            <p class="result error">
                <spring:message code="home.feedback.success.loginerror"/><br>
             </p>
          </c:if>
          
          <c:if test="${delete_success != null}">
-            <p class="success" style="margin-bottom: 1%;">
+            <p class="result success">
                <spring:message code="home.feedback.success.delete"/><br>
             </p>
          </c:if>
          
          <c:if test="${not_enabled != null}">
-            <p class="error" style="margin-bottom: 1%;">
+            <p class="result error">
                <spring:message code="home.feedback.error.notenabled"/><br>
             </p>
          </c:if>
          
          <c:if test="${confirmation_error != null}">
-            <p class="error" style="margin-bottom: 1%;">
+            <p class="result error">
                <spring:message code="home.feedback.error.confirmation"/><br>
             </p>
          </c:if>
 
          <c:if test="${passwordreset_error != null}">
-            <p class="error" style="margin-bottom: 1%;">
+            <p class="result error">
                <spring:message code="home.feedback.error.generic"/><br>
             </p>
          </c:if>
@@ -122,9 +122,9 @@
             <input type="submit" class="btn btn-primary" value='${login}' />
             <sec:csrfInput />
          </form>
-         <a href="#">
+
             <a href="<c:url value='/forgot' />"><spring:message code="home.login.forgot"/></a>
-         </a>
+
       </section>
       
       <section id="profile-deco" class="profile-resume">

@@ -9,11 +9,6 @@
 
 <main class="firstcontainer container">
 <section class="fullwidth-section-only-vertical">
-<!-- 
-<c:if test="${newUser != null}">
-  		Almost done! Just answer the following questions:
-</c:if>
- -->
  
 <h1><spring:message code="answers.title"/></h1>
 <p><spring:message code="answers.subtitle"/></p>

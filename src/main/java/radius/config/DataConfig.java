@@ -8,17 +8,15 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-//import javax.sql.DataSource;
-
 @Configuration
 public class DataConfig {
 	
 	@Bean
 	public BasicDataSource datasource() {
 		Properties dbProperties = new Properties();
-		/*Buffered*/ InputStream in;
+		InputStream in;
 		try {
-			in = /*(BufferedInputStream)*/ DataConfig.class.getResourceAsStream("/config/database_prod.properties");
+			in = DataConfig.class.getResourceAsStream("/config/database_dev.properties");
 			dbProperties.load(in);
 			in.close();
 		} catch (IOException e) {

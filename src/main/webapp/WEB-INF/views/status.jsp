@@ -13,10 +13,10 @@
    
          <c:choose>
          <c:when test="${success == 0}">
-           	<p class="error" style="margin-bottom: 1%;"><spring:message code="status.change.feedback.error"/><br></p>
+           	<p class="result error"><spring:message code="status.change.feedback.error"/><br></p>
          </c:when>
          <c:when test="${success == 1}">
-            <p class="success" style="margin-bottom: 1%;"><spring:message code="status.change.feedback.success"/><br></p>
+            <p class="result success"><spring:message code="status.change.feedback.success"/><br></p>
          </c:when>
          <c:otherwise>
          </c:otherwise>

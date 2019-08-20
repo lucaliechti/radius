@@ -603,6 +603,10 @@ input[type="button"] {
 
 
 /*LL: I am using these in some places, but not in feedback elements*/
+p.result {
+	margin-bottom: 20px;
+}
+
 p.success {
 	background-color: #3EAB70;
 	color: white;
@@ -720,6 +724,7 @@ div #register-questions {}
 div #register-locations {}
 .radio-button-label-no {}
 .radio-button-label-yes {}
+.radio-button-label-dontcare {}
 
 /*login-balken deko*/
 /*LL: auskommentiert, weil ich dort jetzt das Registrier-Formular hingetan habe. TBD 

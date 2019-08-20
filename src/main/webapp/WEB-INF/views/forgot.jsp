@@ -10,7 +10,7 @@
       <section class="leftsection-content-element" id="">
 
           <c:if test="${sent != null}">
-             <p class="success" style="margin-bottom: 1%;">
+             <p class="result success">
                 <spring:message code="forgot.sent"/> ${emailaddress}<br>
              </p>
           </c:if>
