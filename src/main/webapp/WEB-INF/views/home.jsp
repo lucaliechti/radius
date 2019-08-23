@@ -9,6 +9,25 @@
 
 <main class="firstcontainer container">
    <section id="leftsection">
+        <!-- only while the survey is on -->
+
+        <c:if test="${newsletter_subscribe_success != null}">
+           <p class="result success">
+              <spring:message code="home.feedback.success.newsletter.subscribe"/><br>
+           </p>
+        </c:if>
+
+        <c:if test="${newsletter_unsubscribe_success != null}">
+           <p class="result success">
+              <spring:message code="home.feedback.success.newsletter.unsubscribe"/><br>
+           </p>
+        </c:if>
+
+        <c:if test="${surveySuccess != null}">
+           <p class="result success">
+              <spring:message code="survey.feedback.success"/><br>
+           </p>
+        </c:if>
    
          <c:if test="${waitForEmailConfirmation != null}">
             <p class="result success">
@@ -58,24 +77,34 @@
             </p>
          </c:if>
 
-         <c:if test="${passwordreset_error != null}">
+         <c:if test="${generic_error != null}">
             <p class="result error">
                <spring:message code="home.feedback.error.generic"/><br>
             </p>
          </c:if>
 
-      <section class="leftsection-title" id="page-title">         
+      <section class="leftsection-title" id="page-title">
          <h2>
             <spring:message code="home.title"/>
          </h2>
+          <p style="margin-top: 10px;"> <!-- lets test this here -->
+              <spring:message code="home.welcome.details"/>
+          </p>
       </section>
       <section class="leftsection-content">
          <section class="leftsection-content-element" id="">
-            <h2>
+<!--            <h2>
                <spring:message code="home.welcome.title"/>
             </h2>
             <p>
                <spring:message code="home.welcome.details"/>
+            </p>                                                      -->
+            <h2>
+               Was sind die wichtigsten Fragen der Schweiz?
+            </h2>
+            <p>
+               Radius ist eine Plattform, die eine einfache Möglichkeit bietet, persönlich und konstruktiv mit politisch Andersdenkenden zu diskutieren.<br>
+               Wir wollen wissen: Welche politischen Fragen bewegen Sie? Worüber würden Sie sich gerne mit jemand Andersdenkendem unterhalten? Lassen Sie es uns in der <a href="<c:url value='/survey' />">Umfrage</a> wissen!
             </p>
          </section>
          <section class="leftsection-content-element" id="">

@@ -52,7 +52,7 @@ public class NewPasswordController {
             userRepo.updatePassword(encoder.encode(passwordForm.getPassword()), UUID.randomUUID().toString(), email);
         }
         catch (Exception e) {
-            model.addAttribute("passwordreset_error", Boolean.TRUE);
+            model.addAttribute("generic_error", Boolean.TRUE);
             model.addAttribute("registrationForm", new UserForm());
             model.addAttribute("cantons", staticRepo.cantons());
             return "home";

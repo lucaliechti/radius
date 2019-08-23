@@ -48,9 +48,11 @@
       </div>
       <ul id="menu" class="menupoint navigations">
          <li><a href="<c:url value='/about' />"><spring:message code="about.title"/></a></li>
+         <li><a href="<c:url value='/survey' />"><spring:message code="survey.title"/></a></li>
          <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/status' />"><spring:message code="status.title"/></a></li></sec:authorize>
          <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/profile' />"><spring:message code="profile.title"/></a></li></sec:authorize>
          <!-- <li><a href="<c:url value='/experience' />">Experiences</a></li> -->
+         <sec:authorize access="hasAnyRole('ADMIN')"><li><a href="<c:url value='/admin' />"><spring:message code="admin.title"/></a></li></sec:authorize>
          <sec:authorize access="hasAnyRole('ADMIN')"><li><a href="<c:url value='/monitoring' />"><spring:message code="monitoring.title"/></a></li></sec:authorize>
          <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/logout' />"><spring:message code="logout.title.short"/></a></li></sec:authorize>
          <li>

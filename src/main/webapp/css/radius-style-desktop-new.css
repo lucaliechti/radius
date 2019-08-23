@@ -316,6 +316,8 @@ a,
 label,
 textarea,
 input,
+th,
+td,
 input[type="radio"] {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 18px;
@@ -323,6 +325,11 @@ input[type="radio"] {
 	color: #000000;
 	border: none;
 	line-height: 1.4;
+}
+
+th, td {
+    padding-right: 15px;
+    text-align: left;
 }
 
 p.interested {
@@ -350,7 +357,8 @@ ul#menu {
 	justify-content: space-between;
 }
 
-b {
+b,
+th {
 	color: #006F68;
 	font-weight: 600;
 }
@@ -732,3 +740,12 @@ div #register-locations {}
 	text-align: center;
 }
 */
+
+/*LL: sorting the user table on the admin page*/
+th.sorted.ascending:after {
+	content: "  \2191";
+}
+
+th.sorted.descending:after {
+	content: " \2193";
+}

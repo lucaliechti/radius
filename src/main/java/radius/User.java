@@ -105,6 +105,7 @@ public class User {
 	public List<Boolean> getQuestions() {
 		return questions;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}

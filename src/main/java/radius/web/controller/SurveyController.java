@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.SurveyForm;
 import radius.UserForm;
+import radius.data.JDBCNewsletterRepository;
 import radius.data.JDBCStaticResourceRepository;
+import radius.data.JDBCSurveyRepository;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -21,6 +23,15 @@ public class SurveyController {
 
     @Autowired
     private JDBCStaticResourceRepository staticRepo;
+
+    @Autowired
+    private RegistrationController reg;
+
+    @Autowired
+    private JDBCSurveyRepository sur;
+
+    @Autowired
+    private JDBCNewsletterRepository nws;
 
     @RequestMapping(value="/survey", method=GET)
     public String survey(Model model, Locale loc){
@@ -38,20 +49,50 @@ public class SurveyController {
             return "survey";
         }
 
+        boolean wantsNewsletter = surveyForm.getNewsletter();
+        boolean wantsToRegister = surveyForm.getRegistration();
+
         //save questions
+        try {
+            sur.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(), wantsNewsletter, wantsToRegister);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            model.addAttribute("surveyFailure", Boolean.TRUE);
+            model.addAttribute("surveyForm", surveyForm);
+            model.addAttribute("cantons", staticRepo.cantons());
+            return "survey";
+        }
+        model.addAttribute("surveySuccess", Boolean.TRUE);
 
-        //If Newsletter: save email address
+        //user wants to register - don't care about the newsletter
+        if(wantsToRegister) {
+            String firstName = surveyForm.getFirstName();
+            String lastName = surveyForm.getLastName();
+            String canton = surveyForm.getCanton();
+            String emailR = surveyForm.getEmailR();
+            String password = surveyForm.getPassword();
 
-        //If registered: save User, send email etc.
-        //TODO
-        model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
+            return reg.cleanlyRegisterNewUser(model, loc, firstName, lastName, canton, emailR, password);
+        }
 
-
-
+        //only newsletter, no registration
+        else if(wantsNewsletter) {
+            String emailN = surveyForm.getEmailN();
+            try {
+                nws.subscribe(emailN, "Survey Summer 2019");
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+                model.addAttribute("surveyFailure", Boolean.TRUE);
+                model.addAttribute("surveyForm", surveyForm);
+                model.addAttribute("cantons", staticRepo.cantons());
+                return "survey";
+            }
+        }
 
         model.addAttribute("registrationForm", new UserForm());
         model.addAttribute("cantons", staticRepo.cantons());
         return "home";
-
     }
 }

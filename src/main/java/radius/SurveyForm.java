@@ -4,6 +4,7 @@ import radius.web.validation.Conditional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Conditional(selected = "newsletter", values = {"true"}, required = {}, email = {"emailN"}, pw = {})
@@ -78,6 +79,27 @@ public class SurveyForm {
     public void setA13(Boolean q) { this.a13 = q; }
     public void setA14(Boolean q) { this.a14 = q; }
     public void setA15(Boolean q) { this.a15 = q; }
+
+    //returns an ordered list of answers; answers may be null
+    public List<Boolean> getAnswers() {
+        ArrayList<Boolean> answers = new ArrayList<Boolean>();
+        answers.add(a1);
+        answers.add(a2);
+        answers.add(a3);
+        answers.add(a4);
+        answers.add(a5);
+        answers.add(a6);
+        answers.add(a7);
+        answers.add(a8);
+        answers.add(a9);
+        answers.add(a10);
+        answers.add(a11);
+        answers.add(a12);
+        answers.add(a13);
+        answers.add(a14);
+        answers.add(a15);
+        return answers;
+    }
 
     //Newsletter getters/setters
     public Boolean getNewsletter() { return newsletter; }

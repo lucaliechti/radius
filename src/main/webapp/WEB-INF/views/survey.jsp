@@ -27,9 +27,17 @@ function showOrHideSection(checkbox, section) {
 
 <main class="firstcontainer container">
    <section class="fullwidth-section">
-      <section class="leftsection-content-element" id="survey">
-         <h1> Welche Fragen würden Sie gerne diskutieren?</h1>
-         <p>Wählen Sie höchstens 10.</p>
+      <section class="container leftsection-content-element" id="survey">
+
+        <c:if test="${surveyFailure != null}">
+           <p class="result error">
+              <spring:message code="home.feedback.error.generic"/><br>
+           </p>
+        </c:if>
+
+         <h1>Was sind die wichtigsten Fragen der Schweiz?</h1>
+         <p>Radius ist eine Plattform, die eine einfache Möglichkeit bietet, persönlich und konstruktiv mit politisch Andersdenkenden zu diskutieren.<br>Wir wollen wissen: Welche politischen Fragen bewegen Sie? Worüber würden Sie sich gerne mit jemand Andersdenkendem unterhalten?</p><br>
+         <p>Wählen Sie höchstens 10 Fragen aus, die Sie wichtig finden.</p>
          <div class="form-group leftsection-content-element" id="survey-questions">
             <form:form method="POST" action="survey" modelAttribute="surveyForm">
                <c:forEach begin="1" end="15" varStatus="loop">
@@ -61,43 +69,50 @@ function showOrHideSection(checkbox, section) {
 
 
          <div class="form-group leftsection-content-element" id="survey-newsletter">
-           <div class="form-group">
-              <form:label path="emailN">
-                 <h1>Anmeldung zum Newsletter</h1>
-                 <p><form:checkbox path="newsletter" id="checkbox-newsletter" onchange="showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter')"/> Ja, ich würde gerne den Radius-Newsletter per Mail erhalten (deutlich weniger als 1x pro Monat).</p><br>
-              </form:label>
-              <div id="hiddenNewsletter" >
-                 <form:input path="emailN" class="form-control" accept-charset="ISO-8859-1"/>
+            <div class="form-group">
+               <form:label path="emailN">
+                  <h1>Anmeldung zum Newsletter</h1>
+                  <p><form:checkbox path="newsletter" id="checkbox-newsletter" onchange="showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter')"/> Ja, ich würde gerne den Radius-Newsletter per Mail erhalten (deutlich weniger als 1x pro Monat).</p><br>
+               </form:label>
+               <div id="hiddenNewsletter" >
+               <form:label path="emailN">
+                  <spring:message code="home.register.email"/>
+               </form:label>
+               <form:input path="emailN" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
 
-              <div class="feedback-error" id="survey-feedback-email">
-                 <form:errors path="emailN"/>
-              </div>
-              </div>
-           </div>
+               <div class="feedback-error" id="survey-feedback-email">
+                  <form:errors path="emailN"/>
+               </div>
+               <p>
+                  <spring:message code="home.register.hint"/>
+               </p>
+               </div>
+            </div>
          </div>
 
 
          <div class="form-group leftsection-content-element" id="survey-registration">
-            <h1>Registrierung bei Radius</h1>
-            <p><form:checkbox path="registration" id="checkbox-registration" onchange="showOrHideSection($('#checkbox-registration'), 'hiddenRegistration')"/> Ja, ich würde mich gerne bei Radius registrieren.</p><br>
-            <div id="hiddenRegistration">
             <div class="form-group">
-               <form:label path="firstName">
+                <form:label path="firstName">
+                    <h1>Registrierung bei Radius</h1>
+                    <p><form:checkbox path="registration" id="checkbox-registration" onchange="showOrHideSection($('#checkbox-registration'), 'hiddenRegistration')"/> Ja, ich möchte mich bei Radius registrieren, um mit Andersdenkenden in Kontakt zu treten.</p><br>
+                </form:label>
+                <div id="hiddenRegistration">
+                <form:label path="firstName">
                   <spring:message code="home.register.fn"/>
-               </form:label>
-               <div class="col-10">
-                  <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1"/>
-               </div>
-               <div class="feedback-error" id="survey-feedback-email">
-                  <form:errors path="firstName"/>
-               </div>
-            </div>
+                </form:label>
+                <div class="col-10">
+                    <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1" style="max-width:600px;"/>
+                </div>
+                <div class="feedback-error" id="survey-feedback-email">
+                    <form:errors path="firstName"/>
+                </div>
             <div class="form-group">
                <form:label path="lastName">
                   <spring:message code="home.register.ln"/>
                </form:label>
                <div>
-                  <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="lastName"/>
@@ -108,7 +123,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.canton"/>
                </form:label>
                <div>
-                  <form:select class="dropdown-input" path="canton">
+                  <form:select class="dropdown-input" path="canton" style="max-width:600px;">
                      <form:option value="NONE" label="---"/>
                      <form:options items="${cantons}" />
                   </form:select>
@@ -119,7 +134,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.email"/>
                </form:label>
                <div>
-                  <form:input path="emailR" class="form-control"  accept-charset="ISO-8859-1"/>
+                  <form:input path="emailR" class="form-control"  accept-charset="ISO-8859-1" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="emailR"/>
@@ -130,7 +145,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.pw"/>
                </form:label>
                <div>
-                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="password"/>

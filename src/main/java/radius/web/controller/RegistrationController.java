@@ -73,6 +73,11 @@ public class RegistrationController {
 		String canton = registrationForm.getCanton();
 		String email = new String(registrationForm.getEmail().getBytes("ISO-8859-1"), "UTF-8");
 		String password = new String(registrationForm.getPassword().getBytes("ISO-8859-1"), "UTF-8");
+
+		return cleanlyRegisterNewUser(model, locale, firstName, lastName, canton, email, password);
+	}
+
+	protected String cleanlyRegisterNewUser(Model model, Locale locale, String firstName, String lastName, String canton, String email, String password) {
 		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
 		UUID uuid = UUID.randomUUID();
 		try {
@@ -100,15 +105,18 @@ public class RegistrationController {
 
 		try {
 			emailService.sendSimpleMessage(
-					email, 
-					messageSource.getMessage("email.confirm.title", new Object[]{}, locale), 
+					email,
+					messageSource.getMessage("email.confirm.title", new Object[]{}, locale),
 					messageSource.getMessage("email.confirm.content", new Object[]{firstName, lastName, "https://radius-schweiz.ch/confirm?uuid=" + uuid.toString()}, locale),
 					helloMailSender
-				);
+			);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
+			model.addAttribute("registrationForm", new UserForm());
+			model.addAttribute("cantons", staticResourceRepo.cantons());
+			return "home";
 		}
 
 		//success
