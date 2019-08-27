@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import radius.EmailForm;
 import radius.User;
 import radius.UserForm;
 import radius.data.*;
@@ -35,6 +36,9 @@ public class RegistrationController {
 	@Qualifier("helloMailSender")
 	@Autowired
 	private JavaMailSenderImpl helloMailSender;
+
+	@Autowired
+	private HomeController h;
 	
 	private EmailService emailService;
 	
@@ -42,7 +46,7 @@ public class RegistrationController {
     private MessageSource messageSource;
 	
 	@Autowired
-	PasswordEncoder encoder;
+	private PasswordEncoder encoder;
 	
 	//specify here which implementation of UserRepository will be used
 	@Autowired
@@ -55,9 +59,7 @@ public class RegistrationController {
 
 	@RequestMapping(method=GET)
 	public String reset(Model model) {
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticResourceRepo.cantons());
-		return "home";
+		return h.cleanlyHome(model);
 	}
 	
 	@RequestMapping(method=POST)
@@ -66,7 +68,8 @@ public class RegistrationController {
 		if(result.hasErrors()) {
 			System.out.println("RegistrationController: Error registering");
 			model.addAttribute("cantons", staticResourceRepo.cantons());
-			return "home";
+			model.addAttribute("newsletterForm", new EmailForm());
+			return "home"; //here we cannot return cleanly, because there registrationForm has been in use
 		}
 		String firstName = new String(registrationForm.getFirstName().getBytes("ISO-8859-1"), "UTF-8");
 		String lastName = new String(registrationForm.getLastName().getBytes("ISO-8859-1"), "UTF-8");
@@ -89,17 +92,13 @@ public class RegistrationController {
 		catch (EmailAlreadyExistsException eaee) {
 			System.out.println(eaee.getMessage());
 			model.addAttribute("emailExistsError", Boolean.TRUE);
-			model.addAttribute("registrationForm", new UserForm());
-			model.addAttribute("cantons", staticResourceRepo.cantons());
-			return "home";
+			return h.cleanlyHome(model);
 		}
 		catch (Exception e) {
 			System.out.println("RegistrationController: error saving new user!");
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
-			model.addAttribute("registrationForm", new UserForm());
-			model.addAttribute("cantons", staticResourceRepo.cantons());
-			return "home";
+			return h.cleanlyHome(model);
 		}
 		System.out.println("email confirmation uuid: " + uuidRepo.findUserByUUID(uuid.toString()));
 
@@ -114,15 +113,11 @@ public class RegistrationController {
 		catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
-			model.addAttribute("registrationForm", new UserForm());
-			model.addAttribute("cantons", staticResourceRepo.cantons());
-			return "home";
+			return h.cleanlyHome(model);
 		}
 
 		//success
 		model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticResourceRepo.cantons());
-		return "home";
+		return h.cleanlyHome(model);
 	}
 }

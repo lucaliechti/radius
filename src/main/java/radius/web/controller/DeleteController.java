@@ -38,9 +38,7 @@ public class DeleteController {
 
 	@RequestMapping(method=GET)
 	public String reset(Model model) {
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticRepo.cantons());
-		return "home";
+		return hc.cleanlyHome(model);
 	}
 
 	@RequestMapping(method=POST)

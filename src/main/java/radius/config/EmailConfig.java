@@ -27,6 +27,13 @@ public class EmailConfig {
         return mailSender;
     }
 
+    @Bean
+    public JavaMailSenderImpl newsletterMailSender() {
+        EmailProperties p = new EmailProperties("/config/email_newsletter.properties");
+        JavaMailSenderImpl mailSender = createFromProperties(p);
+        return mailSender;
+    }
+
 	private JavaMailSenderImpl createFromProperties(EmailProperties p) {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(p.getHost());

@@ -8,8 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.PasswordForm;
-import radius.User;
-import radius.UserForm;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.UserRepository;
 
@@ -33,11 +31,12 @@ public class NewPasswordController {
     @Autowired
     UserRepository userRepo;
 
+    @Autowired
+    private HomeController h;
+
     @RequestMapping(method=GET)
     public String reset(Model model) {
-        model.addAttribute("registrationForm", new UserForm());
-        model.addAttribute("cantons", staticRepo.cantons());
-        return "home";
+        return h.cleanlyHome(model);
     }
 
     @RequestMapping(method=POST)
@@ -53,14 +52,10 @@ public class NewPasswordController {
         }
         catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAttribute("registrationForm", new UserForm());
-            model.addAttribute("cantons", staticRepo.cantons());
-            return "home";
+            return h.cleanlyHome(model);
         }
 
         model.addAttribute("passwordReset", Boolean.TRUE);
-        model.addAttribute("registrationForm", new UserForm());
-        model.addAttribute("cantons", staticRepo.cantons());
-        return "home";
+        return h.cleanlyHome(model);
     }
 }

@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.HalfEdge;
 import radius.MeetingFeedbackForm;
 import radius.User;
-import radius.UserForm;
 import radius.User.userStatus;
 import radius.UserPair;
 import radius.data.MatchingRepository;
@@ -40,6 +36,9 @@ public class StatusController {
 	
     @Autowired
 	private AnswerController ac;
+
+    @Autowired
+	private HomeController h;
 	
 	@RequestMapping(method=GET) //are all these spam parameters needed?
 	public String statusPage(Model model, Locale locale) {
@@ -48,9 +47,10 @@ public class StatusController {
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {
 			model.addAttribute("not_enabled", true);
-			model.addAttribute("registrationForm", new UserForm());
-			model.addAttribute("cantons", staticRepo.cantons());
-			return "home";
+//			model.addAttribute("registrationForm", new UserForm());
+//			model.addAttribute("cantons", staticRepo.cantons());
+//			return "home";
+			return h.cleanlyHome(model);
 		}
 		if(!user.getAnswered()) {
 			return ac.answer(model);

@@ -21,7 +21,6 @@ public class EmailProperties {
 		Properties p = new Properties();
 		InputStream in;
 		try {
-//			in = (BufferedInputStream) EmailProperties.class.getResourceAsStream("/config/email.properties");
 			in = EmailProperties.class.getResourceAsStream(file);
 			p.load(in);
 			in.close();

@@ -8,12 +8,14 @@ import java.util.List;
 @Repository
 public interface NewsletterRepository {
 
-    public void subscribe(String email, String source);
+    public String subscribe(String email, String source);
 
     public void unsubscribe(String uuid);
 
     public List<UserValidation> getRecipients();
 
     public int numberOfRecipients();
+
+    public boolean alreadySubscribed(String email);
 
 }

@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.SurveyForm;
-import radius.UserForm;
 import radius.data.JDBCNewsletterRepository;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCSurveyRepository;
@@ -26,6 +25,9 @@ public class SurveyController {
 
     @Autowired
     private RegistrationController reg;
+
+    @Autowired
+    private HomeController h;
 
     @Autowired
     private JDBCSurveyRepository sur;
@@ -91,8 +93,6 @@ public class SurveyController {
             }
         }
 
-        model.addAttribute("registrationForm", new UserForm());
-        model.addAttribute("cantons", staticRepo.cantons());
-        return "home";
+        return h.cleanlyHome(model);
     }
 }

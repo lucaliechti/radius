@@ -20,12 +20,8 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 	<!-- additional CSS -->
-    <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css"> <!-- was -desktop-launch -->
-    <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css"> <!-- was -mobile-launch -->
-	
-	<!-- Leaflet -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"><link/>
-	<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css">
+    <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css">
 
 	<!-- favicon -->
 	<link rel="shortcut icon" href="favicon.ico" />

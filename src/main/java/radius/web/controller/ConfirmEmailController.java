@@ -2,13 +2,13 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.UserForm;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUUIDRepository;
 import radius.data.JDBCUserRepository;
@@ -23,6 +23,9 @@ public class ConfirmEmailController {
 	private UserRepository userRepo;
 	private UUIDRepository uuidRepo;
 	private StaticResourceRepository staticRepo;
+
+	@Autowired
+	private HomeController h;
 	
 	public ConfirmEmailController(JDBCUserRepository _userRepo, JDBCUUIDRepository _uuidRepo, JDBCStaticResourceRepository _staticRepo) {
 		this.userRepo = _userRepo;
@@ -37,20 +40,15 @@ public class ConfirmEmailController {
 			userEmail = uuidRepo.findUserByUUID(uuid);
 		}
 		catch (IncorrectResultSizeDataAccessException irsdae) {
-			model.addAttribute("registrationForm", new UserForm());
-			model.addAttribute("cantons", staticRepo.cantons());
 			model.addAttribute("confirmation_error", true);
-			//this could be done nicer by a homecontroller
-			return "home";
+			return h.cleanlyHome(model);
 		}
 		if(userEmail != null) {
 			userRepo.enableUser(userEmail);
 			uuidRepo.removeUser(userEmail);
-			model.addAttribute("enable_success", true);
-		}		
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticRepo.cantons());
+			model.addAttribute("enable_success", true); ///////////??????????????
+		}
 		model.addAttribute("emailconfirmed", true);
-		return "home";
+		return h.cleanlyHome(model);
 	}
 }

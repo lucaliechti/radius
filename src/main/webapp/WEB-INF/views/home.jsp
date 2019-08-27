@@ -121,6 +121,7 @@
    <!-- preparing variables -->
    <spring:message code="home.login.login" var="login" />
    <spring:message code="home.register.register" var="register" />
+   <spring:message code="newsletter.register" var="feed" />
    
    <section id="rightsection">
       <section class="login-resume">
@@ -144,15 +145,17 @@
                   <input id="password" name="password" type="password" class="form-control" value=""/>
                </div>
             </div>
-            <input id="remember_me" name="remember-me" type="checkbox"/>
-            <label for="remember_me">
-               <spring:message code="home.login.remember"/>
-            </label>
             <input type="submit" class="btn btn-primary" value='${login}' />
+            <div>
+                <input id="remember_me" name="remember-me" type="checkbox"/>
+                <label for="remember_me">
+                   <spring:message code="home.login.remember"/>
+                </label>
+            </div>
             <sec:csrfInput />
          </form>
 
-            <a href="<c:url value='/forgot' />"><spring:message code="home.login.forgot"/></a>
+         <a href="<c:url value='/forgot' />"><spring:message code="home.login.forgot"/></a>
 
       </section>
       
@@ -233,6 +236,29 @@
             </p>
          </c:if>
       </section>
+
+            <section id="profile-deco" class="profile-resume">
+               <h2>
+                  <spring:message code="newsletter.title"/>
+               </h2>
+                <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
+                    <div class="form-group">
+                       <form:label path="email">
+                          <spring:message code="home.register.email"/>
+                       </form:label>
+                       <div class="col-10">
+                          <form:input path="email" class="form-control"  accept-charset="ISO-8859-1"/>
+                       </div>
+                       <div class="feedback-error" id="register-feedback-newsletter-email">
+                          <form:errors path="email"/>
+                       </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="${feed}" />
+                    <p><spring:message code="newsletter.description"/></p>
+                    <sec:csrfInput />
+                </form:form>
+            </section>
+
    </section>
 </main>
 <jsp:include page="templates/footer.jsp" />

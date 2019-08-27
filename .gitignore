@@ -5,6 +5,7 @@ target/*
 *.png
 src/main/resources/config*
 *ms.js
+*min.js
 robots.txt
 .idea/*
 radius.iml

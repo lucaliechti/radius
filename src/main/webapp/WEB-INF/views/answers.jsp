@@ -7,6 +7,10 @@
 
 <jsp:include page="templates/header.jsp" />
 
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"><link/>
+<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+
 <main class="firstcontainer container">
 <section class="fullwidth-section-only-vertical">
  
@@ -59,6 +63,72 @@
          <form:errors path="modus"/>
       </div>
    </div>
+
+   <!-- this is just for fun
+
+   <div class="leftsection-content-element" id="register-special" style="border: 3px solid; border-color: #ff0000; position: relative; padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 0px;">
+       <img src="img/ch.png" class="topleft" style="position: absolute; top: 0px; left: 0px;"/>
+       <img src="img/ch.png" class="topright" style="position: absolute; top: 0px; right: 0px;"/>
+       <div style="margin: 50px 50px;">
+       <label for="questions" class="label-title"><font color="#ff0000"><spring:message code="questions.special"/></font></label>
+
+      <p>
+         <spring:message code="questions.special.2019.4.1"/>
+      </p>
+      <form:radiobutton path="special" value="true"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.true"/>
+      </label>
+      <form:radiobutton path="special" value="false"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.false"/>
+      </label>
+      <form:radiobutton path="special" value="dontcare"/>
+      <label class="radio-button-label-dontcare">
+         <spring:message code="question.dontcare"/>
+      </label>
+
+      <p>
+         <spring:message code="questions.special.2019.4.2"/>
+      </p>
+      <form:radiobutton path="special" value="true"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.true"/>
+      </label>
+      <form:radiobutton path="special" value="false"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.false"/>
+      </label>
+      <form:radiobutton path="special" value="dontcare"/>
+      <label class="radio-button-label-dontcare">
+         <spring:message code="question.dontcare"/>
+      </label>
+
+      <p>
+         <spring:message code="questions.special.2019.4.3"/>
+      </p>
+      <form:radiobutton path="special" value="true"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.true"/>
+      </label>
+      <form:radiobutton path="special" value="false"/>
+      <label class="radio-button-label-yes">
+         <spring:message code="question.false"/>
+      </label>
+      <form:radiobutton path="special" value="dontcare"/>
+      <label class="radio-button-label-dontcare">
+         <spring:message code="question.dontcare"/>
+      </label>
+
+
+       </div>
+       <img src="img/ch.png" class="bottomleft" style="position: absolute; bottom: 0px; left: 0px;"/>
+       <img src="img/ch.png" class="bottomright" style="position: absolute; bottom: 0px; right: 0px;"/>
+   </div> -->
+
+   <!-- UNBEDINGT machen, dass die Fragen anders heissen: wenn nur normale Fragen, dann "Antworten", ansonsten "Reguläre Antworten" oder sowas -->
+
+
    <div class="form-group leftsection-content-element" id="register-questions">
       <label for="questions" class="label-title"><spring:message code="answers.answers"/></label>
       <p>

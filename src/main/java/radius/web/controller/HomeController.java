@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import radius.EmailForm;
 import radius.UserForm;
 import radius.data.JDBCStaticResourceRepository;
 
@@ -39,26 +40,25 @@ public class HomeController {
 
 		System.out.println("In the HomeController class");
 		
-		if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated() && !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) ) {
+		if(SecurityContextHolder.getContext().getAuthentication() != null &&
+				SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+				!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) ) {
 			return sc.statusPage(model, locale);
 		}
 		
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticRepo.cantons());
-		
 		if(loggedout != null) {
-			model.addAttribute("loggedout", "user sees this page right after logging out");
+			model.addAttribute("loggedout", Boolean.TRUE);
 		}
 		
 		if(error != null) {
-			model.addAttribute("loginerror", "user sees this page right after logging out");
+			model.addAttribute("loginerror", Boolean.TRUE);
 		}
 
 		if(model.containsAttribute("success")) {
-			model.addAttribute("success", -1);
+			model.addAttribute("success", Boolean.TRUE);
 		}
 		
-		return "home";
+		return cleanlyHome(model);
 	}
 	
 	@RequestMapping(method=POST)
@@ -67,8 +67,13 @@ public class HomeController {
 		if(loginerror != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}
+		return cleanlyHome(model);
+	}
+
+	public String cleanlyHome(Model model) {
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());
-		return "home";
+		model.addAttribute("newsletterForm", new EmailForm());
+		return "home"; //the OG home
 	}
 }

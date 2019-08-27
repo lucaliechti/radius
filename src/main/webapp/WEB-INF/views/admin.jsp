@@ -6,7 +6,16 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="templates/header.jsp" />
-<script src="js/jquery.tablesort.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.min.css">
+
+<script>
+$(document).ready(function() {
+  $('table').DataTable({
+    "lengthMenu": [ 20, 50, 100 ]
+  });
+});
+</script>
 
 <!-- variables -->
 <spring:message code="admin.newsletter.send" var="send" />
@@ -26,6 +35,7 @@
          </h2>
       </section>
       <section class="leftsection-content">
+
          <section class="leftsection-content-element" id="">
               <h2>
                  <spring:message code="admin.newsletter.title"/>
@@ -68,7 +78,7 @@
             <h2>
               <spring:message code="admin.users.title"/>
             </h2>
-            <table>
+            <table id="usertable" class="table table-striped table-bordered table-sm">
                 <thead>
                     <tr>
                         <th>Vorname</th>
@@ -76,7 +86,7 @@
                         <th>Email bestätigt</th>
                         <th>Fragen beantwortet</th>
                         <th>Status</th>
-                        <th class="no-sort">Letzte Änderung</th>
+                        <th>Letzte Änderung</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -95,12 +105,17 @@
          </section>
          <section class="leftsection-content-element" id="">
             <h2>
-               Andere Section
+               Im Moment ist Abstimmung: <spring:message code="question.${special}"/>
             </h2>
             <p>
-               Anderer Inhalt
+               Anzahl Abstimmungen: ${nrvotes}
             </p>
          </section>
+
+
+
+
+
       </section>
    </section>
 
@@ -115,6 +130,5 @@
    </section>
 </main>
 
-<script>$('table').tablesort();</script>
 <jsp:include page="templates/footer.jsp" />
 

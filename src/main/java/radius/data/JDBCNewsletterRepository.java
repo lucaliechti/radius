@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -26,10 +27,13 @@ public class JDBCNewsletterRepository implements NewsletterRepository {
     private static final String SUBSCRIBE =  "INSERT INTO newsletter(datecreate, email, source, uuid) VALUES (?, ?, ?, ?)";
     private static final String UNSUBSCRIBE = "DELETE FROM newsletter WHERE uuid = ?";
     private static final String GET_RECIPIENTS = "SELECT email, uuid FROM newsletter";
+    private static final String ALREADY_SUBSCRIBED = "SELECT EXISTS (SELECT 1 FROM newsletter WHERE email = ?)";
 
     @Override
-    public void subscribe(String email, String source) {
-        jdbcTemplate.update(SUBSCRIBE, OffsetDateTime.now(), email, source, UUID.randomUUID().toString());
+    public String subscribe(String email, String source) {
+        String uuid = UUID.randomUUID().toString();
+        jdbcTemplate.update(SUBSCRIBE, OffsetDateTime.now(), email, source, uuid);
+        return uuid;
     }
 
     @Override
@@ -45,6 +49,13 @@ public class JDBCNewsletterRepository implements NewsletterRepository {
     @Override
     public int numberOfRecipients() {
         return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM newsletter", Integer.class);
+    }
+
+    @Override
+    public boolean alreadySubscribed(String email) {
+        // super ugly
+        Map<String, Object> recipients = jdbcTemplate.queryForMap(ALREADY_SUBSCRIBED, email);
+        return (boolean)recipients.get("exists");
     }
 
     private static final class UserValidationRowMapper implements RowMapper<UserValidation> {

@@ -205,6 +205,7 @@ section .leftsection-content-element:first-child {
 
 .dropdown-input {
 	width: 100%;
+	margin-bottom: 10px;
 }
 
 /*footer*/
@@ -537,7 +538,8 @@ footer a:visited {
 
 input[type="text"],
 input[type="password"],
-textarea {
+textarea,
+input[type="search"] { /*LL: admin page table*/
 	border: #006F68 solid 2px;
 	padding: 5px;
 	width: 100%;
@@ -566,6 +568,7 @@ input[type="button"] {
 	color: #ffffff;
 	background-color: #006F68;
 	padding: 0.42em 0.6em 0.38em 0.6em;
+	margin-bottom: 6px; /*LL*/
 }
 
 #logo-home {
@@ -734,18 +737,10 @@ div #register-locations {}
 .radio-button-label-yes {}
 .radio-button-label-dontcare {}
 
-/*login-balken deko*/
-/*LL: auskommentiert, weil ich dort jetzt das Registrier-Formular hingetan habe. TBD 
-#profile-deco {
-	text-align: center;
-}
-*/
-
-/*LL: sorting the user table on the admin page*/
-th.sorted.ascending:after {
-	content: "  \2191";
-}
-
-th.sorted.descending:after {
-	content: " \2193";
+/*LL: admin page*/
+div #usertable_info {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #000000;
 }
