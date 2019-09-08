@@ -4,6 +4,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 import radius.data.StaticResourceRepository;
+import radius.web.components.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/profile")
@@ -26,6 +28,9 @@ public class ProfileController {
 	private JDBCUserRepository userRepo;
 	private StaticResourceRepository staticRepo;
 	private HomeController hc;
+
+	@Autowired
+	private RealWorldProperties real;
 
 	@Autowired
 	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, HomeController _hc) {
@@ -39,7 +44,7 @@ public class ProfileController {
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
 		if(!u.getEnabled()) {
 			model.addAttribute("not_enabled", true);
@@ -57,25 +62,14 @@ public class ProfileController {
 			model.addAttribute("email", u.getEmail());
 			model.addAttribute("canton", u.getCanton());
 			model.addAttribute("motivation", u.getMotivation());
-			List<Boolean> q = u.getQuestions();
-			model.addAttribute("q1", q.get(0));
-			model.addAttribute("q2", q.get(1));
-			model.addAttribute("q3", q.get(2));
-			model.addAttribute("q4", q.get(3));
-			model.addAttribute("q5", q.get(4));
+			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
+			model.addAttribute("answers", answers);
 			model.addAttribute("modus", u.getModusAsString());
-			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
-//			List<Integer> loc = u.getLocations();
-//			ArrayList<String> locations = new ArrayList<String>();
-//			for (int l : loc) {
-//				locations.add(staticRepo.regions().get(l));
-//			}
-
-//			model.addAttribute("locations", locations);
+//			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
 			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
 			model.addAttribute("languages", u.getLanguages());
-//			model.addAttribute("status", u.getStatus().toString());
 			model.addAttribute("history", usersMatches(email));
+			model.addAttribute("nrQ", real.numberOfRegularQuestions());
 		}
 		return "profile";
 	}

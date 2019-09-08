@@ -171,7 +171,7 @@
                <div class="col-10">
                   <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1"/>
                </div>
-               <div class="feedback-error" id="register-feedback-email">
+               <div class="feedback-error" id="register-feedback-firstname">
                   <form:errors path="firstName"/>
                </div>
             </div>
@@ -182,7 +182,7 @@
                <div>
                   <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1"/>
                </div>
-               <div class="feedback-error" id="register-feedback-email">
+               <div class="feedback-error" id="register-feedback-lastname">
                   <form:errors path="lastName"/>
                </div>
             </div>
@@ -215,7 +215,7 @@
                <div>
                   <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1"/>
                </div>
-               <div class="feedback-error" id="register-feedback-email">
+               <div class="feedback-error" id="register-feedback-password">
                   <form:errors path="password"/>
                </div>
             </div>

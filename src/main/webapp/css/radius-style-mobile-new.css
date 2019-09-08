@@ -1,5 +1,3 @@
-
-
 @font-face {
 	font-family: Fira Sans Condensed;
 	src: url(font/FiraSansCondensed-Light.woff);
@@ -48,18 +46,7 @@
 		margin-left: 5%;
 		margin-right: 5%;
 	}
-	section .profile-resume {
-		border-bottom: none;
-	}
-	#edit-profile-leftsection {
-		padding-right: 0;
-		padding-bottom: 20px;
-	}
-	#edit-profile-rightsection {
-		border-left: none;
-		padding-left: 0;
-		width: 100%
-	}
+
 	#profile-history,
 	#profile-experiences {
 		border-top: 2px solid #000;
@@ -95,19 +82,8 @@
 	.fullwidth-section {
 		flex-wrap: wrap;
 	}
-	.col-50-left {
-		flex: 1 0 100%;
-		padding-right: 0;
-		padding-bottom: 20px;
-	}
-	.col-50-right {
-		flex: 1 0 100%;
-		padding-left: 0;
-		border: none;
-		border-top: 2px solid black;
-		padding-top: 20px;
-	}
-	/*
+
+/*
  * Made by Erik Terwan
  * 24th of November 2015
  * MIT License
@@ -117,9 +93,6 @@
 		background-color: #006F68;
 		margin-top: 0px
 	}
-	/*#secondary-menubar {
-		display: none;
-	}*/
 	.language-selector a {
 		padding: 0;
 		margin-left: 0;
@@ -133,7 +106,6 @@
 		border: none;
 	}
 	.language-selector a:last-child {
-		/*******************************************************/
 		padding: 0;
 	}
 	a {
@@ -141,9 +113,6 @@
 	}
 	#menuToggle {
 		display: inline-flex;
-		/*position: relative;*/
-		/*top: -20px;*/
-		/*left: 90%;*/
 		z-index: 1;
 		-webkit-user-select: none;
 		user-select: none;
@@ -154,9 +123,6 @@
 		display: block;
 		width: 40px;
 		height: calc(40px + 20px);
-		/*2x padding + 1x Logo Height*/
-		/*top: 0px;*/
-		/*left: 0px;*/
 		right: calc(5vw - 3px);
 		position: absolute;
 		cursor: pointer;
@@ -172,7 +138,7 @@
 		align-self: center;
 		margin-right: 5vw;
 	}
-	/*
+/*
  * Just a quick hamburger
  */
 	#menuToggle span {
@@ -193,31 +159,29 @@
 	#menuToggle span:nth-last-child(2) {
 		transform-origin: 0% 100%;
 	}
-	/* 
+/*
  * Transform all the slices of hamburger
  * into a crossmark.
  */
 	#menuToggle input:checked~#burger span {
 		opacity: 1;
 		transform: rotate(45deg) translate(-5px, -12px);
-		/*transform: rotate(-45deg) translate(-2px, -1px);*/
 		background: #ffffff;
 	}
-	/*
+/*
  * But let's hide the middle one.
  */
 	#menuToggle input:checked~#burger span:nth-last-child(3) {
 		opacity: 0;
 		transform: rotate(0deg) scale(0.2, 0.2);
 	}
-	/*
+/*
  * Ohyeah and the last one should go the other direction
  */
 	#menuToggle input:checked~#burger span:nth-last-child(2) {
 		transform: rotate(-45deg) translate(-6px, 13px);
-		/*transform: rotate(45deg) translate(0px, -1px);*/
 	}
-	/*
+/*
  * Make this absolute positioned
  * at the top left of the screen
  */
@@ -228,13 +192,8 @@
 		position: absolute;
 		right: 0;
 		top: 62px;
-		/* Top Höhe */
-		/*left: -20%;*/
-		/*top: -25px;*/
 		width: 11em;
 		margin: 0;
-		/*padding: 20px;*/
-		/*padding-top: 25px;*/
 		background: #006F68;
 		list-style-type: none;
 		-webkit-font-smoothing: antialiased;
@@ -280,18 +239,46 @@
 	#menu a,
 	#language-select a {
 		padding: 0.01em 0.10em 0.13em 0.28em;
-		/**************************************************/
 		margin-left: -2px;
 		color: #fffff;
 		background-color: #006F68;
 		border: none;
 		text-decoration: none;
 	}
-	/*
+/*
  * And let's slide it in from the left
  */
 	#menuToggle input:checked~ul {
 		transform: none;
 	}
-}
 
+    /*
+    section .profile-resume {
+        border-bottom: none;
+    }
+    #edit-profile-leftsection {
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+    #edit-profile-rightsection {
+        border-left: none;
+        padding-left: 0;
+        width: 100%
+    }
+    */
+
+    /*
+    .col-50-left {
+        flex: 1 0 100%;
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+    .col-50-right {
+        flex: 1 0 100%;
+        padding-left: 0;
+        border: none;
+        border-top: 2px solid black;
+        padding-top: 20px;
+    }
+    */
+}

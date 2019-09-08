@@ -11,6 +11,8 @@ public class RealWorldProperties {
 
     private boolean specialIsActive;
     private int numberOfVotes;
+    private int numberOfRegularQuestions;
+    private String currentVote;
 
     public RealWorldProperties() { readFromFile("/config/realworld.properties"); } //hardcoded
 
@@ -26,6 +28,7 @@ public class RealWorldProperties {
         }
         try {
             specialIsActive = Boolean.valueOf(p.getProperty("specialIsActive"));
+            currentVote = p.getProperty("currentVote");
         }
         catch (Exception e) {
             System.out.println("Couldn't decide whether the special is active.");
@@ -38,6 +41,13 @@ public class RealWorldProperties {
             System.out.println("Didn't understand how many votes there are.");
             numberOfVotes = -1;
         }
+        try {
+            numberOfRegularQuestions = Integer.parseInt(p.getProperty("numberOfRegularQuestions"));
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Didn't understand how many regular questions there are.");
+            numberOfRegularQuestions = -1;
+        }
     }
 
     public boolean specialIsActive() {
@@ -47,4 +57,8 @@ public class RealWorldProperties {
     public int numberOfVotes() {
         return numberOfVotes;
     }
+
+    public int numberOfRegularQuestions() { return numberOfRegularQuestions; }
+
+    public String currentVote() { return currentVote; }
 }

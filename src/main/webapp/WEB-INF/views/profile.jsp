@@ -24,9 +24,9 @@
          
 <section id="leftsection-content">
    <section class="leftsection-title" id="page-title">    
-      <h1>
+      <h2>
          <spring:message code="profile.title"/>
-      </h1>
+      </h2>
       <!-- 	
          <div class="editing-icons-div"><a href="#"><img src="img/icon-edit.png" class="editing-icons"></a>				
          <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a></div>-->
@@ -47,22 +47,13 @@
       <h2><spring:message code="profile.radiusdata"/></h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
-   
-   <p><b><spring:message code="q1"/></b>
-      <br>
-      <spring:message code="question.${q1}"/>
-   <p><b><spring:message code="q2"/></b>
-      <br>
-      <spring:message code="question.${q2}"/>
-   <p><b><spring:message code="q3"/></b>
-      <br>
-      <spring:message code="question.${q3}"/>
-   <p><b><spring:message code="q4"/></b>
-      <br>
-      <spring:message code="question.${q4}"/>
-   <p><b><spring:message code="q5"/></b>
-      <br>
-      <spring:message code="question.${q5}"/>
+
+   <c:forEach begin="1" end="${nrQ}" varStatus="loop">
+      <p><b><spring:message code="q${loop.index}"/></b>
+         <br>
+         <spring:message code="question.${answers[loop.index-1]}"/>
+   </c:forEach>
+
    </section>	
    <section class="leftsection-content-element" id="">
          <div class="editable">
@@ -97,7 +88,7 @@
       <h2><spring:message code="profile.experiences"/></h2>
       <p><spring:message code="profile.experiences.none"/></p>
    </section> -->
-   <jsp:include page="temp_history.jsp" />
+   <jsp:include page="history.jsp" />
 </section>
 
 </main>

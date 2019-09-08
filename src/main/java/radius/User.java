@@ -5,8 +5,7 @@ import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
-
-//import org.hibernate.validator.constraints.Email;
+import java.util.stream.Collectors;
 
 public class User {
 	private long id;
@@ -19,13 +18,14 @@ public class User {
 	private String canton;
 	private userStatus status;
 	private userModus modus;
-	private boolean enabled; 	//if email has been confirmed
-	private boolean answered; 	//if questions have been answered
+	private boolean enabled; 			//if email has been confirmed
+	private boolean answeredRegular; 	//if *regular* questions have been answered
 	private boolean banned;
 	private String motivation;
 	private List<Integer> locations;
 	private List<String> languages;
-	private List<Boolean> questions;
+	private List<answer> regularanswers;
+	private List<answer> specialanswers;
 	private String uuid;
 	private Timestamp dateModified;
 
@@ -39,11 +39,12 @@ public class User {
 			userStatus _status,
 			String _motivation,
 			boolean _enabled,
-			boolean _answered,
+			boolean _answeredRegular,
 			boolean _banned,
 			List<Integer> _locations,
 			List<String> _languages,
-			List<Boolean> _questions,
+			List<String> _regularanswers,
+//			List<String> _specialanswers,
 			Timestamp _dateModified
 	) {
 		this.firstname = _firstname;
@@ -55,11 +56,12 @@ public class User {
 		this.status = _status;
 		this.motivation = _motivation;
 		this.enabled = _enabled;
-		this.answered = _answered;
+		this.answeredRegular = _answeredRegular;
 		this.banned = _banned;
 		this.locations = _locations;
 		this.languages = _languages;
-		this.questions = _questions;
+		this.regularanswers = _regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+//		this.specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.dateModified = _dateModified;
 	}
 
@@ -72,8 +74,8 @@ public class User {
 		this.password = _password;
 		this.uuid = UUID.randomUUID().toString();
 	}
-	public User() {
-	}
+
+	public User() { }
 	
 	public long getId() {
 		return id;
@@ -100,12 +102,20 @@ public class User {
 		return enabled;
 	}
 	public Boolean getAnswered() {
-		return answered;
+		return answeredRegular;
 	}
-	public List<Boolean> getQuestions() {
-		return questions;
+	public List<answer> getRegularanswers() {
+		return regularanswers;
 	}
-
+	public List<String> getRegularAnswersAsListOfStrings() {
+		return regularanswers.stream().map(User::convertAnswerToString).collect(Collectors.toList());
+	}
+	public List<answer> getSpecialanswers() {
+		return specialanswers;
+	}
+	public List<String> getSpecialAnswersAsListOfStrings() {
+		return specialanswers.stream().map(User::convertAnswerToString).collect(Collectors.toList());
+	}
 	public void setId(long id) {
 		this.id = id;
 	}
@@ -130,10 +140,9 @@ public class User {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	public void setAnswered(Boolean answered) {
-		this.answered = answered;
+	public void setAnsweredRegular(Boolean answered) {
+		this.answeredRegular = answered;
 	}
-
 	public void setBanned(Boolean banned) {
 		this.banned = banned;
 	}
@@ -143,12 +152,11 @@ public class User {
 	public Timestamp getDateModified() {
 		return dateModified;
 	}
-
-	public void setQuestions(List<Boolean> questions) throws Exception {
-		if(questions.size() != 5) {
-			throw new Exception("An array of != 5 Boolean values has been passed.");
-		}
-		this.questions = questions;
+	public void setRegularanswers(List<String> answers) {
+		regularanswers = answers.stream().map(User::convertAnswer).collect(Collectors.toList());
+	}
+	public void setSpecialanswers(List<String> _specialanswers) {
+		specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 	}
 	public List<Integer> getLocations() {
 		return locations;
@@ -165,29 +173,23 @@ public class User {
 	public userModus getModus() {
 		return modus;
 	}
-	
 	public String getModusAsString() {
 		return convertModusToString(this.modus);
 	}
-	
 	public void setModus(String _modus) {
 		this.modus = convertModus(_modus);
 	}
-
 	public String getMotivation() {
 		return motivation;
 	}
 	public void setMotivation(String motivation) {
 		this.motivation = motivation;
 	}
+	public String getUuid() { return uuid; }
+	public void setUuid(String _uuid) { this.uuid = _uuid; }
 
 	public static userStatus convertStatus(String status) {
-		if(status == null) {
-			return null;
-		}
 		switch (status) {
-		/*case "NEW":
-				return userStatus.NEW;*/
 			case "WAITING":
 				return userStatus.WAITING;	
 			case "MATCHED":
@@ -201,69 +203,75 @@ public class User {
 	
 	public static String convertStatusToString(userStatus _status) {
 		switch (_status) {
-		/*case NEW:
-			return "NEW";*/
-		case WAITING:
-			return "WAITING";	
-		case MATCHED:
-			return "MATCHED";
-		case INACTIVE:
-			return "INACTIVE";
-		default:
-			return null;
+			case WAITING:
+				return "WAITING";
+			case MATCHED:
+				return "MATCHED";
+			case INACTIVE:
+				return "INACTIVE";
+			default:
+				return null;
 		}
 	}
 	
 	public static userModus convertModus(String modus) {
-		if(modus == null) {
-			return null;
-		}
 		switch (modus) {
-		case "SINGLE":
-			return userModus.SINGLE;
-		case "PAIR":
-			return userModus.PAIR;	
-		case "EITHER":
-			return userModus.EITHER;
-		default:
-			return null;
+			case "SINGLE":
+				return userModus.SINGLE;
+			case "PAIR":
+				return userModus.PAIR;
+			case "EITHER":
+				return userModus.EITHER;
+			default:
+				return null;
 		}
 	}
 	
 	public static String convertModusToString(userModus _modus) {
 		switch (_modus) {
-		case SINGLE:
-			return "SINGLE";
-		case PAIR:
-			return "PAIR";	
-		case EITHER:
-			return "EITHER";
-		default:
-			return null;
+			case SINGLE:
+				return "SINGLE";
+			case PAIR:
+				return "PAIR";
+			case EITHER:
+				return "EITHER";
+			default:
+				return null;
+		}
+	}
+
+	public static answer convertAnswer(String _answer) {
+		switch (_answer) {
+			case "TRUE":
+				return answer.TRUE;
+			case "FALSE":
+				return answer.FALSE;
+			case "DONTCARE":
+				return answer.DONTCARE;
+			default:
+				return null;
+		}
+	}
+
+	public static String convertAnswerToString(answer _answer) {
+		if(_answer == null) { System.out.println("hoooi NULL"); return "DONTCARE"; }
+		switch (_answer) {
+			case TRUE:
+				return "TRUE";
+			case FALSE:
+				return "FALSE";
+			case DONTCARE:
+				return "DONTCARE";
+			default:
+				return null;
 		}
 	}
 	
 	public static String createLocString(List<Integer> locs){
-		String loc = "";
-		for(Integer locid : locs) {
-			if(loc==""){
-				loc += locid;
-			}
-			else {
-				loc += ";"+locid;
-			}
-		}
-		return loc;
+		return locs.stream().map(String::valueOf).collect(Collectors.joining(";"));
 	}
 
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String _uuid) {uuid = _uuid;}
-	
 	public enum userStatus {
-		/*NEW,*/
 		WAITING,
 		MATCHED,
 		INACTIVE
@@ -273,5 +281,11 @@ public class User {
 		SINGLE,
 		PAIR,
 		EITHER
+	}
+
+	public enum answer {
+		TRUE,
+		FALSE,
+		DONTCARE
 	}
 }

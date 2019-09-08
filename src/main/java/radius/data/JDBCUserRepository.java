@@ -10,24 +10,32 @@ import radius.User;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.exceptions.UserHasMatchesException;
+import radius.web.components.RealWorldProperties;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class JDBCUserRepository implements UserRepository {
+
+	@Autowired
+	private RealWorldProperties real;
 	
 	private JdbcTemplate jdbcTemplate;
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USERS_TO_MATCH =   "SELECT * FROM users WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
+	private static final String FIND_CURRENT_ANSWERS = 	"SELECT answer FROM votes WHERE email = ? AND votenr = ?";
 	private static final String FIND_USER_BY_UUID =		"SELECT * FROM users WHERE uuid = ?";
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
 	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
-	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, datemodify = ? WHERE email = ?";
+	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, regularanswers = ?, datemodify = ? WHERE email = ?";
+	private static final String ANSWER_CURRENT = 		"INSERT INTO votes (email, votenr, answer) VALUES (?, ?, ?)";
+	private static final String UPDATE_CURRENT = 		"UPDATE votes SET answer = ? WHERE email = ? AND votenr = ?";
 	private static final String UPDATE_PASSWORD = 		"UPDATE users SET password = ?, uuid = ?, datemodify = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
@@ -62,38 +70,28 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public User findUserByEmail(String email) {
+		User u;
 		try {
-			return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, new UserRowMapper(), email);
+			u = jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, new UserRowMapper(), email);
 		} catch (EmptyResultDataAccessException e) {
+			System.out.println("UserRepository: No user with email = " + email);
 			return null;
 		}
+		try { //it can very well be that everthing is in order with the user and they just haven't filled out the vote questions
+			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.currentVote());
+			u.setSpecialanswers(Arrays.asList(result.get("answer").toString().split(";")));
+		}
+		catch (Exception e) {
+			u.setSpecialanswers(Collections.emptyList());
+			System.out.println("UserRepository: Either no current vote or user has not answered the special questions");
+		}
+		return u;
 	}
-	
+
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String email = rs.getString("email");
-			ArrayList<Boolean> questions = new ArrayList<Boolean>();
-			questions.add(rs.getBoolean("q1"));
-			questions.add(rs.getBoolean("q2"));
-			questions.add(rs.getBoolean("q3"));
-			questions.add(rs.getBoolean("q4"));
-			questions.add(rs.getBoolean("q5"));
-
-			List<Integer> locations = null;
-			String[] loc = new String[0];
-			String rs_loc = rs.getString("locations");
-			if(rs_loc != null) {
-				loc = rs.getString("locations").split(";");
-			}
-			Integer[] locint = new Integer[loc.length];
-			try {
-				for(int i = 0; i < loc.length; i++) {
-					locint[i] = Integer.parseInt(loc[i]);
-				}
-			}
-			catch(NumberFormatException nfe) {nfe.printStackTrace();} 
-			locations = Arrays.asList(locint);
-//			System.out.println(loc);
+			List locations = Arrays.asList(rs.getString("locations").split(";")).stream().map(Integer::valueOf).collect(Collectors.toList());
 			ArrayList<String> languages = new ArrayList<String>();
 			if(rs.getString("languages") != null){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
@@ -113,7 +111,8 @@ public class JDBCUserRepository implements UserRepository {
 					rs.getBoolean("banned"),
 					locations,
 					languages,
-					questions,
+					Arrays.asList(rs.getString("regularanswers").split(";")),
+//					List.of("TRUE", "FALSE", "DONTCARE"),
 					rs.getTimestamp("datemodify")
 			);
 		}
@@ -144,27 +143,25 @@ public class JDBCUserRepository implements UserRepository {
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
-	
-	//TODO: locations
+
 	@Override
 	public void updateUser(User u) {
-		List<Boolean> questions = u.getQuestions();
+		String regularAnswers = String.join(";", u.getRegularAnswersAsListOfStrings());
 		String lang = String.join(";", u.getLanguages());
 		String loc = User.createLocString(u.getLocations());
-		/*can be deleted if the above works
-		String loc = "";
-		for(Integer locid : u.getLocations()) {
-			if(loc==""){
-				loc += locid;//.toString();
-			}
-			else {
-				loc += ";"+locid;
-			}
-		}*/
-		//String loc = String.join(";", u.getLocations());
-		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()), 
-				questions.get(0), questions.get(1), questions.get(2), questions.get(3), 
-				questions.get(4), OffsetDateTime.now(), u.getEmail());
+		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()),
+				regularAnswers, OffsetDateTime.now(), u.getEmail());
+	}
+
+	public void updateVotes(String email, String currentVote, List<User.answer> answers) {
+		String prettyanswers = answers.stream().map(a -> User.convertAnswerToString(a)).collect(Collectors.joining(";"));
+		try {
+			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.currentVote());
+			jdbcTemplate.update(UPDATE_CURRENT, prettyanswers, email, currentVote);
+		}
+		catch (EmptyResultDataAccessException er) {
+			jdbcTemplate.update(ANSWER_CURRENT, email, currentVote, prettyanswers);
+		}
 	}
 
 	@Override

@@ -35,19 +35,26 @@ public abstract class UserPair {
 		return commonLocations;
 	}
 
+	//TODO: Change name of function, it is now misleading
 	public int numberOfDisagreements() {
-		List<Boolean> answers1 = user1().getQuestions();
-		List<Boolean> answers2 = user2().getQuestions();
+		List<User.answer> answers1 = user1().getRegularanswers();
+		List<User.answer> answers2 = user2().getRegularanswers();
 
-		int nDisagreements = 0;
+		int matchScore = 0;
+		final int DISAGREEMENT_WEIGHT = 10; //using ints for now so nothing changes downstream
+		final int AGREEMENT_WEIGHT = 3;
 
 		for (int i = 0; i < answers1.size(); i++) {
-			if (answers1.get(i) != answers2.get(i)) {
-				nDisagreements += 1;
+			if (answers1.get(i) == User.answer.TRUE && answers2.get(i) == User.answer.FALSE ||
+			    answers1.get(i) == User.answer.FALSE && answers2.get(i) == User.answer.TRUE) {
+				matchScore += DISAGREEMENT_WEIGHT;
+			}
+			else if (answers1.get(i) == answers2.get(i) && !(answers1.get(i) == User.answer.DONTCARE)) {
+				matchScore -= AGREEMENT_WEIGHT;
 			}
 		}
 
-		return nDisagreements;
+		return matchScore;
 	}
 
 	public static Optional<User.userModus> commonModus(User.userModus modus1, User.userModus modus2) {

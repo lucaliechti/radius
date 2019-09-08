@@ -15,12 +15,11 @@
 <section class="fullwidth-section-only-vertical">
  
 <h1><spring:message code="answers.title"/></h1>
-<p><spring:message code="answers.subtitle"/></p>
+<p style="margin-bottom: 10px;"><spring:message code="answers.subtitle"/></p>
 
 <!-- preparing variables -->
 <spring:message code="answers.motivation.ph" var="motivationph" />
 <spring:message code="answers.modus.explain" var="explain" />
-
 
 <form:form method="POST" action="answers" modelAttribute="answerForm" accept-charset="ISO-8859-1">
    <div class="form-group leftsection-content-element" id="register-motivation">
@@ -31,6 +30,7 @@
          <form:textarea path="motivation" placeholder='${motivationph}' class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
       </div>
    </div>
+
    <div class="form-group leftsection-content-element" id="register-languages">
       <form:label path="languages" class="label-title">
          <spring:message code="answers.languages"/>
@@ -41,10 +41,11 @@
             <spring:message code="language.${l}"/>
          </p>
       </c:forEach>
-      <div class="feedback-error" id="register-feedback-email">
+      <div class="feedback-error" id="answers-feedback-languages">
          <form:errors path="languages"/>
       </div>
    </div>
+
    <div class="form-group leftsection-content-element" id="register-modus">
       <p>
          <form:label path="modus" class="label-title">
@@ -57,155 +58,71 @@
          <label class="radio-button-label-no">
             <spring:message code="modus.${m}"/>
          </label>
-         
       </c:forEach>
-      <div class="feedback-error" id="register-feedback-email">
+      <div class="feedback-error" id="answers-feedback-modi">
          <form:errors path="modus"/>
       </div>
    </div>
 
-   <!-- this is just for fun
+   <!-- hier kommt die SpecialForm -->
 
-   <div class="leftsection-content-element" id="register-special" style="border: 3px solid; border-color: #ff0000; position: relative; padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 0px;">
-       <img src="img/ch.png" class="topleft" style="position: absolute; top: 0px; left: 0px;"/>
-       <img src="img/ch.png" class="topright" style="position: absolute; top: 0px; right: 0px;"/>
-       <div style="margin: 50px 50px;">
-       <label for="questions" class="label-title"><font color="#ff0000"><spring:message code="questions.special"/></font></label>
+        <div class="leftsection-content-element" id="register-special" style="border: 3px solid; border-color: #ff0000; position: relative; padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 0px;">
+            <img src="img/ch.png" class="pos top left"/>
+            <img src="img/ch.png" class="pos top right"/>
+            <div id="specialAnswers">
+            <label for="specialanswers" class="label-title special"><spring:message code="questions.special"/></label>
 
-      <p>
-         <spring:message code="questions.special.2019.4.1"/>
-      </p>
-      <form:radiobutton path="special" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="special" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <form:radiobutton path="special" value="dontcare"/>
-      <label class="radio-button-label-dontcare">
-         <spring:message code="question.dontcare"/>
-      </label>
+            <c:forEach begin="1" end="${nrV}" varStatus="loop">
+                 <p>
+                    <spring:message code="questions.special.${currentVote}.${loop.index}"/>
+                 </p>
+                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="TRUE"/>
+                 <label>
+                    <spring:message code="question.true"/>
+                 </label>
+                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="FALSE"/>
+                 <label>
+                    <spring:message code="question.false"/>
+                 </label>
+                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="DONTCARE"/>
+                 <label>
+                    <spring:message code="question.dontcare"/>
+                 </label>
+            </c:forEach>
 
-      <p>
-         <spring:message code="questions.special.2019.4.2"/>
-      </p>
-      <form:radiobutton path="special" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="special" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <form:radiobutton path="special" value="dontcare"/>
-      <label class="radio-button-label-dontcare">
-         <spring:message code="question.dontcare"/>
-      </label>
+             </div>
+             <img src="img/ch.png" class="pos bottom left"/>
+             <img src="img/ch.png" class="pos bottom right"/>
+          </div>
 
-      <p>
-         <spring:message code="questions.special.2019.4.3"/>
-      </p>
-      <form:radiobutton path="special" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="special" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <form:radiobutton path="special" value="dontcare"/>
-      <label class="radio-button-label-dontcare">
-         <spring:message code="question.dontcare"/>
-      </label>
-
-
-       </div>
-       <img src="img/ch.png" class="bottomleft" style="position: absolute; bottom: 0px; left: 0px;"/>
-       <img src="img/ch.png" class="bottomright" style="position: absolute; bottom: 0px; right: 0px;"/>
-   </div> -->
+   <!-- Ende SpecialForm -->
 
    <!-- UNBEDINGT machen, dass die Fragen anders heissen: wenn nur normale Fragen, dann "Antworten", ansonsten "Reguläre Antworten" oder sowas -->
 
-
    <div class="form-group leftsection-content-element" id="register-questions">
-      <label for="questions" class="label-title"><spring:message code="answers.answers"/></label>
-      <p>
-         <spring:message code="q1"/>
-      </p>
-      <form:radiobutton path="q1" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="q1" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <div class="feedback-error">
-         <form:errors path="q1"/>
-      </div>
-      
-      <p>
-         <spring:message code="q2"/>
-      </p>
-      <form:radiobutton path="q2" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="q2" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <div class="feedback-error">
-         <form:errors path="q2"/>
-      </div>
-      
-      <p>
-         <spring:message code="q3"/>
-      </p>
-      <form:radiobutton path="q3" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="q3" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <div class="feedback-error">
-         <form:errors path="q3"/>
-      </div>
-      
-      <p>
-         <spring:message code="q4"/>
-      </p>
-      <form:radiobutton path="q4" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="q4" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <div class="feedback-error">
-         <form:errors path="q4"/>
-      </div>
-      
-      <p>
-         <spring:message code="q5"/>
-      </p>
-      <form:radiobutton path="q5" value="true"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.true"/>
-      </label>
-      <form:radiobutton path="q5" value="false"/>
-      <label class="radio-button-label-yes">
-         <spring:message code="question.false"/>
-      </label>
-      <div class="feedback-error">
-         <form:errors path="q5"/>
-      </div>
+      <label for="regularanswers" class="label-title"><spring:message code="answers.answers"/></label>
+      <c:forEach begin="1" end="${nrQ}" varStatus="loop">
+        <p>
+           <spring:message code="q${loop.index}"/>
+        </p>
+        <form:radiobutton path="regularanswers[${loop.index-1}]" value="TRUE"/>
+        <label>
+           <spring:message code="question.true"/>
+        </label>
+        <form:radiobutton path="regularanswers[${loop.index-1}]" value="FALSE"/>
+        <label>
+           <spring:message code="question.false"/>
+        </label>
+        <form:radiobutton path="regularanswers[${loop.index-1}]" value="DONTCARE"/>
+        <label>
+           <spring:message code="question.dontcare"/>
+        </label>
+        <div class="feedback-error" id="answers-feedback-q${loop.index}">
+           <form:errors path="regularanswers"/>
+        </div>
+      </c:forEach>
    </div>
+
    <div class="form-group leftsection-content-element" id="register-locations">
       <form:label path="locations" class="label-title">
          <spring:message code="answers.location"/>
@@ -218,17 +135,14 @@
          <form:hidden path="locations"/>
          <div id="register-map-locations"> </div>
       </section><br>
-      <div class="feedback-error">
+      <div class="feedback-error" id="answers-feedback-location">
          <form:errors path="locations"/>
       </div>
         <input type="submit" class="btn btn-primary" value="Answer" />
    		<sec:csrfInput />
    		</form:form>
    </div>
-
-
-
-
+</section>
 
 <script>
    var locationes = $('#locations').val();
@@ -242,6 +156,6 @@
        selectDeselect(region);
    }
 </script>
-</section>
+
 </main>
 <jsp:include page="templates/footer.jsp" />

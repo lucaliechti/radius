@@ -43,7 +43,7 @@ public class StatusController {
 	@RequestMapping(method=GET) //are all these spam parameters needed?
 	public String statusPage(Model model, Locale locale) {
 		System.out.println("in the StatusController class");
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {
 			model.addAttribute("not_enabled", true);

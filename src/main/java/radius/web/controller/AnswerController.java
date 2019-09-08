@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,6 +25,7 @@ import radius.AnswerForm;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
+import radius.web.components.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/answers")
@@ -33,6 +36,9 @@ public class AnswerController {
 	
 	@Autowired
 	private StatusController sc;
+
+	@Autowired
+	private RealWorldProperties realWorld;
 	
 	@Autowired
 	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
@@ -43,84 +49,67 @@ public class AnswerController {
 	@RequestMapping(method=GET)
 	public String answer(Model model) {
 		System.out.println("in the AnswerController class after GET request");
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
-		if(!userRepo.userHasAnswered(email)) {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		User u = userRepo.findUserByEmail(email);
+		if(!u.getAnswered()) { //TODO: Do this directly on the user object
 			model.addAttribute("newUser", true);
 			model.addAttribute("answerForm", new AnswerForm());
 		}
 		else {
-			AnswerForm f = newFormFromUser(userRepo.findUserByEmail(email));
+			AnswerForm f = newFormFromUser(u);
 			model.addAttribute("answerForm", f);
 		}
-		addListsTo(model);
+		prepare(model);
 		return "answers";
 	}
 	
 	@RequestMapping(method=POST)
-	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
+	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model, Locale locale)  {
+		System.out.println("in the AnswerController class after POST request");
 		if(result.hasErrors()) {
-			addListsTo(model);
+			prepare(model);
 			return "answers";
 		}
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
 		u = updateUserFromForm(u, answerForm);
-		u.setAnswered(true);
+		u.setAnsweredRegular(true);
 		u.setStatus("WAITING"); //new
 		userRepo.updateUser(u);
+		if(answerForm.getSpecialanswers() != null) {
+			userRepo.updateVotes(email, realWorld.currentVote(), answerForm.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList()));
+		}
 		return sc.statusPage(model, locale);
 	}
 	
-	private void addListsTo(Model model) {
-		List<String> lang = staticRepo.languages();
-		model.addAttribute("lang", lang);
-		
-		List<String> modi = staticRepo.modi();
-		model.addAttribute("modi", modi);
+	private void prepare(Model model) {
+		model.addAttribute("lang", staticRepo.languages());
+		model.addAttribute("modi", staticRepo.modi());
+		model.addAttribute("nrQ", realWorld.numberOfRegularQuestions());
+		model.addAttribute("special", realWorld.specialIsActive());
+		model.addAttribute("nrV", realWorld.numberOfVotes());
+		model.addAttribute("currentVote", realWorld.currentVote());
 	}
 	
 	private AnswerForm newFormFromUser(User u) {
-		AnswerForm f = new AnswerForm();
-		f.setMotivation(u.getMotivation());
-		f.setModus(u.getModusAsString());
-		f.setLanguages(u.getLanguages());
-		f.setLocations(User.createLocString(u.getLocations()));
-		f.setQ1(u.getQuestions().get(0));
-		f.setQ2(u.getQuestions().get(1));
-		f.setQ3(u.getQuestions().get(2));
-		f.setQ4(u.getQuestions().get(3));
-		f.setQ5(u.getQuestions().get(4));
-		
-		return f;
+		AnswerForm form = new AnswerForm();
+		form.setMotivation(u.getMotivation());
+		form.setModus(u.getModusAsString());
+		form.setLanguages(u.getLanguages());
+		form.setLocations(User.createLocString(u.getLocations()));
+		form.setRegularanswers(u.getRegularAnswersAsListOfStrings());
+		form.setSpecialanswers(u.getSpecialAnswersAsListOfStrings());
+		return form;
 	}
 	
-	private User updateUserFromForm(User u, AnswerForm answerForm) throws UnsupportedEncodingException {
-		u.setLanguages(answerForm.getLanguages());
-		u.setModus(answerForm.getModus());
-		u.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
-		ArrayList<Boolean> questions = new ArrayList<Boolean>();
-		questions.add(answerForm.getQ1());
-		questions.add(answerForm.getQ2());
-		questions.add(answerForm.getQ3());
-		questions.add(answerForm.getQ4());
-		questions.add(answerForm.getQ5());
-		try {
-			String[] loc = answerForm.getLocations().split(";");
-			Integer[] locint = new Integer[loc.length];
-			for(int i = 0; i < loc.length; i++) {
-				locint[i] = Integer.parseInt(loc[i]);
-			}
-			List<Integer> locations = Arrays.asList(locint);
-			u.setLocations(locations);
-		}
+	private User updateUserFromForm(User user, AnswerForm answerForm) {
+		user.setLanguages(answerForm.getLanguages());
+		user.setModus(answerForm.getModus());
+		user.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
+		user.setRegularanswers(answerForm.getRegularanswers());
+		user.setSpecialanswers(answerForm.getSpecialanswers());
+		try { user.setLocations(Arrays.asList(answerForm.getLocations().split(";")).stream().map(Integer::valueOf).collect(Collectors.toList())); }
 		catch (NumberFormatException nfe) { System.out.print("Answercontroller: "); nfe.printStackTrace(); }
-		
-		try {
-			u.setQuestions(questions);
-		} catch (Exception e) {
-			// If not exactly 5 answers are given; this should never happen.
-			e.printStackTrace();
-		}
-		return u;
+		return user;
 	}
 }

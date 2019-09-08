@@ -110,16 +110,9 @@
    </section>
    <section id="rightsection">
 
-
-<jsp:include page="temp_history.jsp" /><!-- TODO: separate history and testimonials page -->
-
-
+    <jsp:include page="history.jsp" /><!-- TODO: separate history and testimonials page -->
 
    </section>
 </main>
-
-
-
-
 
 <jsp:include page="templates/footer.jsp" />

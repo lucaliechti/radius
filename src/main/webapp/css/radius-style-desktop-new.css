@@ -1,15 +1,6 @@
-
-
 @font-face {
 	font-family: Fira Sans Condensed;
 	src: url(FiraSansCondensed-Light.woff);
-}
-
-#language-select {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
 }
 
 html,
@@ -27,15 +18,9 @@ body {
 	flex-direction: column;
 }
 
-.firstcontainer {
-	/*min-height: 100%;*/
-	/*margin-bottom: -65px;*/
-}
+.firstcontainer { }
 
 .container {
-	/*margin: 5%;
-	padding: 20px;
-	border: 2px solid;*/
 	flex: 1 0 auto;
 }
 
@@ -83,7 +68,7 @@ main {
 	margin-right: 5%;
 }
 
-#broadrightsection {
+#broadrightsection { /* LL, awkward */
 	display: inline-block;
 	flex: 0 0 25%;
 	border: 2px solid black;
@@ -110,21 +95,6 @@ main {
 	padding: 20px;
 	margin: 5%;
 	margin-top: calc(3*20px);
-}
-
-.map-section {
-	display: flex;
-}
-
-#register-map-locations {
-	flex: 0 1 300px;
-	padding-left: 20px;
-}
-
-#map {
-	flex: 1 0 auto;
-	max-width: 1200px;
-	height: 600px;
 }
 
 #leftsection-bottom {
@@ -177,7 +147,6 @@ section .leftsection-content-element:first-child {
 
 #primary-menubar {
 	margin-top: calc(3*29px);
-	/ background-color: #ffffff;
 }
 
 #language-select,
@@ -208,52 +177,6 @@ section .leftsection-content-element:first-child {
 	margin-bottom: 10px;
 }
 
-/*footer*/
-
-#footer {
-	display: flex;
-}
-
-#contact {
-	margin: 20px 5vw;
-	flex: 1 0 auto;
-	display: inline;
-}
-
-#s-icons a {
-	text-decoration: underline;
-}
-
-#s-icons li a {
-	display: inline-block;
-	margin: 0;
-	padding: 0px;
-}
-
-ul #s-icons,
-#s-icons {
-	display: flex;
-	flex: 0 0 auto;
-	margin: 0;
-	list-style: none;
-}
-
-.icon {
-	height: 23px;
-	margin-left: 10px;
-}
-
-
-/*footer END*/
-
-#loginout,
-#menu {
-	/*position: relative;*/
-	/*float: right;*/
-	/*display: inline;*/
-	/*list-style-type: none;*/
-}
-
 #menuToggle {
 	display: inline-block;
 	flex: 0 0 auto;
@@ -263,7 +186,6 @@ ul#menu li {
 	margin: 0;
 	padding: 0;
 }
-
 
 /*Fonts*/
 
@@ -282,6 +204,7 @@ h6 {
 }
 
 h2 {
+    font-weight: 300;
 	margin-bottom: 10px;
 }
 
@@ -308,10 +231,6 @@ li {
 	line-height: 1.8;
 }
 
-h2 {
-	font-weight: 300;
-}
-
 p,
 a,
 label,
@@ -333,31 +252,6 @@ th, td {
     text-align: left;
 }
 
-p.interested {
-	margin: 0 0 0 0px;
-	/*Vor- und Nachbreiten der Absätze*/
-	padding: 0 0 0 0px;
-}
-
-a {
-	color: #006F68;
-}
-
-#menu a,
-ul#menu {
-	text-decoration: none;
-	list-style: none;
-}
-
-#footer,
-#footer p {
-	border: none;
-}
-
-#footer {
-	justify-content: space-between;
-}
-
 b,
 th {
 	color: #006F68;
@@ -365,6 +259,7 @@ th {
 }
 
 a {
+	color: #006F68;
 	text-decoration: underline;
 	font-size: inherit!important;
 }
@@ -380,7 +275,7 @@ a:visited {
 	text-decoration: none;
 	clear: both;
 	float: left;
-	font-size: 18px!important;
+	font-size: 18px !important;
 	line-height: 1.8;
 }
 
@@ -394,6 +289,211 @@ a:visited {
 	content: "";
 	padding-right: 7px;
 	background-repeat: no-repeat;
+}
+
+/*hide mobile menu*/
+#menuToggle input {
+	display: none;
+}
+
+#logo-home {
+	width: auto;
+	height: 24px;
+	content: url(../img/logo-radius.png);
+}
+
+/* WebKit/Blink Browsers */
+::selection {
+	background: #006F68;
+	color: white;
+}
+
+/* Gecko Browsers */
+::-moz-selection {
+	background: #006F68;
+	color: white;
+}
+
+/***** FEEDBACKS *****/
+
+/*LL: I am using these in some places, but not in feedback elements*/
+p.result {
+	margin-bottom: 20px;
+    color: white;
+    padding: 5 8 5px;
+}
+
+p.success {
+	background-color: #3EAB70;
+}
+
+p.error {
+	background-color: #D02643;
+}
+
+/*LL: New, because if I use p.error I get problems with the padding*/
+.feedback-error {
+	color: #D02643;
+	font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+/* MAP */
+.map-section {
+	display: flex;
+}
+
+#register-map-locations {
+	flex: 0 1 300px;
+	padding-left: 20px;
+}
+
+#map {
+	flex: 1 0 auto;
+	max-width: 1200px;
+	height: 600px;
+}
+
+/* FORMS */
+
+#form {
+	display: flex;
+	margin-top: 10px;
+}
+
+#form input {
+	flex: 0 1 400px;
+}
+
+#form input[type="submit"] {
+	flex: 0 0 auto;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"], /*LL: admin page table*/
+textarea {
+	border: #006F68 solid 2px;
+	padding: 5px;
+	width: 100%;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.login-resume input[type="text"] {
+	width: 100%;
+}
+
+textarea {
+	width: 100%;
+	height: 20vh;
+}
+
+form,
+fieldset {
+	border: none;
+}
+
+input[type="submit"],
+input[type="button"] {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 18px;
+	color: #ffffff;
+	background-color: #006F68;
+	padding: 0.42em 0.6em 0.38em 0.6em;
+	margin-bottom: 6px; /*LL*/
+}
+
+/***** HTML ELEMENTS *****/
+
+.leftsection-title {
+	margin-bottom: 20px;
+}
+
+.leftsection-title,
+.leftsection-content {
+	border: 2px solid;
+	padding: 20px;
+}
+
+.leftsection-content-element {
+	border: none;
+	margin: 0;
+}
+
+/*extra für registration*/
+.label-title {
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 24px;
+	color: #006F68;
+	padding: 0;
+}
+
+/*LL: admin page*/
+div #usertable_info {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #000000;
+}
+
+/***** SPECIAL ELEMENTS *****/
+
+/* ILLUSTRATIONS */
+.illustration-info { /*kreisli mit symbol drin*/
+	width: 10vw;
+	display: inline;
+	margin-right: 40px;
+}
+
+.illustration-deco {
+	width: 10vw;
+}
+
+/* ICONS */
+.editing-icons {
+	width: 35px;
+}
+
+.editing-icons-div {
+	padding-left: 20px;
+}
+
+/* SWISS FLAGS */
+.pos {
+    position: absolute;
+}
+.top {
+    top: 0px;
+}
+.left {
+    left: 0px;
+}
+.bottom {
+    bottom: 0px;
+}
+.right {
+    right: 0px;
+}
+#specialAnswers {
+    margin: 50px 50px;
+}
+.special {
+    color: #ff0000;
+}
+
+/***** HEADER *****/
+
+#language-select {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+}
+
+#menu a,
+ul#menu {
+	text-decoration: none;
+	list-style: none;
 }
 
 #menu {
@@ -425,7 +525,6 @@ a:visited {
 
 .language-selector a:last child {
 	padding: 0.01em 0.27em 0.13em 0.28em;
-	/**************************************************/
 }
 
 #menu li.current-menu-item>a {
@@ -475,7 +574,6 @@ a:visited {
 
 .navigations a {
 	padding: 0.22em 0.4em 0.18em 0.4em;
-	/**************************************************/
 	margin-left: -2px;
 	color: #ffffff;
 	background-color: #006F68;
@@ -490,18 +588,13 @@ a:visited {
 }
 
 .navigations,
-#home {
+#home { /* id="home" only used in header.jsp line 35 and 36 */
 	display: inline-block;
 }
 
+/***** FOOTER *****/
 
-/*hide mobile menu*/
-
-#menuToggle input {
-	display: none;
-}
-
-#secondary-menubar,
+/*#secondary-menubar,*/
 #footer,
 footer p {
 	background-color: #006F68;
@@ -514,17 +607,11 @@ footer a {
 }
 
 footer a:hover,
-footer a:active, 
+footer a:active,
 footer a:visited {
 	color: white;
 }
 
-
-/*Sticky Footer*/
-
-.push {
-	height: 65px;
-}
 
 #footer {
 	padding: 20px 5vw;
@@ -536,211 +623,105 @@ footer a:visited {
 	padding: 0;
 }
 
-input[type="text"],
-input[type="password"],
-textarea,
-input[type="search"] { /*LL: admin page table*/
-	border: #006F68 solid 2px;
-	padding: 5px;
-	width: 100%;
-	display: block;
-	margin-bottom: 10px;
-}
-
-.login-resume input[type="text"] {
-	width: 100%;
-}
-
-textarea {
-	width: 100%;
-	height: 20vh;
-}
-
-form,
-fieldset {
-	border: none;
-}
-
-input[type="submit"],
-input[type="button"] {
-	font-family: 'Fira Sans Condensed', sans-serif;
-	font-size: 18px;
-	color: #ffffff;
-	background-color: #006F68;
-	padding: 0.42em 0.6em 0.38em 0.6em;
-	margin-bottom: 6px; /*LL*/
-}
-
-#logo-home {
-	width: auto;
-	height: 24px;
-	content: url(../img/logo-radius.png);
-}
-
-/*ul.ul-big li::before {
-    content: '̶';
-    margin-right: 0.3em;
-  }
- 
-  ul.ul-big li {
-    margin: 0;
-  }
-   
-   
-  ul.ul-big{
-    list-style-type: none;
- 
-}*/
-::selection {
-	background: #006F68;
-	/* WebKit/Blink Browsers */
-	
-	color: white;
-}
-::-moz-selection {
-	background: #006F68;
-	/* Gecko Browsers */
-	
-	color: white;
-}
-
-/*div#feedback {
-	margin-top: 0.2em;
-}
-
-#feedback p {
-	width: 100%;
-}*/
-
-
-/*LL: I am using these in some places, but not in feedback elements*/
-p.result {
-	margin-bottom: 20px;
-}
-
-p.success {
-	background-color: #3EAB70;
-	color: white;
-	padding: 5 8 5px;
-}
-
-p.error {
-	background-color: #D02643;
-	color: white;
-	padding: 5 8 5px;
-}
-/*LL: New, because if I use p.error I get problems with the padding*/
-.feedback-error {
-	color: #D02643;
-	font-family: 'Fira Sans Condensed', sans-serif;
-}
-#form {
+#footer {
 	display: flex;
-	margin-top: 10px;
-}
-#form input {
-	flex: 0 1 400px;
-	/*flex: 1 0 auto;*/
-}
-#form input[type="submit"] {
-	flex: 0 0 auto;
-}
-.illustration-info {
-	/*kreisli mit symbol drin*/
-	
-	width: 10vw;
-	display: inline;
-	margin-right: 40px;
-}
-.illustration-deco {
-	width: 10vw;
-}
-.editing-icons {
-	width: 35px;
-}
-.editing-icons-div {
-	padding-left: 20px;
-}
-#new-exp-form input {
-	display: block;
+	justify-content: space-between;
 }
 
-/*extra für profile- editing*/
-#edit-profile-rightsection {
-	display: inline-block;
-	flex: 0 0 auto;
-	border-left: 2px solid black;
-	padding: 0px 0 0px 20px;
-	/*margin-top: 5%;
-	margin-bottom: 5%;
-	margin-left: 10px;
-	margin-right: 5%;*/
-}
-#edit-profile-leftsection {
-	flex: 1 0 auto;
-	padding-right: 20px;
-	/*margin-top: 5%;
-	margin-bottom: 5%;
-	margin-left: 5%;
-	margin-right: 10px;*/
-}
-.col-50-left {
-	flex: 1 0 50%;
-	padding-right: 20px;
-}
-.col-50-right {
-	flex: 1 0 50%;
-	padding-left: 20px;
-	border-left: 2px solid black;
-}
-.leftsection-title {
-	margin-bottom: 20px;
-}
-.leftsection-title,
-.leftsection-content {
-	border: 2px solid;
-	padding: 20px;
-}
-.leftsection-content-element {
+#footer,
+#footer p {
 	border: none;
-	margin: 0;
 }
 
-/*expericences*/
+#contact {
+	margin: 20px 5vw;
+	flex: 1 0 auto;
+	display: inline;
+}
+
+#s-icons a {
+	text-decoration: underline;
+}
+
+#s-icons li a {
+	display: inline-block;
+	margin: 0;
+	padding: 0px;
+}
+
+ul #s-icons,
+#s-icons {
+	display: flex;
+	flex: 0 0 auto;
+	margin: 0;
+	list-style: none;
+}
+
+.icon {
+	height: 23px;
+	margin-left: 10px;
+}
+
+/******* RANDOM STUFF, NO CLUE *******/
+
+
+/*expericences*/              /*
 .published-experience {
 	background-color: #A1CEC7;
 	padding: 20px;
 	margin-bottom: 20px;
 }
+
+/* LL: no clue what this is
 .zitate {
 	font-weight: 300i;
 }
+
 .username-signature {
 	color: #006F68;
 }
+*/
 
-/*extra für registration*/
-.label-title/*h2*/
-{
-	font-family: 'Fira Sans Condensed', sans-serif;
-	font-size: 24px;
-	color: #006F68;
-	padding: 0;
+/*
+#new-exp-form input {
+	display: block;
 }
-div #register-motivation {}
-div #register-languages {}
-div #register-modus {}
-div #register-map-locations {}
-div #register-questions {}
-div #register-locations {}
-.radio-button-label-no {}
-.radio-button-label-yes {}
-.radio-button-label-dontcare {}
 
-/*LL: admin page*/
-div #usertable_info {
-    font-family: 'Fira Sans Condensed', sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    color: #000000;
+#edit-profile-rightsection {
+	display: inline-block;
+	flex: 0 0 auto;
+	border-left: 2px solid black;
+	padding: 0px 0 0px 20px;
 }
+
+#edit-profile-leftsection {
+	flex: 1 0 auto;
+	padding-right: 20px;
+}
+
+.col-50-left {
+	flex: 1 0 50%;
+	padding-right: 20px;
+}
+
+.col-50-right {
+	flex: 1 0 50%;
+	padding-left: 20px;
+	border-left: 2px solid black;
+}
+*/
+
+/*Sticky Footer*/
+/*
+.push {
+	height: 65px;
+}
+*/
+
+/*
+p.interested {
+	margin: 0 0 0 0px;
+	/*Vor- und Nachbreiten der Absätze*//*
+	padding: 0 0 0 0px;
+}
+*/

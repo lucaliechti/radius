@@ -23,6 +23,8 @@ function showOrHideSection(checkbox, section) {
     $("#"+section).hide();
   }
 }
+
+
 </script>
 
 <main class="firstcontainer container">
@@ -35,7 +37,7 @@ function showOrHideSection(checkbox, section) {
            </p>
         </c:if>
 
-         <h1>Was sind die wichtigsten Fragen der Schweiz?</h1>
+         <h2>Was sind die wichtigsten Fragen der Schweiz?</h2>
          <p>Radius ist eine Plattform, die eine einfache Möglichkeit bietet, persönlich und konstruktiv mit politisch Andersdenkenden zu diskutieren.<br>Wir wollen wissen: Welche politischen Fragen bewegen Sie? Worüber würden Sie sich gerne mit jemand Andersdenkendem unterhalten?</p><br>
          <p>Wählen Sie höchstens 10 Fragen aus, die Sie wichtig finden.</p>
          <div class="form-group leftsection-content-element" id="survey-questions">
@@ -104,7 +106,7 @@ function showOrHideSection(checkbox, section) {
                 <div class="col-10">
                     <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1" style="max-width:600px;"/>
                 </div>
-                <div class="feedback-error" id="survey-feedback-email">
+                <div class="feedback-error" id="survey-feedback-firstname">
                     <form:errors path="firstName"/>
                 </div>
             <div class="form-group">
@@ -114,7 +116,7 @@ function showOrHideSection(checkbox, section) {
                <div>
                   <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
                </div>
-               <div class="feedback-error" id="survey-feedback-email">
+               <div class="feedback-error" id="survey-feedback-lastname">
                   <form:errors path="lastName"/>
                </div>
             </div>
@@ -147,7 +149,7 @@ function showOrHideSection(checkbox, section) {
                <div>
                   <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
                </div>
-               <div class="feedback-error" id="survey-feedback-email">
+               <div class="feedback-error" id="survey-feedback-password">
                   <form:errors path="password"/>
                </div>
             </div>
