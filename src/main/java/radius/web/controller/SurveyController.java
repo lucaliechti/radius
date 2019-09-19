@@ -24,21 +24,24 @@ public class SurveyController {
     private JDBCStaticResourceRepository staticRepo;
 
     @Autowired
-    private RegistrationController reg;
+    private RegistrationController registrationController;
 
     @Autowired
-    private HomeController h;
+    private HomeController homeController;
 
     @Autowired
-    private JDBCSurveyRepository sur;
+    private JDBCSurveyRepository surveyRepo;
 
     @Autowired
-    private JDBCNewsletterRepository nws;
+    private JDBCNewsletterRepository newsletterRepo;
+
+    private final int SURVEY_SIZE = 15;
 
     @RequestMapping(value="/survey", method=GET)
     public String survey(Model model, Locale loc){
         model.addAttribute("surveyForm", new SurveyForm());
         model.addAttribute("cantons", staticRepo.cantons());
+        model.addAttribute("nrQ", SURVEY_SIZE);
         return "survey";
     }
 
@@ -48,6 +51,7 @@ public class SurveyController {
             System.out.println("invalid surveyForm");
             model.addAttribute("surveyForm", surveyForm);
             model.addAttribute("cantons", staticRepo.cantons());
+            model.addAttribute("nrQ", SURVEY_SIZE);
             return "survey";
         }
 
@@ -56,13 +60,14 @@ public class SurveyController {
 
         //save questions
         try {
-            sur.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(), wantsNewsletter, wantsToRegister);
+            surveyRepo.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(), wantsNewsletter, wantsToRegister);
         }
         catch(Exception e) {
             e.printStackTrace();
             model.addAttribute("surveyFailure", Boolean.TRUE);
             model.addAttribute("surveyForm", surveyForm);
             model.addAttribute("cantons", staticRepo.cantons());
+            model.addAttribute("nrQ", SURVEY_SIZE);
             return "survey";
         }
         model.addAttribute("surveySuccess", Boolean.TRUE);
@@ -75,24 +80,25 @@ public class SurveyController {
             String emailR = surveyForm.getEmailR();
             String password = surveyForm.getPassword();
 
-            return reg.cleanlyRegisterNewUser(model, loc, firstName, lastName, canton, emailR, password);
+            return registrationController.cleanlyRegisterNewUser(model, loc, firstName, lastName, canton, emailR, password);
         }
 
         //only newsletter, no registration
         else if(wantsNewsletter) {
             String emailN = surveyForm.getEmailN();
             try {
-                nws.subscribe(emailN, "Survey Summer 2019");
+                newsletterRepo.subscribe(emailN, "Survey Summer 2019");
             }
             catch(Exception e) {
                 e.printStackTrace();
                 model.addAttribute("surveyFailure", Boolean.TRUE);
                 model.addAttribute("surveyForm", surveyForm);
                 model.addAttribute("cantons", staticRepo.cantons());
+                model.addAttribute("nrQ", SURVEY_SIZE);
                 return "survey";
             }
         }
 
-        return h.cleanlyHome(model);
+        return homeController.cleanlyHome(model);
     }
 }

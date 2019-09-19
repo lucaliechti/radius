@@ -30,7 +30,7 @@ public class ConditionalSurveyValidator implements ConstraintValidator<Condition
         pw = requiredIfChecked.pw();
         message = requiredIfChecked.message();
         values = requiredIfChecked.values();
-        emailValidator = EmailValidator.getInstance(); //does this work?
+        emailValidator = EmailValidator.getInstance();
     }
 
     @Override

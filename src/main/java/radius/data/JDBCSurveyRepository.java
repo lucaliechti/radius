@@ -22,12 +22,11 @@ public class JDBCSurveyRepository implements SurveyRepository {
     private static final String SAVE_ANSWERS =  "INSERT INTO survey(datecreate, questions, answers, newsletter, registration) VALUES (?, ?, ?, ?, ?)";
 
     @Override
-    public void saveAnswers(List<Integer> questions, List<Boolean> answers, boolean newsletter, boolean registration) {
+    public void saveAnswers(List<Integer> questions, List<String> answers, boolean newsletter, boolean registration) {
         String q = questions.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining(";"));
         String a = answers.stream()
-                .map(String::valueOf)
                 .collect(Collectors.joining(";"))
                 .replace("null", "");
         jdbcTemplate.update(SAVE_ANSWERS, OffsetDateTime.now(), q, a, newsletter, registration);

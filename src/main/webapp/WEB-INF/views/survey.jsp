@@ -42,7 +42,7 @@ function showOrHideSection(checkbox, section) {
          <p>Wählen Sie höchstens 10 Fragen aus, die Sie wichtig finden.</p>
          <div class="form-group leftsection-content-element" id="survey-questions">
             <form:form method="POST" action="survey" modelAttribute="surveyForm">
-               <c:forEach begin="1" end="15" varStatus="loop">
+               <c:forEach begin="1" end="${nrQ}" varStatus="loop">
                   <p>
                      <form:checkbox id="q${loop.index}" path="questions" value="${loop.index}" onchange="showOrHide('#q${loop.index}', ${loop.index})"/>
                      <b>
@@ -52,11 +52,11 @@ function showOrHideSection(checkbox, section) {
                   <div id="answer${loop.index}">
                      <p>
                         <spring:message code="survey.answer"/><br>
-                        <form:radiobutton id="a${loop.index}_yes" path="a${loop.index}" value="true"/>
+                        <form:radiobutton id="a${loop.index}_yes" path="answers[${loop.index-1}]" value="true"/>
                         <label class="radio-button-label-yes">
                            <spring:message code="question.true"/>&emsp;
                         </label>
-                        <form:radiobutton id="a${loop.index}_no" path="a${loop.index}" value="false" />
+                        <form:radiobutton id="a${loop.index}_no" path="answers[${loop.index-1}]" value="false" />
                         <label class="radio-button-label-no">
                            <spring:message code="question.false"/>&emsp;
                         </label>
