@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class JDBCUserRepository implements UserRepository {
@@ -88,13 +89,21 @@ public class JDBCUserRepository implements UserRepository {
 		return u;
 	}
 
+	//TODO: Use java.util.Optional
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			String email = rs.getString("email");
-			List locations = Arrays.asList(rs.getString("locations").split(";")).stream().map(Integer::valueOf).collect(Collectors.toList());
+			List<Integer> locations = Collections.emptyList();
+			if(rs.getString("languages") != null){
+				locations = Arrays.asList(rs.getString("locations").split(";")).stream().map(Integer::valueOf).collect(Collectors.toList());
+			}
 			ArrayList<String> languages = new ArrayList<String>();
 			if(rs.getString("languages") != null){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
+			}
+			ArrayList<String> regularanswers = new ArrayList<String>();
+			if(rs.getString("regularanswers") != null){
+				regularanswers = new ArrayList<String>(Arrays.asList(rs.getString("regularanswers").split(";")));
 			}
 
 			return new User(
@@ -111,8 +120,7 @@ public class JDBCUserRepository implements UserRepository {
 					rs.getBoolean("banned"),
 					locations,
 					languages,
-					Arrays.asList(rs.getString("regularanswers").split(";")),
-//					List.of("TRUE", "FALSE", "DONTCARE"),
+					regularanswers,
 					rs.getTimestamp("datemodify")
 			);
 		}

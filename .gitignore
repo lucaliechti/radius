@@ -1,8 +1,6 @@
 *.html
 target/*
-*.ico
 *.woff
-*.png
 src/main/resources/config*
 *ms.js
 *min.js

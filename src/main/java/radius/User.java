@@ -215,6 +215,7 @@ public class User {
 	}
 	
 	public static userModus convertModus(String modus) {
+		if(modus == null) { System.out.println("hoooi NULL"); return userModus.EITHER; }
 		switch (modus) {
 			case "SINGLE":
 				return userModus.SINGLE;
@@ -236,7 +237,7 @@ public class User {
 			case EITHER:
 				return "EITHER";
 			default:
-				return null;
+				return "EITHER";
 		}
 	}
 
