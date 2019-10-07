@@ -1,9 +1,8 @@
 *.html
 target/*
-*.woff
-src/main/resources/config*
-*ms.js
-*min.js
+src/main/resources/config/*.properties
 robots.txt
 .idea/*
 radius.iml
+.gitsecret/keys/random_seed
+!*.secret

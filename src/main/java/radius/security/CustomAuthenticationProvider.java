@@ -28,12 +28,11 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
       String username = auth.getName();
       String enteredPassword = auth.getCredentials().toString();
-      
       UserDetails u = this.getUserDetailsService().loadUserByUsername(username); //checken, ob 1 Resultat. Bereits im Repo - throw new BadCredentialsException("Invalid username or password");
       if(u == null) {
     	  return null;
   	  }
-      
+
       //prepare authorities
       List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
       final List<String> roles = userRepository.findAuthoritiesByEmail(username); 
@@ -46,6 +45,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     	  return new UsernamePasswordAuthenticationToken(u, enteredPassword, grantedAuthorities);
       }
       else {
+          System.out.println("does not match");
     	  return null;
       }
   }
