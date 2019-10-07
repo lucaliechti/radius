@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>5.1.8.RELEASE</spring.version>
         <spring.security.version>5.1.5.RELEASE</spring.security.version>
+        <flyway.version>6.0.4</flyway.version>
     </properties>
     <dependencies>
         <dependency>
@@ -143,7 +144,7 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>6.0.4</version>
+            <version>${flyway.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -187,6 +188,20 @@
                 <configuration>
                     <source>11</source>
                     <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+                <configuration>
+                    <sqlMigrationSeparator>__</sqlMigrationSeparator>
+                    <locations>
+                        <location>filesystem:src/main/resources/flyway/migrations</location>
+                    </locations>
+                    <configFiles>
+                        <configFile>src/main/resources/config/flyway.properties</configFile>
+                    </configFiles>
                 </configuration>
             </plugin>
         </plugins>
