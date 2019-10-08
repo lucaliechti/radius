@@ -65,8 +65,6 @@ public class MultiHttpSecurityConfig {
 			authProvider.setUserDetailsService(userDetailsService);
 			return authProvider;
 		}
-
-
 	}
 
 	@Configuration

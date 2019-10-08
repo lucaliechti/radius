@@ -3,10 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -17,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,7 +21,7 @@ import radius.AnswerForm;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
-import radius.web.components.RealWorldProperties;
+import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/answers")

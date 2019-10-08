@@ -19,7 +19,7 @@ import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
 import radius.data.StaticResourceRepository;
-import radius.web.components.RealWorldProperties;
+import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/profile")

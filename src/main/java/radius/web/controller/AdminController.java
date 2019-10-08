@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.NewsletterMessage;
 import radius.data.NewsletterRepository;
 import radius.data.UserRepository;
-import radius.web.components.RealWorldProperties;
+import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 import java.util.Locale;
 

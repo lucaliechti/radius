@@ -10,7 +10,7 @@ import radius.User;
 import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.exceptions.UserHasMatchesException;
-import radius.web.components.RealWorldProperties;
+import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
