@@ -1,8 +1,10 @@
 package radius.config;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import radius.web.components.ProfileConfiguration;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -12,11 +14,11 @@ import java.util.Properties;
 public class DataConfig {
 	
 	@Bean
-	public BasicDataSource datasource() {
+	public BasicDataSource datasource(ProfileConfiguration.ProfileProperties profileProp) {
 		Properties dbProperties = new Properties();
 		InputStream in;
 		try {
-			in = DataConfig.class.getResourceAsStream("/config/database_dev.properties");
+			in = DataConfig.class.getResourceAsStream(profileProp.getDbfile());
 			dbProperties.load(in);
 			in.close();
 		} catch (IOException e) {

@@ -1,5 +1,7 @@
 package radius.web.components;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,23 +26,12 @@ public class RealWorldConfiguration {
         return new RealWorldProperties(special, votes, regular, current);
     }
 
+    @AllArgsConstructor
+    @Getter
     public static class RealWorldProperties {
-
         private boolean specialIsActive;
         private int numberOfVotes;
         private int numberOfRegularQuestions;
         private String currentVote;
-
-        public RealWorldProperties(boolean special, int votes, int regular, String current){
-            this.specialIsActive = special;
-            this.numberOfVotes = votes;
-            this.numberOfRegularQuestions = regular;
-            this.currentVote = current;
-        }
-
-        public boolean specialIsActive() { return specialIsActive; }
-        public int numberOfVotes() { return numberOfVotes; }
-        public int numberOfRegularQuestions() { return numberOfRegularQuestions; }
-        public String currentVote() { return currentVote; }
     }
 }

@@ -30,8 +30,8 @@ public class AdminController {
         model.addAttribute("newsletterForm", new NewsletterMessage());
         model.addAttribute("numberRecipients", newsletterRepo.numberOfRecipients());
         model.addAttribute("users", userRepo.allUsers());
-        model.addAttribute("special", realWorld.specialIsActive());
-        model.addAttribute("nrvotes", realWorld.numberOfVotes());
+        model.addAttribute("special", realWorld.isSpecialIsActive());
+        model.addAttribute("nrvotes", realWorld.getNumberOfVotes());
         return "admin";
     }
 

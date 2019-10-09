@@ -79,7 +79,7 @@ public class JDBCUserRepository implements UserRepository {
 			return null;
 		}
 		try { //it can very well be that everthing is in order with the user and they just haven't filled out the vote questions
-			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.currentVote());
+			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.getCurrentVote());
 			u.setSpecialanswers(Arrays.asList(result.get("answer").toString().split(";")));
 		}
 		catch (Exception e) {
@@ -164,7 +164,7 @@ public class JDBCUserRepository implements UserRepository {
 	public void updateVotes(String email, String currentVote, List<User.answer> answers) {
 		String prettyanswers = answers.stream().map(a -> User.convertAnswerToString(a)).collect(Collectors.joining(";"));
 		try {
-			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.currentVote());
+			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.getCurrentVote());
 			jdbcTemplate.update(UPDATE_CURRENT, prettyanswers, email, currentVote);
 		}
 		catch (EmptyResultDataAccessException er) {

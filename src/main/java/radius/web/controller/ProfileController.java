@@ -69,7 +69,7 @@ public class ProfileController {
 			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
 			model.addAttribute("languages", u.getLanguages());
 			model.addAttribute("history", usersMatches(email));
-			model.addAttribute("nrQ", real.numberOfRegularQuestions());
+			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
 		}
 		return "profile";
 	}

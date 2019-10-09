@@ -73,7 +73,7 @@ public class AnswerController {
 		u.setStatus("WAITING"); //new
 		userRepo.updateUser(u);
 		if(answerForm.getSpecialanswers() != null) {
-			userRepo.updateVotes(email, realWorld.currentVote(), answerForm.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList()));
+			userRepo.updateVotes(email, realWorld.getCurrentVote(), answerForm.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList()));
 		}
 		return sc.statusPage(model, locale);
 	}
@@ -81,10 +81,10 @@ public class AnswerController {
 	private void prepare(Model model) {
 		model.addAttribute("lang", staticRepo.languages());
 		model.addAttribute("modi", staticRepo.modi());
-		model.addAttribute("nrQ", realWorld.numberOfRegularQuestions());
-		model.addAttribute("special", realWorld.specialIsActive());
-		model.addAttribute("nrV", realWorld.numberOfVotes());
-		model.addAttribute("currentVote", realWorld.currentVote());
+		model.addAttribute("nrQ", realWorld.getNumberOfRegularQuestions());
+		model.addAttribute("special", realWorld.isSpecialIsActive());
+		model.addAttribute("nrV", realWorld.getNumberOfVotes());
+		model.addAttribute("currentVote", realWorld.getCurrentVote());
 	}
 	
 	private AnswerForm newFormFromUser(User u) {
