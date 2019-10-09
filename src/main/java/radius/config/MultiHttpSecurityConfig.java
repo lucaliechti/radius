@@ -21,8 +21,10 @@ import radius.security.CustomAuthenticationProvider;
 
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
+
 	@Configuration
 	public static class FormLoginConfiguration extends WebSecurityConfigurerAdapter {
+
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.authenticationProvider(authProvider());
@@ -34,7 +36,7 @@ public class MultiHttpSecurityConfig {
 			http
 					.authorizeRequests()
 					.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status", "/toggleStatus").authenticated()
-					.antMatchers("/monitoring/**", "/admin/**").hasRole("ADMIN")
+					.antMatchers("/monitoring/**", "/admin/**", "/actuator/**", "/health/**").hasRole("ADMIN")
 					.antMatchers(HttpMethod.POST, "/experience").authenticated()
 					.anyRequest().permitAll();
 
