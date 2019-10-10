@@ -7,6 +7,7 @@
     <version>1.1.0</version>
     <name>radius</name>
     <url>http://maven.apache.org</url>
+
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -16,14 +17,15 @@
         <slf4j.version>2.0.0-alpha1</slf4j.version>
         <resourcesfolder>src/main/resources</resourcesfolder>
     </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.9.RELEASE</version>
+    </parent>
+
     <dependencies>
         <!-- Spring Boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-parent</artifactId>
-            <version>${spring.boot.version}</version>
-            <type>pom</type>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -42,6 +44,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
@@ -65,11 +73,6 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
             <version>5.2.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
@@ -151,6 +154,12 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <version>3.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <finalName>radius</finalName>
@@ -202,7 +211,7 @@
                 <configuration>
                     <sqlMigrationSeparator>__</sqlMigrationSeparator>
                     <locations>
-                        <location>filesystem:src/main/resources/flyway/migrations</location>
+                        <location>filesystem:src/main/resources/db/migration</location>
                     </locations>
                     <configFile>src/main/resources/config/flyway.properties</configFile>
                 </configuration>

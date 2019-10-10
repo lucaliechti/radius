@@ -18,15 +18,13 @@ import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class JDBCUserRepository implements UserRepository {
 
-	@Autowired
 	private RealWorldProperties real;
-	
 	private JdbcTemplate jdbcTemplate;
+
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users";
 	private static final String FIND_USERS_TO_MATCH =   "SELECT * FROM users WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
@@ -55,8 +53,9 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String ALL_MATCHES_FOR_USER = 	"SELECT * FROM matches WHERE email1 = ?";
 
 	@Autowired
-    public void init(DataSource jdbcdatasource) {
+    public void init(DataSource jdbcdatasource, RealWorldProperties prop) {
         this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
+        this.real = prop;
     }
 
 	@Override
@@ -142,12 +141,13 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void saveUser(User u) throws EmailAlreadyExistsException {
 		if(userExists(u.getEmail())) {
+			System.out.println("LOG: User with email " + u.getEmail() + " already exists.");
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
 		if(u.getCanton().equals("NONE")) {
 			u.setCanton(null);
 		}
-		
+		System.out.println("LOG: For email address " + u.getEmail() + " we did NOT see any existing.");
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
@@ -194,16 +194,22 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public boolean userExists(String email) {
-		// super ugly
-		Map<String, Object> users = jdbcTemplate.queryForMap(USER_EXISTS, email);
-		return (boolean)users.get("exists");
+		return jdbcTemplate.queryForObject(USER_EXISTS, new Object[]{email}, Boolean.class);
 	}
 
 	@Override
 	public boolean userHasAnswered(String email) {
-		// also super ugly
-		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ANSWERED, email);
-		return (boolean)users.get("exists");
+		return jdbcTemplate.queryForObject(USER_ANSWERED, new Object[]{email}, Boolean.class);
+	}
+
+	@Override
+	public boolean userIsEnabled(String email) {
+		return jdbcTemplate.queryForObject(USER_ENABLED, new Object[]{email}, Boolean.class);
+	}
+
+	@Override
+	public boolean userIsActive(String email) {
+		return jdbcTemplate.queryForObject(USER_ACTIVE, new Object[]{email}, Boolean.class);
 	}
 
 	@Override
@@ -222,25 +228,11 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public boolean userIsEnabled(String email) {
-		// guess what, also super ugly
-		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ENABLED, email);
-		return (boolean)users.get("exists");
-	}
-
-	@Override
 	public void match(UserPair userPair) {
 		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.userStatus.MATCHED), userPair.user1().getEmail());
 		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.userStatus.MATCHED), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user1().getEmail(), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(), userPair.user1().getEmail());
-	}
-
-	@Override
-	public boolean userIsActive(String email) {
-		// still plenty of chances to do it the ugly way
-		Map<String, Object> users = jdbcTemplate.queryForMap(USER_ACTIVE, email);
-		return (boolean)users.get("exists");
 	}
 
 	@Override

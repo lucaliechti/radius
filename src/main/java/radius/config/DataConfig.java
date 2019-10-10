@@ -1,6 +1,7 @@
 package radius.config;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import radius.web.components.ProfileConfiguration;
@@ -13,7 +14,8 @@ import java.util.Properties;
 public class DataConfig {
 	
 	@Bean
-	public BasicDataSource datasource(ProfileConfiguration.ProfileProperties profileProp) {
+	@Qualifier("Postgres")
+	public BasicDataSource dataSource(ProfileConfiguration.ProfileProperties profileProp) {
 		Properties dbProperties = new Properties();
 		InputStream in;
 		try {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import radius.User;
 import radius.data.UserRepository;
 
-@Service//("userDetailsService")
+@Service("postgresUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired

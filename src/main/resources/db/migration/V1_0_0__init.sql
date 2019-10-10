@@ -51,12 +51,19 @@ CREATE TABLE users (
 	enabled boolean NOT NULL,
 	answered boolean NOT NULL,
 	motivation varchar(8000),
-	regularanswers varchar(100),
+	q1 boolean,
+	q2 boolean,
+	q3 boolean,
+	q4 boolean,
+	q5 boolean,
 	banned boolean NOT NULL,
 	uuid varchar(100),
 	datecreate timestamp with time zone,
     datemodify timestamp with time zone
 );
+
+--INSERT INTO users (status, firstname, lastname, email, password, enabled, answered, banned) VALUES ('WAITING', 'Luca', 'Liechti', 'email@example.com', 'verysecret', 'true', 'false', 'false');
+--DELETE FROM users;
 
 --authorities
 DROP TABLE IF EXISTS authorities CASCADE;
