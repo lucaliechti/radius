@@ -23,9 +23,11 @@ public class UserRegistrationTest {
 
         @Test
         public void insertUser() throws Exception {
-            User saved = new User("firstname", "lastname", "NONE", "email@example.com", "secretSECRET");
+            String examplemail = "email@example.com";
+
+            User saved = new User("firstname", "lastname", "NONE", examplemail, "secretSECRET");
             repo.saveUser(saved);
-            User compared = repo.findUserByEmail("email@example.com");
+            User compared = repo.findUserByEmail(examplemail);
             assertThat(saved.getEmail()).isEqualTo(compared.getEmail());
         }
 }
