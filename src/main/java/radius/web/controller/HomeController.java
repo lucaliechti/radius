@@ -64,7 +64,6 @@ public class HomeController {
 	
 	@RequestMapping(method=POST)
 	public String login(@RequestParam(value = "error", required = false) String loginerror, Model model) {
-		System.out.println("in the HomeController class after HTTP POST");
 		if(loginerror != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}

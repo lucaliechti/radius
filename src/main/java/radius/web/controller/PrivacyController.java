@@ -12,7 +12,6 @@ public class PrivacyController {
 
 	@RequestMapping(method=GET)
 	public String privacy(Model model) {
-		System.out.println("in the PrivacyController class");
 		return "privacy";
 	}
 }

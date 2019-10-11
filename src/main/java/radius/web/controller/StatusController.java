@@ -17,22 +17,20 @@ import radius.MeetingFeedbackForm;
 import radius.User;
 import radius.User.userStatus;
 import radius.UserPair;
-import radius.data.MatchingRepository;
-import radius.data.StaticResourceRepository;
-import radius.data.UserRepository;
+import radius.data.*;
 
 @Controller
 @RequestMapping(value="/status")
 public class StatusController {
 	
 	@Autowired
-	private UserRepository userRepo;
+	private JDBCUserRepository userRepo;
 	
 	@Autowired
 	private MatchingRepository matchRepo;
 	
 	@Autowired
-	private StaticResourceRepository staticRepo;
+	private JDBCStaticResourceRepository staticRepo;
 	
     @Autowired
 	private AnswerController ac;
@@ -42,14 +40,10 @@ public class StatusController {
 	
 	@RequestMapping(method=GET) //are all these spam parameters needed?
 	public String statusPage(Model model, Locale locale) {
-		System.out.println("in the StatusController class");
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {
 			model.addAttribute("not_enabled", true);
-//			model.addAttribute("registrationForm", new UserForm());
-//			model.addAttribute("cantons", staticRepo.cantons());
-//			return "home";
 			return h.cleanlyHome(model);
 		}
 		if(!user.getAnswered()) {

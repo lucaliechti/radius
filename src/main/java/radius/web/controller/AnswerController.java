@@ -44,7 +44,6 @@ public class AnswerController {
 
 	@RequestMapping(method=GET)
 	public String answer(Model model) {
-		System.out.println("in the AnswerController class after GET request");
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
 		if(!u.getAnswered()) { //TODO: Do this directly on the user object
@@ -61,7 +60,6 @@ public class AnswerController {
 	
 	@RequestMapping(method=POST)
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model, Locale locale)  {
-		System.out.println("in the AnswerController class after POST request");
 		if(result.hasErrors()) {
 			prepare(model);
 			return "answers";

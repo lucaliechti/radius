@@ -12,7 +12,6 @@ public class AboutController {
 
 	@RequestMapping(method=GET)
 	public String imprint(Model model) {
-		System.out.println("in the AboutController class");
 		return "about";
 	}
 }

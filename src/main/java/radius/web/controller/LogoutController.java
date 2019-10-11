@@ -21,7 +21,6 @@ public class LogoutController {
 	
 	@RequestMapping(method=GET)
 	public String logoutPage (Model model, HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		System.out.println("in the LogoutController class");
 	    return hc.home("loggedout", null, model, request, response, locale);
 	}
 }
