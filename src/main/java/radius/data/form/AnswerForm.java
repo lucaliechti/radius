@@ -1,4 +1,4 @@
-package radius;
+package radius.data.form;
 
 import java.util.ArrayList;
 import java.util.List;

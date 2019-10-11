@@ -10,7 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.EmailForm;
+import radius.data.JDBCStaticResourceRepository;
+import radius.data.form.EmailForm;
 import radius.NewsletterMessage;
 import radius.UserValidation;
 import radius.data.JDBCNewsletterRepository;
@@ -30,7 +31,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class NewsletterController {
 
     @Autowired
-    private StaticResourceRepository staticRepo;
+    private JDBCStaticResourceRepository staticRepo;
 
     @Autowired
     private HomeController h;

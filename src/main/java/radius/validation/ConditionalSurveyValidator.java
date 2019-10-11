@@ -1,4 +1,4 @@
-package radius.web.validation;
+package radius.validation;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.validator.routines.EmailValidator;

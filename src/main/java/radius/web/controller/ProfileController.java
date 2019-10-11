@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.AnswerForm;
+import radius.data.form.AnswerForm;
 import radius.HalfEdge;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;

@@ -10,8 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.EmailForm;
-import radius.PasswordForm;
+import radius.data.form.EmailForm;
+import radius.data.form.PasswordForm;
 import radius.data.UserRepository;
 import radius.web.components.EmailService;
 

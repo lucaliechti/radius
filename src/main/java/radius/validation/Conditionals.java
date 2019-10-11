@@ -1,4 +1,4 @@
-package radius.web.validation;
+package radius.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

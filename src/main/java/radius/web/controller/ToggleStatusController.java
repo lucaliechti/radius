@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.MeetingFeedbackForm;
+import radius.data.form.MeetingFeedbackForm;
 import radius.data.MatchingRepository;
 import radius.data.UserRepository;
 

@@ -13,7 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.HalfEdge;
-import radius.MeetingFeedbackForm;
+import radius.data.form.MeetingFeedbackForm;
 import radius.User;
 import radius.User.userStatus;
 import radius.UserPair;

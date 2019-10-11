@@ -1,11 +1,10 @@
-package radius;
+package radius.data.form;
 
-import radius.web.validation.Conditional;
+import radius.validation.Conditional;
 
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Conditional(selected = "newsletter", values = {"true"}, required = {}, email = {"emailN"}, pw = {})
 @Conditional(selected = "registration", values = {"true"}, required = {"firstName", "lastName"}, email = {"emailR"}, pw = {"password"})

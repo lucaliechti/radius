@@ -3,7 +3,6 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.EmailForm;
-import radius.UserForm;
+import radius.data.form.EmailForm;
+import radius.data.form.UserForm;
 import radius.data.JDBCStaticResourceRepository;
 
 @Controller

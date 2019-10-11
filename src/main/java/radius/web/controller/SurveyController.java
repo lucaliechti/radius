@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.SurveyForm;
+import radius.data.form.SurveyForm;
 import radius.data.JDBCNewsletterRepository;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCSurveyRepository;

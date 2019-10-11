@@ -1,4 +1,4 @@
-package radius.web.validation;
+package radius.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

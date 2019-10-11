@@ -1,4 +1,4 @@
-package radius;
+package radius.data.form;
 
 import javax.validation.constraints.Size;
 

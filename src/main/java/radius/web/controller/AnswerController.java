@@ -17,7 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.AnswerForm;
+import radius.data.form.AnswerForm;
 import radius.User;
 import radius.data.JDBCStaticResourceRepository;
 import radius.data.JDBCUserRepository;
@@ -95,7 +95,7 @@ public class AnswerController {
 		form.setSpecialanswers(u.getSpecialAnswersAsListOfStrings());
 		return form;
 	}
-	
+
 	private User updateUserFromForm(User user, AnswerForm answerForm) {
 		user.setLanguages(answerForm.getLanguages());
 		user.setModus(answerForm.getModus());
