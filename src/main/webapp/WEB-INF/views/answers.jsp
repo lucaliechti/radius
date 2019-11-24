@@ -21,13 +21,13 @@
 <spring:message code="answers.motivation.ph" var="motivationph" />
 <spring:message code="answers.modus.explain" var="explain" />
 
-<form:form method="POST" action="answers" modelAttribute="answerForm" accept-charset="ISO-8859-1">
+<form:form method="POST" action="answers" modelAttribute="answerForm">
    <div class="form-group leftsection-content-element" id="register-motivation">
       <form:label path="motivation" class="label-title">
          <spring:message code="answers.motivation"/>
       </form:label>
       <div class="col-10">
-         <form:textarea path="motivation" placeholder='${motivationph}' class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
+         <form:textarea path="motivation" placeholder='${motivationph}' class="input-paragraph form-control"/>
       </div>
    </div>
 

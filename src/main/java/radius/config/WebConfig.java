@@ -5,12 +5,14 @@ import java.util.concurrent.TimeUnit;
 
 import javax.validation.Validator;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.CacheControl;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
@@ -69,6 +71,17 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/img/**")
 				.addResourceLocations("/img/")
 				.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));
+	}
+
+	@Bean
+	public FilterRegistrationBean filterRegistrationBean() {
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		filter.setEncoding("UTF-8");
+
+		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+		registrationBean.setFilter(filter);
+		registrationBean.addUrlPatterns("/*");
+		return registrationBean;
 	}
     
 }

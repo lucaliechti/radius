@@ -71,11 +71,11 @@ public class RegistrationController {
 			model.addAttribute("newsletterForm", new EmailForm());
 			return "home"; //here we cannot return cleanly, because there registrationForm has been in use
 		}
-		String firstName = new String(registrationForm.getFirstName().getBytes("ISO-8859-1"), "UTF-8");
-		String lastName = new String(registrationForm.getLastName().getBytes("ISO-8859-1"), "UTF-8");
+		String firstName = registrationForm.getFirstName();
+		String lastName = registrationForm.getLastName();
 		String canton = registrationForm.getCanton();
-		String email = new String(registrationForm.getEmail().getBytes("ISO-8859-1"), "UTF-8");
-		String password = new String(registrationForm.getPassword().getBytes("ISO-8859-1"), "UTF-8");
+		String email = registrationForm.getEmail();
+		String password = registrationForm.getPassword();
 
 		return cleanlyRegisterNewUser(model, locale, firstName, lastName, canton, email, password);
 	}

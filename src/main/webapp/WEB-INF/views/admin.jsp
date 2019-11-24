@@ -50,7 +50,7 @@ $(document).ready(function() {
                       <spring:message code="admin.newsletter.subject"/>
                    </form:label>
                    <div class="col-10">
-                      <form:input path="subject" class="form-control" accept-charset="ISO-8859-1"/>
+                      <form:input path="subject" class="form-control"/>
                    </div>
                    <div class="feedback-error" id="newsletter-feedback-subject">
                       <form:errors path="subject"/>
@@ -62,7 +62,7 @@ $(document).ready(function() {
                       <spring:message code="admin.newsletter.message"/>
                    </form:label>
                    <div class="col-10">
-                      <form:textarea path="message" class="input-paragraph form-control" accept-charset="ISO-8859-1"/>
+                      <form:textarea path="message" class="input-paragraph form-control"/>
                    </div>
                    <div class="feedback-error" id="newsletter-feedback-message">
                       <form:errors path="message"/>

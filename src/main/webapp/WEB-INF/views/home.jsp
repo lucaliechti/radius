@@ -169,7 +169,7 @@
                   <spring:message code="home.register.fn"/>
                </form:label>
                <div class="col-10">
-                  <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1"/>
+                  <form:input path="firstName" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-firstname">
                   <form:errors path="firstName"/>
@@ -180,7 +180,7 @@
                   <spring:message code="home.register.ln"/>
                </form:label>
                <div>
-                  <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="lastName" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-lastname">
                   <form:errors path="lastName"/>
@@ -202,7 +202,7 @@
                   <spring:message code="home.register.email"/>
                </form:label>
                <div>
-                  <form:input path="email" class="form-control"  accept-charset="ISO-8859-1"/>
+                  <form:input path="email" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
                   <form:errors path="email"/>
@@ -213,7 +213,7 @@
                   <spring:message code="home.register.pw"/>
                </form:label>
                <div>
-                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="password" type="password" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-password">
                   <form:errors path="password"/>
@@ -247,7 +247,7 @@
                           <spring:message code="home.register.email"/>
                        </form:label>
                        <div class="col-10">
-                          <form:input path="email" class="form-control"  accept-charset="ISO-8859-1"/>
+                          <form:input path="email" class="form-control"/>
                        </div>
                        <div class="feedback-error" id="register-feedback-newsletter-email">
                           <form:errors path="email"/>

@@ -28,7 +28,7 @@
                   <spring:message code="forgot.body"/>
                </form:label>
                <div>
-                  <form:input path="email" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="email" class="form-control"/>
                </div>
                <div class="feedback-error" id="reset-feedback-email">
                   <form:errors path="email"/>

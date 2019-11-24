@@ -58,7 +58,7 @@ public class NewsletterController {
     }
 
     @RequestMapping(path="/subscribe", method=POST)
-    public String subscribe(@ModelAttribute("subscriptionForm") @Valid EmailForm subscriptionForm, BindingResult result, Model model, Locale loc) {
+    public String subscribe(@ModelAttribute("subscriptionForm") @Valid EmailForm subscriptionForm, Model model, Locale loc) {
         try {
             return cleanlySubscribeToNewsletter(model, subscriptionForm.getEmail(), REGISTRATION_WEBSITE, loc);
         }
@@ -92,8 +92,8 @@ public class NewsletterController {
             return "admin";
         }
 
-        String subject = new String(letter.getSubject().getBytes("ISO-8859-1"), "UTF-8");
-        String message = new String(letter.getMessage().getBytes("ISO-8859-1"), "UTF-8");
+        String subject = new String(letter.getSubject());
+        String message = new String(letter.getMessage());
 
         message += "\n\n";
 

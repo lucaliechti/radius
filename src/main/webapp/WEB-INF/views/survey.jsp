@@ -80,7 +80,7 @@ function showOrHideSection(checkbox, section) {
                <form:label path="emailN">
                   <spring:message code="home.register.email"/>
                </form:label>
-               <form:input path="emailN" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
+               <form:input path="emailN" class="form-control" style="max-width:600px;"/>
 
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="emailN"/>
@@ -104,7 +104,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.fn"/>
                 </form:label>
                 <div class="col-10">
-                    <form:input path="firstName" class="form-control"  accept-charset="ISO-8859-1" style="max-width:600px;"/>
+                    <form:input path="firstName" class="form-control" style="max-width:600px;"/>
                 </div>
                 <div class="feedback-error" id="survey-feedback-firstname">
                     <form:errors path="firstName"/>
@@ -114,7 +114,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.ln"/>
                </form:label>
                <div>
-                  <form:input path="lastName" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
+                  <form:input path="lastName" class="form-control" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-lastname">
                   <form:errors path="lastName"/>
@@ -136,7 +136,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.email"/>
                </form:label>
                <div>
-                  <form:input path="emailR" class="form-control"  accept-charset="ISO-8859-1" style="max-width:600px;"/>
+                  <form:input path="emailR" class="form-control" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="emailR"/>
@@ -147,7 +147,7 @@ function showOrHideSection(checkbox, section) {
                   <spring:message code="home.register.pw"/>
                </form:label>
                <div>
-                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1" style="max-width:600px;"/>
+                  <form:input path="password" type="password" class="form-control" style="max-width:600px;"/>
                </div>
                <div class="feedback-error" id="survey-feedback-password">
                   <form:errors path="password"/>

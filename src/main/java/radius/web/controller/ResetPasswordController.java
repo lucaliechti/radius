@@ -65,7 +65,7 @@ public class ResetPasswordController {
             System.out.println("ResetEmailController: Bad email address");
             return "forgot";
         }
-        String email = new String(emailForm.getEmail().getBytes("ISO-8859-1"), "UTF-8");
+        String email = new String(emailForm.getEmail());
 
         String uuid = userRepo.findUuidByEmail(email);
         if(uuid != null) {

@@ -28,7 +28,7 @@
                   <spring:message code="reset.body"/>
                </form:label>
                <div>
-                  <form:input path="password" type="password" class="form-control" accept-charset="ISO-8859-1"/>
+                  <form:input path="password" type="password" class="form-control"/>
                </div>
                <div class="feedback-error" id="reset-feedback-password">
                   <form:errors path="password"/>
