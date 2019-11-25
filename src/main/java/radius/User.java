@@ -18,8 +18,8 @@ public class User {
 	private String canton;
 	private userStatus status;
 	private userModus modus;
-	private boolean enabled; 			//if email has been confirmed
-	private boolean answeredRegular; 	//if *regular* questions have been answered
+	private boolean enabled;
+	private boolean answeredRegular;
 	private boolean banned;
 	private String motivation;
 	private List<Integer> locations;

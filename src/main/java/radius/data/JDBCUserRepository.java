@@ -29,7 +29,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_USERS_TO_MATCH =   "SELECT * FROM users WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users WHERE email = ?";
 	private static final String FIND_CURRENT_ANSWERS = 	"SELECT answer FROM votes WHERE email = ? AND votenr = ?";
-	private static final String FIND_USER_BY_UUID =		"SELECT * FROM users WHERE uuid = ?";
+	private static final String FIND_USER_BY_UUID =		"SELECT email FROM users WHERE uuid = ?";
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
 	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
 	private static final String UPDATE_USER = 			"UPDATE users SET locations = ?, languages = ?, motivation = ?, modus = ?, answered = TRUE, regularanswers = ?, datemodify = ? WHERE email = ?";
@@ -42,7 +42,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_ANSWERED = 		"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND answered = TRUE)";
 	private static final String USER_ENABLED = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND enabled = TRUE)";
 	private static final String USER_ACTIVE = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ? AND NOT status = 'INACTIVE')";
-	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE WHERE email = ?";
+	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE, uuid = ? WHERE email = ?";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 
@@ -94,7 +94,7 @@ public class JDBCUserRepository implements UserRepository {
 			String email = rs.getString("email");
 			List<Integer> locations = Collections.emptyList();
 			if(rs.getString("languages") != null){
-				locations = Arrays.asList(rs.getString("locations").split(";")).stream().map(Integer::valueOf).collect(Collectors.toList());
+				locations = Arrays.stream(rs.getString("locations").split(";")).map(Integer::valueOf).collect(Collectors.toList());
 			}
 			ArrayList<String> languages = new ArrayList<String>();
 			if(rs.getString("languages") != null){
@@ -224,7 +224,7 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public void enableUser(String email) {
-		jdbcTemplate.update(ENABLE_USER, email);
+		jdbcTemplate.update(ENABLE_USER, UUID.randomUUID().toString(), email);
 	}
 
 	@Override
@@ -249,7 +249,7 @@ public class JDBCUserRepository implements UserRepository {
 	public void deleteUser(String email) throws UserHasMatchesException {
 		//TODO: This has quite some implications - make nice
 		List<HalfEdge> matches = jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
-		if(matches.size()!=0){
+		if(matches.size() > 0){
 			throw new UserHasMatchesException(email + " has matches and cannot be deleted.");
 		}
 		jdbcTemplate.update(DELETE_AUTHORITIES, email);
@@ -257,9 +257,9 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public User findUserByUuid(String uuid) {
+	public String findEmailByUuid(String uuid) {
 		try {
-			return jdbcTemplate.queryForObject(FIND_USER_BY_UUID, new UserRowMapper(), uuid);
+			return jdbcTemplate.queryForObject(FIND_USER_BY_UUID, String.class, uuid);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -268,8 +268,7 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public String findUuidByEmail(String email) {
 		try {
-			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_UUID_BY_EMAIL, email);
-			return result.get("uuid").toString();
+			return jdbcTemplate.queryForObject(FIND_UUID_BY_EMAIL, String.class, email);
 		}
 		catch (EmptyResultDataAccessException e) {
 			return null;

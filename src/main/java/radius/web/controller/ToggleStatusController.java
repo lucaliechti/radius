@@ -4,10 +4,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.Locale;
-
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +46,8 @@ public class ToggleStatusController {
 	}
 	
 	@RequestMapping(method=POST)
-	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm, BindingResult result, Model model, Locale locale) {
+	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm,
+							 BindingResult result, Model model, Locale locale) {
 		if(result.hasErrors()) {
 			System.out.println("ToggleStatusController: Error toggling");
 			model.addAttribute("success", 0);
@@ -62,7 +61,6 @@ public class ToggleStatusController {
 		else {
 			matchRepo.unconfirmHalfEdge(email);
 		}
-		
 		matchRepo.deactivateOldMatchesFor(email);
 		
 		switch(feedbackForm.getNextState()) {
@@ -77,7 +75,6 @@ public class ToggleStatusController {
 		default:
 			model.addAttribute("success", 0);
 		}
-
 		return sc.statusPage(model, locale);
 	}
 }

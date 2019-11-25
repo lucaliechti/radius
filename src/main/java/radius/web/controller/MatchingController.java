@@ -28,22 +28,21 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping(value = "/api/")
 public class MatchingController {
+
 	private final JDBCUserRepository userRepo;
 	private final EmailService emailService;
 	private final StaticResourceRepository staticRepo;
-	
-	@Qualifier("matchingMailSender")
-	@Autowired
 	private JavaMailSenderImpl matchingMailSender;
-	
-	@Autowired
 	private MessageSource messageSource;
 
 	@Autowired
-	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService, JDBCStaticResourceRepository _staticRepo) {
+	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService,
+			JDBCStaticResourceRepository staticRepo, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
 		this.userRepo = _userRepo;
 		this.emailService = _emailService;
-		this.staticRepo = _staticRepo;
+		this.staticRepo = staticRepo;
+		this.matchingMailSender = matchingMailSender;
+		this.messageSource = messageSource;
 	}
 
 	/**

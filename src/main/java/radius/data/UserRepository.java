@@ -1,5 +1,6 @@
 package radius.data;
 
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Repository;
 import radius.User;
 import radius.HalfEdge;
@@ -51,7 +52,7 @@ public interface UserRepository {
 	//TODO: It shouldn't be a problem if the user has matches. Make nice in the future.
 	public void deleteUser(String email) throws UserHasMatchesException;
 
-	public User findUserByUuid(String uuid);
+	public String findEmailByUuid(String uuid);
 
 	public String findUuidByEmail(String email);
 	
