@@ -24,7 +24,7 @@
       
 <!-- preparing variables -->
 <spring:message code="status.meeting.confirm" var="confirm" />
-<spring:message code="status.modi.${modi}" var="compatiblemodi" />
+<spring:message code="status.modi.${compatibleModus}" var="compatiblemodus" />
 <c:forEach items="${commonlanguages}" var="lang" varStatus="stat">
   <c:set var="languages">${stat.first ? "" : languages}<spring:message code="language.${lang}"/>${stat.last ? "" : ", "}</c:set>
 </c:forEach>
@@ -46,7 +46,7 @@
          	</div>
             <div class="subsection">
             <div class="editable"><h2><spring:message code="status.yourstatus"/>: <b><spring:message code="status.${user.status}"/></b></h2></div>
-            <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages};${compatiblemodi}" argumentSeparator=";"/><br><br>
+            <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages};${compatiblemodus}" argumentSeparator=";"/><br><br>
             <c:choose>
             <c:when test="${user.status != 'MATCHED'}">
             	<a href="toggleStatus"><spring:message code="status.${user.status}.toggle"/></a><br><br>

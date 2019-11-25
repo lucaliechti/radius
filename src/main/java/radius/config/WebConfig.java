@@ -25,9 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
-	
-	//i18n: http://www.concretepage.com/spring-4/spring-4-mvc-internationalization-i18n-and-localization-l10n-annotation-example
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
@@ -47,6 +45,14 @@ public class WebConfig implements WebMvcConfigurer {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
+
+    @Bean
+	public MessageSource validationMessageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.addBasenames("classpath:ValidationMessages");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
     
     @Bean
     public LocaleResolver localeResolver(){
@@ -62,7 +68,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public Validator validator() {
     	LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-    	validator.setValidationMessageSource(messageSource());
+    	validator.setValidationMessageSource(validationMessageSource());
     	return validator;
     }
 
