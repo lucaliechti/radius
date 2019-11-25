@@ -45,7 +45,7 @@ public class StatusController {
 	}
 	
 	@RequestMapping(method=GET)
-	public String statusPage(Model model, Locale locale) {
+	public String statusPage(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findUserByEmail(email);
 		if(!user.getEnabled()) {

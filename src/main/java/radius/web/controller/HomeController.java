@@ -2,13 +2,7 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,36 +22,31 @@ import radius.data.JDBCStaticResourceRepository;
 public class HomeController {
 
 	private JDBCStaticResourceRepository staticRepo;
-	
-	@Autowired
 	private StatusController sc;
-	
-	@Autowired
-	public HomeController(JDBCStaticResourceRepository _staticRepo) { this.staticRepo = _staticRepo; }
+
+	public HomeController(JDBCStaticResourceRepository _staticRepo, StatusController sc) {
+		this.staticRepo = _staticRepo;
+		this.sc = sc;
+	}
 	
 	@RequestMapping(method=GET)
-	public String home(@RequestParam(value = "logout", required = false) String loggedout, @RequestParam(value = "error", required = false) String error, Model model, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-
+	public String home(@RequestParam(value = "logout", required = false) String loggedout,
+					   @RequestParam(value = "error", required = false) String error, Model model) {
 		log.info("In the HomeController class");
-		
 		if(SecurityContextHolder.getContext().getAuthentication() != null &&
 				SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
 				!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) ) {
-			return sc.statusPage(model, locale);
+			return sc.statusPage(model);
 		}
-		
 		if(loggedout != null) {
 			model.addAttribute("loggedout", Boolean.TRUE);
 		}
-		
 		if(error != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}
-
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", Boolean.TRUE);
 		}
-		
 		return cleanlyHome(model);
 	}
 	
@@ -73,6 +62,6 @@ public class HomeController {
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());
 		model.addAttribute("newsletterForm", new EmailDto());
-		return "home"; //the OG home
+		return "home";
 	}
 }

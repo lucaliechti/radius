@@ -3,7 +3,6 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class ProfileController {
 	}
 
 	@RequestMapping(method=GET)
-	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model, Locale locale) {
+	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model) {
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
@@ -48,7 +47,7 @@ public class ProfileController {
 		User u = userRepo.findUserByEmail(email);
 		if(!u.getEnabled()) {
 			model.addAttribute("not_enabled", true);
-			return hc.home(null, null, model, null, null, locale);
+			return hc.home(null, null, model);
 		}
 		else if(!u.getAnswered()) {
 			model.addAttribute("lang", staticRepo.languages());
@@ -62,7 +61,7 @@ public class ProfileController {
 			model.addAttribute("email", u.getEmail());
 			model.addAttribute("canton", u.getCanton());
 			model.addAttribute("motivation", u.getMotivation());
-			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(s -> s.toLowerCase()).collect(Collectors.toList());
+			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase).collect(Collectors.toList());
 			model.addAttribute("answers", answers);
 			model.addAttribute("modus", u.getModusAsString());
 //			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
@@ -73,8 +72,7 @@ public class ProfileController {
 		}
 		return "profile";
 	}
-	
-	//TODO: This is 1:1 the same as in StatusController. I can't inject a StatusController here because of circularity. Make nicer.
+
 	public List<HalfEdge> usersMatches(String email) {
 		return userRepo.allMatchesForUser(email);
 	}

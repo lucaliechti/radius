@@ -35,23 +35,23 @@ public class ToggleStatusController {
 	
 	@RequestMapping(method=GET)
 	public String toggle(Model model, Locale locale) {
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		if(userRepo.userIsActive(email)) {
 			userRepo.deactivateUser(email);
 		}
 		else {
 			userRepo.activateUser(email);
 		}
-		return sc.statusPage(model, locale);
+		return sc.statusPage(model);
 	}
 	
 	@RequestMapping(method=POST)
 	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm,
-							 BindingResult result, Model model, Locale locale) {
+							 BindingResult result, Model model) {
 		if(result.hasErrors()) {
 			System.out.println("ToggleStatusController: Error toggling");
 			model.addAttribute("success", 0);
-			return sc.statusPage(model, locale);
+			return sc.statusPage(model);
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		
@@ -75,6 +75,6 @@ public class ToggleStatusController {
 		default:
 			model.addAttribute("success", 0);
 		}
-		return sc.statusPage(model, locale);
+		return sc.statusPage(model);
 	}
 }

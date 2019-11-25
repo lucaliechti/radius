@@ -2,11 +2,6 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +15,7 @@ public class LogoutController {
 	private HomeController hc;
 	
 	@RequestMapping(method=GET)
-	public String logoutPage (Model model, HttpServletRequest request, HttpServletResponse response, Locale locale) {
-	    return hc.home("loggedout", null, model, request, response, locale);
+	public String logoutPage (Model model) {
+	    return hc.home("loggedout", null, model);
 	}
 }

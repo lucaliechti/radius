@@ -5,34 +5,28 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.data.JDBCStaticResourceRepository;
+import radius.data.JDBCUserRepository;
 import radius.data.UserRepository;
 import radius.exceptions.UserHasMatchesException;
 
 @Controller
 @RequestMapping(value="/delete")
 public class DeleteController {
-	
-	@Autowired
+
 	private HomeController hc;
-	
-	@Autowired
 	private UserRepository userRepo;
-	
-	@Autowired
 	private ProfileController pc;
 
-	@Autowired
-	private JDBCStaticResourceRepository staticRepo;
+	public DeleteController(HomeController hc, JDBCUserRepository userRepo, ProfileController pc) {
+		this.hc = hc;
+		this.userRepo = userRepo;
+		this.pc = pc;
+	}
 
 	@RequestMapping(method=GET)
 	public String reset(Model model) {
@@ -40,17 +34,17 @@ public class DeleteController {
 	}
 
 	@RequestMapping(method=POST)
-	public String contact(Model model, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+	public String contact(Model model, Locale locale) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
 			userRepo.deleteUser(username);
 		}
 		catch(UserHasMatchesException e) {
 			model.addAttribute("delete_failed", true);
-			return pc.profile(null, model, locale);
+			return pc.profile(null, model);
 		}
 		model.addAttribute("delete_success", username);
 		SecurityContextHolder.clearContext();
-		return hc.home(null, null, model, req, res, locale);
+		return hc.home(null, null, model);
 	}
 }

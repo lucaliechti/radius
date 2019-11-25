@@ -59,14 +59,8 @@ public class AnswerController {
 	public String answer(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
-		if(!u.getAnswered()) {
-			model.addAttribute("newUser", true);
-			model.addAttribute("answerForm", new AnswerForm());
-		}
-		else {
-			AnswerForm f = newFormFromUser(u);
-			model.addAttribute("answerForm", f);
-		}
+		model.addAttribute("answerForm", u.getAnswered() ? newFormFromUser(u) : new AnswerForm());
+		prepare(model);
 		return "answers";
 	}
 	
@@ -91,7 +85,7 @@ public class AnswerController {
 				userRepo.updateVotes(email, realWorld.getCurrentVote(),
 						answerForm.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList()));
 			}
-			return sc.statusPage(model, locale);
+			return sc.statusPage(model);
 		}
 	}
 
