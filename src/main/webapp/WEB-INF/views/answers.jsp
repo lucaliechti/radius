@@ -64,8 +64,7 @@
       </div>
    </div>
 
-   <!-- hier kommt die SpecialForm -->
-
+    <c:if test="${special}">
         <div class="leftsection-content-element" id="register-special" style="border: 3px solid; border-color: #ff0000; position: relative; padding-top: 0px; padding-bottom: 0px; margin-top: 20px; margin-bottom: 0px;">
             <img src="img/ch.png" class="pos top left"/>
             <img src="img/ch.png" class="pos top right"/>
@@ -90,12 +89,15 @@
                  </label>
             </c:forEach>
 
-             </div>
-             <img src="img/ch.png" class="pos bottom left"/>
-             <img src="img/ch.png" class="pos bottom right"/>
-          </div>
+            <div class="feedback-error" id="specialanswers-feedback-error">
+               <form:errors path="specialanswers"/>
+            </div>
 
-   <!-- Ende SpecialForm -->
+            </div>
+            <img src="img/ch.png" class="pos bottom left"/>
+            <img src="img/ch.png" class="pos bottom right"/>
+          </div>
+   </c:if>
 
    <!-- UNBEDINGT machen, dass die Fragen anders heissen: wenn nur normale Fragen, dann "Antworten", ansonsten "Reguläre Antworten" oder sowas -->
 
@@ -117,10 +119,10 @@
         <label>
            <spring:message code="question.dontcare"/>
         </label>
-        <div class="feedback-error" id="answers-feedback-q${loop.index}">
-           <form:errors path="regularanswers"/>
-        </div>
       </c:forEach>
+      <div class="feedback-error" id="regularanswers-feedback-error">
+         <form:errors path="regularanswers"/>
+      </div>
    </div>
 
    <div class="form-group leftsection-content-element" id="register-locations">

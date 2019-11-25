@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -29,17 +30,20 @@ public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
 	private JDBCStaticResourceRepository staticRepo;
-	
-	@Autowired
+	private RealWorldProperties realWorld;
 	private StatusController sc;
 
 	@Autowired
-	private RealWorldProperties realWorld;
-	
-	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo) {
+	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo,
+							RealWorldProperties _realWorld) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;
+		this.realWorld = _realWorld;
+	}
+
+	@Autowired
+	public void setStatusController(StatusController sc) {
+		this.sc = sc;
 	}
 
 	@RequestMapping(method=GET)
@@ -60,6 +64,15 @@ public class AnswerController {
 	
 	@RequestMapping(method=POST)
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model, Locale locale)  {
+		if (answerForm.getSpecialanswers().size() < realWorld.getNumberOfVotes()
+				&& answerForm.getRegularanswers().size() < realWorld.getNumberOfRegularQuestions()) {
+			FieldError regular = new FieldError("answerForm", "regularanswers", "not like dis!");
+			FieldError special = new FieldError("answerForm", "specialanswers", "not like dis eitha!");
+			result.addError(regular);
+			result.addError(special);
+			prepare(model);
+			return "answers";
+		}
 		if(result.hasErrors()) {
 			prepare(model);
 			return "answers";
