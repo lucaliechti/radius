@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.JDBCStaticResourceRepository;
-import radius.data.form.EmailForm;
+import radius.data.form.EmailDto;
 import radius.NewsletterMessage;
 import radius.UserValidation;
 import radius.data.JDBCNewsletterRepository;
-import radius.data.StaticResourceRepository;
 import radius.web.components.EmailService;
 
 import javax.validation.Valid;
@@ -58,7 +57,7 @@ public class NewsletterController {
     }
 
     @RequestMapping(path="/subscribe", method=POST)
-    public String subscribe(@ModelAttribute("subscriptionForm") @Valid EmailForm subscriptionForm, Model model, Locale loc) {
+    public String subscribe(@ModelAttribute("subscriptionForm") @Valid EmailDto subscriptionForm, Model model, Locale loc) {
         try {
             return cleanlySubscribeToNewsletter(model, subscriptionForm.getEmail(), REGISTRATION_WEBSITE, loc);
         }

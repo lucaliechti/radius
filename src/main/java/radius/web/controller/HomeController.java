@@ -17,7 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.form.EmailForm;
+import radius.data.form.EmailDto;
 import radius.data.form.UserForm;
 import radius.data.JDBCStaticResourceRepository;
 
@@ -72,7 +72,7 @@ public class HomeController {
 	public String cleanlyHome(Model model) {
 		model.addAttribute("registrationForm", new UserForm());
 		model.addAttribute("cantons", staticRepo.cantons());
-		model.addAttribute("newsletterForm", new EmailForm());
+		model.addAttribute("newsletterForm", new EmailDto());
 		return "home"; //the OG home
 	}
 }

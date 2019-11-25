@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.form.EmailForm;
+import radius.data.form.EmailDto;
 import radius.User;
 import radius.data.form.UserForm;
 import radius.data.*;
@@ -68,7 +68,7 @@ public class RegistrationController {
 		if(result.hasErrors()) {
 			System.out.println("RegistrationController: Error registering");
 			model.addAttribute("cantons", staticResourceRepo.cantons());
-			model.addAttribute("newsletterForm", new EmailForm());
+			model.addAttribute("newsletterForm", new EmailDto());
 			return "home"; //here we cannot return cleanly, because there registrationForm has been in use
 		}
 		String firstName = registrationForm.getFirstName();

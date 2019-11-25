@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import radius.data.JDBCMatchingRepository;
+import radius.data.JDBCUserRepository;
 import radius.data.form.MeetingFeedbackForm;
 import radius.data.MatchingRepository;
 import radius.data.UserRepository;
@@ -22,15 +24,16 @@ import radius.data.UserRepository;
 @Controller
 @RequestMapping(value="/toggleStatus")
 public class ToggleStatusController {
-	
-	@Autowired
+
 	private UserRepository userRepo;
-	
-	@Autowired
 	private MatchingRepository matchRepo;
-	
-	@Autowired
 	private StatusController sc;
+
+	public ToggleStatusController(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo, StatusController sc) {
+		this.userRepo = userRepo;
+		this.matchRepo = matchRepo;
+		this.sc = sc;
+	}
 	
 	@RequestMapping(method=GET)
 	public String toggle(Model model, Locale locale) {
@@ -51,9 +54,9 @@ public class ToggleStatusController {
 			model.addAttribute("success", 0);
 			return sc.statusPage(model, locale);
 		}
-		String email = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		if(feedbackForm.getConfirmed()) {
+		if(feedbackForm.isConfirmed()) {
 			matchRepo.confirmHalfEdge(email);
 		}
 		else {

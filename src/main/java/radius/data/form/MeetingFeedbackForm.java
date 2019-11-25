@@ -1,26 +1,17 @@
 package radius.data.form;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotEmpty;
 
+@Getter
+@Setter
 public class MeetingFeedbackForm {
-	
-	private boolean confirmed;
+
 	@NotEmpty
 	private String nextState;
-	
-	public boolean getConfirmed() {
-		return confirmed;
-	}
 
-	public void setConfirmed(boolean meetingConfirmed) {
-		this.confirmed = meetingConfirmed;
-	}
+	private boolean confirmed;
 
-	public String getNextState() {
-		return nextState;
-	}
-
-	public void setNextState(String _nextState) {
-		this.nextState = _nextState;
-	}
 }

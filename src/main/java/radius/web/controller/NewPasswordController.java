@@ -7,9 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.form.PasswordForm;
+import radius.data.JDBCUserRepository;
+import radius.data.form.passwordUuidDto;
 import radius.data.JDBCStaticResourceRepository;
-import radius.data.UserRepository;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -29,7 +29,7 @@ public class NewPasswordController {
     PasswordEncoder encoder;
 
     @Autowired
-    UserRepository userRepo;
+    JDBCUserRepository userRepo;
 
     @Autowired
     private HomeController h;
@@ -40,7 +40,7 @@ public class NewPasswordController {
     }
 
     @RequestMapping(method=POST)
-    public String reset(@ModelAttribute("passwordForm") @Valid PasswordForm passwordForm, BindingResult result, Model model, Locale locale) {
+    public String reset(@ModelAttribute("passwordForm") @Valid passwordUuidDto passwordForm, BindingResult result, Model model, Locale locale) {
         if(result.hasErrors()) {
             System.out.println("ResetEmailController: Bad PW");
             return "reset";

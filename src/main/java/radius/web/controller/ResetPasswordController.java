@@ -10,8 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.data.form.EmailForm;
-import radius.data.form.PasswordForm;
+import radius.data.form.EmailDto;
+import radius.data.form.passwordUuidDto;
 import radius.data.UserRepository;
 import radius.web.components.EmailService;
 
@@ -49,18 +49,18 @@ public class ResetPasswordController {
     @RequestMapping(method=GET)
     public String forgot(@RequestParam(value = "uuid", required = false) String uuid, Model model, HttpServletRequest req, HttpServletResponse res) {
         if(uuid == null) {
-            model.addAttribute("emailForm", new EmailForm());
+            model.addAttribute("emailForm", new EmailDto());
             return "forgot";
         }
         else {
             model.addAttribute("uuid", uuid);
-            model.addAttribute("passwordForm", new PasswordForm());
+            model.addAttribute("passwordForm", new passwordUuidDto());
             return "reset";
         }
     }
 
     @RequestMapping(method=POST)
-    public String forgotten(@ModelAttribute("emailForm") @Valid EmailForm emailForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
+    public String forgotten(@ModelAttribute("emailForm") @Valid EmailDto emailForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
         if(result.hasErrors()) {
             System.out.println("ResetEmailController: Bad email address");
             return "forgot";

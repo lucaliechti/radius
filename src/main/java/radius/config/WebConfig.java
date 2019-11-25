@@ -37,23 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
 	    localeChangeInterceptor.setParamName("lang");
 	    return localeChangeInterceptor;
 	}
-	
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.addBasenames("classpath:messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
 
-    @Bean
-	public MessageSource validationMessageSource() {
-		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.addBasenames("classpath:ValidationMessages");
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
-    
     @Bean
     public LocaleResolver localeResolver(){
 	//TODO: We would like to change the locale depending on which site a user is on: schweiz, svizzera, suisse. This works, but gives Exceptions.
@@ -65,13 +49,6 @@ public class WebConfig implements WebMvcConfigurer {
     	return resolver;
     }
     
-    @Bean
-    public Validator validator() {
-    	LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-    	validator.setValidationMessageSource(validationMessageSource());
-    	return validator;
-    }
-
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/img/**")
