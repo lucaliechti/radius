@@ -68,10 +68,12 @@ public class AnswerController {
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm,
 						 BindingResult result, Model model, Locale locale)  {
 		if (!validlyAnswered(answerForm)) {
+			System.out.println("not validly answered");
 			provideFeedback(answerForm, result, locale);
 			return "answers";
 		}
 		else if(result.hasErrors()) {
+			System.out.println("reuslt haserrors");
 			return "answers";
 		}
 		else {

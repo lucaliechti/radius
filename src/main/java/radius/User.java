@@ -52,7 +52,7 @@ public class User {
 			List<Integer> _locations,
 			List<String> _languages,
 			List<String> _regularanswers,
-//			List<String> _specialanswers,
+			List<String> _specialanswers,
 			Timestamp _dateModified
 	) {
 		this.firstname = _firstname;
@@ -68,11 +68,9 @@ public class User {
 		this.locations = _locations;
 		this.languages = _languages;
 		this.regularanswers = _regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
-//		this.specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+		this.specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.dateModified = _dateModified;
 	}
-
-
 
 	public User() { }
 	

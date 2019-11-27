@@ -3,7 +3,6 @@ package radius.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,31 +17,25 @@ import radius.data.UserRepository;
 @Service("postgresUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
 
-	@Autowired
 	private UserRepository userRepository;
 	
-    public CustomUserDetailsService() {
+    public CustomUserDetailsService(UserRepository userRepository) {
         super();
+        this.userRepository = userRepository;
     }
 	
 	@Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         try {
             final User user = userRepository.findUserByEmail(email);
-            System.out.println(user);
             if (user == null) {
                 throw new UsernameNotFoundException("No user found with username: " + email);
             }
-            
             List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             final List<String> roles = userRepository.findAuthoritiesByEmail(email);
             for(String role : roles) {
             	grantedAuthorities.add(new SimpleGrantedAuthority(role));
             }
-            System.out.println("in the customUserDetailsService");
-            System.out.println("email: " + user.getEmail());
-            System.out.println("pass: " + user.getPassword());
-            System.out.println("auth: " + grantedAuthorities);
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
         } catch (final Exception e) {
             throw new AuthenticationServiceException("error");

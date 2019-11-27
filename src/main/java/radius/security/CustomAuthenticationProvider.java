@@ -15,43 +15,37 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import radius.data.UserRepository;
 
-//@Component
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
-  @Autowired
-  private UserRepository userRepository;
-  
-	@Autowired
-	PasswordEncoder encoder;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Override
-	public Authentication authenticate(Authentication auth) throws AuthenticationException {
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Override
+    public Authentication authenticate(Authentication auth) throws AuthenticationException {
       String username = auth.getName();
       String enteredPassword = auth.getCredentials().toString();
-      UserDetails u = this.getUserDetailsService().loadUserByUsername(username); //checken, ob 1 Resultat. Bereits im Repo - throw new BadCredentialsException("Invalid username or password");
+      UserDetails u = this.getUserDetailsService().loadUserByUsername(username);
       if(u == null) {
-    	  return null;
-  	  }
-
-      //prepare authorities
-      List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-      final List<String> roles = userRepository.findAuthoritiesByEmail(username); 
-      for(String role : roles) {
-    	  grantedAuthorities.add(new SimpleGrantedAuthority(role));
+          return null;
       }
-
-      //return the token for login
+      List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+      final List<String> roles = userRepository.findAuthoritiesByEmail(username);
+      for(String role : roles) {
+          grantedAuthorities.add(new SimpleGrantedAuthority(role));
+      }
       if(encoder.matches(enteredPassword, u.getPassword())) {
-    	  return new UsernamePasswordAuthenticationToken(u, enteredPassword, grantedAuthorities);
+          return new UsernamePasswordAuthenticationToken(u, enteredPassword, grantedAuthorities);
       }
       else {
-          System.out.println("does not match");
-    	  return null;
+          return null;
       }
-  }
+    }
 
-  @Override
-  public boolean supports(Class<?> authentication) {
-      return authentication.equals(UsernamePasswordAuthenticationToken.class);
-  }
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
 }

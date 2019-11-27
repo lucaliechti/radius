@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,7 @@ public class UserPairTest {
 				ImmutableList.of(1, 2, 3),
 				ImmutableList.of("DE", "FR"),
 				ImmutableList.of("FALSE", "TRUE", "DONTCARE", "DONTCARE", "DONTCARE"),
+				Collections.emptyList(),
 				Timestamp.from(Instant.ofEpochSecond(0))
 		);
 		User user2 = new User(
@@ -39,6 +41,7 @@ public class UserPairTest {
 				ImmutableList.of(1, 2, 3),
 				ImmutableList.of("DE", "FR"),
 				ImmutableList.of("TRUE", "FALSE", "DONTCARE", "DONTCARE", "DONTCARE"),
+				Collections.emptyList(),
 				Timestamp.from(Instant.ofEpochSecond(0))
 		);
 		UserPair userPair = UserPair.of(user1, user2);

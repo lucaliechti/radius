@@ -13,14 +13,11 @@ import javax.validation.constraints.NotEmpty;
 public class AnswerForm {
 
 	private String motivation;
-	private List<String> regularanswers = new ArrayList<String>();
-	private List<String> specialanswers = new ArrayList<String>();
+	private List<String> regularanswers = new ArrayList<>();
+	private List<String> specialanswers = new ArrayList<>();
 
-	@NotEmpty(message="{error.notBlank}")
-	private String modus;
-	
 	@NotEmpty(message="{error.atLeastOne}")
-	private List<String> languages = new ArrayList<String>();
+	private List<String> languages = new ArrayList<>();
 	
 	@NotEmpty(message="{error.atLeastOne}")
 	private String locations;
