@@ -34,7 +34,7 @@ public class DeleteController {
 	}
 
 	@RequestMapping(method=POST)
-	public String contact(Model model, Locale locale) {
+	public String contact(Model model) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
 			userRepo.deleteUser(username);

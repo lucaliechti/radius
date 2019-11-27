@@ -64,8 +64,8 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public List<User> usersToMatch() {
-		return jdbcTemplate.query(FIND_USERS_TO_MATCH, new UserRowMapper(), User.convertStatusToString(User.userStatus.WAITING));
+	public List<User> matchableUsers() {
+		return jdbcTemplate.query(FIND_USERS_TO_MATCH, new UserRowMapper(), User.convertStatusToString(User.UserStatus.WAITING));
 	}
 
 	@Override
@@ -77,13 +77,12 @@ public class JDBCUserRepository implements UserRepository {
 			System.out.println("UserRepository: No user with email = " + email);
 			return null;
 		}
-		try { //it can very well be that everthing is in order with the user and they just haven't filled out the vote questions
+		try {
 			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.getCurrentVote());
 			u.setSpecialanswers(Arrays.asList(result.get("answer").toString().split(";")));
 		}
 		catch (Exception e) {
 			u.setSpecialanswers(Collections.emptyList());
-			System.out.println("UserRepository: Either no current vote or user has not answered the special questions");
 		}
 		return u;
 	}
@@ -106,21 +105,20 @@ public class JDBCUserRepository implements UserRepository {
 			}
 
 			return new User(
-					rs.getString("firstname"),
-					rs.getString("lastname"),
-					email,
-					rs.getString("password"),
-					rs.getString("canton"),
-					User.convertModus(rs.getString("modus")),
-					User.convertStatus(rs.getString("status")),
-					rs.getString("motivation"),
-					rs.getBoolean("enabled"),
-					rs.getBoolean("answered"),
-					rs.getBoolean("banned"),
-					locations,
-					languages,
-					regularanswers,
-					rs.getTimestamp("datemodify")
+				rs.getString("firstname"),
+				rs.getString("lastname"),
+				email,
+				rs.getString("password"),
+				rs.getString("canton"),
+				User.convertStatus(rs.getString("status")),
+				rs.getString("motivation"),
+				rs.getBoolean("enabled"),
+				rs.getBoolean("answered"),
+				rs.getBoolean("banned"),
+				locations,
+				languages,
+				regularanswers,
+				rs.getTimestamp("datemodify")
 			);
 		}
 	}
@@ -128,12 +126,12 @@ public class JDBCUserRepository implements UserRepository {
 	private static final class MatchRowMapper implements RowMapper<HalfEdge> {
 		public HalfEdge mapRow(ResultSet rs, int rowNum) throws SQLException {
 			return HalfEdge.of(
-					rs.getString("email1"),
-					rs.getString("email2"),
-					rs.getBoolean("active"),
-					Optional.ofNullable(rs.getBoolean("meetingconfirmed")),
-					rs.getTimestamp("datecreated"),
-					Optional.ofNullable(rs.getTimestamp("dateinactive"))
+				rs.getString("email1"),
+				rs.getString("email2"),
+				rs.getBoolean("active"),
+				Optional.ofNullable(rs.getBoolean("meetingconfirmed")),
+				rs.getTimestamp("datecreated"),
+				Optional.ofNullable(rs.getTimestamp("dateinactive"))
 			);
 		}
 	}
@@ -141,14 +139,14 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void saveUser(User u) throws EmailAlreadyExistsException {
 		if(userExists(u.getEmail())) {
-			System.out.println("LOG: User with email " + u.getEmail() + " already exists.");
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
-		if(u.getCanton().equals("NONE")) {
+		/*if(u.getCanton().equals("NONE")) {
 			u.setCanton(null);
-		}
-		System.out.println("LOG: For email address " + u.getEmail() + " we did NOT see any existing.");
-		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(), u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
+		}*/
+		//System.out.println("LOG: For email address " + u.getEmail() + " we did NOT see any existing.");
+		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(),
+				u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
 
@@ -157,18 +155,18 @@ public class JDBCUserRepository implements UserRepository {
 		String regularAnswers = String.join(";", u.getRegularAnswersAsListOfStrings());
 		String lang = String.join(";", u.getLanguages());
 		String loc = User.createLocString(u.getLocations());
-		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(), User.convertModusToString(u.getModus()),
-				regularAnswers, OffsetDateTime.now(), u.getEmail());
+		jdbcTemplate.update(UPDATE_USER, loc, lang, u.getMotivation(),	regularAnswers, OffsetDateTime.now(),
+				u.getEmail());
 	}
 
-	public void updateVotes(String email, String currentVote, List<User.answer> answers) {
-		String prettyanswers = answers.stream().map(a -> User.convertAnswerToString(a)).collect(Collectors.joining(";"));
+	public void updateVotes(String email, String currentVote, List<User.TernaryAnswer> answers) {
+		String prettyAnswers = answers.stream().map(User::convertAnswerToString).collect(Collectors.joining(";"));
 		try {
-			Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.getCurrentVote());
-			jdbcTemplate.update(UPDATE_CURRENT, prettyanswers, email, currentVote);
+			//Map<String, Object> result = jdbcTemplate.queryForMap(FIND_CURRENT_ANSWERS, email, real.getCurrentVote());
+			jdbcTemplate.update(UPDATE_CURRENT, prettyAnswers, email, currentVote);
 		}
-		catch (EmptyResultDataAccessException er) {
-			jdbcTemplate.update(ANSWER_CURRENT, email, currentVote, prettyanswers);
+		catch (EmptyResultDataAccessException er) { //TODO: don't do program logic with exceptions
+			jdbcTemplate.update(ANSWER_CURRENT, email, currentVote, prettyAnswers);
 		}
 	}
 
@@ -229,8 +227,8 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public void match(UserPair userPair) {
-		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.userStatus.MATCHED), userPair.user1().getEmail());
-		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.userStatus.MATCHED), userPair.user2().getEmail());
+		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.UserStatus.MATCHED), userPair.user1().getEmail());
+		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.UserStatus.MATCHED), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user1().getEmail(), userPair.user2().getEmail());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(), userPair.user1().getEmail());
 	}

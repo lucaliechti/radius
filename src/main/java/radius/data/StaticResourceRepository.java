@@ -11,8 +11,6 @@ public interface StaticResourceRepository {
 
 	public Map<Integer, String> regions();
 	
-	public List<String> modi();
-	
 	public List<String> languages();
 	
 	public List<String> prettyLocations(List<Integer> locs);

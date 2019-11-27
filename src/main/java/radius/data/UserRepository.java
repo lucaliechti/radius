@@ -15,7 +15,7 @@ public interface UserRepository {
 
 	public List<User> allUsers();
 
-	public List<User> usersToMatch();
+	public List<User> matchableUsers();
 	
 	public User findUserByEmail(String email);
 	

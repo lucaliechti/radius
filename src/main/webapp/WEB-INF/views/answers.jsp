@@ -19,7 +19,6 @@
 
 <!-- preparing variables -->
 <spring:message code="answers.motivation.ph" var="motivationph" />
-<spring:message code="answers.modus.explain" var="explain" />
 
 <form:form method="POST" action="answers" modelAttribute="answerForm">
    <div class="form-group leftsection-content-element" id="register-motivation">
@@ -43,24 +42,6 @@
       </c:forEach>
       <div class="feedback-error" id="answers-feedback-languages">
          <form:errors path="languages"/>
-      </div>
-   </div>
-
-   <div class="form-group leftsection-content-element" id="register-modus">
-      <p>
-         <form:label path="modus" class="label-title">
-         <spring:message code="modus"/>
-         </form:label>
-         <span title="${explain}">(?)</span>
-      </p>
-      <c:forEach items="${modi}" var="m" >
-      <form:radiobutton path="modus" id="modus_${m}" value="${m}" />
-         <label class="radio-button-label-no">
-            <spring:message code="modus.${m}"/>
-         </label>
-      </c:forEach>
-      <div class="feedback-error" id="answers-feedback-modi">
-         <form:errors path="modus"/>
       </div>
    </div>
 

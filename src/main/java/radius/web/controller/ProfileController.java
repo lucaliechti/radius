@@ -45,13 +45,12 @@ public class ProfileController {
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
-		if(!u.getEnabled()) {
+		if(!u.isEnabled()) {
 			model.addAttribute("not_enabled", true);
 			return hc.home(null, null, model);
 		}
-		else if(!u.getAnswered()) {
+		else if(!u.isAnsweredRegular()) {
 			model.addAttribute("lang", staticRepo.languages());
-			model.addAttribute("modi", staticRepo.modi());
 			model.addAttribute("answerForm", new AnswerForm());
 			return "answers";
 		}
@@ -63,7 +62,6 @@ public class ProfileController {
 			model.addAttribute("motivation", u.getMotivation());
 			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase).collect(Collectors.toList());
 			model.addAttribute("answers", answers);
-			model.addAttribute("modus", u.getModusAsString());
 //			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
 			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
 			model.addAttribute("languages", u.getLanguages());

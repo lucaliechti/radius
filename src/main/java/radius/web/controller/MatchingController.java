@@ -2,7 +2,6 @@ package radius.web.controller;
 
 import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -147,7 +146,7 @@ public class MatchingController {
 
 	@RequestMapping(value = "/graph", method = GET)
 	public ResponseEntity<List<Edge>> graph() {
-		List<User> usersToMatch = ImmutableList.copyOf(userRepo.usersToMatch());
+		List<User> usersToMatch = ImmutableList.copyOf(userRepo.matchableUsers());
 		Instant now = Instant.now();
 
 		List<Edge> edges = allEdges(usersToMatch, now);
@@ -210,7 +209,7 @@ public class MatchingController {
 			return new MatchResponse(match, 403, "One of the users is banned.");
 		}
 
-		if (user1.getStatus() != User.userStatus.WAITING || user2.getStatus() != User.userStatus.WAITING) {
+		if (user1.getStatus() != User.UserStatus.WAITING || user2.getStatus() != User.UserStatus.WAITING) {
 			return new MatchResponse(match, 409, "One of the users is not in WAITING state.");
 		}
 
@@ -222,24 +221,21 @@ public class MatchingController {
 
 		userRepo.match(userPair);
 
-		emailUserAboutMatch(user1, user2, usersLocale(user1));
-		emailUserAboutMatch(user2, user1, usersLocale(user2));
+		emailUserAboutMatch(user1, user2);
+		emailUserAboutMatch(user2, user1);
 
 		return new MatchResponse(match, 201, "The users were successfully matched.");
 	}
 	
-	////////////////////////
-	////////TEST////////////
-	////////////////////////
 	@SuppressWarnings("static-access")
-	private void emailUserAboutMatch(User user, User match, Locale locale) {
+	private void emailUserAboutMatch(User user, User match) {
 		try {
 			UserPair up = UserPair.of(user, match);
 			String matchingLanguages = matchingLanguages(up, user);
 			emailService.sendSimpleMessage(
 					user.getEmail(),
 					messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)), 
-					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, messageSource.getMessage("status.modi." + User.convertModusToString(up.commonModus(user.getModus(), match.getModus()).get()), new Object[]{}, usersLocale(user)), match.getEmail()}, usersLocale(user)),
+					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
 					matchingMailSender
 				);
 		} catch (Exception ignored) {

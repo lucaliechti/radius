@@ -24,7 +24,6 @@ public class JDBCStaticResourceRepository implements StaticResourceRepository {
 	//cache
 	private List<String> cantons = null;
 	private Map<Integer, String> regions = null;
-	private List<String> modi = null;
 	private List<String> languages = null;
 
     @Autowired
@@ -67,19 +66,6 @@ public class JDBCStaticResourceRepository implements StaticResourceRepository {
 			catch (NumberFormatException nfe) { nfe.printStackTrace(); }
 		}
 		return map;
-	}
-
-	@Override
-	public List<String> modi() {
-		if(modi != null) {
-			System.out.println("Loaded modi fromc cache");
-			return modi;
-		}
-		List<String> modi = new ArrayList<String>();
-		modi.add("SINGLE");
-		modi.add("PAIR");
-		modi.add("EITHER");
-		return modi;
 	}
 
 	@Override

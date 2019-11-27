@@ -24,7 +24,6 @@
       
 <!-- preparing variables -->
 <spring:message code="status.meeting.confirm" var="confirm" />
-<spring:message code="status.modi.${compatibleModus}" var="compatiblemodus" />
 <c:forEach items="${commonlanguages}" var="lang" varStatus="stat">
   <c:set var="languages">${stat.first ? "" : languages}<spring:message code="language.${lang}"/>${stat.last ? "" : ", "}</c:set>
 </c:forEach>
@@ -46,7 +45,7 @@
          	</div>
             <div class="subsection">
             <div class="editable"><h2><spring:message code="status.yourstatus"/>: <b><spring:message code="status.${user.status}"/></b></h2></div>
-            <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages};${compatiblemodus}" argumentSeparator=";"/><br><br>
+            <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages}" argumentSeparator=";"/><br><br>
             <c:choose>
             <c:when test="${user.status != 'MATCHED'}">
             	<a href="toggleStatus"><spring:message code="status.${user.status}.toggle"/></a><br><br>
@@ -101,7 +100,7 @@
                   <h2><spring:message code="status.yoursearch"/></h2> 
                   <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
                </div>
-               <p><spring:message code="status.search.modus"/>: <b><spring:message code="modus.${user.modus}"/></b><br>
+               <p>
                <spring:message code="status.search.languages"/>: <b><c:forEach items="${user.languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach></b><br>
                <spring:message code="status.search.locations"/>: <b><c:forEach items="${userlocations}" var="item" varStatus="loop">${item}${!loop.last ? ', ' : ''}</c:forEach></b></p>
             </div>

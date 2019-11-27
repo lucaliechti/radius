@@ -59,7 +59,7 @@ public class AnswerController {
 	public String answer(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
-		model.addAttribute("answerForm", u.getAnswered() ? newFormFromUser(u) : new AnswerForm());
+		model.addAttribute("answerForm", u.isAnsweredRegular() ? newFormFromUser(u) : new AnswerForm());
 		prepare(model);
 		return "answers";
 	}
@@ -79,7 +79,7 @@ public class AnswerController {
 			User u = userRepo.findUserByEmail(email);
 			u = updateUserFromForm(u, answerForm);
 			u.setAnsweredRegular(true);
-			u.setStatus("WAITING");
+			u.setStatus(User.UserStatus.WAITING);
 			userRepo.updateUser(u);
 			if (answerForm.getSpecialanswers() != null) {
 				userRepo.updateVotes(email, realWorld.getCurrentVote(),
@@ -92,7 +92,6 @@ public class AnswerController {
 	@ModelAttribute
 	public void prepare(Model model) {
 		model.addAttribute("lang", staticRepo.languages());
-		model.addAttribute("modi", staticRepo.modi());
 		model.addAttribute("nrQ", realWorld.getNumberOfRegularQuestions());
 		model.addAttribute("special", realWorld.isSpecialIsActive());
 		model.addAttribute("nrV", realWorld.getNumberOfVotes());
@@ -102,7 +101,6 @@ public class AnswerController {
 	private AnswerForm newFormFromUser(User u) {
 		AnswerForm form = new AnswerForm();
 		form.setMotivation(u.getMotivation());
-		form.setModus(u.getModusAsString());
 		form.setLanguages(u.getLanguages());
 		form.setLocations(User.createLocString(u.getLocations()));
 		form.setRegularanswers(u.getRegularAnswersAsListOfStrings());
@@ -112,8 +110,7 @@ public class AnswerController {
 
 	private User updateUserFromForm(User user, AnswerForm answerForm) {
 		user.setLanguages(answerForm.getLanguages());
-		user.setModus(answerForm.getModus());
-		user.setMotivation(answerForm.getMotivation().length() == 0 ? null : answerForm.getMotivation());
+		user.setMotivation(answerForm.getMotivation());
 		user.setRegularanswers(answerForm.getRegularanswers());
 		user.setSpecialanswers(answerForm.getSpecialanswers());
 		try {

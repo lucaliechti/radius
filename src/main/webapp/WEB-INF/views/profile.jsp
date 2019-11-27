@@ -64,7 +64,6 @@
    </div>
    
    <p><b><spring:message code="profile.languages"/>:</b> <c:forEach items="${languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach>
-   <p><b><spring:message code="profile.modus"/>:</b> <spring:message code="modus.${modus}"/>
    <p><b><spring:message code="profile.locations"/>:</b> <c:forEach items="${locations}" var="item" varStatus="loop">${item}${!loop.last ? ', ' : ''}</c:forEach>
    </section>
    <section class="leftsection-content-element" id="">

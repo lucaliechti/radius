@@ -37,52 +37,24 @@ public abstract class UserPair {
 
 	//TODO: Change name of function, it is now misleading
 	public int numberOfDisagreements() {
-		List<User.answer> answers1 = user1().getRegularanswers();
-		List<User.answer> answers2 = user2().getRegularanswers();
+		List<User.TernaryAnswer> answers1 = user1().getRegularanswers();
+		List<User.TernaryAnswer> answers2 = user2().getRegularanswers();
 
 		int matchScore = 0;
 		final int DISAGREEMENT_WEIGHT = 10; //using ints for now so nothing changes downstream
 		final int AGREEMENT_WEIGHT = 3;
 
 		for (int i = 0; i < answers1.size(); i++) {
-			if (answers1.get(i) == User.answer.TRUE && answers2.get(i) == User.answer.FALSE ||
-			    answers1.get(i) == User.answer.FALSE && answers2.get(i) == User.answer.TRUE) {
+			if (answers1.get(i) == User.TernaryAnswer.TRUE && answers2.get(i) == User.TernaryAnswer.FALSE ||
+			    answers1.get(i) == User.TernaryAnswer.FALSE && answers2.get(i) == User.TernaryAnswer.TRUE) {
 				matchScore += DISAGREEMENT_WEIGHT;
 			}
-			else if (answers1.get(i) == answers2.get(i) && !(answers1.get(i) == User.answer.DONTCARE)) {
+			else if (answers1.get(i) == answers2.get(i) && !(answers1.get(i) == User.TernaryAnswer.DONTCARE)) {
 				matchScore -= AGREEMENT_WEIGHT;
 			}
 		}
 
 		return matchScore;
-	}
-
-	public static Optional<User.userModus> commonModus(User.userModus modus1, User.userModus modus2) {
-		Set<User.userModus> available = new HashSet<>(availableModi(modus1));
-		available.retainAll(availableModi(modus2));
-
-		if (available.size() == 2) {
-			return Optional.of(User.userModus.EITHER);
-		}
-		else if (available.size() == 1) {
-			return Optional.of(available.iterator().next());
-		}
-		else {
-			return Optional.empty();
-		}
-	}
-
-	boolean compatibleModi() {
-		return commonModus(user1().getModus(), user2().getModus()).isPresent();
-	}
-
-	private static Set<User.userModus> availableModi(User.userModus modus) {
-		if (modus == User.userModus.EITHER) {
-			return ImmutableSet.of(User.userModus.SINGLE, User.userModus.PAIR);
-		}
-		else {
-			return ImmutableSet.of(modus);
-		}
 	}
 
 	public double totalDaysUnmodified(Instant now) {
@@ -97,10 +69,6 @@ public abstract class UserPair {
 
 		if (commonLocations().isEmpty()) {
 			// no common locations
-			return false;
-		}
-
-		if (!compatibleModi()) {
 			return false;
 		}
 
