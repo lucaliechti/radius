@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.data.dto.EmailDto;
 import radius.data.form.UserForm;
-import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.JSONStaticResourceRepository;
+import radius.data.repository.StaticResourceRepository;
 
 @Controller
 @RequestMapping(value={"/", "/home"})
@@ -21,11 +22,11 @@ import radius.data.repository.JDBCStaticResourceRepository;
 @Slf4j
 public class HomeController {
 
-	private JDBCStaticResourceRepository staticRepo;
+	private StaticResourceRepository staticRepo;
 	private StatusController sc;
 
-	public HomeController(JDBCStaticResourceRepository _staticRepo, StatusController sc) {
-		this.staticRepo = _staticRepo;
+	public HomeController(JSONStaticResourceRepository staticRepo, StatusController sc) {
+		this.staticRepo = staticRepo;
 		this.sc = sc;
 	}
 	

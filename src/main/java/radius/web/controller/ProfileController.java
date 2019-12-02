@@ -12,13 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.repository.UserRepository;
+import radius.data.repository.*;
 import radius.data.form.AnswerForm;
 import radius.HalfEdge;
 import radius.User;
-import radius.data.repository.JDBCStaticResourceRepository;
-import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.StaticResourceRepository;
 import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
@@ -31,7 +28,7 @@ public class ProfileController {
 	private RealWorldProperties real;
 
 	@Autowired
-	public ProfileController(JDBCUserRepository userRepo, JDBCStaticResourceRepository staticRepo, HomeController hc,
+	public ProfileController(JDBCUserRepository userRepo, JSONStaticResourceRepository staticRepo, HomeController hc,
 							 RealWorldProperties real) {
 		this.userRepo = userRepo;
 		this.staticRepo = staticRepo;

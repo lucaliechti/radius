@@ -1,6 +1,8 @@
 *.html
 target/*
 src/main/resources/config/*.properties
+!src/main/resources/config/realworld.properties
+!src/main/resources/config/static.properties
 robots.txt
 .idea/*
 radius.iml

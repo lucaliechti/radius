@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.data.form.AnswerForm;
 import radius.User;
-import radius.data.repository.JDBCStaticResourceRepository;
 import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.JSONStaticResourceRepository;
+import radius.data.repository.StaticResourceRepository;
 import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
@@ -31,7 +32,7 @@ import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 public class AnswerController {
 	
 	private JDBCUserRepository userRepo;
-	private JDBCStaticResourceRepository staticRepo;
+	private StaticResourceRepository staticRepo;
 	private RealWorldProperties realWorld;
 	private boolean specialIsActive;
 	private StatusController sc;
@@ -41,7 +42,7 @@ public class AnswerController {
 	private static final String ERROR_AT_LEAST_ONE_SET = "error.answerOneSetOfQuestions";
 
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo,
+	public AnswerController(JDBCUserRepository _userRepo, JSONStaticResourceRepository _staticRepo,
 							RealWorldProperties _realWorld, MessageSource validationMessageSource) {
 		this.userRepo = _userRepo;
 		this.staticRepo = _staticRepo;

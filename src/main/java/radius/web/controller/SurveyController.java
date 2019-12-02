@@ -24,7 +24,7 @@ public class SurveyController {
     private NewsletterRepository newsletterRepo;
     private final int SURVEY_SIZE = 15;
 
-    public SurveyController(JDBCStaticResourceRepository staticRepo, RegistrationController r, HomeController h,
+    public SurveyController(JSONStaticResourceRepository staticRepo, RegistrationController r, HomeController h,
                             JDBCSurveyRepository surveyRepo, JDBCNewsletterRepository newsletterRepo) {
         this.staticRepo = staticRepo;
         this.registrationController = r;

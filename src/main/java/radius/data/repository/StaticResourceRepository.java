@@ -1,7 +1,6 @@
 package radius.data.repository;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface StaticResourceRepository {
 
 	List<String> cantons();
-
-	Map<Integer, String> regions();
 	
 	List<String> languages();
 	

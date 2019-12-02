@@ -30,7 +30,7 @@ public class StatusController {
 
 	@Autowired
 	public StatusController(JDBCUserRepository userRepo, MatchingRepository matchingRepo,
-							JDBCStaticResourceRepository staticRepo, AnswerController ac) {
+							JSONStaticResourceRepository staticRepo, AnswerController ac) {
 		this.userRepo = userRepo;
 		this.matchRepo = matchingRepo;
 		this.staticRepo = staticRepo;

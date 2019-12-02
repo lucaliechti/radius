@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.dto.EmailDto;
 import radius.User;
 import radius.data.form.UserForm;
-import radius.data.repository.JDBCStaticResourceRepository;
-import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.StaticResourceRepository;
-import radius.data.repository.UserRepository;
+import radius.data.repository.*;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.web.components.EmailService;
 
@@ -37,7 +34,7 @@ public class RegistrationController {
     private MessageSource messageSource;
 	private PasswordEncoder encoder;
 
-	public RegistrationController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo,
+	public RegistrationController(JDBCUserRepository _userRepo, JSONStaticResourceRepository _staticRepo,
 								  EmailService _ses, JavaMailSenderImpl helloMailSender, HomeController h, MessageSource messageSource,
 								  PasswordEncoder encoder) {
 		this.userRepo = _userRepo;

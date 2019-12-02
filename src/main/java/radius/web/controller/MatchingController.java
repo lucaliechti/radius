@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
-import radius.data.repository.JDBCStaticResourceRepository;
 import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.JSONStaticResourceRepository;
 import radius.data.repository.StaticResourceRepository;
 import radius.web.components.EmailService;
 
@@ -36,7 +36,7 @@ public class MatchingController {
 
 	@Autowired
 	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService,
-			JDBCStaticResourceRepository staticRepo, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
+	  JSONStaticResourceRepository staticRepo, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
 		this.userRepo = _userRepo;
 		this.emailService = _emailService;
 		this.staticRepo = staticRepo;
