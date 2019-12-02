@@ -29,51 +29,49 @@ public class User {
 	private String uuid;
 	private Timestamp dateModified;
 
-	public User(String _firstName, String _lastName, String _canton, String _email, String _password) {
-		this.firstname = _firstName;
-		this.lastname = _lastName;
-		this.canton = _canton;
-		this.email = _email;
-		this.password = _password;
+	public User(String firstName, String lastName, String canton, String email, String password) {
+		this.firstname = firstName;
+		this.lastname = lastName;
+		this.canton = canton;
+		this.email = email;
+		this.password = password;
 		this.uuid = UUID.randomUUID().toString();
 	}
 
 	public User(
-			String _firstname,
-			String _lastname,
-			String _email,
-			String _password,
-			String _canton,
-			UserStatus _status,
-			String _motivation,
-			boolean _enabled,
-			boolean _answeredRegular,
-			boolean _banned,
-			List<Integer> _locations,
-			List<String> _languages,
-			List<String> _regularanswers,
-			List<String> _specialanswers,
-			Timestamp _dateModified
+			String firstname,
+			String lastname,
+			String email,
+			String password,
+			String canton,
+			UserStatus status,
+			String motivation,
+			boolean enabled,
+			boolean answeredRegular,
+			boolean banned,
+			List<Integer> locations,
+			List<String> languages,
+			List<String> regularanswers,
+			List<String> specialanswers,
+			Timestamp dateModified
 	) {
-		this.firstname = _firstname;
-		this.lastname = _lastname;
-		this.email = _email;
-		this.password = _password;
-		this.canton = _canton;
-		this.status = _status;
-		this.motivation = _motivation;
-		this.enabled = _enabled;
-		this.answeredRegular = _answeredRegular;
-		this.banned = _banned;
-		this.locations = _locations;
-		this.languages = _languages;
-		this.regularanswers = _regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
-		this.specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
-		this.dateModified = _dateModified;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.canton = canton;
+		this.status = status;
+		this.motivation = motivation;
+		this.enabled = enabled;
+		this.answeredRegular = answeredRegular;
+		this.banned = banned;
+		this.locations = locations;
+		this.languages = languages;
+		this.regularanswers = regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+		this.specialanswers = specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+		this.dateModified = dateModified;
 	}
 
-	public User() { }
-	
 	public List<String> getRegularAnswersAsListOfStrings() {
 		return regularanswers.stream().map(User::convertAnswerToString).collect(Collectors.toList());
 	}

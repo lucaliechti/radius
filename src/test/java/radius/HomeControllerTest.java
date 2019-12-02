@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
-import radius.data.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
 import radius.web.controller.HomeController;
 import radius.web.controller.StatusController;
 

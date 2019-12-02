@@ -95,7 +95,7 @@ $(document).ready(function() {
                             <td>${user.firstname}</td>
                             <td>${user.lastname}</td>
                             <td><spring:message code="question.${user.enabled}"/></td>
-                            <td><spring:message code="question.${user.answered}"/></td>
+                            <td><spring:message code="question.${user.answeredRegular}"/></td>
                             <td><spring:message code="status.${user.status}"/></td>
                             <td><fmt:formatDate value="${user.dateModified}" type="date" dateStyle="medium"/></td>
                          </tr>

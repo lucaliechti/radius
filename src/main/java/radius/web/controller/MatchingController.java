@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.JDBCUserRepository;
-import radius.data.StaticResourceRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.StaticResourceRepository;
 import radius.web.components.EmailService;
 
 import java.time.Instant;

@@ -1,4 +1,4 @@
-package radius;
+package radius.data.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

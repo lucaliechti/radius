@@ -13,7 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import radius.data.UserRepository;
+import radius.data.repository.UserRepository;
 
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 

@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import radius.User;
-import radius.data.UserRepository;
+import radius.data.repository.UserRepository;
 
 @Service("postgresUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {

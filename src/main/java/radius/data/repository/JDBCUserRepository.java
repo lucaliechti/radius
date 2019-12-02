@@ -1,4 +1,4 @@
-package radius.data;
+package radius.data.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,7 +26,7 @@ public class JDBCUserRepository implements UserRepository {
 	private JdbcTemplate jdbcTemplate;
 	private String currentVote;
 
-	private static final String FIND_ALL_USERS =		"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email";
+	private static final String FIND_ALL_USERS =		"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email ORDER BY users.pkey ASC";
 	private static final String FIND_MATCHABLE_USERS =  "SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE users.email = ?";
 	private static final String FIND_USER_BY_UUID =		"SELECT email FROM users WHERE uuid = ?";
@@ -93,7 +93,8 @@ public class JDBCUserRepository implements UserRepository {
 
 			return new User(
 				rs.getString("firstname"),
-				rs.getString("lastname"), rs.getString("email"),
+				rs.getString("lastname"),
+				rs.getString("email"),
 				rs.getString("password"),
 				rs.getString("canton"),
 				User.convertStatus(rs.getString("status")),

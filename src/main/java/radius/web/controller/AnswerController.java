@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.data.form.AnswerForm;
 import radius.User;
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.JDBCUserRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCUserRepository;
 import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
@@ -71,12 +71,10 @@ public class AnswerController {
 			System.out.println("not validly answered");
 			provideFeedback(answerForm, result, locale);
 			return "answers";
-		}
-		else if(result.hasErrors()) {
+		} else if(result.hasErrors()) {
 			System.out.println("reuslt haserrors");
 			return "answers";
-		}
-		else {
+		} else {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			User u = userRepo.findUserByEmail(email);
 			u = updateUserFromForm(u, answerForm);
@@ -119,8 +117,7 @@ public class AnswerController {
 			user.setLocations(Arrays.stream(
 				answerForm.getLocations().split(";")).map(Integer::valueOf).collect(Collectors.toList())
 			);
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			System.out.print("Answercontroller: "); nfe.printStackTrace();
 		}
 		return user;

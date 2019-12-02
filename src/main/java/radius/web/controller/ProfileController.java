@@ -12,30 +12,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import radius.data.repository.UserRepository;
 import radius.data.form.AnswerForm;
 import radius.HalfEdge;
 import radius.User;
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.JDBCUserRepository;
-import radius.data.StaticResourceRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.StaticResourceRepository;
 import radius.web.components.RealWorldConfiguration.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/profile")
 public class ProfileController {
 	
-	private JDBCUserRepository userRepo;
+	private UserRepository userRepo;
 	private StaticResourceRepository staticRepo;
 	private HomeController hc;
-
-	@Autowired
 	private RealWorldProperties real;
 
 	@Autowired
-	public ProfileController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo, HomeController _hc) {
-		this.userRepo = _userRepo;
-		this.staticRepo = _staticRepo;
-		this.hc = _hc;
+	public ProfileController(JDBCUserRepository userRepo, JDBCStaticResourceRepository staticRepo, HomeController hc,
+							 RealWorldProperties real) {
+		this.userRepo = userRepo;
+		this.staticRepo = staticRepo;
+		this.hc = hc;
+		this.real = real;
 	}
 
 	@RequestMapping(method=GET)
@@ -60,7 +61,8 @@ public class ProfileController {
 			model.addAttribute("email", u.getEmail());
 			model.addAttribute("canton", u.getCanton());
 			model.addAttribute("motivation", u.getMotivation());
-			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase).collect(Collectors.toList());
+			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase)
+					.collect(Collectors.toList());
 			model.addAttribute("answers", answers);
 //			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
 			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));

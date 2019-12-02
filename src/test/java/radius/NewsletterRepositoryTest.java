@@ -1,7 +1,7 @@
 package radius;
 
 import org.junit.Test;
-import radius.data.JDBCNewsletterRepository;
+import radius.data.repository.JDBCNewsletterRepository;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;

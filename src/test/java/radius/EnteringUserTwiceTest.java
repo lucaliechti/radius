@@ -1,7 +1,5 @@
 package radius;
 
-import lombok.SneakyThrows;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import radius.data.JDBCUserRepository;
+import radius.data.repository.JDBCUserRepository;
 import radius.exceptions.EmailAlreadyExistsException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

@@ -3,7 +3,6 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.Locale;
 import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,11 +12,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.data.JDBCMatchingRepository;
-import radius.data.JDBCUserRepository;
+import radius.data.repository.JDBCMatchingRepository;
+import radius.data.repository.JDBCUserRepository;
 import radius.data.form.MeetingFeedbackForm;
-import radius.data.MatchingRepository;
-import radius.data.UserRepository;
+import radius.data.repository.MatchingRepository;
+import radius.data.repository.UserRepository;
 
 @Controller
 @RequestMapping(value="/toggleStatus")
@@ -34,12 +33,11 @@ public class ToggleStatusController {
 	}
 	
 	@RequestMapping(method=GET)
-	public String toggle(Model model, Locale locale) {
+	public String toggle(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		if(userRepo.userIsActive(email)) {
 			userRepo.deactivateUser(email);
-		}
-		else {
+		} else {
 			userRepo.activateUser(email);
 		}
 		return sc.statusPage(model);
@@ -49,7 +47,6 @@ public class ToggleStatusController {
 	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm,
 							 BindingResult result, Model model) {
 		if(result.hasErrors()) {
-			System.out.println("ToggleStatusController: Error toggling");
 			model.addAttribute("success", 0);
 			return sc.statusPage(model);
 		}
@@ -57,8 +54,7 @@ public class ToggleStatusController {
 		
 		if(feedbackForm.isConfirmed()) {
 			matchRepo.confirmHalfEdge(email);
-		}
-		else {
+		} else {
 			matchRepo.unconfirmHalfEdge(email);
 		}
 		matchRepo.deactivateOldMatchesFor(email);

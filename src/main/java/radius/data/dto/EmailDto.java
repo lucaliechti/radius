@@ -1,4 +1,4 @@
-package radius.data.form;
+package radius.data.dto;
 
 import lombok.Getter;
 import lombok.Setter;

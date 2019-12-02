@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.form.EmailDto;
+import radius.data.dto.EmailDto;
 import radius.data.form.UserForm;
-import radius.data.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
 
 @Controller
 @RequestMapping(value={"/", "/home"})

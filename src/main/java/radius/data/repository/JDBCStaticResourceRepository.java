@@ -1,11 +1,8 @@
-package radius.data;
+package radius.data.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -33,53 +30,38 @@ public class JDBCStaticResourceRepository implements StaticResourceRepository {
 
 	@Override
 	public List<String> cantons() {
-		if(cantons != null) { //home-made caching
-			System.out.println("Loaded cantons fromc cache");
-			return cantons;
-		}
 		return jdbcTemplate.query(FIND_ALL_CANTONS, new CantonRowMapper());
 	}
 	
 	private static final class CantonRowMapper implements RowMapper<String> {
 			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new String(
-					rs.getString("code")
-			);
+				return rs.getString("code");
 		}
 	}
 
 	@Override
 	public Map<Integer, String> regions() {
 		if(regions != null) {
-			System.out.println("Loaded regions fromc cache");
 			return regions;
 		}
 		List<Map<String, Object>> result = jdbcTemplate.queryForList(FIND_ALL_REGIONS);
-		HashMap<Integer, String> map = new HashMap<Integer, String>();
+		HashMap<Integer, String> map = new HashMap<>();
 
 		for(Map<String, Object> resultmap : result) {
 			try {
 				int pkey = Integer.parseInt(resultmap.get("pkey").toString());
 				String reg = resultmap.get("region").toString();
 				map.put(pkey, reg);
+			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
 			}
-			catch (NumberFormatException nfe) { nfe.printStackTrace(); }
 		}
 		return map;
 	}
 
 	@Override
 	public List<String> languages() {
-		if(languages != null) {
-			System.out.println("Loaded languages fromc cache");
-			return languages;
-		}
-		List<String> lang = new ArrayList<String>();
-		lang.add("DE");
-		lang.add("FR");
-		lang.add("IT");
-		lang.add("EN");
-		return lang;
+		return new ArrayList<>(Arrays.asList("DE", "FR", "IT", "EN"));
 	}
 	
 	public List<String> prettyLocations(List<Integer> locs) {

@@ -8,10 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.form.EmailDto;
+import radius.data.dto.EmailDto;
 import radius.User;
 import radius.data.form.UserForm;
-import radius.data.*;
+import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.StaticResourceRepository;
+import radius.data.repository.UserRepository;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.web.components.EmailService;
 
@@ -35,8 +38,8 @@ public class RegistrationController {
 	private PasswordEncoder encoder;
 
 	public RegistrationController(JDBCUserRepository _userRepo, JDBCStaticResourceRepository _staticRepo,
-			EmailService _ses, JavaMailSenderImpl helloMailSender, HomeController h, MessageSource messageSource,
-			PasswordEncoder encoder) {
+								  EmailService _ses, JavaMailSenderImpl helloMailSender, HomeController h, MessageSource messageSource,
+								  PasswordEncoder encoder) {
 		this.userRepo = _userRepo;
 		this.staticResourceRepo = _staticRepo;
 		this.emailService = _ses;
@@ -61,7 +64,7 @@ public class RegistrationController {
 		}
 		String firstName = registrationForm.getFirstName();
 		String lastName = registrationForm.getLastName();
-		String canton = registrationForm.getCanton();
+		String canton = registrationForm.getCanton().equals("NONE") ? null : registrationForm.getCanton();
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
 

@@ -8,11 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.data.form.EmailDto;
-import radius.data.JDBCNewsletterRepository;
+import radius.data.dto.EmailDto;
+import radius.data.repository.JDBCNewsletterRepository;
 import radius.web.components.EmailService;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
 import java.util.Locale;
 
@@ -53,8 +52,7 @@ public class NewsletterController {
         }
         try {
             return cleanlySubscribeToNewsletter(model, subscriptionForm.getEmail(), loc);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
             e.printStackTrace();
             return h.cleanlyHome(model);
@@ -65,8 +63,7 @@ public class NewsletterController {
     public String unsubscribe(@RequestParam(value = "uuid", required = true) String uuid, Model model) {
         try {
             newsletterRepo.unsubscribe(uuid);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
             return h.cleanlyHome(model);
         }
@@ -83,7 +80,6 @@ public class NewsletterController {
             String content = messageSource.getMessage("email.newsletter.subscribe.content", new Object[]{}, locale);
             content += "\n\n-----------\n" + messageSource.getMessage("email.newsletter.footer",
                     new Object[]{"https://radius-schweiz.ch/unsubscribe?uuid=" + uuid}, locale);
-
             emailService.sendSimpleMessage(email, subject, content, newsletterMailSender);
         }
         model.addAttribute("newsletter_subscribe_success", Boolean.TRUE);

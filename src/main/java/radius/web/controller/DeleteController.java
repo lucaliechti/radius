@@ -3,15 +3,13 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.Locale;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.data.JDBCUserRepository;
-import radius.data.UserRepository;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.UserRepository;
 import radius.exceptions.UserHasMatchesException;
 
 @Controller
@@ -38,8 +36,7 @@ public class DeleteController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
 			userRepo.deleteUser(username);
-		}
-		catch(UserHasMatchesException e) {
+		} catch(UserHasMatchesException e) {
 			model.addAttribute("delete_failed", true);
 			return pc.profile(null, model);
 		}

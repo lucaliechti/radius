@@ -9,9 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.data.form.EmailDto;
-import radius.data.form.passwordUuidDto;
-import radius.data.JDBCUserRepository;
+import radius.data.dto.EmailDto;
+import radius.data.dto.PasswordUuidDto;
+import radius.data.repository.JDBCUserRepository;
 import radius.web.components.EmailService;
 
 import javax.validation.Valid;
@@ -43,10 +43,9 @@ public class ResetPasswordController {
         if(uuid == null) {
             model.addAttribute("emailForm", new EmailDto());
             return "forgot";
-        }
-        else {
+        } else {
             model.addAttribute("uuid", uuid);
-            model.addAttribute("passwordForm", new passwordUuidDto());
+            model.addAttribute("passwordForm", new PasswordUuidDto());
             return "reset";
         }
     }
@@ -73,8 +72,7 @@ public class ResetPasswordController {
                         helloMailSender
                 );
                 System.out.println("Sent PW recovery email to " + email);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Sending PW recovery email to " + email + " FAILED");
                 e.printStackTrace();
             }

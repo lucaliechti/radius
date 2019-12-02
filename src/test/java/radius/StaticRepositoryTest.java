@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import radius.data.JDBCStaticResourceRepository;
-import radius.data.StaticResourceRepository;
+import radius.data.repository.JDBCStaticResourceRepository;
+import radius.data.repository.StaticResourceRepository;
 
 public class StaticRepositoryTest {
 	

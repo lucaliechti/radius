@@ -16,7 +16,7 @@ import radius.data.form.MeetingFeedbackForm;
 import radius.User;
 import radius.User.UserStatus;
 import radius.UserPair;
-import radius.data.*;
+import radius.data.repository.*;
 
 @Controller
 @RequestMapping(value="/status")
@@ -52,8 +52,7 @@ public class StatusController {
 		}
 		if(!user.isAnsweredRegular()) {
 			return ac.answer(model);
-		}
-		else {
+		} else {
 			model.addAttribute("user", user);
 			model.addAttribute("history", usersMatches(email));
 			model.addAttribute("feedbackForm", new MeetingFeedbackForm());

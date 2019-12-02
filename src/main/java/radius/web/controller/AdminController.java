@@ -1,38 +1,41 @@
 package radius.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.NewsletterMessage;
-import radius.data.NewsletterRepository;
-import radius.data.UserRepository;
+import radius.data.form.NewsletterMessage;
+import radius.data.repository.JDBCNewsletterRepository;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.repository.NewsletterRepository;
+import radius.data.repository.UserRepository;
 import radius.web.components.RealWorldConfiguration.RealWorldProperties;
-
-import java.util.Locale;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 public class AdminController {
 
-    @Autowired
     private NewsletterRepository newsletterRepo;
-
-    @Autowired
     private UserRepository userRepo;
-
-    @Autowired
     private RealWorldProperties realWorld;
 
-    @RequestMapping(path="/admin", method=GET)
-    public String admin(Model model, Locale loc) {
+    public AdminController(JDBCNewsletterRepository newsRepo, JDBCUserRepository userRepo, RealWorldProperties real) {
+        this.newsletterRepo = newsRepo;
+        this.userRepo = userRepo;
+        this.realWorld = real;
+    }
+
+    @RequestMapping(path="/admin")
+    public String admin() {
+        return "admin";
+    }
+
+    @ModelAttribute
+    public void prepare(Model model) {
         model.addAttribute("newsletterForm", new NewsletterMessage());
         model.addAttribute("numberRecipients", newsletterRepo.numberOfRecipients());
         model.addAttribute("users", userRepo.allUsers());
         model.addAttribute("special", realWorld.isSpecialIsActive());
         model.addAttribute("nrvotes", realWorld.getNumberOfVotes());
-        return "admin";
     }
 
 }

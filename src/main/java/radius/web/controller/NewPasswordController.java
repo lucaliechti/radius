@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.JDBCUserRepository;
-import radius.data.form.passwordUuidDto;
+import radius.data.repository.JDBCUserRepository;
+import radius.data.dto.PasswordUuidDto;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -35,7 +35,7 @@ public class NewPasswordController {
     }
 
     @RequestMapping(method=POST)
-    public String reset(@ModelAttribute("passwordForm") @Valid passwordUuidDto dto, BindingResult result, Model model) {
+    public String reset(@ModelAttribute("passwordForm") @Valid PasswordUuidDto dto, BindingResult result, Model model) {
         if(result.hasErrors()) {
             System.out.println("ResetEmailController: Bad PW");
             return "reset";
@@ -43,8 +43,7 @@ public class NewPasswordController {
         try {
             String email = userRepo.findEmailByUuid(dto.getUuid());
             userRepo.updatePassword(encoder.encode(dto.getPassword()), UUID.randomUUID().toString(), email);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
             return h.cleanlyHome(model);
         }
