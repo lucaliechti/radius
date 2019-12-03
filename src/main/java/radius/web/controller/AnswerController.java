@@ -60,7 +60,9 @@ public class AnswerController {
 	public String answer(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User u = userRepo.findUserByEmail(email);
-		model.addAttribute("answerForm", u.isAnsweredRegular() ? newFormFromUser(u) : new AnswerForm());
+		model.addAttribute("answerForm", u.isAnsweredRegular() ||
+				(u.getSpecialanswers() != null && u.getSpecialanswers().size() > 0) ?
+				newFormFromUser(u) : new AnswerForm());
 		prepare(model);
 		return "answers";
 	}
@@ -69,11 +71,9 @@ public class AnswerController {
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm,
 						 BindingResult result, Model model, Locale locale)  {
 		if (!validlyAnswered(answerForm)) {
-			System.out.println("not validly answered");
-			provideFeedback(answerForm, result, locale);
+			provideFeedback(result, locale);
 			return "answers";
 		} else if(result.hasErrors()) {
-			System.out.println("reuslt haserrors");
 			return "answers";
 		} else {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -133,7 +133,7 @@ public class AnswerController {
 		return answers.size() == nrAnswers && (answers.contains("TRUE") || answers.contains("FALSE"));
 	}
 
-	private void provideFeedback (AnswerForm form, BindingResult result, Locale locale) {
+	private void provideFeedback (BindingResult result, Locale locale) {
 		if(!specialIsActive) {
 			addFieldError(result, "answerForm", "regularanswers", ERROR_ANSWER_REGULAR_QUESTIONS, locale);
 		} else {

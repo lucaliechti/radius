@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@ComponentScan(basePackages = {"radius"})
+@ComponentScan(basePackages = {"radius.data.form"})
 @Import(MessageConfig.class)
 public class SurveyValidationTest {
 
