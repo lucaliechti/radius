@@ -3,7 +3,7 @@ package radius;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -24,8 +24,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @RunWith(SpringRunner.class)
 @ComponentScan(basePackages = {"radius.config", "radius.security", "radius.data.repository", "radius.web"})
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-@DataJdbcTest
+@SpringBootTest
 public class SurveyIntegrationTest {
 
     private String correctAnswers = "TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE";

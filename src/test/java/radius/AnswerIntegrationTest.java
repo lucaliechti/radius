@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -27,8 +27,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @RunWith(SpringRunner.class)
 @ComponentScan(basePackages = {"radius.config", "radius.security", "radius.data.repository", "radius.web"})
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
-@DataJdbcTest
+@SpringBootTest
 public class AnswerIntegrationTest {
 
     private MockMvc mockMvc;
