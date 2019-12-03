@@ -1,6 +1,5 @@
 package radius.data.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +13,7 @@ public class JDBCSurveyRepository implements SurveyRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public void init(DataSource jdbcdatasource) {
+    public JDBCSurveyRepository(DataSource jdbcdatasource) {
         this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
     }
 

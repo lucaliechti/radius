@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import radius.validation.Conditional;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Conditional(selected = "registration", values = {"true"}, required = {"firstName", "lastName"}, email = {"emailR"}, pw = {"password"})
 public class SurveyForm {
 
+    @NotNull
     @Size(min=1, max=10, message="{error.max10}")
     private List<Integer> questions;
 

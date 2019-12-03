@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import java.util.Locale;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+@Slf4j
 @Controller
 public class SurveyController {
 
@@ -34,20 +36,15 @@ public class SurveyController {
     }
 
     @RequestMapping(value="/survey", method=GET)
-    public String survey(Model model, Locale loc){
-        model.addAttribute("surveyForm", new SurveyForm());
-        model.addAttribute("cantons", staticRepo.cantons());
-        model.addAttribute("nrQ", SURVEY_SIZE);
+    public String survey() {
         return "survey";
     }
 
     @RequestMapping(value="/survey", method=POST)
-    public String filledOutSurvey(@ModelAttribute("surveyForm") @Valid SurveyForm surveyForm, BindingResult result, Model model, Locale loc) {
+    public String filledOutSurvey(@ModelAttribute("surveyForm") @Valid SurveyForm surveyForm, BindingResult result,
+                                  Model model, Locale loc) {
         if(result.hasErrors()) {
-            System.out.println("invalid surveyForm");
             model.addAttribute("surveyForm", surveyForm);
-            model.addAttribute("cantons", staticRepo.cantons());
-            model.addAttribute("nrQ", SURVEY_SIZE);
             return "survey";
         }
 
@@ -57,11 +54,8 @@ public class SurveyController {
         try {
             surveyRepo.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(), wantsNewsletter, wantsToRegister);
         } catch(Exception e) {
-            e.printStackTrace();
             model.addAttribute("surveyFailure", Boolean.TRUE);
             model.addAttribute("surveyForm", surveyForm);
-            model.addAttribute("cantons", staticRepo.cantons());
-            model.addAttribute("nrQ", SURVEY_SIZE);
             return "survey";
         }
         model.addAttribute("surveySuccess", Boolean.TRUE);
@@ -80,14 +74,18 @@ public class SurveyController {
             try {
                 newsletterRepo.subscribe(emailN, "Survey Summer 2019");
             } catch (Exception e) {
-                e.printStackTrace();
                 model.addAttribute("surveyFailure", Boolean.TRUE);
                 model.addAttribute("surveyForm", surveyForm);
-                model.addAttribute("cantons", staticRepo.cantons());
-                model.addAttribute("nrQ", SURVEY_SIZE);
                 return "survey";
             }
         }
         return homeController.cleanlyHome(model);
+    }
+
+    @ModelAttribute
+    public void addParams(Model model) {
+        model.addAttribute("surveyForm", new SurveyForm());
+        model.addAttribute("cantons", staticRepo.cantons());
+        model.addAttribute("nrQ", SURVEY_SIZE);
     }
 }

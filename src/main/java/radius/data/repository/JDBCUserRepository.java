@@ -130,7 +130,7 @@ public class JDBCUserRepository implements UserRepository {
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(),
-				u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
+				u.getLastname(), u.getCanton() == "NONE" ? null : u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
 

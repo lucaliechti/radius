@@ -52,7 +52,8 @@ public class RegistrationController {
 	}
 	
 	@RequestMapping(method=POST)
-	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result, Model model, Locale locale) throws UnsupportedEncodingException {
+	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result,
+						   Model model, Locale locale) {
 		if(result.hasErrors()) {
 			System.out.println("RegistrationController: Error registering");
 			model.addAttribute("cantons", staticResourceRepo.cantons());
@@ -61,24 +62,23 @@ public class RegistrationController {
 		}
 		String firstName = registrationForm.getFirstName();
 		String lastName = registrationForm.getLastName();
-		String canton = registrationForm.getCanton().equals("NONE") ? null : registrationForm.getCanton();
+		String canton = registrationForm.getCanton();
 		String email = registrationForm.getEmail();
 		String password = registrationForm.getPassword();
 
 		return cleanlyRegisterNewUser(model, locale, firstName, lastName, canton, email, password);
 	}
 
-	String cleanlyRegisterNewUser(Model model, Locale locale, String firstName, String lastName, String canton, String email, String password) {
+	public String cleanlyRegisterNewUser(Model model, Locale locale, String firstName, String lastName, String canton,
+								  String email, String password) {
 		User user = new User(firstName, lastName, canton, email, encoder.encode(password));
 		try {
 			userRepo.saveUser(user);
-		}
-		catch (EmailAlreadyExistsException eaee) {
+		} catch (EmailAlreadyExistsException eaee) {
 			System.out.println(eaee.getMessage());
 			model.addAttribute("emailExistsError", Boolean.TRUE);
 			return h.cleanlyHome(model);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
 			return h.cleanlyHome(model);
@@ -92,8 +92,7 @@ public class RegistrationController {
 							"https://radius-schweiz.ch/confirm?uuid=" + user.getUuid()}, locale),
 					helloMailSender
 			);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", true);
 			return h.cleanlyHome(model);
