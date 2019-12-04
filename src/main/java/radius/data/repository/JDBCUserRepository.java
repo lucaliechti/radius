@@ -228,22 +228,13 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public String findEmailByUuid(String uuid) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_USER_BY_UUID, String.class, uuid);
-		} catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+	public String findEmailByUuid(String uuid) throws EmptyResultDataAccessException {
+		return jdbcTemplate.queryForObject(FIND_USER_BY_UUID, String.class, uuid);
 	}
 
 	@Override
-	public String findUuidByEmail(String email) {
-		try {
-			return jdbcTemplate.queryForObject(FIND_UUID_BY_EMAIL, String.class, email);
-		}
-		catch (EmptyResultDataAccessException e) {
-			return null;
-		}
+	public String findUuidByEmail(String email) throws EmptyResultDataAccessException {
+		return jdbcTemplate.queryForObject(FIND_UUID_BY_EMAIL, String.class, email);
 	}
 }
 

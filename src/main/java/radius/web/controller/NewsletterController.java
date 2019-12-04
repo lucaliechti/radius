@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.dto.EmailDto;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.web.components.EmailService;
+import radius.web.components.ModelRepository;
 import radius.web.components.ProfileDependentProperties;
 
 import javax.validation.Valid;
@@ -22,32 +23,33 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class NewsletterController {
 
-    private HomeController h;
     private MessageSource messageSource;
     private JDBCNewsletterRepository newsletterRepo;
     private JavaMailSenderImpl newsletterMailSender;
     private EmailService emailService;
     private ProfileDependentProperties prop;
+    private ModelRepository modelRepository;
 
     private static final String NEWSLETTER_EMAIL_SUBJECT = "email.newsletter.subscribe.title";
     private static final String NEWSLETTER_EMAIL_MESSAGE = "email.newsletter.subscribe.content";
     private static final String NEWSLETTER_EMAIL_FOOTER = "email.newsletter.footer";
+    private static final String REGISTRATION_WEBSITE = "Website";
 
-    public NewsletterController(HomeController h, MessageSource messageSource, JDBCNewsletterRepository newsletterRepo,
-            JavaMailSenderImpl newsletterMailSender, EmailService emailService, ProfileDependentProperties prop) {
-         this.h = h;
+    public NewsletterController(MessageSource messageSource, JDBCNewsletterRepository newsletterRepo,
+                                JavaMailSenderImpl newsletterMailSender, EmailService emailService,
+                                ProfileDependentProperties prop, ModelRepository modelRepository) {
          this.messageSource = messageSource;
          this.newsletterRepo = newsletterRepo;
          this.newsletterMailSender = newsletterMailSender;
          this.emailService = emailService;
          this.prop = prop;
+         this.modelRepository = modelRepository;
     }
-
-    private final String REGISTRATION_WEBSITE = "Website";
 
     @RequestMapping(path="/subscribe", method=GET)
     public String getSubscribe(Model model) {
-        return h.cleanlyHome(model);
+        model.addAllAttributes(modelRepository.homeAttributes());
+        return "home";
     }
 
     @RequestMapping(path="/subscribe", method=POST)
@@ -55,14 +57,15 @@ public class NewsletterController {
                             BindingResult result, Model model, Locale loc) {
         if(result.hasErrors()) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            return h.cleanlyHome(model);
+            model.addAllAttributes(modelRepository.homeAttributes());
+            return "home";
         }
         try {
             return cleanlySubscribeToNewsletter(model, subscriptionForm.getEmail(), loc);
         } catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            e.printStackTrace();
-            return h.cleanlyHome(model);
+            model.addAllAttributes(modelRepository.homeAttributes());
+            return "home";
         }
     }
 
@@ -72,11 +75,13 @@ public class NewsletterController {
             newsletterRepo.unsubscribe(uuid);
         } catch (Exception e) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            return h.cleanlyHome(model);
+            model.addAllAttributes(modelRepository.homeAttributes());
+            return "home";
         }
 
         model.addAttribute("newsletter_unsubscribe_success", Boolean.TRUE);
-        return h.cleanlyHome(model);
+        model.addAllAttributes(modelRepository.homeAttributes());
+        return "home";
     }
 
     private String cleanlySubscribeToNewsletter(Model model, String email, Locale locale) {
@@ -85,7 +90,8 @@ public class NewsletterController {
             sendSubscriptionEmail(email, uuid, locale);
         }
         model.addAttribute("newsletter_subscribe_success", Boolean.TRUE);
-        return h.cleanlyHome(model);
+        model.addAllAttributes(modelRepository.homeAttributes());
+        return "home";
     }
 
     private void sendSubscriptionEmail(String email, String uuid, Locale locale) {

@@ -8,6 +8,7 @@ import radius.exceptions.EmailAlreadyExistsException;
 import radius.exceptions.UserHasMatchesException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository {
