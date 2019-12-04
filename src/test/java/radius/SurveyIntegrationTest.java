@@ -3,13 +3,11 @@ package radius;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.data.repository.JDBCSurveyRepository;
 import radius.web.controller.RegistrationController;
@@ -24,7 +22,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 @RunWith(SpringRunner.class)
 @ComponentScan(basePackages = {"radius.config", "radius.security", "radius.data.repository", "radius.web"})
-@SpringBootTest
+@WebMvcTest
 public class SurveyIntegrationTest {
 
     private String correctAnswers = "TRUE,null,null,null,null,null,null,null,null,null,null,null,null,null,FALSE";

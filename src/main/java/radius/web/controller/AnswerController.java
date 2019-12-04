@@ -114,13 +114,8 @@ public class AnswerController {
 		user.setMotivation(answerForm.getMotivation());
 		user.setRegularanswers(answerForm.getRegularanswers());
 		user.setSpecialanswers(answerForm.getSpecialanswers());
-		try {
-			user.setLocations(Arrays.stream(
-				answerForm.getLocations().split(";")).map(Integer::valueOf).collect(Collectors.toList())
-			);
-		} catch (NumberFormatException nfe) {
-			System.out.print("Answercontroller: "); nfe.printStackTrace();
-		}
+		user.setLocations(Arrays.stream(answerForm.getLocations().split(";")).map(Integer::valueOf)
+				.collect(Collectors.toList()));
 		return user;
 	}
 

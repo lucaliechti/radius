@@ -4,14 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import radius.data.repository.JDBCUserRepository;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.web.controller.AnswerController;
@@ -27,7 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @RunWith(SpringRunner.class)
 @ComponentScan(basePackages = {"radius.config", "radius.security", "radius.data.repository", "radius.web"})
-@SpringBootTest
+@WebMvcTest
 public class AnswerIntegrationTest {
 
     private MockMvc mockMvc;
