@@ -14,6 +14,7 @@ import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.web.components.EmailService;
+import radius.web.components.ProfileDependentProperties;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -33,10 +34,11 @@ public class RegistrationController {
 	private HomeController h;
     private MessageSource messageSource;
 	private PasswordEncoder encoder;
+	private ProfileDependentProperties prop;
 
 	public RegistrationController(JDBCUserRepository _userRepo, JSONStaticResourceRepository _staticRepo,
-								  EmailService _ses, JavaMailSenderImpl helloMailSender, HomeController h, MessageSource messageSource,
-								  PasswordEncoder encoder) {
+								  EmailService _ses, JavaMailSenderImpl helloMailSender, HomeController h,
+								  MessageSource messageSource, PasswordEncoder encoder, ProfileDependentProperties prop) {
 		this.userRepo = _userRepo;
 		this.staticResourceRepo = _staticRepo;
 		this.emailService = _ses;
@@ -44,6 +46,7 @@ public class RegistrationController {
 		this.h = h;
 		this.messageSource = messageSource;
 		this.encoder = encoder;
+		this.prop = prop;
 	}
 
 	@RequestMapping(method=GET)
@@ -55,7 +58,6 @@ public class RegistrationController {
 	public String register(@ModelAttribute("registrationForm") @Valid UserForm registrationForm, BindingResult result,
 						   Model model, Locale locale) {
 		if(result.hasErrors()) {
-			System.out.println("RegistrationController: Error registering");
 			model.addAttribute("cantons", staticResourceRepo.cantons());
 			model.addAttribute("newsletterForm", new EmailDto());
 			return "home";
@@ -75,25 +77,21 @@ public class RegistrationController {
 		try {
 			userRepo.saveUser(user);
 		} catch (EmailAlreadyExistsException eaee) {
-			System.out.println(eaee.getMessage());
 			model.addAttribute("emailExistsError", Boolean.TRUE);
 			return h.cleanlyHome(model);
 		} catch (Exception e) {
-			e.printStackTrace();
 			model.addAttribute("registrationError", true);
 			return h.cleanlyHome(model);
 		}
-		System.out.println("email confirmation uuid: " + user.getUuid());
 		try {
 			emailService.sendSimpleMessage(
 					email,
 					messageSource.getMessage("email.confirm.title", new Object[]{}, locale),
 					messageSource.getMessage("email.confirm.content", new Object[]{firstName, lastName,
-							"https://radius-schweiz.ch/confirm?uuid=" + user.getUuid()}, locale),
+							prop.getUrl() + "/confirm?uuid=" + user.getUuid()}, locale),
 					helloMailSender
 			);
 		} catch (Exception e) {
-			e.printStackTrace();
 			model.addAttribute("registrationError", true);
 			return h.cleanlyHome(model);
 		}

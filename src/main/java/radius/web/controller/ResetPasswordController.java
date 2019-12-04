@@ -13,6 +13,7 @@ import radius.data.dto.EmailDto;
 import radius.data.dto.PasswordUuidDto;
 import radius.data.repository.JDBCUserRepository;
 import radius.web.components.EmailService;
+import radius.web.components.ProfileDependentProperties;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -28,14 +29,19 @@ public class ResetPasswordController {
     private EmailService emailService;
     private MessageSource messageSource;
     private JDBCUserRepository userRepo;
+    private ProfileDependentProperties prop;
+
+    private static final String EMAIL_FORGOT_SUBJECT = "email.forgot.title";
+    private static final String EMAIL_FORGOT_MESSAGE = "email.forgot.content";
 
     @Autowired
     public ResetPasswordController(EmailService _ses, JavaMailSenderImpl helloMailSender, MessageSource messageSource,
-                                   JDBCUserRepository userRepo) {
+                                   JDBCUserRepository userRepo, ProfileDependentProperties prop) {
         this.emailService = _ses;
         this.helloMailSender = helloMailSender;
         this.messageSource = messageSource;
         this.userRepo = userRepo;
+        this.prop = prop;
     }
 
     @RequestMapping(method=GET)
@@ -54,30 +60,24 @@ public class ResetPasswordController {
     public String forgotten(@ModelAttribute("emailForm") @Valid EmailDto emailForm, BindingResult result, Model model,
                             Locale locale) {
         if(result.hasErrors()) {
-            System.out.println("ResetEmailController: Bad email address");
             return "forgot";
         }
         String email = emailForm.getEmail();
         String uuid = userRepo.findUuidByEmail(email);
         if(uuid != null) {
-            System.out.println(messageSource.getMessage("email.forgot.title", new Object[]{}, locale));
-            System.out.println(messageSource.getMessage("email.forgot.content",
-                    new Object[]{"https://radius-schweiz.ch/forgot?uuid=" + uuid}, locale));
             try {
                 emailService.sendSimpleMessage(
-                        email,
-                        messageSource.getMessage("email.forgot.title", new Object[]{}, locale),
-                        messageSource.getMessage("email.forgot.content",
-                                new Object[]{"https://radius-schweiz.ch/forgot?uuid=" + uuid}, locale),
-                        helloMailSender
+                    email,
+                    messageSource.getMessage(EMAIL_FORGOT_SUBJECT, new Object[]{}, locale),
+                    messageSource.getMessage(EMAIL_FORGOT_MESSAGE, new Object[]{prop.getUrl() + "/forgot?uuid=" + uuid},
+                            locale),
+                    helloMailSender
                 );
-                System.out.println("Sent PW recovery email to " + email);
             } catch (Exception e) {
-                System.out.println("Sending PW recovery email to " + email + " FAILED");
-                e.printStackTrace();
+                model.addAttribute("error", Boolean.TRUE);
             }
         }
-        model.addAttribute("sent", Boolean.TRUE);
+        model.addAttribute("sentIfExists", Boolean.TRUE);
         return "forgot";
     }
 }

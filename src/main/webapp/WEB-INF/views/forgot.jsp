@@ -9,11 +9,17 @@
    <section class="fullwidth-section">
       <section class="leftsection-content-element" id="">
 
-          <c:if test="${sent != null}">
+          <c:if test="${sentIfExists != null}">
              <p class="result success">
-                <spring:message code="forgot.sent"/> ${emailaddress}<br>
+                <spring:message code="forgot.sent"/><br>
              </p>
           </c:if>
+
+         <c:if test="${error != null}">
+            <p class="result error">
+               <spring:message code="home.feedback.error.generic"/><br>
+            </p>
+         </c:if>
 
          <h2>
             <spring:message code="forgot.title"/>

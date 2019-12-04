@@ -1,10 +1,9 @@
 package radius.config;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import radius.web.components.ProfileConfiguration;
+import radius.web.components.ProfileDependentProperties;
 
 import java.io.InputStream;
 import java.io.IOException;
@@ -14,14 +13,11 @@ import java.util.Properties;
 public class DataConfig {
 	
 	@Bean
-	@Qualifier("Postgres")
-	public BasicDataSource dataSource(ProfileConfiguration.ProfileProperties profileProp) {
+	public BasicDataSource dataSource(ProfileDependentProperties prop) {
 		Properties dbProperties = new Properties();
-		InputStream in;
-		try {
-			in = DataConfig.class.getResourceAsStream(profileProp.getDbfile());
+		String dbFile = prop.getDbfile();
+		try (InputStream in = DataConfig.class.getResourceAsStream(dbFile)) {
 			dbProperties.load(in);
-			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

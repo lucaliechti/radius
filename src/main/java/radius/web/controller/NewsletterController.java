@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.dto.EmailDto;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.web.components.EmailService;
+import radius.web.components.ProfileDependentProperties;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -26,14 +27,20 @@ public class NewsletterController {
     private JDBCNewsletterRepository newsletterRepo;
     private JavaMailSenderImpl newsletterMailSender;
     private EmailService emailService;
+    private ProfileDependentProperties prop;
+
+    private static final String NEWSLETTER_EMAIL_SUBJECT = "email.newsletter.subscribe.title";
+    private static final String NEWSLETTER_EMAIL_MESSAGE = "email.newsletter.subscribe.content";
+    private static final String NEWSLETTER_EMAIL_FOOTER = "email.newsletter.footer";
 
     public NewsletterController(HomeController h, MessageSource messageSource, JDBCNewsletterRepository newsletterRepo,
-            JavaMailSenderImpl newsletterMailSender, EmailService emailService) {
+            JavaMailSenderImpl newsletterMailSender, EmailService emailService, ProfileDependentProperties prop) {
          this.h = h;
          this.messageSource = messageSource;
          this.newsletterRepo = newsletterRepo;
          this.newsletterMailSender = newsletterMailSender;
          this.emailService = emailService;
+         this.prop = prop;
     }
 
     private final String REGISTRATION_WEBSITE = "Website";
@@ -75,14 +82,18 @@ public class NewsletterController {
     private String cleanlySubscribeToNewsletter(Model model, String email, Locale locale) {
         if(!newsletterRepo.alreadySubscribed(email)) {
             String uuid = newsletterRepo.subscribe(email, REGISTRATION_WEBSITE);
-
-            String subject = messageSource.getMessage("email.newsletter.subscribe.title", new Object[]{}, locale);
-            String content = messageSource.getMessage("email.newsletter.subscribe.content", new Object[]{}, locale);
-            content += "\n\n-----------\n" + messageSource.getMessage("email.newsletter.footer",
-                    new Object[]{"https://radius-schweiz.ch/unsubscribe?uuid=" + uuid}, locale);
-            emailService.sendSimpleMessage(email, subject, content, newsletterMailSender);
+            sendSubscriptionEmail(email, uuid, locale);
         }
         model.addAttribute("newsletter_subscribe_success", Boolean.TRUE);
         return h.cleanlyHome(model);
+    }
+
+    private void sendSubscriptionEmail(String email, String uuid, Locale locale) {
+        String subject = messageSource.getMessage(NEWSLETTER_EMAIL_SUBJECT, new Object[]{}, locale);
+        String content = messageSource.getMessage(NEWSLETTER_EMAIL_MESSAGE, new Object[]{}, locale);
+        content += "\n\n-----------\n";
+        content += messageSource.getMessage(NEWSLETTER_EMAIL_FOOTER,
+                new Object[]{prop.getUrl() + "/unsubscribe?uuid=" + uuid}, locale);
+        emailService.sendSimpleMessage(email, subject, content, newsletterMailSender);
     }
 }

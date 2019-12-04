@@ -267,6 +267,7 @@
             <id>dev</id>
             <properties>
                 <db.conf.file>/config/database_dev.properties</db.conf.file>
+                <radius.url>http://localhost:8080/radius</radius.url>
             </properties>
         </profile>
         <profile>
@@ -276,6 +277,7 @@
             <id>prod</id>
             <properties>
                 <db.conf.file>/config/database_prod.properties</db.conf.file>
+                <radius.url>https://radius-schweiz.ch</radius.url>
             </properties>
         </profile>
     </profiles>
