@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.dto.EmailDto;
-import radius.User;
 import radius.data.form.UserForm;
 import radius.data.repository.JSONStaticResourceRepository;
 import radius.data.repository.StaticResourceRepository;
@@ -49,13 +48,7 @@ public class RegistrationController {
 			model.addAttribute("newsletterForm", new EmailDto());
 			return "home";
 		}
-		Optional<User> optionalUser = userService.registerNewUserFromRegistrationForm(registrationForm);
-		if(optionalUser.isEmpty()) {
-			model.addAttribute("registrationError", true);
-			model.addAllAttributes(modelRepository.homeAttributes());
-			return "home";
-		}
-		boolean success = userService.sendConfirmationEmail(optionalUser.get(), locale);
+		boolean success = userService.registerNewUserFromUserForm(registrationForm, locale);
 		if(success) {
 			model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
 		} else {

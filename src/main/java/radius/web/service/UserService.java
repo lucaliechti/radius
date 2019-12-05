@@ -139,25 +139,23 @@ public class UserService {
         return userSpecificAttributes;
     }
 
-    public Optional<User> registerNewUserFromRegistrationForm(UserForm registrationForm) {
+    public boolean registerNewUserFromUserForm(UserForm registrationForm, Locale locale) {
         String firstName = registrationForm.getFirstName();
         String lastName = registrationForm.getLastName();
         String canton = registrationForm.getCanton();
         String email = registrationForm.getEmail();
         String password = registrationForm.getPassword();
         assert canton != null;
-
         User user = new User(firstName, lastName, canton.equals("NONE") ? null : canton, email, password);
-
         try {
             saveNewUser(user);
         } catch (EmailAlreadyExistsException e) {
-            return Optional.empty();
+            return false;
         }
-        return Optional.of(user);
+        return sendConfirmationEmail(user, locale);
     }
 
-    public boolean sendConfirmationEmail(User user, Locale locale) {
+    private boolean sendConfirmationEmail(User user, Locale locale) {
         try {
             emailService.sendSimpleMessage(
                     user.getEmail(),

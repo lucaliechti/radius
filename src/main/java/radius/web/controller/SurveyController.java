@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.User;
 import radius.data.form.SurveyForm;
 import radius.data.form.UserForm;
 import radius.data.repository.*;
@@ -17,7 +16,6 @@ import radius.web.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Locale;
-import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -50,7 +48,7 @@ public class SurveyController {
 
     @RequestMapping(value="/survey", method=POST)
     public String filledOutSurvey(@ModelAttribute("surveyForm") @Valid SurveyForm surveyForm, BindingResult result,
-                                  Model model, Locale loc) {
+                                  Model model, Locale locale) {
         if(result.hasErrors()) {
             model.addAttribute("surveyForm", surveyForm);
             return "survey";
@@ -76,13 +74,7 @@ public class SurveyController {
             userForm.setEmail(surveyForm.getEmailR());
             userForm.setPassword(surveyForm.getPassword());
 
-            Optional<User> optionalUser = userService.registerNewUserFromRegistrationForm(userForm);
-            if(optionalUser.isEmpty()) {
-                model.addAttribute("registrationError", true);
-                model.addAllAttributes(modelRepository.homeAttributes());
-                return "home";
-            }
-            boolean registrationSuccess = userService.sendConfirmationEmail(optionalUser.get(), loc);
+            boolean registrationSuccess = userService.registerNewUserFromUserForm(userForm, locale);
             if(registrationSuccess) {
                 model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
             } else {
@@ -94,7 +86,7 @@ public class SurveyController {
 
         else if(wantsNewsletter) {
             String emailN = surveyForm.getEmailN();
-            boolean newsletterSuccess = newsletterService.subscribe(emailN, loc, REGISTRATION_SURVEY);
+            boolean newsletterSuccess = newsletterService.subscribe(emailN, locale, REGISTRATION_SURVEY);
             if(!newsletterSuccess) {
                 model.addAttribute("surveyFailure", Boolean.TRUE);
                 model.addAttribute("surveyForm", surveyForm);

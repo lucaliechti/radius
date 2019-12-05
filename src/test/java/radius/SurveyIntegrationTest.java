@@ -78,8 +78,7 @@ public class SurveyIntegrationTest {
         ReflectionTestUtils.setField(surveyController, "surveyService", mockSurveyService);
         doReturn(true).when(mockSurveyService).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
         ReflectionTestUtils.setField(surveyController, "userService", mockUserService);
-        doReturn(Optional.of(mockUser)).when(mockUserService).registerNewUserFromRegistrationForm(any(UserForm.class));
-        doReturn(true).when(mockUserService).sendConfirmationEmail(any(User.class), any(Locale.class));
+        doReturn(true).when(mockUserService).registerNewUserFromUserForm(any(UserForm.class), any(Locale.class));
 
         mockMvc = standaloneSetup(surveyController).build();
 
