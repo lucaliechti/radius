@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.controller.HomeController;
 import radius.web.service.AnswerService;
 import radius.web.service.UserService;
@@ -17,8 +17,8 @@ public class HomeControllerTest {
 	public void testHomePage() throws Exception {
 		UserService mockUserService = mock(UserService.class);
 		AnswerService mockAnswerService = mock(AnswerService.class);
-		ModelRepository mockModelRepository = mock(ModelRepository.class);
-		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelRepository);
+		ModelDecorator mockModelDecorator = mock(ModelDecorator.class);
+		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelDecorator);
 		MockMvc mockMvc = standaloneSetup(controller).build();
 		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}

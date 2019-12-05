@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.User;
 import radius.data.form.MeetingFeedbackForm;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
@@ -25,13 +25,13 @@ import java.util.Optional;
 public class ToggleStatusController {
 
 	private UserService userService;
-	private ModelRepository modelRepository;
+	private ModelDecorator modelDecorator;
 	private MatchingService matchingService;
 
-	public ToggleStatusController(UserService userService, ModelRepository modelRepository,
+	public ToggleStatusController(UserService userService, ModelDecorator modelDecorator,
 								  MatchingService matchingService) {
 		this.userService = userService;
-		this.modelRepository = modelRepository;
+		this.modelDecorator = modelDecorator;
 		this.matchingService = matchingService;
 	}
 	
@@ -41,7 +41,7 @@ public class ToggleStatusController {
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelRepository.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
 		}
 		User user = optionalUser.get();
@@ -61,7 +61,7 @@ public class ToggleStatusController {
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelRepository.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
 		}
 		User user = optionalUser.get();

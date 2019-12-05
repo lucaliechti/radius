@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.data.form.AnswerForm;
 import radius.User;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.components.RealWorldProperties;
 import radius.web.service.AnswerService;
 import radius.web.service.UserService;
@@ -30,7 +30,7 @@ public class AnswerController {
 	private RealWorldProperties realWorld;
 	private MessageSource validationMessages;
 	private UserService userService;
-	private ModelRepository modelRepository;
+	private ModelDecorator modelDecorator;
 	private AnswerService answerService;
 
 	private static final String ERROR_ANSWER_REGULAR_QUESTIONS = "error.answerRegularQuestions";
@@ -38,11 +38,11 @@ public class AnswerController {
 
 	@Autowired
 	public AnswerController(RealWorldProperties _realWorld, MessageSource validationMessageSource,
-							UserService userService, ModelRepository modelRepository, AnswerService answerService) {
+							UserService userService, ModelDecorator modelDecorator, AnswerService answerService) {
 		this.realWorld = _realWorld;
 		this.validationMessages = validationMessageSource;
 		this.userService = userService;
-		this.modelRepository = modelRepository;
+		this.modelDecorator = modelDecorator;
 		this.answerService = answerService;
 	}
 
@@ -53,7 +53,7 @@ public class AnswerController {
 		model.addAttribute("answerForm", user.isAnsweredRegular() ||
 				(user.getSpecialanswers() != null && user.getSpecialanswers().size() > 0) ?
 				answerService.newFormFromUser(user) : new AnswerForm());
-		model.addAllAttributes(modelRepository.answerAttributes());
+		model.addAllAttributes(modelDecorator.answerAttributes());
 		return "answers";
 	}
 	
@@ -61,11 +61,11 @@ public class AnswerController {
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model,
 			Locale locale)  {
 		if(result.hasErrors()) {
-			model.addAllAttributes(modelRepository.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes());
 			return "answers";
 		} else if(!answerService.validlyAnswered(answerForm)) {
 			provideFeedback(result, locale);
-			model.addAllAttributes(modelRepository.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes());
 			return "answers";
 		} else {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();

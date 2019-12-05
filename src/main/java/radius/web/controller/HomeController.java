@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.User;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.service.AnswerService;
 import radius.web.service.UserService;
 
@@ -25,12 +25,12 @@ public class HomeController {
 
 	private UserService userService;
 	private AnswerService answerService;
-	private ModelRepository modelRepository;
+	private ModelDecorator modelDecorator;
 
-	public HomeController(UserService userService, AnswerService answerService, ModelRepository modelRepository) {
+	public HomeController(UserService userService, AnswerService answerService, ModelDecorator modelDecorator) {
 		this.userService = userService;
 		this.answerService = answerService;
-		this.modelRepository = modelRepository;
+		this.modelDecorator = modelDecorator;
 	}
 	
 	@RequestMapping(value={"/", "/home"}, method=GET)
@@ -49,7 +49,7 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", Boolean.TRUE);
 		}
-		model.addAllAttributes(modelRepository.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes());
 		return "home";
 	}
 	
@@ -58,7 +58,7 @@ public class HomeController {
 		if(loginerror != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}
-		model.addAllAttributes(modelRepository.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes());
 		return "home";
 	}
 
@@ -72,17 +72,17 @@ public class HomeController {
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelRepository.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
 		}
 		User user = optionalUser.get();
 		if(!user.isEnabled()) {
 			model.addAttribute("not_enabled", true);
-			model.addAllAttributes(modelRepository.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
 		}
 		else if(!user.isAnsweredRegular()) {
-			model.addAllAttributes(modelRepository.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes());
 			model.addAttribute("answerForm", answerService.newFormFromUser(user));
 			return "answers";
 		} else {

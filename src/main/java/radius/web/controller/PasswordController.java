@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.User;
 import radius.data.dto.EmailDto;
 import radius.data.dto.PasswordUuidDto;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.service.PasswordService;
 import radius.web.service.UserService;
 
@@ -25,12 +25,12 @@ public class PasswordController {
 
     private UserService userService;
     private PasswordService passwordService;
-    private ModelRepository modelRepository;
+    private ModelDecorator modelDecorator;
 
-    public PasswordController(UserService userService, PasswordService passwordService, ModelRepository modelRepository) {
+    public PasswordController(UserService userService, PasswordService passwordService, ModelDecorator modelDecorator) {
         this.userService = userService;
         this.passwordService = passwordService;
-        this.modelRepository = modelRepository;
+        this.modelDecorator = modelDecorator;
     }
 
     @RequestMapping(value = "/forgot", method=GET)
@@ -47,7 +47,7 @@ public class PasswordController {
 
     @RequestMapping(value = "/reset", method=GET)
     public String reset(Model model) {
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 
@@ -78,7 +78,7 @@ public class PasswordController {
         Optional<String> optionalEmail = userService.findEmailByUuid(dto.getUuid());
         if(optionalEmail.isEmpty()) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelRepository.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";
         }
         Optional<User> optionalUser = userService.findUserByEmail(optionalEmail.get());
@@ -86,12 +86,12 @@ public class PasswordController {
             boolean success = passwordService.updatePassword(optionalUser.get(), dto.getPassword());
             if (success) {
                 model.addAttribute("passwordReset", Boolean.TRUE);
-                model.addAllAttributes(modelRepository.homeAttributes());
+                model.addAllAttributes(modelDecorator.homeAttributes());
                 return "home";
             }
         }
         model.addAttribute("generic_error", Boolean.TRUE);
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 }

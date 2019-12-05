@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.form.SurveyForm;
 import radius.data.form.UserForm;
-import radius.data.repository.*;
-import radius.web.components.ModelRepository;
+import radius.web.components.CountrySpecificProperties;
+import radius.web.components.ModelDecorator;
 import radius.web.service.NewsletterService;
 import radius.web.service.SurveyService;
 import radius.web.service.UserService;
@@ -24,18 +24,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class SurveyController {
 
-    private StaticResourceRepository staticRepo;
-    private ModelRepository modelRepository;
+    private CountrySpecificProperties countryProperties;
+    private ModelDecorator modelDecorator;
     private SurveyService surveyService;
     private NewsletterService newsletterService;
     private UserService userService;
     private static final int SURVEY_SIZE = 15;
     private static final String REGISTRATION_SURVEY = "Survey Summer 2019";
 
-    public SurveyController(JSONStaticResourceRepository staticRepo, ModelRepository modelRepository,
+    public SurveyController(CountrySpecificProperties countryProperties, ModelDecorator modelDecorator,
                             SurveyService surveyService, NewsletterService newsletterService, UserService userService) {
-        this.staticRepo = staticRepo;
-        this.modelRepository = modelRepository;
+        this.countryProperties = countryProperties;
+        this.modelDecorator = modelDecorator;
         this.surveyService = surveyService;
         this.newsletterService = newsletterService;
         this.userService = userService;
@@ -80,7 +80,7 @@ public class SurveyController {
             } else {
                 model.addAttribute("registrationError", true);
             }
-            model.addAllAttributes(modelRepository.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";
         }
 
@@ -93,14 +93,14 @@ public class SurveyController {
                 return "survey";
             }
         }
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 
     @ModelAttribute
     public void addParams(Model model) {
         model.addAttribute("surveyForm", new SurveyForm());
-        model.addAttribute("cantons", staticRepo.cantons());
+        model.addAttribute("cantons", countryProperties.getCantons());
         model.addAttribute("nrQ", SURVEY_SIZE);
     }
 }

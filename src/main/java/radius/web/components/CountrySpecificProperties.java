@@ -1,16 +1,18 @@
-package radius.data.repository;
+package radius.web.components;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository
+@Getter
+@Component
 @PropertySource("classpath:config/static.properties")
-public class JSONStaticResourceRepository implements StaticResourceRepository {
+public class CountrySpecificProperties {
 
     @Value("${languages}")
     private List<String> languages;
@@ -19,17 +21,6 @@ public class JSONStaticResourceRepository implements StaticResourceRepository {
     @Value("#{${regions}}")
     private Map<Integer, String> regions;
 
-    @Override
-    public List<String> languages() {
-        return languages;
-    }
-
-    @Override
-    public List<String> cantons() {
-        return cantons;
-    }
-
-    @Override
     public List<String> prettyLocations(List<Integer> locs) {
         return locs.stream().map(l -> regions.get(l)).collect(Collectors.toList());
     }

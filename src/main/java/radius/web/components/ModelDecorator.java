@@ -3,34 +3,32 @@ package radius.web.components;
 import org.springframework.stereotype.Component;
 import radius.data.dto.EmailDto;
 import radius.data.form.UserForm;
-import radius.data.repository.JSONStaticResourceRepository;
-import radius.data.repository.StaticResourceRepository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ModelRepository {
+public class ModelDecorator {
 
-    private StaticResourceRepository staticRepo;
+    private CountrySpecificProperties countryProperties;
     private RealWorldProperties realWorld;
 
-    public ModelRepository(JSONStaticResourceRepository staticRepo, RealWorldProperties realWorld) {
-        this.staticRepo = staticRepo;
+    public ModelDecorator(CountrySpecificProperties countryProperties, RealWorldProperties realWorld) {
+        this.countryProperties = countryProperties;
         this.realWorld = realWorld;
     }
 
     public Map<String, Object> homeAttributes() {
         HashMap<String, Object> homeAttributes = new HashMap<>();
         homeAttributes.put("registrationForm", new UserForm());
-        homeAttributes.put("cantons", staticRepo.cantons());
+        homeAttributes.put("cantons", countryProperties.getCantons());
         homeAttributes.put("newsletterForm", new EmailDto());
         return homeAttributes;
     }
 
     public Map<String, Object> answerAttributes() {
         HashMap<String, Object> answerAttributes = new HashMap<>();
-        answerAttributes.put("lang", staticRepo.languages());
+        answerAttributes.put("lang", countryProperties.getLanguages());
         answerAttributes.put("nrQ", realWorld.getNumberOfRegularQuestions());
         answerAttributes.put("special", realWorld.isSpecialIsActive());
         answerAttributes.put("nrV", realWorld.getNumberOfVotes());

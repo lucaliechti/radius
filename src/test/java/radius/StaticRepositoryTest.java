@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
-import radius.data.repository.JSONStaticResourceRepository;
+import radius.web.components.CountrySpecificProperties;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,21 +23,21 @@ public class StaticRepositoryTest {
 	private final int NUMBER_OF_CANTONS = 26;
 	
 	@Autowired
-	JSONStaticResourceRepository r = new JSONStaticResourceRepository();
+    CountrySpecificProperties r = new CountrySpecificProperties();
 
 	@Test
 	public void languages() {
-		assertNotNull(r.languages());
-		assertEquals(NUMBER_OF_LANGUAGES, r.languages().size());
-		assertTrue(r.languages().contains("DE"));
+		assertNotNull(r.getLanguages());
+		assertEquals(NUMBER_OF_LANGUAGES, r.getLanguages().size());
+		assertTrue(r.getLanguages().contains("DE"));
 	}
 
 	@Test
 	public void cantons() {
-		assertNotNull(r.cantons());
-		assertEquals(NUMBER_OF_CANTONS, r.cantons().size());
-		assertTrue(r.cantons().contains("BE"));
-		assertFalse(r.cantons().contains("ZZ"));
+		assertNotNull(r.getCantons());
+		assertEquals(NUMBER_OF_CANTONS, r.getCantons().size());
+		assertTrue(r.getCantons().contains("BE"));
+		assertFalse(r.getCantons().contains("ZZ"));
 	}
 
 	@Test

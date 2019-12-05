@@ -12,6 +12,7 @@ import radius.data.form.MeetingFeedbackForm;
 import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.web.components.CountrySpecificProperties;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
 import radius.web.components.RealWorldProperties;
@@ -23,7 +24,7 @@ public class UserService {
 
     private UserRepository userRepo;
     private MatchingRepository matchRepo;
-    private StaticResourceRepository staticRepo;
+    private CountrySpecificProperties countryProperties;
     private RealWorldProperties realWorld;
     private EmailService emailService;
     private JavaMailSenderImpl helloMailSender;
@@ -35,12 +36,12 @@ public class UserService {
     private static final String EMAIL_CONFIRM_MESSAGE = "email.confirm.content";
 
     public UserService(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo,
-                       JSONStaticResourceRepository staticRepo, RealWorldProperties realWorld, EmailService emailService,
-                       JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop, MessageSource messageSource,
-                       PasswordEncoder encoder) {
+                       CountrySpecificProperties countryProperties, RealWorldProperties realWorld,
+                       EmailService emailService, JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop,
+                       MessageSource messageSource, PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
-        this.staticRepo = staticRepo;
+        this.countryProperties = countryProperties;
         this.realWorld = realWorld;
         this.emailService = emailService;
         this.helloMailSender = helloMailSender;
@@ -127,13 +128,13 @@ public class UserService {
         userSpecificAttributes.put("user", user);
         userSpecificAttributes.put("history", allMatchesForUser(user.getEmail()));
         userSpecificAttributes.put("feedbackForm", new MeetingFeedbackForm());
-        userSpecificAttributes.put("userlocations", staticRepo.prettyLocations(user.getLocations()));
+        userSpecificAttributes.put("userlocations", countryProperties.prettyLocations(user.getLocations()));
         if(user.getStatus() == User.UserStatus.MATCHED) {
             User match = matchRepo.getCurrentMatchFor(user.getEmail());
             userSpecificAttributes.put("match", match);
             UserPair up = UserPair.of(user, match);
             userSpecificAttributes.put("commonlocations",
-                    String.join(", ", staticRepo.prettyLocations(new ArrayList<>(up.commonLocations()))));
+                    String.join(", ", countryProperties.prettyLocations(new ArrayList<>(up.commonLocations()))));
             userSpecificAttributes.put("commonlanguages", up.commonLanguages());
         }
         return userSpecificAttributes;

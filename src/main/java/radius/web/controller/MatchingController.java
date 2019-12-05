@@ -13,8 +13,7 @@ import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.JSONStaticResourceRepository;
-import radius.data.repository.StaticResourceRepository;
+import radius.web.components.CountrySpecificProperties;
 import radius.web.components.EmailService;
 
 import java.time.Instant;
@@ -30,16 +29,16 @@ public class MatchingController {
 
 	private final JDBCUserRepository userRepo;
 	private final EmailService emailService;
-	private final StaticResourceRepository staticRepo;
+	private final CountrySpecificProperties countryProperties;
 	private JavaMailSenderImpl matchingMailSender;
 	private MessageSource messageSource;
 
 	@Autowired
 	public MatchingController(JDBCUserRepository userRepo, EmailService emailService,
-	  JSONStaticResourceRepository staticRepo, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
+							  CountrySpecificProperties countryProperties, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
 		this.userRepo = userRepo;
 		this.emailService = emailService;
-		this.staticRepo = staticRepo;
+		this.countryProperties = countryProperties;
 		this.matchingMailSender = matchingMailSender;
 		this.messageSource = messageSource;
 	}
@@ -235,7 +234,7 @@ public class MatchingController {
 			emailService.sendSimpleMessage(
 				user.getEmail(),
 				messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)),
-				messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
+				messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", countryProperties.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
 				matchingMailSender
 			);
 		} catch (Exception ignored) { }

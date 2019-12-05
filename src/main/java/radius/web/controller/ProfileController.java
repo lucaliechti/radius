@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.repository.*;
 import radius.data.form.AnswerForm;
 import radius.User;
+import radius.web.components.CountrySpecificProperties;
 import radius.web.components.RealWorldProperties;
 import radius.web.service.UserService;
 
@@ -23,13 +23,13 @@ import radius.web.service.UserService;
 public class ProfileController {
 
 	private UserService userService;
-	private StaticResourceRepository staticRepo;
+	private CountrySpecificProperties countryProperties;
 	private RealWorldProperties real;
 
 	@Autowired
-	public ProfileController(UserService userService, JSONStaticResourceRepository staticRepo, RealWorldProperties real) {
+	public ProfileController(UserService userService, CountrySpecificProperties countryProperties, RealWorldProperties real) {
 		this.userService = userService;
-		this.staticRepo = staticRepo;
+		this.countryProperties = countryProperties;
 		this.real = real;
 	}
 
@@ -44,7 +44,7 @@ public class ProfileController {
 			model.addAttribute("not_enabled", true);
 			return "home";
 		} else if(!user.isAnsweredRegular()) {
-			model.addAttribute("lang", staticRepo.languages());
+			model.addAttribute("lang", countryProperties.getLanguages());
 			model.addAttribute("answerForm", new AnswerForm());
 			return "answers";
 		} else {
@@ -52,7 +52,7 @@ public class ProfileController {
 			List<String> answers = user.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase)
 					.collect(Collectors.toList());
 			model.addAttribute("answers", answers);
-			model.addAttribute("locations", staticRepo.prettyLocations(user.getLocations()));
+			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
 			model.addAttribute("history", userService.allMatchesForUser(email));
 			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
 		}

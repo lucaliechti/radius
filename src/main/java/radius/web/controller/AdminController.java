@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.form.NewsletterMessage;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.NewsletterRepository;
@@ -31,7 +30,6 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
-        model.addAttribute("newsletterForm", new NewsletterMessage());
         model.addAttribute("numberRecipients", newsletterRepo.numberOfRecipients());
         model.addAttribute("users", userRepo.allUsers());
         model.addAttribute("special", realWorld.isSpecialIsActive());

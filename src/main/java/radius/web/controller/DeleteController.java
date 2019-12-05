@@ -11,25 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.UserRepository;
 import radius.exceptions.UserHasMatchesException;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 
 @Controller
 @RequestMapping(value="/delete")
 public class DeleteController {
 
-	private ModelRepository modelRepository;
+	private ModelDecorator modelDecorator;
 	private UserRepository userRepo;
 	private ProfileController pc;
 
-	public DeleteController(ModelRepository modelRepository, JDBCUserRepository userRepo, ProfileController pc) {
-		this.modelRepository = modelRepository;
+	public DeleteController(ModelDecorator modelDecorator, JDBCUserRepository userRepo, ProfileController pc) {
+		this.modelDecorator = modelDecorator;
 		this.userRepo = userRepo;
 		this.pc = pc;
 	}
 
 	@RequestMapping(method=GET)
 	public String reset(Model model) {
-		model.addAllAttributes(modelRepository.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes());
 		return "home";
 	}
 
@@ -44,7 +44,7 @@ public class DeleteController {
 		}
 		model.addAttribute("delete_success", username);
 		SecurityContextHolder.clearContext();
-		model.addAllAttributes(modelRepository.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes());
 		return "home";
 	}
 }

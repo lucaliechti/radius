@@ -36,45 +36,15 @@ $(document).ready(function() {
       </section>
       <section class="leftsection-content">
 
-         <section class="leftsection-content-element" id="">
+         <section class="leftsection-content-element" id="newsletter">
               <h2>
                  <spring:message code="admin.newsletter.title"/>
               </h2>
               <p>
                 <spring:message code="admin.newsletter.number"/> ${numberRecipients}
-              </p><br>
-              <form:form method="POST" action="send" modelAttribute="newsletterForm">
-
-                <div class="form-group">
-                   <form:label path="subject">
-                      <spring:message code="admin.newsletter.subject"/>
-                   </form:label>
-                   <div class="col-10">
-                      <form:input path="subject" class="form-control"/>
-                   </div>
-                   <div class="feedback-error" id="newsletter-feedback-subject">
-                      <form:errors path="subject"/>
-                   </div>
-                </div>
-
-                <div class="form-group">
-                   <form:label path="message">
-                      <spring:message code="admin.newsletter.message"/>
-                   </form:label>
-                   <div class="col-10">
-                      <form:textarea path="message" class="input-paragraph form-control"/>
-                   </div>
-                   <div class="feedback-error" id="newsletter-feedback-message">
-                      <form:errors path="message"/>
-                   </div>
-                </div>
-
-                <input type="submit" class="btn btn-primary" value="${send}" />
-                <sec:csrfInput />
-
-              </form:form>
+              </p>
          </section>
-         <section class="leftsection-content-element" id="">
+         <section class="leftsection-content-element" id="users">
             <h2>
               <spring:message code="admin.users.title"/>
             </h2>
@@ -111,11 +81,6 @@ $(document).ready(function() {
                Anzahl Abstimmungen: ${nrvotes}
             </p>
          </section>
-
-
-
-
-
       </section>
    </section>
 

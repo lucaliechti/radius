@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.dto.EmailDto;
-import radius.web.components.ModelRepository;
+import radius.web.components.ModelDecorator;
 import radius.web.service.NewsletterService;
 
 import javax.validation.Valid;
@@ -19,19 +19,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @Controller
 public class NewsletterController {
 
-    private ModelRepository modelRepository;
+    private ModelDecorator modelDecorator;
     private NewsletterService newsletterService;
 
     private static final String REGISTRATION_WEBSITE = "Website";
 
-    public NewsletterController(ModelRepository modelRepository, NewsletterService newsletterService) {
-         this.modelRepository = modelRepository;
+    public NewsletterController(ModelDecorator modelDecorator, NewsletterService newsletterService) {
+         this.modelDecorator = modelDecorator;
          this.newsletterService = newsletterService;
     }
 
     @RequestMapping(path="/subscribe", method=GET)
     public String getSubscribe(Model model) {
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 
@@ -40,17 +40,17 @@ public class NewsletterController {
                             BindingResult result, Model model, Locale loc) {
         if(result.hasErrors()) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelRepository.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";
         }
         boolean success = newsletterService.subscribe(subscriptionForm.getEmail(), loc, REGISTRATION_WEBSITE);
         if(!success) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelRepository.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";
         }
         model.addAttribute("newsletter_subscribe_success", Boolean.TRUE);
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 
@@ -59,11 +59,11 @@ public class NewsletterController {
         boolean success = newsletterService.unsubscribe(uuid);
         if(!success) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelRepository.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";
         }
         model.addAttribute("newsletter_unsubscribe_success", Boolean.TRUE);
-        model.addAllAttributes(modelRepository.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
     }
 }
