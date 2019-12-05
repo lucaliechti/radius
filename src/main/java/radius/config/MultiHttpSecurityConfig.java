@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,28 +34,25 @@ public class MultiHttpSecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			//authorization
 			http
-					.authorizeRequests()
-					.antMatchers("/history", "/myexperience", "/profile", "/answers", "/status", "/toggleStatus").authenticated()
-					.antMatchers("/monitoring/**", "/admin/**", "/actuator/**", "/health/**").hasRole("ADMIN")
-					.antMatchers(HttpMethod.POST, "/experience").authenticated()
-					.anyRequest().permitAll();
+				.authorizeRequests()
+				.antMatchers("/history", "/profile", "/answers", "/status", "/toggleStatus").authenticated()
+				.antMatchers("/monitoring/**", "/admin/**", "/actuator/**", "/health/**").hasRole("ADMIN")
+				.anyRequest().permitAll();
 
 			//TODO: Custom login handler
 			//login
 			http
-					.formLogin().loginPage("/home")
-					.defaultSuccessUrl("/status")
-					.failureUrl("/home?error")
-					.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks
-					.and().csrf();
+				.formLogin().loginPage("/home")
+				.defaultSuccessUrl("/status")
+				.failureUrl("/home?error")
+				.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks
+				.and().csrf();
 
-			
 			//TODO: Custom logout handler
 			//logout
 			http
 				.logout()
 					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-					
 		}
 
 		@Qualifier("postgresUserDetailsService")
@@ -81,18 +77,18 @@ public class MultiHttpSecurityConfig {
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.inMemoryAuthentication()
-					.passwordEncoder(passwordEncoder())
-					.withUser(env.getProperty("matcher.user")).password(passwordEncoder().encode(env.getProperty("matcher.pass"))).roles("MATCHER");
+				.passwordEncoder(passwordEncoder())
+				.withUser(env.getProperty("matcher.user")).password(passwordEncoder().encode(env.getProperty("matcher.pass"))).roles("MATCHER");
 		}
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.antMatcher("/api/**")
-					.authorizeRequests()
-					.anyRequest().hasRole("MATCHER").and()
-					.httpBasic().and()
-					.csrf().disable()
-					.requiresChannel().anyRequest().requiresSecure();
+				.authorizeRequests()
+				.anyRequest().hasRole("MATCHER").and()
+				.httpBasic().and()
+				.csrf().disable()
+				.requiresChannel().anyRequest().requiresSecure();
 		}
 	}
 

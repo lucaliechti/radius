@@ -42,7 +42,7 @@ public class AnswerService {
         AnswerForm form = new AnswerForm();
         form.setMotivation(user.getMotivation());
         form.setLanguages(user.getLanguages());
-        form.setLocations(User.createLocString(user.getLocations()));
+        form.setLocations(user.locationString());
         form.setRegularanswers(user.getRegularAnswersAsListOfStrings());
         form.setSpecialanswers(user.getSpecialAnswersAsListOfStrings());
         return form;

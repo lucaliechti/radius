@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import radius.User;
 import radius.data.dto.EmailDto;
 import radius.data.dto.PasswordUuidDto;
 import radius.web.components.ModelRepository;
@@ -74,9 +75,15 @@ public class PasswordController {
         if(result.hasErrors()) {
             return "reset";
         }
-        Optional<String> email = userService.findEmailByUuid(dto.getUuid());
-        if(email.isPresent()) {
-            boolean success = passwordService.updatePassword(dto.getPassword(), email.get());
+        Optional<String> optionalEmail = userService.findEmailByUuid(dto.getUuid());
+        if(optionalEmail.isEmpty()) {
+            model.addAttribute("generic_error", Boolean.TRUE);
+            model.addAllAttributes(modelRepository.homeAttributes());
+            return "home";
+        }
+        Optional<User> optionalUser = userService.findUserByEmail(optionalEmail.get());
+        if(optionalUser.isPresent()) {
+            boolean success = passwordService.updatePassword(optionalUser.get(), dto.getPassword());
             if (success) {
                 model.addAttribute("passwordReset", Boolean.TRUE);
                 model.addAllAttributes(modelRepository.homeAttributes());

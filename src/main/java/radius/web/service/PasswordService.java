@@ -4,6 +4,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import radius.User;
 import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.UserRepository;
 import radius.web.components.EmailService;
@@ -36,9 +37,11 @@ public class PasswordService {
         this.encoder = encoder;
     }
 
-    public boolean updatePassword(String email, String newPassword) {
+    public boolean updatePassword(User user, String plaintextPassword) {
+        user.setPassword(encoder.encode(plaintextPassword));
+        user.setUuid(UUID.randomUUID().toString());
         try {
-            userRepo.updatePassword(encoder.encode(newPassword), UUID.randomUUID().toString(), email);
+            userRepo.updateExistingUser(user);
         } catch (Exception e) {
             return false;
         }

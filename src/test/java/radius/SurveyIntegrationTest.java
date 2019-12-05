@@ -8,10 +8,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import radius.data.form.UserForm;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.data.repository.JDBCSurveyRepository;
 import radius.web.controller.RegistrationController;
 import radius.web.controller.SurveyController;
+import radius.web.service.UserService;
+
+import java.util.Locale;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -32,6 +37,8 @@ public class SurveyIntegrationTest {
     JDBCSurveyRepository mockSurveyRepo = mock(JDBCSurveyRepository.class);
     JDBCNewsletterRepository mockNewsletterRepo = mock(JDBCNewsletterRepository.class);
     RegistrationController mockRegistrationController = mock(RegistrationController.class);
+    UserService mockUserService = mock(UserService.class);
+    User mockUser = mock(User.class);
 
     @Autowired
     SurveyController surveyController;
@@ -73,8 +80,9 @@ public class SurveyIntegrationTest {
         ReflectionTestUtils.setField(surveyController, "registrationController", mockRegistrationController);
         ReflectionTestUtils.setField(surveyController, "surveyRepo", mockSurveyRepo);
         doNothing().when(mockSurveyRepo).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
-        doReturn("home").when(mockRegistrationController).
-                cleanlyRegisterNewUser(any(), any(), anyString(), anyString(), anyString(), anyString(), anyString());
+        ReflectionTestUtils.setField(surveyController, "userService", mockUserService);
+        doReturn(Optional.of(mockUser)).when(mockUserService).registerNewUserFromRegistrationForm(any(UserForm.class));
+        doReturn(true).when(mockUserService).sendConfirmationEmail(any(User.class), any(Locale.class));
 
         mockMvc = standaloneSetup(surveyController).build();
 

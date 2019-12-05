@@ -32,12 +32,10 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_USER_BY_UUID =		"SELECT email FROM users WHERE uuid = ?";
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
 	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
-	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, locations = ?, languages = ?, motivation = ?, answered = TRUE, regularanswers = ?, datemodify = ? WHERE email = ?";
+	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, firstname = ?, lastname = ?, password = ?, canton = ?, languages = ?, locations = ?, enabled = ?, answered = ?, motivation = ?, datemodify = ?, uuid = ?, regularanswers = ? WHERE email = ?";
 	private static final String ANSWER_CURRENT_VOTE = 	"INSERT INTO votes (email, votenr, answer) VALUES (?, ?, ?)";
 	private static final String UPDATE_VOTE =    		"UPDATE votes SET answer = ? WHERE email = ? AND votenr = ?";
-	private static final String UPDATE_PASSWORD = 		"UPDATE users SET password = ?, uuid = ?, datemodify = ? WHERE email = ?";
 	private static final String SET_USER_STATUS =		"UPDATE users SET status = ? WHERE email = ?";
-	private static final String ENABLE_USER = 			"UPDATE users SET enabled = TRUE, uuid = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
@@ -74,19 +72,19 @@ public class JDBCUserRepository implements UserRepository {
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			List<Integer> locations = Collections.emptyList();
-			if(rs.getString("locations") != null){
+			if(rs.getString("locations") != null && !rs.getString("locations").equals("")){
 				locations = Arrays.stream(rs.getString("locations").split(";")).map(Integer::valueOf).collect(Collectors.toList());
 			}
 			ArrayList<String> languages = new ArrayList<String>();
-			if(rs.getString("languages") != null){
+			if(rs.getString("languages") != null && !rs.getString("languages").equals("")){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
 			}
 			ArrayList<String> regularanswers = new ArrayList<String>();
-			if(rs.getString("regularanswers") != null){
+			if(rs.getString("regularanswers") != null && !rs.getString("regularanswers").equals("")){
 				regularanswers = new ArrayList<String>(Arrays.asList(rs.getString("regularanswers").split(";")));
 			}
 			ArrayList<String> specialanswers = new ArrayList<String>();
-			if(rs.getString("answer") != null){
+			if(rs.getString("answer") != null && !rs.getString("answer").equals("")){
 				specialanswers = new ArrayList<String>(Arrays.asList(rs.getString("answer").split(";")));
 			}
 
@@ -124,23 +122,24 @@ public class JDBCUserRepository implements UserRepository {
 	}
 	
 	@Override
-	public void saveUser(User u) throws EmailAlreadyExistsException {
+	public void saveNewUser(User u) throws EmailAlreadyExistsException {
 		if(userExists(u.getEmail())) {
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(),
-				u.getLastname(), u.getCanton() == "NONE" ? null : u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
+				u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
 
 	@Override
-	public void updateUser(User u) {
-		String regularAnswers = String.join(";", u.getRegularAnswersAsListOfStrings());
-		String lang = String.join(";", u.getLanguages());
-		String loc = User.createLocString(u.getLocations());
-		String status = u.getStatus().name();
-		jdbcTemplate.update(UPDATE_USER, status, loc, lang, u.getMotivation(), regularAnswers, OffsetDateTime.now(),
-				u.getEmail());
+	public void updateExistingUser(User user) {
+		String regularAnswers = String.join(";", user.getRegularAnswersAsListOfStrings());
+		String lang = String.join(";", user.getLanguages());
+		String loc = user.locationString();
+		String status = user.getStatus().name();
+		jdbcTemplate.update(UPDATE_USER, status, user.getFirstname(), user.getLastname(), user.getPassword(),
+				user.getCanton(), lang, loc, user.isEnabled(), user.isAnsweredRegular(), user.getMotivation(),
+				OffsetDateTime.now(), user.getUuid(), regularAnswers, user.getEmail());
 	}
 
 	@Override
@@ -153,13 +152,7 @@ public class JDBCUserRepository implements UserRepository {
 		}
 	}
 
-	@Override
-	public void updatePassword(String password, String uuid, String email) {
-		jdbcTemplate.update(UPDATE_PASSWORD, password, uuid, OffsetDateTime.now(), email);
-	}
-
-	@Override
-	public void grantUserRights(String email){
+	private void grantUserRights(String email){
 		jdbcTemplate.update(GRANT_USER_RIGHTS, OffsetDateTime.now(), OffsetDateTime.now(), email, "ROLE_USER");
 	}
 
@@ -173,8 +166,7 @@ public class JDBCUserRepository implements UserRepository {
 		return roles;
 	}
 
-	@Override
-	public boolean userExists(String email) {
+	private boolean userExists(String email) {
 		return jdbcTemplate.queryForObject(USER_EXISTS, new Object[]{email}, Boolean.class);
 	}
 
@@ -186,11 +178,6 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public List<HalfEdge> allMatchesForUser(String email) {
 		return jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
-	}
-
-	@Override
-	public void enableUser(String email) {
-		jdbcTemplate.update(ENABLE_USER, UUID.randomUUID().toString(), email);
 	}
 
 	@Override

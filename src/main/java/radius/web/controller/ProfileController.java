@@ -14,65 +14,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.data.repository.*;
 import radius.data.form.AnswerForm;
-import radius.HalfEdge;
 import radius.User;
 import radius.web.components.RealWorldProperties;
+import radius.web.service.UserService;
 
 @Controller
 @RequestMapping(value="/profile")
 public class ProfileController {
-	
-	private UserRepository userRepo;
+
+	private UserService userService;
 	private StaticResourceRepository staticRepo;
-	private HomeController hc;
 	private RealWorldProperties real;
 
 	@Autowired
-	public ProfileController(JDBCUserRepository userRepo, JSONStaticResourceRepository staticRepo, HomeController hc,
-							 RealWorldProperties real) {
-		this.userRepo = userRepo;
+	public ProfileController(UserService userService, JSONStaticResourceRepository staticRepo, RealWorldProperties real) {
+		this.userService = userService;
 		this.staticRepo = staticRepo;
-		this.hc = hc;
 		this.real = real;
 	}
 
 	@RequestMapping(method=GET)
-	public String profile(@RequestParam(value = "login", required = false) String loggedin, Model model) {
+	public String profile(@RequestParam(value="login", required=false) String loggedin, Model model) {
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		User u = userRepo.findUserByEmail(email);
-		if(!u.isEnabled()) {
+		User user = userService.findUserByEmail(email).get();
+		if(!user.isEnabled()) {
 			model.addAttribute("not_enabled", true);
-			return hc.home(null, null, model);
-		}
-		else if(!u.isAnsweredRegular()) {
+			return "home";
+		} else if(!user.isAnsweredRegular()) {
 			model.addAttribute("lang", staticRepo.languages());
 			model.addAttribute("answerForm", new AnswerForm());
 			return "answers";
-		}
-		else {
-			model.addAttribute("firstName", u.getFirstname());
-			model.addAttribute("lastName", u.getLastname());
-			model.addAttribute("email", u.getEmail());
-			model.addAttribute("canton", u.getCanton());
-			model.addAttribute("motivation", u.getMotivation());
-			List<String> answers = u.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase)
+		} else {
+			model.addAttribute("user", user);
+			List<String> answers = user.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase)
 					.collect(Collectors.toList());
 			model.addAttribute("answers", answers);
-//			model.addAttribute("user", u); //this would be enough (except for questions probably). Make nicer.
-			model.addAttribute("locations", staticRepo.prettyLocations(u.getLocations()));
-			model.addAttribute("languages", u.getLanguages());
-			model.addAttribute("history", usersMatches(email));
+			model.addAttribute("locations", staticRepo.prettyLocations(user.getLocations()));
+			model.addAttribute("history", userService.allMatchesForUser(email));
 			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
 		}
 		return "profile";
 	}
-
-	public List<HalfEdge> usersMatches(String email) {
-		return userRepo.allMatchesForUser(email);
-	}
-
 }
-

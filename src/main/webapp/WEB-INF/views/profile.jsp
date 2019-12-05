@@ -27,22 +27,17 @@
       <h2>
          <spring:message code="profile.title"/>
       </h2>
-      <!-- 	
-         <div class="editing-icons-div"><a href="#"><img src="img/icon-edit.png" class="editing-icons"></a>				
-         <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a></div>-->
    </section>
    <section class="leftsection-content">
    <section class="leftsection-content-element" id="">
       <h2><spring:message code="profile.personaldata"/></h2>
-   	  <!-- <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div> -->
-   
-   <p><b><spring:message code="profile.fn"/>:</b> ${firstName}
-   <p><b><spring:message code="profile.ln"/>:</b> ${lastName}
-   <p><b><spring:message code="profile.email"/>:</b> ${email}
-   <p><b><spring:message code="profile.canton"/>:</b> <c:if test="${canton != null}"><spring:message code="canton.${canton}"/></c:if>
-   <p><b><spring:message code="profile.motivation"/>:</b> ${motivation}	
+      <p><b><spring:message code="profile.fn"/>:</b> ${user.firstname}
+      <p><b><spring:message code="profile.ln"/>:</b> ${user.lastname}
+      <p><b><spring:message code="profile.email"/>:</b> ${user.email}
+      <p><b><spring:message code="profile.canton"/>:</b> <c:if test="${user.canton != null}"><spring:message code="canton.${user.canton}"/></c:if>
+      <p><b><spring:message code="profile.motivation"/>:</b> ${user.motivation}
    </section>
-   <section class="leftsection-content-element" id="">
+   <section class="leftsection-content-element" id="radiusdata">
       <div class="editable">
       <h2><spring:message code="profile.radiusdata"/></h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
@@ -50,12 +45,12 @@
 
    <c:forEach begin="1" end="${nrQ}" varStatus="loop">
       <p><b><spring:message code="q${loop.index}"/></b>
-         <br>
-         <spring:message code="question.${answers[loop.index-1]}"/>
+      <br>
+      <spring:message code="question.${answers[loop.index-1]}"/>
    </c:forEach>
 
    </section>	
-   <section class="leftsection-content-element" id="">
+   <section class="leftsection-content-element" id="additionaldata">
          <div class="editable">
       <h2>
          <spring:message code="profile.additionaldata"/>
@@ -63,10 +58,10 @@
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
    
-   <p><b><spring:message code="profile.languages"/>:</b> <c:forEach items="${languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach>
+   <p><b><spring:message code="profile.languages"/>:</b> <c:forEach items="${user.languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach>
    <p><b><spring:message code="profile.locations"/>:</b> <c:forEach items="${locations}" var="item" varStatus="loop">${item}${!loop.last ? ', ' : ''}</c:forEach>
    </section>
-   <section class="leftsection-content-element" id="">
+   <section class="leftsection-content-element" id="delete">
    <div class="editable">
       <h2><spring:message code="profile.delete"/></h2>
    </div>
@@ -78,15 +73,7 @@
 </section>
 </section>
 </section>
-<section id="rightsection"><!-- 
-   <section id="profile-history" class="profile-resume">
-      <h2><spring:message code="profile.history"/></h2>
-      <p><spring:message code="profile.history.none"/></p>
-   </section>
-   <section id="profile-experiences" class="profile-resume">
-      <h2><spring:message code="profile.experiences"/></h2>
-      <p><spring:message code="profile.experiences.none"/></p>
-   </section> -->
+<section id="rightsection">
    <jsp:include page="history.jsp" />
 </section>
 

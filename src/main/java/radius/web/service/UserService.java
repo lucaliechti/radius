@@ -1,13 +1,19 @@
 package radius.web.service;
 
+import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.data.form.MeetingFeedbackForm;
+import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.web.components.EmailService;
+import radius.web.components.ProfileDependentProperties;
 import radius.web.components.RealWorldProperties;
 
 import java.util.*;
@@ -19,34 +25,57 @@ public class UserService {
     private MatchingRepository matchRepo;
     private StaticResourceRepository staticRepo;
     private RealWorldProperties realWorld;
+    private EmailService emailService;
+    private JavaMailSenderImpl helloMailSender;
+    private ProfileDependentProperties prop;
+    private MessageSource messageSource;
+    private PasswordEncoder encoder;
+
+    private static final String EMAIL_CONFIRM_SUBJECT = "email.confirm.title";
+    private static final String EMAIL_CONFIRM_MESSAGE = "email.confirm.content";
 
     public UserService(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo,
-                       JSONStaticResourceRepository staticRepo, RealWorldProperties realWorld) {
+                       JSONStaticResourceRepository staticRepo, RealWorldProperties realWorld, EmailService emailService,
+                       JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop, MessageSource messageSource,
+                       PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
         this.staticRepo = staticRepo;
         this.realWorld = realWorld;
+        this.emailService = emailService;
+        this.helloMailSender = helloMailSender;
+        this.prop = prop;
+        this.messageSource = messageSource;
+        this.encoder = encoder;
     }
 
     public void activateUser(User user) {
         user.setStatus(User.UserStatus.WAITING);
-        updateUser(user);
+        updateExistingUser(user);
     }
 
     public void deactivateUser(User user) {
         user.setStatus(User.UserStatus.INACTIVE);
-        updateUser(user);
+        updateExistingUser(user);
     }
 
-    public void updateUser(User user) {
-        userRepo.updateUser(user);
-        if(realWorld.isSpecialIsActive() && user.getSpecialanswers().size() > 0) {
+    public void enableUser(String email) {
+        User user = findUserByEmail(email).get();
+        user.setEnabled(true);
+        user.setUuid(UUID.randomUUID().toString());
+        updateExistingUser(user);
+    }
+
+    public void updateExistingUser(User user) {
+        userRepo.updateExistingUser(user);
+        if (realWorld.isSpecialIsActive() && user.getSpecialanswers().size() > 0) {
             userRepo.updateVotes(user.getEmail(), realWorld.getCurrentVote(), user.getSpecialanswers());
         }
     }
 
-    public void saveUser(User user) throws EmailAlreadyExistsException { //TODO: RegistrationController
-        userRepo.saveUser(user);
+    public void saveNewUser(User user) throws EmailAlreadyExistsException {
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepo.saveNewUser(user);
     }
 
     public Optional<User> findUserByEmail(String email) {
@@ -108,5 +137,38 @@ public class UserService {
             userSpecificAttributes.put("commonlanguages", up.commonLanguages());
         }
         return userSpecificAttributes;
+    }
+
+    public Optional<User> registerNewUserFromRegistrationForm(UserForm registrationForm) {
+        String firstName = registrationForm.getFirstName();
+        String lastName = registrationForm.getLastName();
+        String canton = registrationForm.getCanton();
+        String email = registrationForm.getEmail();
+        String password = registrationForm.getPassword();
+        assert canton != null;
+
+        User user = new User(firstName, lastName, canton.equals("NONE") ? null : canton, email, password);
+
+        try {
+            saveNewUser(user);
+        } catch (EmailAlreadyExistsException e) {
+            return Optional.empty();
+        }
+        return Optional.of(user);
+    }
+
+    public boolean sendConfirmationEmail(User user, Locale locale) {
+        try {
+            emailService.sendSimpleMessage(
+                    user.getEmail(),
+                    messageSource.getMessage(EMAIL_CONFIRM_SUBJECT, new Object[]{}, locale),
+                    messageSource.getMessage(EMAIL_CONFIRM_MESSAGE, new Object[]{user.getFirstname(), user.getLastname(),
+                            prop.getUrl() + "/confirm?uuid=" + user.getUuid()}, locale),
+                    helloMailSender
+            );
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

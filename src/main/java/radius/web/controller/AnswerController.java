@@ -71,7 +71,7 @@ public class AnswerController {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
 			User user = userService.findUserByEmail(email).get();
 			answerService.updateUserFromAnswerForm(user, answerForm);
-			userService.updateUser(user);
+			userService.updateExistingUser(user);
 			model.addAllAttributes(userService.userSpecificAttributes(user));
 			return "status";
 		}

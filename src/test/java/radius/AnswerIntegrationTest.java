@@ -42,7 +42,7 @@ public class AnswerIntegrationTest {
         doReturn(Optional.of(mockUser)).when(mockUserService).findUserByEmail(anyString());
         doReturn(true).when(mockUser).isAnsweredRegular();
         doReturn(true).when(mockUser).isEnabled();
-        doNothing().when(mockUserService).saveUser(any(User.class));
+        doNothing().when(mockUserService).saveNewUser(any(User.class));
         ReflectionTestUtils.setField(answerController, "userService", mockUserService);
     }
 

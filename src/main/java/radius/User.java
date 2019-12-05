@@ -39,21 +39,21 @@ public class User {
 	}
 
 	public User(
-			String firstname,
-			String lastname,
-			String email,
-			String password,
-			String canton,
-			UserStatus status,
-			String motivation,
-			boolean enabled,
-			boolean answeredRegular,
-			boolean banned,
-			List<Integer> locations,
-			List<String> languages,
-			List<String> regularanswers,
-			List<String> specialanswers,
-			Timestamp dateModified
+		String firstname,
+		String lastname,
+		String email,
+		String password,
+		String canton,
+		UserStatus status,
+		String motivation,
+		boolean enabled,
+		boolean answeredRegular,
+		boolean banned,
+		List<Integer> locations,
+		List<String> languages,
+		List<String> regularanswers,
+		List<String> specialanswers,
+		Timestamp dateModified
 	) {
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -140,8 +140,8 @@ public class User {
 		}
 	}
 	
-	public static String createLocString(List<Integer> locs){
-		return locs.stream().map(String::valueOf).collect(Collectors.joining(";"));
+	public String locationString(){
+		return locations.stream().map(String::valueOf).collect(Collectors.joining(";"));
 	}
 
 	public enum UserStatus {

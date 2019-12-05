@@ -230,35 +230,28 @@
                <spring:message code="home.register.error.general"/>
             </p>
          </c:if>
-         <c:if test="${emailExistsError != null}">
-            <p class="error">
-               <spring:message code="home.register.error.emailexists"/>
-            </p>
-         </c:if>
       </section>
-
-            <section id="profile-deco" class="profile-resume">
-               <h2>
-                  <spring:message code="newsletter.title"/>
-               </h2>
-                <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
-                    <div class="form-group">
-                       <form:label path="email">
-                          <spring:message code="home.register.email"/>
-                       </form:label>
-                       <div class="col-10">
-                          <form:input path="email" class="form-control"/>
-                       </div>
-                       <div class="feedback-error" id="register-feedback-newsletter-email">
-                          <form:errors path="email"/>
-                       </div>
-                    </div>
-                    <input type="submit" class="btn btn-primary" value="${feed}" />
-                    <p><spring:message code="newsletter.description"/></p>
-                    <sec:csrfInput />
-                </form:form>
-            </section>
-
+        <section id="profile-deco" class="profile-resume">
+           <h2>
+              <spring:message code="newsletter.title"/>
+           </h2>
+            <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
+                <div class="form-group">
+                   <form:label path="email">
+                      <spring:message code="home.register.email"/>
+                   </form:label>
+                   <div class="col-10">
+                      <form:input path="email" class="form-control"/>
+                   </div>
+                   <div class="feedback-error" id="register-feedback-newsletter-email">
+                      <form:errors path="email"/>
+                   </div>
+                </div>
+                <input type="submit" class="btn btn-primary" value="${feed}" />
+                <p><spring:message code="newsletter.description"/></p>
+                <sec:csrfInput />
+            </form:form>
+        </section>
    </section>
 </main>
 <jsp:include page="templates/footer.jsp" />

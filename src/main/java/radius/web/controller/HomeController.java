@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.User;
 import radius.web.components.ModelRepository;
+import radius.web.service.AnswerService;
 import radius.web.service.UserService;
 
 import java.util.Optional;
@@ -23,10 +24,12 @@ import java.util.Optional;
 public class HomeController {
 
 	private UserService userService;
+	private AnswerService answerService;
 	private ModelRepository modelRepository;
 
-	public HomeController(UserService userService, ModelRepository modelRepository) {
+	public HomeController(UserService userService, AnswerService answerService, ModelRepository modelRepository) {
 		this.userService = userService;
+		this.answerService = answerService;
 		this.modelRepository = modelRepository;
 	}
 	
@@ -80,6 +83,7 @@ public class HomeController {
 		}
 		else if(!user.isAnsweredRegular()) {
 			model.addAllAttributes(modelRepository.answerAttributes());
+			model.addAttribute("answerForm", answerService.newFormFromUser(user));
 			return "answers";
 		} else {
 			model.addAllAttributes(userService.userSpecificAttributes(user));

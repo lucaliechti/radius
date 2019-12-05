@@ -6,12 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import radius.User;
 import radius.data.form.SurveyForm;
+import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.web.components.ModelRepository;
+import radius.web.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Locale;
+import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -21,19 +25,20 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class SurveyController {
 
     private StaticResourceRepository staticRepo;
-    private RegistrationController registrationController;
     private ModelRepository modelRepository;
     private SurveyRepository surveyRepo;
     private NewsletterRepository newsletterRepo;
+    private UserService userService;
     private final int SURVEY_SIZE = 15;
 
-    public SurveyController(JSONStaticResourceRepository staticRepo, RegistrationController r, ModelRepository modelRepository,
-                            JDBCSurveyRepository surveyRepo, JDBCNewsletterRepository newsletterRepo) {
+    public SurveyController(JSONStaticResourceRepository staticRepo, ModelRepository modelRepository,
+                            JDBCSurveyRepository surveyRepo, JDBCNewsletterRepository newsletterRepo,
+                            UserService userService) {
         this.staticRepo = staticRepo;
-        this.registrationController = r;
         this.modelRepository = modelRepository;
         this.surveyRepo = surveyRepo;
         this.newsletterRepo = newsletterRepo;
+        this.userService = userService;
     }
 
     @RequestMapping(value="/survey", method=GET)
@@ -62,12 +67,27 @@ public class SurveyController {
         model.addAttribute("surveySuccess", Boolean.TRUE);
 
         if(wantsToRegister) {
-            String firstName = surveyForm.getFirstName();
-            String lastName = surveyForm.getLastName();
-            String canton = surveyForm.getCanton();
-            String emailR = surveyForm.getEmailR();
-            String password = surveyForm.getPassword();
-            return registrationController.cleanlyRegisterNewUser(model, loc, firstName, lastName, canton, emailR, password);
+            UserForm userForm = new UserForm();
+            userForm.setFirstName(surveyForm.getFirstName());
+            userForm.setLastName(surveyForm.getLastName());
+            userForm.setCanton(surveyForm.getCanton());
+            userForm.setEmail(surveyForm.getEmailR());
+            userForm.setPassword(surveyForm.getPassword());
+
+            Optional<User> optionalUser = userService.registerNewUserFromRegistrationForm(userForm);
+            if(optionalUser.isEmpty()) {
+                model.addAttribute("registrationError", true);
+                model.addAllAttributes(modelRepository.homeAttributes());
+                return "home";
+            }
+            boolean success = userService.sendConfirmationEmail(optionalUser.get(), loc);
+            if(success) {
+                model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
+            } else {
+                model.addAttribute("registrationError", true);
+            }
+            model.addAllAttributes(modelRepository.homeAttributes());
+            return "home";
         }
 
         else if(wantsNewsletter) {

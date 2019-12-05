@@ -16,7 +16,6 @@ import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.JSONStaticResourceRepository;
 import radius.data.repository.StaticResourceRepository;
 import radius.web.components.EmailService;
-import radius.web.components.SimpleEmailService;
 
 import java.time.Instant;
 import java.util.*;

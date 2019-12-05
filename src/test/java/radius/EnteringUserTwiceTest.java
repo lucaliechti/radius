@@ -35,7 +35,7 @@ public class EnteringUserTwiceTest {
     @Test
     public void insertUser() throws Exception {
         User u = new User("firstname", "lastname", "NONE", alreadyExistingEmail, "secretSECRET");
-        assertThrows(EmailAlreadyExistsException.class, () -> repo.saveUser(u));
+        assertThrows(EmailAlreadyExistsException.class, () -> repo.saveNewUser(u));
     }
 
 }
