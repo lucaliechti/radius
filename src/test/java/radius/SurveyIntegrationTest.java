@@ -9,10 +9,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import radius.data.form.UserForm;
-import radius.data.repository.JDBCNewsletterRepository;
-import radius.data.repository.JDBCSurveyRepository;
-import radius.web.controller.RegistrationController;
 import radius.web.controller.SurveyController;
+import radius.web.service.NewsletterService;
+import radius.web.service.SurveyService;
 import radius.web.service.UserService;
 
 import java.util.Locale;
@@ -34,9 +33,8 @@ public class SurveyIntegrationTest {
     private String correctQuestions = "1,15";
     private MockMvc mockMvc;
 
-    JDBCSurveyRepository mockSurveyRepo = mock(JDBCSurveyRepository.class);
-    JDBCNewsletterRepository mockNewsletterRepo = mock(JDBCNewsletterRepository.class);
-    RegistrationController mockRegistrationController = mock(RegistrationController.class);
+    SurveyService mockSurveyService = mock(SurveyService.class);
+    NewsletterService mockNewsletterService = mock(NewsletterService.class);
     UserService mockUserService = mock(UserService.class);
     User mockUser = mock(User.class);
 
@@ -77,9 +75,8 @@ public class SurveyIntegrationTest {
 
     @Test
     public void successfullyRegister() throws Exception {
-        ReflectionTestUtils.setField(surveyController, "registrationController", mockRegistrationController);
-        ReflectionTestUtils.setField(surveyController, "surveyRepo", mockSurveyRepo);
-        doNothing().when(mockSurveyRepo).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
+        ReflectionTestUtils.setField(surveyController, "surveyService", mockSurveyService);
+        doReturn(true).when(mockSurveyService).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
         ReflectionTestUtils.setField(surveyController, "userService", mockUserService);
         doReturn(Optional.of(mockUser)).when(mockUserService).registerNewUserFromRegistrationForm(any(UserForm.class));
         doReturn(true).when(mockUserService).sendConfirmationEmail(any(User.class), any(Locale.class));
@@ -101,8 +98,8 @@ public class SurveyIntegrationTest {
 
     @Test
     public void failingSurveyRepo() throws Exception {
-        ReflectionTestUtils.setField(surveyController, "surveyRepo", mockSurveyRepo);
-        doThrow(RuntimeException.class).when(mockSurveyRepo).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
+        ReflectionTestUtils.setField(surveyController, "surveyService", mockSurveyService);
+        doReturn(false).when(mockSurveyService).saveAnswers(anyList(), anyList(), anyBoolean(), anyBoolean());
 
         mockMvc = standaloneSetup(surveyController).build();
 
@@ -129,8 +126,8 @@ public class SurveyIntegrationTest {
 
     @Test
     public void failingNewsletterRepo() throws Exception {
-        ReflectionTestUtils.setField(surveyController, "newsletterRepo", mockNewsletterRepo);
-        doThrow(RuntimeException.class).when(mockNewsletterRepo).subscribe(anyString(), anyString());
+        ReflectionTestUtils.setField(surveyController, "newsletterService", mockNewsletterService);
+        doReturn(false).when(mockNewsletterService).subscribe(anyString(), any(Locale.class), anyString());
 
         mockMvc = standaloneSetup(surveyController).build();
 

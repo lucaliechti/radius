@@ -11,6 +11,8 @@ import radius.data.form.SurveyForm;
 import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.web.components.ModelRepository;
+import radius.web.service.NewsletterService;
+import radius.web.service.SurveyService;
 import radius.web.service.UserService;
 
 import javax.validation.Valid;
@@ -26,18 +28,18 @@ public class SurveyController {
 
     private StaticResourceRepository staticRepo;
     private ModelRepository modelRepository;
-    private SurveyRepository surveyRepo;
-    private NewsletterRepository newsletterRepo;
+    private SurveyService surveyService;
+    private NewsletterService newsletterService;
     private UserService userService;
-    private final int SURVEY_SIZE = 15;
+    private static final int SURVEY_SIZE = 15;
+    private static final String REGISTRATION_SURVEY = "Survey Summer 2019";
 
     public SurveyController(JSONStaticResourceRepository staticRepo, ModelRepository modelRepository,
-                            JDBCSurveyRepository surveyRepo, JDBCNewsletterRepository newsletterRepo,
-                            UserService userService) {
+                            SurveyService surveyService, NewsletterService newsletterService, UserService userService) {
         this.staticRepo = staticRepo;
         this.modelRepository = modelRepository;
-        this.surveyRepo = surveyRepo;
-        this.newsletterRepo = newsletterRepo;
+        this.surveyService = surveyService;
+        this.newsletterService = newsletterService;
         this.userService = userService;
     }
 
@@ -57,9 +59,9 @@ public class SurveyController {
         boolean wantsNewsletter = surveyForm.getNewsletter();
         boolean wantsToRegister = surveyForm.getRegistration();
 
-        try {
-            surveyRepo.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(), wantsNewsletter, wantsToRegister);
-        } catch(Exception e) {
+        boolean surveySuccess = surveyService.saveAnswers(surveyForm.getQuestions(), surveyForm.getAnswers(),
+                wantsNewsletter, wantsToRegister);
+        if(!surveySuccess) {
             model.addAttribute("surveyFailure", Boolean.TRUE);
             model.addAttribute("surveyForm", surveyForm);
             return "survey";
@@ -80,8 +82,8 @@ public class SurveyController {
                 model.addAllAttributes(modelRepository.homeAttributes());
                 return "home";
             }
-            boolean success = userService.sendConfirmationEmail(optionalUser.get(), loc);
-            if(success) {
+            boolean registrationSuccess = userService.sendConfirmationEmail(optionalUser.get(), loc);
+            if(registrationSuccess) {
                 model.addAttribute("waitForEmailConfirmation", Boolean.TRUE);
             } else {
                 model.addAttribute("registrationError", true);
@@ -92,9 +94,8 @@ public class SurveyController {
 
         else if(wantsNewsletter) {
             String emailN = surveyForm.getEmailN();
-            try {
-                newsletterRepo.subscribe(emailN, "Survey Summer 2019");
-            } catch (Exception e) {
+            boolean newsletterSuccess = newsletterService.subscribe(emailN, loc, REGISTRATION_SURVEY);
+            if(!newsletterSuccess) {
                 model.addAttribute("surveyFailure", Boolean.TRUE);
                 model.addAttribute("surveyForm", surveyForm);
                 return "survey";
