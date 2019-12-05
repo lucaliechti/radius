@@ -1,27 +1,22 @@
 package radius;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
-import radius.data.repository.JSONStaticResourceRepository;
+import radius.web.components.ModelRepository;
 import radius.web.controller.HomeController;
-import radius.web.controller.StatusController;
-
-import java.util.Collections;
+import radius.web.service.UserService;
 
 public class HomeControllerTest {
-
 	@Test
 	public void testHomePage() throws Exception {
-        JSONStaticResourceRepository staticRepo = mock(JSONStaticResourceRepository.class);
-		when(staticRepo.cantons()).thenReturn(Collections.emptyList());
-		StatusController sc = mock(StatusController.class);
-		HomeController controller = new HomeController(staticRepo, sc);
+		UserService mockUserService = mock(UserService.class);
+		ModelRepository mockModelRepository = mock(ModelRepository.class);
+		HomeController controller = new HomeController(mockUserService, mockModelRepository);
 		MockMvc mockMvc = standaloneSetup(controller).build();
 		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}

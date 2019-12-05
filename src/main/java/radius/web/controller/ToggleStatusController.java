@@ -12,65 +12,68 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.data.repository.JDBCMatchingRepository;
-import radius.data.repository.JDBCUserRepository;
+import radius.User;
 import radius.data.form.MeetingFeedbackForm;
-import radius.data.repository.MatchingRepository;
-import radius.data.repository.UserRepository;
+import radius.web.components.ModelRepository;
+import radius.web.service.MatchingService;
+import radius.web.service.UserService;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value="/toggleStatus")
 public class ToggleStatusController {
 
-	private UserRepository userRepo;
-	private MatchingRepository matchRepo;
-	private StatusController sc;
+	private UserService userService;
+	private ModelRepository modelRepository;
+	private MatchingService matchingService;
 
-	public ToggleStatusController(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo, StatusController sc) {
-		this.userRepo = userRepo;
-		this.matchRepo = matchRepo;
-		this.sc = sc;
+	public ToggleStatusController(UserService userService, ModelRepository modelRepository,
+								  MatchingService matchingService) {
+		this.userService = userService;
+		this.modelRepository = modelRepository;
+		this.matchingService = matchingService;
 	}
 	
 	@RequestMapping(method=GET)
 	public String toggle(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		if(userRepo.userIsActive(email)) {
-			userRepo.deactivateUser(email);
-		} else {
-			userRepo.activateUser(email);
+		Optional<User> optionalUser = userService.findUserByEmail(email);
+		if(optionalUser.isEmpty()) {
+			model.addAttribute("generic_error", Boolean.TRUE);
+			model.addAllAttributes(modelRepository.homeAttributes());
+			return "home";
 		}
-		return sc.statusPage(model);
+		User user = optionalUser.get();
+		if(user.getStatus() != User.UserStatus.INACTIVE) {
+			userService.deactivateUser(user);
+		} else {
+			userService.activateUser(user);
+		}
+		model.addAllAttributes(userService.userSpecificAttributes(user));
+		return "status";
 	}
 	
 	@RequestMapping(method=POST)
 	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm,
 							 BindingResult result, Model model) {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		Optional<User> optionalUser = userService.findUserByEmail(email);
+		if(optionalUser.isEmpty()) {
+			model.addAttribute("generic_error", Boolean.TRUE);
+			model.addAllAttributes(modelRepository.homeAttributes());
+			return "home";
+		}
+		User user = optionalUser.get();
 		if(result.hasErrors()) {
 			model.addAttribute("success", 0);
-			return sc.statusPage(model);
+			model.addAllAttributes(userService.userSpecificAttributes(user));
+			return "status";
 		}
-		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		
-		if(feedbackForm.isConfirmed()) {
-			matchRepo.confirmHalfEdge(email);
-		} else {
-			matchRepo.unconfirmHalfEdge(email);
-		}
-		matchRepo.deactivateOldMatchesFor(email);
-		
-		switch(feedbackForm.getNextState()) {
-		case "WAITING":
-			model.addAttribute("success", 1);
-			userRepo.activateUser(email);
-			break;
-		case "INACTIVE":
-			model.addAttribute("success", 1);
-			userRepo.deactivateUser(email);
-			break;
-		default:
-			model.addAttribute("success", 0);
-		}
-		return sc.statusPage(model);
+		matchingService.updateMatchesAfterMeeting(user, feedbackForm);
+		boolean success = userService.updateUserAfterMeeting(user, feedbackForm);
+		model.addAllAttributes(userService.userSpecificAttributes(user));
+		model.addAttribute("success", success ? 1 : 0);
+		return "status";
 	}
 }

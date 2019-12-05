@@ -9,7 +9,7 @@ import radius.data.repository.JDBCNewsletterRepository;
 import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.NewsletterRepository;
 import radius.data.repository.UserRepository;
-import radius.web.components.RealWorldConfiguration.RealWorldProperties;
+import radius.web.components.RealWorldProperties;
 
 @Controller
 public class AdminController {

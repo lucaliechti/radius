@@ -3,11 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,123 +18,77 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import radius.data.form.AnswerForm;
 import radius.User;
-import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.JSONStaticResourceRepository;
-import radius.data.repository.StaticResourceRepository;
-import radius.web.components.RealWorldConfiguration.RealWorldProperties;
+import radius.web.components.ModelRepository;
+import radius.web.components.RealWorldProperties;
+import radius.web.service.AnswerService;
+import radius.web.service.UserService;
 
 @Controller
 @RequestMapping(value="/answers")
 public class AnswerController {
 	
-	private JDBCUserRepository userRepo;
-	private StaticResourceRepository staticRepo;
 	private RealWorldProperties realWorld;
-	private boolean specialIsActive;
-	private StatusController sc;
 	private MessageSource validationMessages;
+	private UserService userService;
+	private ModelRepository modelRepository;
+	private AnswerService answerService;
 
 	private static final String ERROR_ANSWER_REGULAR_QUESTIONS = "error.answerRegularQuestions";
 	private static final String ERROR_AT_LEAST_ONE_SET = "error.answerOneSetOfQuestions";
 
 	@Autowired
-	public AnswerController(JDBCUserRepository _userRepo, JSONStaticResourceRepository _staticRepo,
-							RealWorldProperties _realWorld, MessageSource validationMessageSource) {
-		this.userRepo = _userRepo;
-		this.staticRepo = _staticRepo;
+	public AnswerController(RealWorldProperties _realWorld, MessageSource validationMessageSource,
+							UserService userService, ModelRepository modelRepository, AnswerService answerService) {
 		this.realWorld = _realWorld;
-		this.specialIsActive = realWorld.isSpecialIsActive();
 		this.validationMessages = validationMessageSource;
-	}
-
-	@Autowired
-	public void setStatusController(StatusController sc) {
-		this.sc = sc;
+		this.userService = userService;
+		this.modelRepository = modelRepository;
+		this.answerService = answerService;
 	}
 
 	@RequestMapping(method=GET)
 	public String answer(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		User u = userRepo.findUserByEmail(email);
-		model.addAttribute("answerForm", u.isAnsweredRegular() ||
-				(u.getSpecialanswers() != null && u.getSpecialanswers().size() > 0) ?
-				newFormFromUser(u) : new AnswerForm());
-		prepare(model);
+		User user = userService.findUserByEmail(email).get();
+		model.addAttribute("answerForm", user.isAnsweredRegular() ||
+				(user.getSpecialanswers() != null && user.getSpecialanswers().size() > 0) ?
+				answerService.newFormFromUser(user) : new AnswerForm());
+		model.addAllAttributes(modelRepository.answerAttributes());
 		return "answers";
 	}
 	
 	@RequestMapping(method=POST)
-	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm,
-						 BindingResult result, Model model, Locale locale)  {
-		if (!validlyAnswered(answerForm)) {
-			provideFeedback(result, locale);
+	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model,
+			Locale locale)  {
+		if(result.hasErrors()) {
+			model.addAllAttributes(modelRepository.answerAttributes());
 			return "answers";
-		} else if(result.hasErrors()) {
+		} else if(!answerService.validlyAnswered(answerForm)) {
+			provideFeedback(result, locale);
+			model.addAllAttributes(modelRepository.answerAttributes());
 			return "answers";
 		} else {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();
-			User u = userRepo.findUserByEmail(email);
-			u = updateUserFromForm(u, answerForm);
-			u.setAnsweredRegular(true);
-			u.setStatus(User.UserStatus.WAITING);
-			userRepo.updateUser(u);
-			if (answerForm.getSpecialanswers() != null) {
-				userRepo.updateVotes(email, realWorld.getCurrentVote(),
-						answerForm.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList()));
-			}
-			return sc.statusPage(model);
+			User user = userService.findUserByEmail(email).get();
+			answerService.updateUserFromAnswerForm(user, answerForm);
+			userService.updateUser(user);
+			model.addAllAttributes(userService.userSpecificAttributes(user));
+			return "status";
 		}
-	}
-
-	@ModelAttribute
-	public void prepare(Model model) {
-		model.addAttribute("lang", staticRepo.languages());
-		model.addAttribute("nrQ", realWorld.getNumberOfRegularQuestions());
-		model.addAttribute("special", realWorld.isSpecialIsActive());
-		model.addAttribute("nrV", realWorld.getNumberOfVotes());
-		model.addAttribute("currentVote", realWorld.getCurrentVote());
-	}
-	
-	private AnswerForm newFormFromUser(User u) {
-		AnswerForm form = new AnswerForm();
-		form.setMotivation(u.getMotivation());
-		form.setLanguages(u.getLanguages());
-		form.setLocations(User.createLocString(u.getLocations()));
-		form.setRegularanswers(u.getRegularAnswersAsListOfStrings());
-		form.setSpecialanswers(u.getSpecialAnswersAsListOfStrings());
-		return form;
-	}
-
-	private User updateUserFromForm(User user, AnswerForm answerForm) {
-		user.setLanguages(answerForm.getLanguages());
-		user.setMotivation(answerForm.getMotivation());
-		user.setRegularanswers(answerForm.getRegularanswers());
-		user.setSpecialanswers(answerForm.getSpecialanswers());
-		user.setLocations(Arrays.stream(answerForm.getLocations().split(";")).map(Integer::valueOf)
-				.collect(Collectors.toList()));
-		return user;
-	}
-
-	private boolean validlyAnswered(AnswerForm form) {
-		return validAnswers(form.getRegularanswers(), realWorld.getNumberOfRegularQuestions())
-				|| validAnswers(form.getSpecialanswers(), realWorld.getNumberOfVotes());
-	}
-
-	private boolean validAnswers(List<String> answers, int nrAnswers) {
-		return answers.size() == nrAnswers && (answers.contains("TRUE") || answers.contains("FALSE"));
 	}
 
 	private void provideFeedback (BindingResult result, Locale locale) {
-		if(!specialIsActive) {
-			addFieldError(result, "answerForm", "regularanswers", ERROR_ANSWER_REGULAR_QUESTIONS, locale);
+		if(!realWorld.isSpecialIsActive()) {
+			addFieldError(result,"regularanswers", ERROR_ANSWER_REGULAR_QUESTIONS, locale);
 		} else {
-			addFieldError(result, "answerForm", "regularanswers", ERROR_AT_LEAST_ONE_SET, locale);
-			addFieldError(result, "answerForm", "specialanswers", ERROR_AT_LEAST_ONE_SET, locale);
+			addFieldError(result, "regularanswers", ERROR_AT_LEAST_ONE_SET, locale);
+			addFieldError(result,"specialanswers", ERROR_AT_LEAST_ONE_SET, locale);
 		}
 	}
 
-	private void addFieldError(BindingResult result, String form, String field, String message, Locale loc) {
-		FieldError regular = new FieldError(form, field, validationMessages.getMessage(message, new String[]{}, loc));
-		result.addError(regular);
+	private void addFieldError(BindingResult result, String field, String message, Locale loc) {
+		FieldError error = new FieldError("answerForm", field,
+				validationMessages.getMessage(message, new String[]{}, loc));
+		result.addError(error);
 	}
 }

@@ -21,12 +21,8 @@ public class JDBCSurveyRepository implements SurveyRepository {
 
     @Override
     public void saveAnswers(List<Integer> questions, List<String> answers, boolean newsletter, boolean registration) {
-        String q = questions.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(";"));
-        String a = answers.stream()
-                .collect(Collectors.joining(";"))
-                .replace("null", "");
+        String q = questions.stream().map(String::valueOf).collect(Collectors.joining(";"));
+        String a = String.join(";", answers).replace("null", "");
         jdbcTemplate.update(SAVE_ANSWERS, OffsetDateTime.now(), q, a, newsletter, registration);
     }
 }

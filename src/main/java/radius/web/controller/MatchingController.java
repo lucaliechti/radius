@@ -16,6 +16,7 @@ import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.JSONStaticResourceRepository;
 import radius.data.repository.StaticResourceRepository;
 import radius.web.components.EmailService;
+import radius.web.components.SimpleEmailService;
 
 import java.time.Instant;
 import java.util.*;
@@ -35,10 +36,10 @@ public class MatchingController {
 	private MessageSource messageSource;
 
 	@Autowired
-	public MatchingController(JDBCUserRepository _userRepo, EmailService _emailService,
+	public MatchingController(JDBCUserRepository userRepo, EmailService emailService,
 	  JSONStaticResourceRepository staticRepo, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
-		this.userRepo = _userRepo;
-		this.emailService = _emailService;
+		this.userRepo = userRepo;
+		this.emailService = emailService;
 		this.staticRepo = staticRepo;
 		this.matchingMailSender = matchingMailSender;
 		this.messageSource = messageSource;
@@ -233,13 +234,12 @@ public class MatchingController {
 			UserPair up = UserPair.of(user, match);
 			String matchingLanguages = matchingLanguages(up, user);
 			emailService.sendSimpleMessage(
-					user.getEmail(),
-					messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)), 
-					messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
-					matchingMailSender
-				);
-		} catch (Exception ignored) {
-		}
+				user.getEmail(),
+				messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)),
+				messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", staticRepo.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
+				matchingMailSender
+			);
+		} catch (Exception ignored) { }
 	}
 	
 	private String matchingLanguages(UserPair up, User user) {

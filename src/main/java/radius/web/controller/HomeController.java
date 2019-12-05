@@ -11,33 +11,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.dto.EmailDto;
-import radius.data.form.UserForm;
-import radius.data.repository.JSONStaticResourceRepository;
-import radius.data.repository.StaticResourceRepository;
+import radius.User;
+import radius.web.components.ModelRepository;
+import radius.web.service.UserService;
+
+import java.util.Optional;
 
 @Controller
-@RequestMapping(value={"/", "/home"})
 @ComponentScan("radius.config")
 @Slf4j
 public class HomeController {
 
-	private StaticResourceRepository staticRepo;
-	private StatusController sc;
+	private UserService userService;
+	private ModelRepository modelRepository;
 
-	public HomeController(JSONStaticResourceRepository staticRepo, StatusController sc) {
-		this.staticRepo = staticRepo;
-		this.sc = sc;
+	public HomeController(UserService userService, ModelRepository modelRepository) {
+		this.userService = userService;
+		this.modelRepository = modelRepository;
 	}
 	
-	@RequestMapping(method=GET)
-	public String home(@RequestParam(value = "logout", required = false) String loggedout,
-					   @RequestParam(value = "error", required = false) String error, Model model) {
+	@RequestMapping(value={"/", "/home"}, method=GET)
+	public String home(@RequestParam(value="logout", required=false) String loggedout,
+					   @RequestParam(value="error", required=false) String error, Model model) {
 		log.info("In the HomeController class");
-		if(SecurityContextHolder.getContext().getAuthentication() != null &&
-				SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-				!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) ) {
-			return sc.statusPage(model);
+		if(userIsAuthenticated()) {
+			return prepareModelAndRedirectLoggedInUser(model);
 		}
 		if(loggedout != null) {
 			model.addAttribute("loggedout", Boolean.TRUE);
@@ -48,21 +46,50 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", Boolean.TRUE);
 		}
-		return cleanlyHome(model);
+		model.addAllAttributes(modelRepository.homeAttributes());
+		return "home";
 	}
 	
-	@RequestMapping(method=POST)
-	public String login(@RequestParam(value = "error", required = false) String loginerror, Model model) {
+	@RequestMapping(value={"/", "/home"}, method=POST)
+	public String login(@RequestParam(value="error", required=false) String loginerror, Model model) {
 		if(loginerror != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}
-		return cleanlyHome(model);
+		model.addAllAttributes(modelRepository.homeAttributes());
+		return "home";
 	}
 
-	public String cleanlyHome(Model model) {
-		model.addAttribute("registrationForm", new UserForm());
-		model.addAttribute("cantons", staticRepo.cantons());
-		model.addAttribute("newsletterForm", new EmailDto());
-		return "home";
+	@RequestMapping(value="/status", method=GET)
+	public String status(Model model) {
+		return prepareModelAndRedirectLoggedInUser(model);
+	}
+
+	private String prepareModelAndRedirectLoggedInUser(Model model) {
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		Optional<User> optionalUser = userService.findUserByEmail(email);
+		if(optionalUser.isEmpty()) {
+			model.addAttribute("generic_error", Boolean.TRUE);
+			model.addAllAttributes(modelRepository.homeAttributes());
+			return "home";
+		}
+		User user = optionalUser.get();
+		if(!user.isEnabled()) {
+			model.addAttribute("not_enabled", true);
+			model.addAllAttributes(modelRepository.homeAttributes());
+			return "home";
+		}
+		else if(!user.isAnsweredRegular()) {
+			model.addAllAttributes(modelRepository.answerAttributes());
+			return "answers";
+		} else {
+			model.addAllAttributes(userService.userSpecificAttributes(user));
+			return "status";
+		}
+	}
+
+	private boolean userIsAuthenticated() {
+		return SecurityContextHolder.getContext().getAuthentication() != null &&
+			SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
+			!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
 	}
 }

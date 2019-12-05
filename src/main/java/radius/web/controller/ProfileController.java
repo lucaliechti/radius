@@ -16,7 +16,7 @@ import radius.data.repository.*;
 import radius.data.form.AnswerForm;
 import radius.HalfEdge;
 import radius.User;
-import radius.web.components.RealWorldConfiguration.RealWorldProperties;
+import radius.web.components.RealWorldProperties;
 
 @Controller
 @RequestMapping(value="/profile")

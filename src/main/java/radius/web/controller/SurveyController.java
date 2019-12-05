@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.form.SurveyForm;
 import radius.data.repository.*;
+import radius.web.components.ModelRepository;
 
 import javax.validation.Valid;
 import java.util.Locale;
@@ -21,16 +22,16 @@ public class SurveyController {
 
     private StaticResourceRepository staticRepo;
     private RegistrationController registrationController;
-    private HomeController homeController;
+    private ModelRepository modelRepository;
     private SurveyRepository surveyRepo;
     private NewsletterRepository newsletterRepo;
     private final int SURVEY_SIZE = 15;
 
-    public SurveyController(JSONStaticResourceRepository staticRepo, RegistrationController r, HomeController h,
+    public SurveyController(JSONStaticResourceRepository staticRepo, RegistrationController r, ModelRepository modelRepository,
                             JDBCSurveyRepository surveyRepo, JDBCNewsletterRepository newsletterRepo) {
         this.staticRepo = staticRepo;
         this.registrationController = r;
-        this.homeController = h;
+        this.modelRepository = modelRepository;
         this.surveyRepo = surveyRepo;
         this.newsletterRepo = newsletterRepo;
     }
@@ -79,7 +80,8 @@ public class SurveyController {
                 return "survey";
             }
         }
-        return homeController.cleanlyHome(model);
+        model.addAllAttributes(modelRepository.homeAttributes());
+        return "home";
     }
 
     @ModelAttribute

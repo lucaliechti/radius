@@ -1,5 +1,7 @@
 package radius.data.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Repository;
 import radius.User;
 import radius.HalfEdge;
@@ -17,7 +19,7 @@ public interface UserRepository {
 
 	List<User> matchableUsers();
 	
-	User findUserByEmail(String email);
+	User findUserByEmail(String email) throws EmptyResultDataAccessException;
 	
 	void saveUser(User u) throws EmailAlreadyExistsException;
 	
@@ -41,16 +43,10 @@ public interface UserRepository {
 
 	void match(UserPair userPair);
 
-	boolean userIsActive(String email);
-	
-	void activateUser(String email);
-	
-	void deactivateUser(String email);
-
 	void deleteUser(String email) throws UserHasMatchesException;
 
-	String findEmailByUuid(String uuid);
+	String findEmailByUuid(String uuid) throws EmptyResultDataAccessException;
 
-	String findUuidByEmail(String email);
+	String findUuidByEmail(String email) throws EmptyResultDataAccessException;
 	
 }

@@ -10,10 +10,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import radius.data.repository.JDBCUserRepository;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.web.components.RealWorldProperties;
 import radius.web.controller.AnswerController;
-import radius.web.controller.StatusController;
+import radius.web.service.UserService;
+
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -30,25 +32,18 @@ public class AnswerIntegrationTest {
 
     private MockMvc mockMvc;
 
-    JDBCUserRepository mockUserRepo = mock(JDBCUserRepository.class);
-    User mockUser = mock(User.class);
-
     @Autowired
     AnswerController answerController;
 
-    @Autowired
-    StatusController statusController;
-
     @Before
     public void mockController() throws EmailAlreadyExistsException {
-        ReflectionTestUtils.setField(answerController, "userRepo", mockUserRepo);
-        ReflectionTestUtils.setField(statusController, "userRepo", mockUserRepo);
-        doReturn(mockUser).when(mockUserRepo).findUserByEmail(anyString());
+        User mockUser = mock(User.class);
+        UserService mockUserService = mock(UserService.class);
+        doReturn(Optional.of(mockUser)).when(mockUserService).findUserByEmail(anyString());
         doReturn(true).when(mockUser).isAnsweredRegular();
         doReturn(true).when(mockUser).isEnabled();
-
-        doNothing().when(mockUserRepo).saveUser(any(User.class));
-        doNothing().when(mockUserRepo).updateVotes(anyString(), anyString(), anyList());
+        doNothing().when(mockUserService).saveUser(any(User.class));
+        ReflectionTestUtils.setField(answerController, "userService", mockUserService);
     }
 
     @Test
@@ -73,7 +68,9 @@ public class AnswerIntegrationTest {
     @Test
     @WithMockUser
     public void onlyRegularQuestions() throws Exception {
-        ReflectionTestUtils.setField(answerController, "specialIsActive", true);
+        RealWorldProperties mockRealWorld = mock(RealWorldProperties.class);
+        doReturn(true).when(mockRealWorld).isSpecialIsActive();
+        ReflectionTestUtils.setField(answerController, "realWorld", mockRealWorld);
 
         mockMvc = standaloneSetup(answerController).build();
 
@@ -82,7 +79,7 @@ public class AnswerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("answers"));
 
-        ReflectionTestUtils.setField(answerController, "specialIsActive", false);
+        doReturn(false).when(mockRealWorld).isSpecialIsActive();
 
         mockMvc.perform(post("/answers/")
                 .param("regularanswers", "TRUE,FALSE,DONTCARE,TRUE,FALSE"))
