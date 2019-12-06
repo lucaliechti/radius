@@ -67,4 +67,8 @@ public class NewsletterService {
         }
         return true;
     }
+
+    public int numberOfRecipients() {
+        return newsletterRepository.numberOfRecipients();
+    }
 }

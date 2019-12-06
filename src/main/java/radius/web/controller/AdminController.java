@@ -4,22 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.repository.JDBCNewsletterRepository;
-import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.NewsletterRepository;
-import radius.data.repository.UserRepository;
 import radius.web.components.RealWorldProperties;
+import radius.web.service.NewsletterService;
+import radius.web.service.UserService;
 
 @Controller
 public class AdminController {
 
-    private NewsletterRepository newsletterRepo;
-    private UserRepository userRepo;
+    private NewsletterService newsletterservice;
+    private UserService userService;
     private RealWorldProperties realWorld;
 
-    public AdminController(JDBCNewsletterRepository newsRepo, JDBCUserRepository userRepo, RealWorldProperties real) {
-        this.newsletterRepo = newsRepo;
-        this.userRepo = userRepo;
+    public AdminController(NewsletterService newsletterservice, UserService userService, RealWorldProperties real) {
+        this.newsletterservice = newsletterservice;
+        this.userService = userService;
         this.realWorld = real;
     }
 
@@ -30,8 +28,8 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
-        model.addAttribute("numberRecipients", newsletterRepo.numberOfRecipients());
-        model.addAttribute("users", userRepo.allUsers());
+        model.addAttribute("numberRecipients", newsletterservice.numberOfRecipients());
+        model.addAttribute("users", userService.allUsers());
         model.addAttribute("special", realWorld.isSpecialIsActive());
         model.addAttribute("nrvotes", realWorld.getNumberOfVotes());
     }

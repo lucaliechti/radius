@@ -8,23 +8,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import radius.data.repository.JDBCUserRepository;
-import radius.data.repository.UserRepository;
-import radius.exceptions.UserHasMatchesException;
 import radius.web.components.ModelDecorator;
+import radius.web.service.MatchingService;
+import radius.web.service.UserService;
 
 @Controller
 @RequestMapping(value="/delete")
 public class DeleteController {
 
 	private ModelDecorator modelDecorator;
-	private UserRepository userRepo;
-	private ProfileController pc;
+	private UserService userService;
+	private MatchingService matchingService;
 
-	public DeleteController(ModelDecorator modelDecorator, JDBCUserRepository userRepo, ProfileController pc) {
+	public DeleteController(ModelDecorator modelDecorator, UserService userService, MatchingService matchingService) {
 		this.modelDecorator = modelDecorator;
-		this.userRepo = userRepo;
-		this.pc = pc;
+		this.userService = userService;
+		this.matchingService = matchingService;
 	}
 
 	@RequestMapping(method=GET)
@@ -36,12 +35,11 @@ public class DeleteController {
 	@RequestMapping(method=POST)
 	public String contact(Model model) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		try {
-			userRepo.deleteUser(username);
-		} catch(UserHasMatchesException e) {
+		if(!matchingService.allMatchesForUser(username).isEmpty()) {
 			model.addAttribute("delete_failed", true);
-			return pc.profile(null, model);
+			return "profile";
 		}
+		userService.deleteUser(username);
 		model.addAttribute("delete_success", username);
 		SecurityContextHolder.clearContext();
 		model.addAllAttributes(modelDecorator.homeAttributes());

@@ -1,11 +1,13 @@
 package radius.web.controller;
 
 import com.google.common.collect.ImmutableList;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +15,8 @@ import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
 import radius.data.repository.JDBCUserRepository;
-import radius.web.components.CountrySpecificProperties;
-import radius.web.components.EmailService;
+import radius.web.service.MatchingService;
+import radius.web.service.UserService;
 
 import java.time.Instant;
 import java.util.*;
@@ -28,46 +30,25 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class MatchingController {
 
 	private final JDBCUserRepository userRepo;
-	private final EmailService emailService;
-	private final CountrySpecificProperties countryProperties;
-	private JavaMailSenderImpl matchingMailSender;
-	private MessageSource messageSource;
+	private UserService userService;
+	private MatchingService matchingService;
 
 	@Autowired
-	public MatchingController(JDBCUserRepository userRepo, EmailService emailService,
-							  CountrySpecificProperties countryProperties, JavaMailSenderImpl matchingMailSender, MessageSource messageSource) {
+	public MatchingController(JDBCUserRepository userRepo, UserService userService, MatchingService matchingService) {
 		this.userRepo = userRepo;
-		this.emailService = emailService;
-		this.countryProperties = countryProperties;
-		this.matchingMailSender = matchingMailSender;
-		this.messageSource = messageSource;
+		this.userService = userService;
+		this.matchingService = matchingService;
 	}
 
 	/**
 	 * REST class representing a pair of users which could be matched, together with a weight
 	 */
+	@Getter
+	@AllArgsConstructor
 	public static class Edge {
 		private final String start;
 		private final String end;
 		private final double weight;
-
-		public Edge(String start, String end, double weight) {
-			this.start = start;
-			this.end = end;
-			this.weight = weight;
-		}
-
-		public String getStart() {
-			return start;
-		}
-
-		public String getEnd() {
-			return end;
-		}
-
-		public double getWeight() {
-			return weight;
-		}
 
 		public static Optional<MatchingController.Edge> optFromUserPair(UserPair userPair, Instant now) {
 			if (userPair.compatible()) {
@@ -82,37 +63,17 @@ public class MatchingController {
 	/**
 	 * REST class containing the request to match two users
 	 */
+	@Data
+	@NoArgsConstructor
 	public static class Match {
 		private String start;
 		private String end;
-
-		public Match() {
-		}
-
-		public String getStart() {
-			return start;
-		}
-
-		public void setStart(String start) {
-			this.start = start;
-		}
-
-		public String getEnd() {
-			return end;
-		}
-
-		public void setEnd(String end) {
-			this.end = end;
-		}
-
-		public String toString() {
-			return String.format("%s - %s", this.getStart(), this.getEnd());
-		}
 	}
 
 	/**
 	 * REST class containing the response for a match request
 	 */
+	@Getter
 	public static class MatchResponse {
 		private final int code;
 		private final String description;
@@ -125,27 +86,11 @@ public class MatchingController {
 			this.code = code;
 			this.description = description;
 		}
-
-		public int getCode() {
-			return code;
-		}
-
-		public String getDescription() {
-			return description;
-		}
-
-		public String getStart() {
-			return start;
-		}
-
-		public String getEnd() {
-			return end;
-		}
 	}
 
 	@RequestMapping(value = "/graph", method = GET)
 	public ResponseEntity<List<Edge>> graph() {
-		List<User> usersToMatch = ImmutableList.copyOf(userRepo.matchableUsers());
+		List<User> usersToMatch = ImmutableList.copyOf(userService.matchableUsers());
 		Instant now = Instant.now();
 
 		List<Edge> edges = allEdges(usersToMatch, now);
@@ -155,7 +100,7 @@ public class MatchingController {
 	private Map<String, Set<String>> alreadyMatched() {
 		Map<String, Set<String>> result = new HashMap<>();
 
-		for (HalfEdge halfEdge : userRepo.allMatches()) {
+		for (HalfEdge halfEdge : matchingService.allMatches()) {
 			if (!result.containsKey(halfEdge.email1())) {
 				result.put(halfEdge.email1(), new HashSet<>());
 			}
@@ -218,45 +163,11 @@ public class MatchingController {
 			return new MatchResponse(match, 409, "Conflict: The users are incompatible.");
 		}
 
-		userRepo.match(userPair);
+		matchingService.match(userPair);
 
-		emailUserAboutMatch(user1, user2);
-		emailUserAboutMatch(user2, user1);
+		matchingService.emailUserAboutMatch(user1, user2);
+		matchingService.emailUserAboutMatch(user2, user1);
 
 		return new MatchResponse(match, 201, "The users were successfully matched.");
-	}
-	
-	@SuppressWarnings("static-access")
-	private void emailUserAboutMatch(User user, User match) {
-		try {
-			UserPair up = UserPair.of(user, match);
-			String matchingLanguages = matchingLanguages(up, user);
-			emailService.sendSimpleMessage(
-				user.getEmail(),
-				messageSource.getMessage("email.match.title", new Object[]{}, usersLocale(user)),
-				messageSource.getMessage("email.match.content", new Object[]{user.getFirstname(), user.getLastname(), match.getFirstname(), match.getLastname(), String.join(", ", countryProperties.prettyLocations(new ArrayList<Integer>(up.commonLocations()))), matchingLanguages, match.getEmail()}, usersLocale(user)),
-				matchingMailSender
-			);
-		} catch (Exception ignored) { }
-	}
-	
-	private String matchingLanguages(UserPair up, User user) {
-		ArrayList<String> languages = new ArrayList<String>();
-		for(String lang : up.commonLanguages()){
-			languages.add(messageSource.getMessage("language." + lang, new Object[]{}, usersLocale(user)));
-		}
-		return String.join(", ", languages);
-	}
-
-	private Locale usersLocale(User u) {
-		if(u.getLanguages().contains("DE")){
-			return new Locale("de");
-		}
-		else if(u.getLanguages().contains("FR")){
-			return new Locale("fr");
-		}
-		else {
-			return new Locale("en");
-		}
 	}
 }

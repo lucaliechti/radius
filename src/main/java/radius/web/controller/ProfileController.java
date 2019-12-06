@@ -16,6 +16,7 @@ import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.CountrySpecificProperties;
 import radius.web.components.RealWorldProperties;
+import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
 @Controller
@@ -23,14 +24,17 @@ import radius.web.service.UserService;
 public class ProfileController {
 
 	private UserService userService;
+	private MatchingService matchingService;
 	private CountrySpecificProperties countryProperties;
 	private RealWorldProperties real;
 
 	@Autowired
-	public ProfileController(UserService userService, CountrySpecificProperties countryProperties, RealWorldProperties real) {
+	public ProfileController(UserService userService, CountrySpecificProperties countryProperties,
+							 RealWorldProperties real, MatchingService matchingService) {
 		this.userService = userService;
 		this.countryProperties = countryProperties;
 		this.real = real;
+		this.matchingService = matchingService;
 	}
 
 	@RequestMapping(method=GET)
@@ -53,7 +57,7 @@ public class ProfileController {
 					.collect(Collectors.toList());
 			model.addAttribute("answers", answers);
 			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
-			model.addAttribute("history", userService.allMatchesForUser(email));
+			model.addAttribute("history", matchingService.allMatchesForUser(email));
 			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
 		}
 		return "profile";

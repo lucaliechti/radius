@@ -1,6 +1,10 @@
 package radius.data.repository;
 
+import radius.HalfEdge;
 import radius.User;
+import radius.UserPair;
+
+import java.util.List;
 
 public interface MatchingRepository {
 	
@@ -11,5 +15,11 @@ public interface MatchingRepository {
 	void confirmHalfEdge(String email);
 	
 	void unconfirmHalfEdge(String email);
+
+	List<HalfEdge> allMatches();
+
+	List<HalfEdge> allMatchesForUser(String email);
+
+	void createMatch(UserPair userPair);
 	
 }

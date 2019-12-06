@@ -25,13 +25,7 @@ public interface UserRepository {
 
 	void updateVotes(String email, String currentVote, List<User.TernaryAnswer> answers);
 
-	List<HalfEdge> allMatchesForUser(String email);
-
 	List<String> findAuthoritiesByEmail(String email);
-
-	List<HalfEdge> allMatches();
-
-	void match(UserPair userPair);
 
 	void deleteUser(String email) throws UserHasMatchesException;
 

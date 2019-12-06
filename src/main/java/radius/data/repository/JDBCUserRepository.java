@@ -5,11 +5,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import radius.HalfEdge;
 import radius.User;
-import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
-import radius.exceptions.UserHasMatchesException;
 import radius.web.components.RealWorldProperties;
 
 import javax.sql.DataSource;
@@ -35,15 +32,11 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, firstname = ?, lastname = ?, password = ?, canton = ?, languages = ?, locations = ?, enabled = ?, answered = ?, motivation = ?, datemodify = ?, uuid = ?, regularanswers = ? WHERE email = ?";
 	private static final String ANSWER_CURRENT_VOTE = 	"INSERT INTO votes (email, votenr, answer) VALUES (?, ?, ?)";
 	private static final String UPDATE_VOTE =    		"UPDATE votes SET answer = ? WHERE email = ? AND votenr = ?";
-	private static final String SET_USER_STATUS =		"UPDATE users SET status = ? WHERE email = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
 	private static final String FIND_AUTH_BY_EMAIL = 	"SELECT email, authority FROM authorities WHERE email = ?";
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
-	private static final String CREATE_MATCH =			"INSERT INTO matches(datecreated, email1, email2, active, meetingconfirmed) VALUES (?, ?, ?, TRUE, FALSE)";
-	private static final String ALL_MATCHES =			"SELECT * FROM matches";
-	private static final String ALL_MATCHES_FOR_USER = 	"SELECT * FROM matches WHERE email1 = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, RealWorldProperties prop) {
@@ -67,23 +60,21 @@ public class JDBCUserRepository implements UserRepository {
 		return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, new UserRowMapper(), currentVote, email);
 	}
 
-	//TODO: Use java.util.Optional
-	//TODO: Use arrays on DB
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-			List<Integer> locations = Collections.emptyList();
+			List<Integer> locations = new ArrayList<>();
 			if(rs.getString("locations") != null && !rs.getString("locations").equals("")){
 				locations = Arrays.stream(rs.getString("locations").split(";")).map(Integer::valueOf).collect(Collectors.toList());
 			}
-			ArrayList<String> languages = new ArrayList<String>();
+			List<String> languages = new ArrayList<>();
 			if(rs.getString("languages") != null && !rs.getString("languages").equals("")){
 				languages = new ArrayList<String>(Arrays.asList(rs.getString("languages").split(";")));
 			}
-			ArrayList<String> regularanswers = new ArrayList<String>();
+			List<String> regularanswers = new ArrayList<>();
 			if(rs.getString("regularanswers") != null && !rs.getString("regularanswers").equals("")){
 				regularanswers = new ArrayList<String>(Arrays.asList(rs.getString("regularanswers").split(";")));
 			}
-			ArrayList<String> specialanswers = new ArrayList<String>();
+			List<String> specialanswers = new ArrayList<>();
 			if(rs.getString("answer") != null && !rs.getString("answer").equals("")){
 				specialanswers = new ArrayList<String>(Arrays.asList(rs.getString("answer").split(";")));
 			}
@@ -108,19 +99,6 @@ public class JDBCUserRepository implements UserRepository {
 		}
 	}
 
-	private static final class MatchRowMapper implements RowMapper<HalfEdge> {
-		public HalfEdge mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return HalfEdge.of(
-				rs.getString("email1"),
-				rs.getString("email2"),
-				rs.getBoolean("active"),
-				Optional.of(rs.getBoolean("meetingconfirmed")),
-				rs.getTimestamp("datecreated"),
-				Optional.ofNullable(rs.getTimestamp("dateinactive"))
-			);
-		}
-	}
-	
 	@Override
 	public void saveNewUser(User u) throws EmailAlreadyExistsException {
 		if(userExists(u.getEmail())) {
@@ -171,29 +149,7 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public List<HalfEdge> allMatches() {
-		return jdbcTemplate.query(ALL_MATCHES, new MatchRowMapper());
-	}
-
-	@Override
-	public List<HalfEdge> allMatchesForUser(String email) {
-		return jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
-	}
-
-	@Override
-	public void match(UserPair userPair) {
-		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.UserStatus.MATCHED), userPair.user1().getEmail());
-		jdbcTemplate.update(SET_USER_STATUS, User.convertStatusToString(User.UserStatus.MATCHED), userPair.user2().getEmail());
-		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user1().getEmail(), userPair.user2().getEmail());
-		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(), userPair.user1().getEmail());
-	}
-
-	@Override
-	public void deleteUser(String email) throws UserHasMatchesException {
-		List<HalfEdge> matches = jdbcTemplate.query(ALL_MATCHES_FOR_USER, new MatchRowMapper(), email);
-		if(matches.size() > 0){
-			throw new UserHasMatchesException(email + " has matches and cannot be deleted.");
-		}
+	public void deleteUser(String email) {
 		jdbcTemplate.update(DELETE_AUTHORITIES, email);
 		jdbcTemplate.update(DELETE_USER, email);
 	}

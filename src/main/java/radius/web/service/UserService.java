@@ -12,6 +12,7 @@ import radius.data.form.MeetingFeedbackForm;
 import radius.data.form.UserForm;
 import radius.data.repository.*;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.exceptions.UserHasMatchesException;
 import radius.web.components.CountrySpecificProperties;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
@@ -107,7 +108,7 @@ public class UserService {
     }
 
     public List<HalfEdge> allMatchesForUser(String email) {
-        return userRepo.allMatchesForUser(email);
+        return matchRepo.allMatchesForUser(email);
     }
 
     public boolean updateUserAfterMeeting(User user, MeetingFeedbackForm feedbackForm) {
@@ -169,5 +170,30 @@ public class UserService {
             return false;
         }
         return true;
+    }
+
+    public List<User> allUsers() {
+        try {
+            return userRepo.allUsers();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    public boolean deleteUser(String username) {
+        try {
+            userRepo.deleteUser(username);
+        } catch (UserHasMatchesException matchE) {
+            return false;
+        }
+        return true;
+    }
+
+    public List<User> matchableUsers() {
+        try {
+            return userRepo.matchableUsers();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,22 @@ public class User {
 	}
 	public void setSpecialanswers(List<String> _specialanswers) {
 		specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+	}
+
+	public Locale preferredLocale() {
+		return new Locale(languages.contains("DE") ? "de" : (languages.contains("FR") ? "fr" : "en"));
+	}
+
+	private Locale usersLocale(User u) {
+		if(u.getLanguages().contains("DE")){
+			return new Locale("de");
+		}
+		else if(u.getLanguages().contains("FR")){
+			return new Locale("fr");
+		}
+		else {
+			return new Locale("en");
+		}
 	}
 
 	public static UserStatus convertStatus(String status) {
