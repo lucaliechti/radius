@@ -32,5 +32,6 @@ public interface UserRepository {
 	String findEmailByUuid(String uuid) throws EmptyResultDataAccessException;
 
 	String findUuidByEmail(String email) throws EmptyResultDataAccessException;
-	
+
+    void updateLastLogin(String name);
 }

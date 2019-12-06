@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import radius.security.CustomAuthenticationProvider;
+import radius.security.LoginTimeAwareAuthenticationSuccessHandler;
 
 @EnableWebSecurity
 public class MultiHttpSecurityConfig {
@@ -32,24 +33,20 @@ public class MultiHttpSecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			//authorization
 			http
 				.authorizeRequests()
 				.antMatchers("/history", "/profile", "/answers", "/status", "/toggleStatus").authenticated()
 				.antMatchers("/monitoring/**", "/admin/**", "/actuator/**", "/health/**").hasRole("ADMIN")
 				.anyRequest().permitAll();
 
-			//TODO: Custom login handler
-			//login
 			http
 				.formLogin().loginPage("/home")
 				.defaultSuccessUrl("/status")
 				.failureUrl("/home?error")
+				.successHandler(handler)
 				.and().rememberMe().tokenValiditySeconds(2419200).key("remember-me").userDetailsService(userDetailsService) //four weeks
 				.and().csrf();
 
-			//TODO: Custom logout handler
-			//logout
 			http
 				.logout()
 					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
@@ -58,6 +55,10 @@ public class MultiHttpSecurityConfig {
 		@Qualifier("postgresUserDetailsService")
 		@Autowired
 		private UserDetailsService userDetailsService;
+
+		@Qualifier("loginTimeAwareAuthenticationSuccessHandler")
+		@Autowired
+		private LoginTimeAwareAuthenticationSuccessHandler handler;
 
 		@Bean
 		DaoAuthenticationProvider authProvider() {
@@ -96,4 +97,5 @@ public class MultiHttpSecurityConfig {
 	public static PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }

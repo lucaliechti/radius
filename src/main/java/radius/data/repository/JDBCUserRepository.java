@@ -37,6 +37,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String USER_EXISTS = 			"SELECT EXISTS (SELECT 1 FROM users WHERE email = ?)";
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
+	private static final String UPDATE_LAST_LOGIN = 	"UPDATE users SET lastlogin = ? WHERE email = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, RealWorldProperties prop) {
@@ -162,6 +163,11 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public String findUuidByEmail(String email) throws EmptyResultDataAccessException {
 		return jdbcTemplate.queryForObject(FIND_UUID_BY_EMAIL, String.class, email);
+	}
+
+	@Override
+	public void updateLastLogin(String name) {
+		jdbcTemplate.update(UPDATE_LAST_LOGIN, OffsetDateTime.now(), name);
 	}
 }
 

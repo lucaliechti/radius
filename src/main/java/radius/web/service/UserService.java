@@ -196,4 +196,8 @@ public class UserService {
             return Collections.emptyList();
         }
     }
+
+    public void updateLastLogin(String name) {
+        userRepo.updateLastLogin(name);
+    }
 }
