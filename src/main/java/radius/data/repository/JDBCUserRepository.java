@@ -28,8 +28,8 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE users.email = ?";
 	private static final String FIND_USER_BY_UUID =		"SELECT email FROM users WHERE uuid = ?";
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
-	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, answered, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
-	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, firstname = ?, lastname = ?, password = ?, canton = ?, languages = ?, locations = ?, enabled = ?, answered = ?, motivation = ?, datemodify = ?, uuid = ?, regularanswers = ? WHERE email = ?";
+	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
+	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, firstname = ?, lastname = ?, password = ?, canton = ?, languages = ?, locations = ?, enabled = ?, motivation = ?, datemodify = ?, uuid = ?, regularanswers = ? WHERE email = ?";
 	private static final String ANSWER_CURRENT_VOTE = 	"INSERT INTO votes (email, votenr, answer) VALUES (?, ?, ?)";
 	private static final String UPDATE_VOTE =    		"UPDATE votes SET answer = ? WHERE email = ? AND votenr = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
@@ -89,7 +89,6 @@ public class JDBCUserRepository implements UserRepository {
 				User.convertStatus(rs.getString("status")),
 				rs.getString("motivation"),
 				rs.getBoolean("enabled"),
-				rs.getBoolean("answered"),
 				rs.getBoolean("banned"),
 				locations,
 				languages,
@@ -106,7 +105,7 @@ public class JDBCUserRepository implements UserRepository {
 			throw new EmailAlreadyExistsException("User with email " + u.getEmail() + " already exists.");
 		}
 		jdbcTemplate.update(SAVE_NEW_USER, OffsetDateTime.now(), OffsetDateTime.now(), u.getFirstname(),
-				u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, false, u.getUuid());
+				u.getLastname(), u.getCanton(), u.getEmail(), u.getPassword(), "INACTIVE", false, u.getUuid());
 		grantUserRights(u.getEmail());
 	}
 
@@ -117,7 +116,7 @@ public class JDBCUserRepository implements UserRepository {
 		String loc = user.locationString();
 		String status = user.getStatus().name();
 		jdbcTemplate.update(UPDATE_USER, status, user.getFirstname(), user.getLastname(), user.getPassword(),
-				user.getCanton(), lang, loc, user.isEnabled(), user.isAnsweredRegular(), user.getMotivation(),
+				user.getCanton(), lang, loc, user.isEnabled(), user.getMotivation(),
 				OffsetDateTime.now(), user.getUuid(), regularAnswers, user.getEmail());
 	}
 

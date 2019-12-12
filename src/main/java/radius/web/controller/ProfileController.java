@@ -16,6 +16,7 @@ import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.CountrySpecificProperties;
 import radius.web.components.RealWorldProperties;
+import radius.web.service.AnswerService;
 import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
@@ -24,14 +25,16 @@ import radius.web.service.UserService;
 public class ProfileController {
 
 	private UserService userService;
+	private AnswerService answerService;
 	private MatchingService matchingService;
 	private CountrySpecificProperties countryProperties;
 	private RealWorldProperties real;
 
 	@Autowired
 	public ProfileController(UserService userService, CountrySpecificProperties countryProperties,
-							 RealWorldProperties real, MatchingService matchingService) {
+							 RealWorldProperties real, MatchingService matchingService, AnswerService answerService) {
 		this.userService = userService;
+		this.answerService = answerService;
 		this.countryProperties = countryProperties;
 		this.real = real;
 		this.matchingService = matchingService;
@@ -47,7 +50,7 @@ public class ProfileController {
 		if(!user.isEnabled()) {
 			model.addAttribute("not_enabled", true);
 			return "home";
-		} else if(!user.isAnsweredRegular()) {
+		} else if(!answerService.userHasValidlyAnswered(user)) {
 			model.addAttribute("lang", countryProperties.getLanguages());
 			model.addAttribute("answerForm", new AnswerForm());
 			return "answers";

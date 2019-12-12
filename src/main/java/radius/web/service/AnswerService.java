@@ -2,6 +2,7 @@ package radius.web.service;
 
 import org.springframework.stereotype.Service;
 import radius.User;
+import radius.User.TernaryAnswer;
 import radius.data.form.AnswerForm;
 import radius.web.components.RealWorldProperties;
 
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 public class AnswerService {
 
     private RealWorldProperties realWorld;
+    private static final int MIN_DISAGREEMENTS_REGULAR = 2;
+    private static final int MIN_DISAGREEMENTS_SPECIAL = 1;
 
     public AnswerService(RealWorldProperties realWorld) {
         this.realWorld = realWorld;
@@ -20,7 +23,6 @@ public class AnswerService {
 
     public void updateUserFromAnswerForm(User user, AnswerForm answerForm) {
         user.setStatus(User.UserStatus.WAITING);
-        user.setAnsweredRegular(answerForm.getRegularanswers().size() > 0);
         user.setLanguages(answerForm.getLanguages());
         user.setMotivation(answerForm.getMotivation());
         user.setRegularanswers(answerForm.getRegularanswers());
@@ -29,13 +31,28 @@ public class AnswerService {
                 .collect(Collectors.toList()));
     }
 
-    public boolean validlyAnswered(AnswerForm form) {
-        return validAnswers(form.getRegularanswers(), realWorld.getNumberOfRegularQuestions())
-                || validAnswers(form.getSpecialanswers(), realWorld.getNumberOfVotes());
+    public boolean validlyAnsweredForm(AnswerForm form) {
+        List<TernaryAnswer> regular = form.getRegularanswers().stream().map(User::convertAnswer).collect(Collectors.toList());
+        List<TernaryAnswer> special = form.getSpecialanswers().stream().map(User::convertAnswer).collect(Collectors.toList());
+        return validAnswers(regular, realWorld.getNumberOfRegularQuestions(), MIN_DISAGREEMENTS_REGULAR)
+                || validAnswers(special, realWorld.getNumberOfVotes(), MIN_DISAGREEMENTS_SPECIAL);
     }
 
-    private boolean validAnswers(List<String> answers, int nrAnswers) {
-        return answers.size() == nrAnswers && (answers.contains("TRUE") || answers.contains("FALSE"));
+    public boolean userHasValidlyAnswered(User user) {
+        if(user.getSpecialanswers() != null){
+            return validAnswers(user.getSpecialanswers(), realWorld.getNumberOfVotes(), MIN_DISAGREEMENTS_SPECIAL);
+        } else if (user.getRegularanswers() != null) {
+            return validAnswers(user.getRegularanswers(), realWorld.getNumberOfRegularQuestions(), MIN_DISAGREEMENTS_REGULAR);
+        }
+        return false;
+    }
+
+    private boolean validAnswers(List<TernaryAnswer> answers, int nrAnswers, int requiredDisagreements) {
+        return answers.size() == nrAnswers && meaningfulAnswers(answers) >= requiredDisagreements;
+    }
+
+    private int meaningfulAnswers(List<TernaryAnswer> questions) {
+        return (int) questions.stream().filter(q -> q != TernaryAnswer.DONTCARE).count();
     }
 
     public AnswerForm newFormFromUser(User user) {

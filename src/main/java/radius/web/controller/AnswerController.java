@@ -50,8 +50,7 @@ public class AnswerController {
 	public String answer(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userService.findUserByEmail(email).get();
-		model.addAttribute("answerForm", user.isAnsweredRegular() ||
-				(user.getSpecialanswers() != null && user.getSpecialanswers().size() > 0) ?
+		model.addAttribute("answerForm", answerService.userHasValidlyAnswered(user) ?
 				answerService.newFormFromUser(user) : new AnswerForm());
 		model.addAllAttributes(modelDecorator.answerAttributes());
 		return "answers";
@@ -63,7 +62,7 @@ public class AnswerController {
 		if(result.hasErrors()) {
 			model.addAllAttributes(modelDecorator.answerAttributes());
 			return "answers";
-		} else if(!answerService.validlyAnswered(answerForm)) {
+		} else if(!answerService.validlyAnsweredForm(answerForm)) {
 			provideFeedback(result, locale);
 			model.addAllAttributes(modelDecorator.answerAttributes());
 			return "answers";

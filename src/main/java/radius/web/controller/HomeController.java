@@ -81,7 +81,7 @@ public class HomeController {
 			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
 		}
-		else if(!user.isAnsweredRegular()) {
+		else if(!answerService.userHasValidlyAnswered(user)) {
 			model.addAllAttributes(modelDecorator.answerAttributes());
 			model.addAttribute("answerForm", answerService.newFormFromUser(user));
 			return "answers";

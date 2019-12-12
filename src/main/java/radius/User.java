@@ -20,7 +20,6 @@ public class User {
 	private String canton;
 	private UserStatus status;
 	private boolean enabled;
-	private boolean answeredRegular;
 	private boolean banned;
 	private String motivation;
 	private List<Integer> locations;
@@ -48,7 +47,6 @@ public class User {
 		UserStatus status,
 		String motivation,
 		boolean enabled,
-		boolean answeredRegular,
 		boolean banned,
 		List<Integer> locations,
 		List<String> languages,
@@ -64,7 +62,6 @@ public class User {
 		this.status = status;
 		this.motivation = motivation;
 		this.enabled = enabled;
-		this.answeredRegular = answeredRegular;
 		this.banned = banned;
 		this.locations = locations;
 		this.languages = languages;
@@ -85,21 +82,8 @@ public class User {
 	public void setSpecialanswers(List<String> _specialanswers) {
 		specialanswers = _specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 	}
-
 	public Locale preferredLocale() {
 		return new Locale(languages.contains("DE") ? "de" : (languages.contains("FR") ? "fr" : "en"));
-	}
-
-	private Locale usersLocale(User u) {
-		if(u.getLanguages().contains("DE")){
-			return new Locale("de");
-		}
-		else if(u.getLanguages().contains("FR")){
-			return new Locale("fr");
-		}
-		else {
-			return new Locale("en");
-		}
 	}
 
 	public static UserStatus convertStatus(String status) {
@@ -110,19 +94,6 @@ public class User {
 				return UserStatus.MATCHED;
 			case "INACTIVE":
 				return UserStatus.INACTIVE;
-			default:
-				return null;
-		}
-	}
-	
-	public static String convertStatusToString(UserStatus status) {
-		switch (status) {
-			case WAITING:
-				return "WAITING";
-			case MATCHED:
-				return "MATCHED";
-			case INACTIVE:
-				return "INACTIVE";
 			default:
 				return null;
 		}
