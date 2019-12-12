@@ -39,12 +39,8 @@ public class AnswerService {
     }
 
     public boolean userHasValidlyAnswered(User user) {
-        if(user.getSpecialanswers() != null){
-            return validAnswers(user.getSpecialanswers(), realWorld.getNumberOfVotes(), MIN_DISAGREEMENTS_SPECIAL);
-        } else if (user.getRegularanswers() != null) {
-            return validAnswers(user.getRegularanswers(), realWorld.getNumberOfRegularQuestions(), MIN_DISAGREEMENTS_REGULAR);
-        }
-        return false;
+        return validAnswers(user.getRegularanswers(), realWorld.getNumberOfRegularQuestions(), MIN_DISAGREEMENTS_REGULAR)
+        || validAnswers(user.getSpecialanswers(), realWorld.getNumberOfVotes(), MIN_DISAGREEMENTS_SPECIAL);
     }
 
     private boolean validAnswers(List<TernaryAnswer> answers, int nrAnswers, int requiredDisagreements) {
