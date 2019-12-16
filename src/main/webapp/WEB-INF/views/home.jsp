@@ -124,24 +124,24 @@
    <spring:message code="newsletter.register" var="feed" />
    
    <section id="rightsection">
-      <section class="login-resume">
+      <section id="login" class="login-resume">
          <h2>
             <spring:message code="home.login.title"/>
          </h2>
          <form name="loginForm" action="home" method="POST">
             <div class="form-group">
-               <label for="username" class="col-2 col-form-label">
+               <label for="username">
                   <spring:message code="home.login.email"/>
                </label>
-               <div class="col-10">
+               <div class="form-group">
                   <input id="username" name="username" type="text" class="form-control" value=""/>
                </div>
             </div>
             <div class="form-group">
-               <label for="password" class="col-2 col-form-label">
+               <label for="password">
                   <spring:message code="home.login.pw"/>
                </label>
-               <div class="col-10">
+               <div class="form-group">
                   <input id="password" name="password" type="password" class="form-control" value=""/>
                </div>
             </div>
@@ -154,12 +154,9 @@
             </div>
             <sec:csrfInput />
          </form>
-
          <a href="<c:url value='/forgot' />"><spring:message code="home.login.forgot"/></a>
-
       </section>
-      
-      <section id="profile-deco" class="profile-resume">
+      <section id="profile-deco-register" class="profile-resume">
          <h2>
             <spring:message code="home.register.title"/>
          </h2>
@@ -168,7 +165,7 @@
                <form:label path="firstName">
                   <spring:message code="home.register.fn"/>
                </form:label>
-               <div class="col-10">
+               <div class="form-group">
                   <form:input path="firstName" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-firstname">
@@ -179,7 +176,7 @@
                <form:label path="lastName">
                   <spring:message code="home.register.ln"/>
                </form:label>
-               <div>
+               <div class="form-group">
                   <form:input path="lastName" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-lastname">
@@ -190,7 +187,7 @@
                <form:label path="canton">
                   <spring:message code="home.register.canton"/>
                </form:label>
-               <div>
+               <div class="form-group">
                   <form:select class="dropdown-input" path="canton">
                      <form:option value="NONE" label="---"/>
                      <form:options items="${cantons}" />
@@ -201,7 +198,7 @@
                <form:label path="email">
                   <spring:message code="home.register.email"/>
                </form:label>
-               <div>
+               <div class="form-group">
                   <form:input path="email" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
@@ -212,7 +209,7 @@
                <form:label path="password">
                   <spring:message code="home.register.pw"/>
                </form:label>
-               <div>
+               <div class="form-group">
                   <form:input path="password" type="password" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-password">
@@ -231,7 +228,7 @@
             </p>
          </c:if>
       </section>
-        <section id="profile-deco" class="profile-resume">
+        <section id="profile-deco-newsletter" class="profile-resume">
            <h2>
               <spring:message code="newsletter.title"/>
            </h2>
@@ -240,7 +237,7 @@
                    <form:label path="email">
                       <spring:message code="home.register.email"/>
                    </form:label>
-                   <div class="col-10">
+                   <div class="form-group">
                       <form:input path="email" class="form-control"/>
                    </div>
                    <div class="feedback-error" id="register-feedback-newsletter-email">
