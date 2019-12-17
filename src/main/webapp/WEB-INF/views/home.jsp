@@ -93,12 +93,6 @@
       </section>
       <section class="leftsection-content">
          <section class="leftsection-content-element" id="">
-<!--            <h2>
-               <spring:message code="home.welcome.title"/>
-            </h2>
-            <p>
-               <spring:message code="home.welcome.details"/>
-            </p>                                                      -->
             <h2>
                Was sind die wichtigsten Fragen der Schweiz?
             </h2>
@@ -124,7 +118,7 @@
    <spring:message code="newsletter.register" var="feed" />
    
    <section id="rightsection">
-      <section id="login" class="login-resume">
+      <section id="login-form" class="login-resume">
          <h2>
             <spring:message code="home.login.title"/>
          </h2>
