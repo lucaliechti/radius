@@ -206,6 +206,7 @@
                <div class="form-group">
                   <form:input path="password" type="password" class="form-control"/>
                </div>
+               <input class="ohnohoney" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
                <div class="feedback-error" id="register-feedback-password">
                   <form:errors path="password"/>
                </div>
@@ -245,5 +246,18 @@
         </section>
    </section>
 </main>
+
+<script>
+   var form = document.querySelector('#registrationForm');
+   var repeat = document.querySelector('#repeat-password');
+   form.addEventListener("submit", function(event) {
+      if(repeat.value.length !== 0) {
+         event.preventDefault();
+         return false;
+      }
+      return true;
+   });
+</script>
+
 <jsp:include page="templates/footer.jsp" />
 
