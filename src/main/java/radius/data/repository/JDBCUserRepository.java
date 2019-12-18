@@ -30,6 +30,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
 	private static final String SAVE_NEW_USER = 		"INSERT INTO users(datecreate, datemodify, firstname, lastname, canton, email, password, status, enabled, banned, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, FALSE, ?)";
 	private static final String UPDATE_USER = 			"UPDATE users SET status = ?, firstname = ?, lastname = ?, password = ?, canton = ?, languages = ?, locations = ?, enabled = ?, motivation = ?, datemodify = ?, uuid = ?, regularanswers = ? WHERE email = ?";
+	private static final String CURRENT_VOTE_ANSWERED = "SELECT EXISTS (SELECT 1 FROM votes WHERE email = ? AND votenr = ?)";
 	private static final String ANSWER_CURRENT_VOTE = 	"INSERT INTO votes (email, votenr, answer) VALUES (?, ?, ?)";
 	private static final String UPDATE_VOTE =    		"UPDATE votes SET answer = ? WHERE email = ? AND votenr = ?";
 	private static final String GRANT_USER_RIGHTS = 	"INSERT INTO authorities(datecreate, datemodify, email, authority) VALUES (?, ?, ?, ?)";
@@ -94,7 +95,8 @@ public class JDBCUserRepository implements UserRepository {
 				languages,
 				regularanswers,
 				specialanswers,
-				rs.getTimestamp("datemodify")
+				rs.getTimestamp("datemodify"),
+				rs.getString("uuid")
 			);
 		}
 	}
@@ -123,9 +125,10 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void updateVotes(String email, String currentVote, List<User.TernaryAnswer> answers) {
 		String prettyAnswers = answers.stream().map(User::convertAnswerToString).collect(Collectors.joining(";"));
-		try {
+		boolean alreadyAnswered = jdbcTemplate.queryForObject(CURRENT_VOTE_ANSWERED, new Object[]{email, currentVote}, Boolean.class);
+		if(alreadyAnswered) {
 			jdbcTemplate.update(UPDATE_VOTE, prettyAnswers, email, currentVote);
-		} catch (EmptyResultDataAccessException er) { //TODO: don't do program logic with exceptions
+		} else {
 			jdbcTemplate.update(ANSWER_CURRENT_VOTE, email, currentVote, prettyAnswers);
 		}
 	}

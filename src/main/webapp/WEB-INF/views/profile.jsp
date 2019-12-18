@@ -42,13 +42,13 @@
       <h2><spring:message code="profile.radiusdata"/></h2>
       <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
    </div>
-
-   <c:forEach begin="1" end="${nrQ}" varStatus="loop">
-      <p><b><spring:message code="q${loop.index}"/></b>
-      <br>
-      <spring:message code="question.${answers[loop.index-1]}"/>
-   </c:forEach>
-
+   <c:if test="${not empty answers}">
+      <c:forEach begin="1" end="${nrQ}" varStatus="loop">
+         <p><b><spring:message code="q${loop.index}"/></b>
+         <br>
+         <spring:message code="question.${answers[loop.index-1]}"/>
+      </c:forEach>
+   </c:if>
    </section>	
    <section class="leftsection-content-element" id="additionaldata">
          <div class="editable">

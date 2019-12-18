@@ -52,7 +52,8 @@ public class User {
 		List<String> languages,
 		List<String> regularanswers,
 		List<String> specialanswers,
-		Timestamp dateModified
+		Timestamp dateModified,
+		String uuid
 	) {
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -68,6 +69,7 @@ public class User {
 		this.regularanswers = regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.specialanswers = specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.dateModified = dateModified;
+		this.uuid = uuid;
 	}
 
 	public List<String> getRegularAnswersAsListOfStrings() {
