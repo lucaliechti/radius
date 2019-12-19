@@ -39,7 +39,7 @@ public class ToggleStatusController {
 	public String toggle(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(optionalUser.isEmpty()) {
+		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
@@ -59,7 +59,7 @@ public class ToggleStatusController {
 							 BindingResult result, Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(optionalUser.isEmpty()) {
+		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";

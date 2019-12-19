@@ -70,7 +70,7 @@ public class HomeController {
 	private String prepareModelAndRedirectLoggedInUser(Model model) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(optionalUser.isEmpty()) {
+		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";

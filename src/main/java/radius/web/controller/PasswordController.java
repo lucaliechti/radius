@@ -76,7 +76,7 @@ public class PasswordController {
             return "reset";
         }
         Optional<String> optionalEmail = userService.findEmailByUuid(dto.getUuid());
-        if(optionalEmail.isEmpty()) {
+        if(!optionalEmail.isPresent()) {
             model.addAttribute("generic_error", Boolean.TRUE);
             model.addAllAttributes(modelDecorator.homeAttributes());
             return "home";

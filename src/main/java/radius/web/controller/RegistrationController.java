@@ -60,7 +60,7 @@ public class RegistrationController {
 	@RequestMapping(value="/confirm", method=GET)
 	public String confirm(@RequestParam(value="uuid") String uuid, Model model) {
 		Optional<String> userEmail = userService.findEmailByUuid(uuid);
-		if(userEmail.isEmpty()) {
+		if(!userEmail.isPresent()) {
 			model.addAttribute("confirmation_error", true);
 			model.addAllAttributes(modelDecorator.homeAttributes());
 			return "home";
