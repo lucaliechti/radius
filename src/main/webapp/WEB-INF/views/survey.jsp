@@ -23,9 +23,10 @@ function showOrHideSection(checkbox, section) {
     $("#"+section).hide();
   }
 }
-
-
 </script>
+
+<!-- preparing variables -->
+<spring:message code="survey.send" var="send" />
 
 <main class="firstcontainer container">
    <section class="fullwidth-section">
@@ -37,9 +38,9 @@ function showOrHideSection(checkbox, section) {
            </p>
         </c:if>
 
-         <h2>Was sind die wichtigsten Fragen der Schweiz?</h2>
-         <p>Radius ist eine Plattform, die eine einfache Möglichkeit bietet, persönlich und konstruktiv mit politisch Andersdenkenden zu diskutieren.<br>Wir wollen wissen: Welche politischen Fragen bewegen Sie? Worüber würden Sie sich gerne mit jemand Andersdenkendem unterhalten?</p><br>
-         <p>Wählen Sie höchstens 10 Fragen aus, die Sie wichtig finden.</p>
+         <h2><spring:message code="survey.header"/></h2>
+         <p><spring:message code="survey.explanation"/></p><br>
+         <p><spring:message code="survey.onetoten"/></p>
          <div class="form-group leftsection-content-element" id="survey-questions">
             <form:form method="POST" action="survey" modelAttribute="surveyForm">
                <c:forEach begin="1" end="${nrQ}" varStatus="loop">
@@ -73,8 +74,8 @@ function showOrHideSection(checkbox, section) {
          <div class="form-group leftsection-content-element" id="survey-newsletter">
             <div class="form-group">
                <form:label path="emailN">
-                  <h1>Anmeldung zum Newsletter</h1>
-                  <p><form:checkbox path="newsletter" id="checkbox-newsletter" onchange="showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter')"/> Ja, ich würde gerne den Radius-Newsletter per Mail erhalten (deutlich weniger als 1x pro Monat).</p><br>
+                  <h1><spring:message code="survey.newsletter.header"/></h1>
+                  <p><form:checkbox path="newsletter" id="checkbox-newsletter" onchange="showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter')"/> <spring:message code="survey.newsletter.explanation"/></p><br>
                </form:label>
                <div id="hiddenNewsletter" >
                <form:label path="emailN">
@@ -96,8 +97,8 @@ function showOrHideSection(checkbox, section) {
          <div class="form-group leftsection-content-element" id="survey-registration">
             <div class="form-group">
                 <form:label path="firstName">
-                    <h1>Registrierung bei Radius</h1>
-                    <p><form:checkbox path="registration" id="checkbox-registration" onchange="showOrHideSection($('#checkbox-registration'), 'hiddenRegistration')"/> Ja, ich möchte mich bei Radius registrieren, um mit Andersdenkenden in Kontakt zu treten.</p><br>
+                    <h1><spring:message code="survey.register.header"/></h1>
+                    <p><form:checkbox path="registration" id="checkbox-registration" onchange="showOrHideSection($('#checkbox-registration'), 'hiddenRegistration')"/> <spring:message code="survey.register.explanation"/></p><br>
                 </form:label>
                 <div id="hiddenRegistration">
                 <form:label path="firstName">
@@ -159,9 +160,9 @@ function showOrHideSection(checkbox, section) {
                <spring:message code="home.register.hint"/>
             </p>
             </div>
-            <input type="submit" class="btn btn-primary" value="Absenden" />
+            <input type="submit" class="btn btn-primary" value="${send}" />
          </form:form>
-
+         </div>
          </div>
       </section>
    </section>
