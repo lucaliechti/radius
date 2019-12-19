@@ -30,7 +30,7 @@ public class SurveyController {
     private NewsletterService newsletterService;
     private UserService userService;
     private static final int SURVEY_SIZE = 15;
-    private static final String REGISTRATION_SURVEY = "Survey Summer 2019";
+    private static final String REGISTRATION_SURVEY = "Survey Winter 2019/2020";
 
     public SurveyController(CountrySpecificProperties countryProperties, ModelDecorator modelDecorator,
                             SurveyService surveyService, NewsletterService newsletterService, UserService userService) {

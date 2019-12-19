@@ -3,11 +3,13 @@ package radius.web.service;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+import radius.data.dto.EmailSourceDto;
 import radius.data.repository.JDBCNewsletterRepository;
 import radius.data.repository.NewsletterRepository;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -18,6 +20,7 @@ public class NewsletterService {
     private ProfileDependentProperties prop;
     private EmailService emailService;
     private JavaMailSenderImpl newsletterMailSender;
+    private JavaMailSenderImpl helloMailSender;
 
     private static final String NEWSLETTER_EMAIL_SUBJECT = "email.newsletter.subscribe.title";
     private static final String NEWSLETTER_EMAIL_MESSAGE = "email.newsletter.subscribe.content";
@@ -25,12 +28,13 @@ public class NewsletterService {
 
     public NewsletterService(JDBCNewsletterRepository newsletterRepository, MessageSource messageSource,
                              ProfileDependentProperties prop, EmailService emailService,
-                             JavaMailSenderImpl newsletterMailSender) {
+                             JavaMailSenderImpl newsletterMailSender, JavaMailSenderImpl helloMailSender) {
         this.newsletterRepository = newsletterRepository;
         this.messageSource = messageSource;
         this.prop = prop;
         this.emailService = emailService;
         this.newsletterMailSender = newsletterMailSender;
+        this.helloMailSender = helloMailSender;
     }
 
     public boolean unsubscribe(String uuid) {
@@ -68,7 +72,12 @@ public class NewsletterService {
         return true;
     }
 
-    public int numberOfRecipients() {
-        return newsletterRepository.numberOfRecipients();
+    public List<EmailSourceDto> allRecipients() {
+        return newsletterRepository.allRecipients();
+    }
+
+    public void sendMassEmail(String sender, String subject, String message, List<String> recipients) {
+        System.out.println("Sending email with sender " + sender + " to " + recipients.size() + " recipients.");
+        //TODO: append unsubscribe URL in footer
     }
 }
