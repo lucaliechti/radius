@@ -672,3 +672,17 @@ ul #s-icons,
 	width: 0;
 	z-index: -1;
 }
+
+/* overwriting styles from DataTables */
+table.dataTable tr.selected td.select-checkbox::after, table.dataTable tr.selected th.select-checkbox::after {
+	margin-top: -15px !important;
+	margin-left: -6px !important;
+}
+
+table.dataTable tbody td.select-checkbox::before, table.dataTable tbody td.select-checkbox::after, table.dataTable tbody th.select-checkbox::before, table.dataTable tbody th.select-checkbox::after {
+	top: 0.7em !important;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+	padding: 0.1px 0.1px !important;
+}
