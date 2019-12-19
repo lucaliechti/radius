@@ -27,6 +27,7 @@ public class JDBCNewsletterRepository implements NewsletterRepository {
     private static final String UNSUBSCRIBE = "DELETE FROM newsletter WHERE uuid = ?";
     private static final String ALL_RECIPIENTS = "SELECT * FROM newsletter";
     private static final String ALREADY_SUBSCRIBED = "SELECT EXISTS (SELECT 1 FROM newsletter WHERE email = ?)";
+    private static final String UUID_FOR_EMAIL = "SELECT uuid FROM newsletter WHERE email = ?";
 
     @Override
     public String subscribe(String email, String source) {
@@ -48,6 +49,11 @@ public class JDBCNewsletterRepository implements NewsletterRepository {
     @Override
     public List<EmailSourceDto> allRecipients() {
         return jdbcTemplate.query(ALL_RECIPIENTS, new JDBCNewsletterRepository.NewsletterDtoRowMapper());
+    }
+
+    @Override
+    public String findUuidByEmail(String email) {
+        return jdbcTemplate.queryForObject(UUID_FOR_EMAIL, new Object[]{email}, String.class);
     }
 
     private static final class NewsletterDtoRowMapper implements RowMapper<EmailSourceDto> {

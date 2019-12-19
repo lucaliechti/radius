@@ -9,6 +9,7 @@ import radius.data.repository.NewsletterRepository;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,9 +62,7 @@ public class NewsletterService {
     private boolean sendSubscriptionEmail(String email, String uuid, Locale locale) {
         String subject = messageSource.getMessage(NEWSLETTER_EMAIL_SUBJECT, new Object[]{}, locale);
         String content = messageSource.getMessage(NEWSLETTER_EMAIL_MESSAGE, new Object[]{}, locale);
-        content += "\n\n-----------\n";
-        content += messageSource.getMessage(NEWSLETTER_EMAIL_FOOTER,
-                new Object[]{prop.getUrl() + "/unsubscribe?uuid=" + uuid}, locale);
+        appendUnsubscribeFooterToMessage(uuid, locale, content);
         try {
             emailService.sendSimpleMessage(email, subject, content, newsletterMailSender);
         } catch (Exception e) {
@@ -76,8 +75,30 @@ public class NewsletterService {
         return newsletterRepository.allRecipients();
     }
 
-    public void sendMassEmail(String sender, String subject, String message, List<String> recipients) {
-        System.out.println("Sending email with sender " + sender + " to " + recipients.size() + " recipients.");
-        //TODO: append unsubscribe URL in footer
+    public List<String> sendMassEmail(boolean isNewsletter, String subject, String message, List<String> recipients,
+                                      Locale locale) {
+        ArrayList<String> failedRecipients = new ArrayList<>();
+        JavaMailSenderImpl sender = isNewsletter ? newsletterMailSender : helloMailSender;
+        for(String recipient : recipients) {
+            if(isNewsletter) {
+                appendUnsubscribeFooterToMessage(findUuidByEmail(recipient), locale, message);
+            }
+            try {
+                emailService.sendSimpleMessage(recipient, subject, message, sender);
+            } catch (Exception e) {
+                failedRecipients.add(recipient);
+            }
+        }
+        return failedRecipients;
+    }
+
+    private String findUuidByEmail(String email) {
+        return newsletterRepository.findUuidByEmail(email);
+    }
+
+    private void appendUnsubscribeFooterToMessage(String uuid, Locale locale, String content) {
+        content += "\n\n-----------\n";
+        content += messageSource.getMessage(NEWSLETTER_EMAIL_FOOTER,
+                new Object[]{prop.getUrl() + "/unsubscribe?uuid=" + uuid}, locale);
     }
 }

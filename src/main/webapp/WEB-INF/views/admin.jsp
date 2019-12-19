@@ -79,9 +79,15 @@
 <main class="firstcontainer container">
     <section id="leftsection" style="max-width: 1140px;margin: 0 auto;">
 
-        <c:if test="${send_success != null}">
+        <c:if test="${successfullySent != null}">
             <p class="result success">
-                <spring:message code="admin.newsletter.feedback.success.send"/>
+                ${successfullySent} Mails wurden erfolgreich gesendet.<br>
+            </p>
+        </c:if>
+
+        <c:if test="${failedRecipients != null}">
+            <p class="result error">
+                Mails an folgende Adressen konnten nicht zugestellt werden:<br> ${failedRecipients}
             </p>
         </c:if>
 
@@ -117,6 +123,7 @@
                         'Survey Winter 2019/2020',
                         NEWSLETTER_SOURCE_COLUMN);"> Survey</input>
                 </p>
+
                 <table id="newslettertable" class="table table-striped table-bordered table-sm">
                     <thead>
                         <tr>
@@ -142,7 +149,16 @@
                     <form:errors path="message"/>
                     <form:hidden path="recipients"  id="recipients_newsletter"/>
                     <form:errors path="recipients"/>
-                    <input type="submit" class="btn btn-primary" value="Answer" />
+                    <p>
+                        <form:radiobutton path="language" value="de" checked="checked"/> Deutsch
+                    </p>
+                    <p>
+                        <form:radiobutton path="language" value="fr"/> Französisch
+                    </p>
+                    <p>
+                        <form:radiobutton path="language" value="en"/> Englisch
+                    </p>
+                    <input type="submit" class="btn btn-primary" value="Send" />
                     <sec:csrfInput />
                 </form:form>
             </section>
@@ -207,7 +223,7 @@
                     <form:errors path="message"/>
                     <form:hidden path="recipients"  id="recipients_users"/>
                     <form:errors path="recipients"/>
-                    <input type="submit" class="btn btn-primary" value="Answer" />
+                    <input type="submit" class="btn btn-primary" value="Send" />
                     <sec:csrfInput />
                 </form:form>
 
@@ -222,17 +238,6 @@
             </section>
         </section>
     </section>
-    <!--
-    <section id="rightsection">
-        <section class="login-resume">
-            Inhalt
-        </section>
-
-        <section id="profile-deco" class="profile-resume">
-            Anderer Inhalt
-        </section>
-    </section>
-    -->
 </main>
 
 <jsp:include page="templates/footer.jsp" />

@@ -16,4 +16,6 @@ public interface NewsletterRepository {
 
     List<EmailSourceDto> allRecipients();
 
+    String findUuidByEmail(String email);
+
 }
