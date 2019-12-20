@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.form.NewsletterForm;
 import radius.web.components.RealWorldProperties;
 import radius.web.service.NewsletterService;
+import radius.web.service.SurveyService;
 import radius.web.service.UserService;
 
 import javax.validation.Valid;
@@ -23,11 +24,14 @@ public class AdminController {
 
     private NewsletterService newsletterservice;
     private UserService userService;
+    private SurveyService surveyService;
     private RealWorldProperties realWorld;
 
-    public AdminController(NewsletterService newsletterservice, UserService userService, RealWorldProperties real) {
+    public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
+                           RealWorldProperties real) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
+        this.surveyService = surveyService;
         this.realWorld = real;
     }
 
@@ -73,6 +77,7 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("surveyStats", surveyService.statistics());
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
         model.addAttribute("users", userService.allUsers());
         model.addAttribute("special", realWorld.isSpecialIsActive());
