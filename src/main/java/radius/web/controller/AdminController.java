@@ -77,6 +77,7 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("regionDensity", userService.regionDensity());
         model.addAttribute("surveyStats", surveyService.statistics());
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
         model.addAttribute("users", userService.allUsers());

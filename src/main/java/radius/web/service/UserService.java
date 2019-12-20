@@ -19,6 +19,7 @@ import radius.web.components.ProfileDependentProperties;
 import radius.web.components.RealWorldProperties;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -199,5 +200,16 @@ public class UserService {
 
     public void updateLastLogin(String name) {
         userRepo.updateLastLogin(name);
+    }
+
+    public int[] regionDensity() {
+        int[] registeredUsers = new int[countryProperties.getRegions().keySet().size()];
+        List<String> regions = userRepo.regionDensity();
+        regions = regions.stream().filter(region -> region != null && region.length() > 0).collect(Collectors.toList());
+        regions.forEach( s -> {
+            int[] values = Arrays.stream(s.split(";")).mapToInt(Integer::parseInt).toArray();
+            Arrays.stream(values).forEach(code -> registeredUsers[code-1]++);
+        } );
+        return registeredUsers;
     }
 }

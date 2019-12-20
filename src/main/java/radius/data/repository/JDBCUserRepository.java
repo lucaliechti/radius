@@ -39,6 +39,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String DELETE_AUTHORITIES =	"DELETE FROM authorities WHERE email = ?";
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 	private static final String UPDATE_LAST_LOGIN = 	"UPDATE users SET lastlogin = ? WHERE email = ?";
+	private static final String REGION_DENSITY =		"SELECT locations FROM users";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, RealWorldProperties prop) {
@@ -170,6 +171,12 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void updateLastLogin(String name) {
 		jdbcTemplate.update(UPDATE_LAST_LOGIN, OffsetDateTime.now(), name);
+	}
+
+	@Override
+	public List<String> regionDensity() {
+		List<Map<String, Object>> locations = jdbcTemplate.queryForList(REGION_DENSITY);
+		return locations.stream().map(map -> (String) map.get("locations")).collect(Collectors.toList());
 	}
 }
 

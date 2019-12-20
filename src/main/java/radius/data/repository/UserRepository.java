@@ -34,4 +34,6 @@ public interface UserRepository {
 	String findUuidByEmail(String email) throws EmptyResultDataAccessException;
 
     void updateLastLogin(String name);
+
+    List<String> regionDensity();
 }

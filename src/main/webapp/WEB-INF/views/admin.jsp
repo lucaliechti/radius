@@ -6,13 +6,88 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <jsp:include page="templates/header.jsp" />
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"><link/>
+<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
+<!-- DataTables -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-
+<!-- other stuff -->
 <link rel="stylesheet" type="text/css" href="css/admin.css"/>
 <script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" src="js/ms.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var map = L.map('map').setView([46.75, 8.25], 8);
+
+        var tl = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 8,
+            minZoom: 8,
+            maxBoundsViscosity: 1,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        }).addTo(map);
+
+        map.setMaxBounds([[45.22, 4.95], [48.24, 11.55]]);
+
+        function style(feature) {
+            return {
+                fillColor: getColor(getCount(feature.id)),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
+        gl = L.geoJson(ms, {
+            style: style
+        }).addTo(map);
+
+        function getColor(d) {
+            return d >= 100 ? '#800026' :
+                d >= 50  ? '#BD0026' :
+                d >= 20  ? '#E31A1C' :
+                d >= 10  ? '#FC4E2A' :
+                d >= 5   ? '#FD8D3C' :
+                d >= 2   ? '#FEB24C' :
+                d >= 1   ? '#FED976' :
+                '#FFEDA0';
+        }
+
+        var legend = L.control({position: 'topright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info maplegend'),
+                grades = [0, 1, 2, 5, 10, 20, 50, 100],
+                labels = [];
+
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+            return div;
+        };
+        legend.addTo(map);
+    });
+
+    regionalDensities = regionDensityAsJS();
+
+    function regionDensityAsJS() {
+        jsArray = [];
+        <c:forEach items="${regionDensity}" var="answer">
+            jsArray.push(${answer});
+        </c:forEach>
+        return jsArray;
+    }
+
+    function getCount(id) {
+        return regionalDensities[id-1];
+    }
+</script>
 
 <script>
     $(document).ready(function() {
@@ -46,10 +121,10 @@
     function maxAnswers() {
         let max = 0;
         <c:forEach items="${surveyStats}" var="answer" varStatus="loop">
-        var currentSum = ${answer[0] + answer[1] + answer[2]};
-        if(currentSum > max) {
-            max = currentSum;
-        }
+            var currentSum = ${answer[0] + answer[1] + answer[2]};
+            if(currentSum > max) {
+                max = currentSum;
+            }
         </c:forEach>
         return max;
     }
@@ -244,6 +319,10 @@
                     </ul>
                 </figure>
 
+            </section>
+            <section class="leftsection-content-element" id="registrationmap">
+                <h2>Where come from?</h2>
+                <div id="map"></div>
             </section>
             <section class="leftsection-content-element" id="votes">
                 <h2>
