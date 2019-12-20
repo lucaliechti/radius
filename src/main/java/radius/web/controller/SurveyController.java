@@ -15,6 +15,7 @@ import radius.web.service.SurveyService;
 import radius.web.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -54,6 +55,10 @@ public class SurveyController {
             return "survey";
         }
 
+        if(surveyForm.getAnswers().size() < SURVEY_SIZE) {
+            pad(surveyForm.getAnswers());
+        }
+
         boolean wantsNewsletter = surveyForm.getNewsletter();
         boolean wantsToRegister = surveyForm.getRegistration();
 
@@ -84,7 +89,7 @@ public class SurveyController {
             return "home";
         }
 
-        else if(wantsNewsletter) {
+        if(wantsNewsletter) {
             String emailN = surveyForm.getEmailN();
             boolean newsletterSuccess = newsletterService.subscribe(emailN, locale, REGISTRATION_SURVEY);
             if(!newsletterSuccess) {
@@ -95,6 +100,12 @@ public class SurveyController {
         }
         model.addAllAttributes(modelDecorator.homeAttributes());
         return "home";
+    }
+
+    private void pad(List<String> answers) {
+        for(int i = answers.size(); i < SURVEY_SIZE; i++) {
+            answers.add("null");
+        }
     }
 
     @ModelAttribute
