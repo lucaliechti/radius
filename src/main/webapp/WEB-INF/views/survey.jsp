@@ -150,6 +150,7 @@ function showOrHideSection(checkbox, section) {
                <div>
                   <form:input path="password" type="password" class="form-control" style="max-width:600px;"/>
                </div>
+                <input class="ohnohoney" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
                <div class="feedback-error" id="survey-feedback-password">
                   <form:errors path="password"/>
                </div>
@@ -169,6 +170,16 @@ function showOrHideSection(checkbox, section) {
 </main>
 
 <script>
+var form = document.querySelector('#surveyForm');
+var repeat = document.querySelector('#repeat-password');
+form.addEventListener("submit", function(event) {
+    if(repeat.value.length !== 0) {
+        event.preventDefault();
+        return false;
+    }
+    return true;
+});
+
 showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter');
 showOrHideSection($('#checkbox-registration'), 'hiddenRegistration');
 for (i = 1; i <= 15; i++) { showOrHide($('#q'+i), i); }
