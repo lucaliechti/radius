@@ -18,6 +18,7 @@ public class NewsletterForm {
     @NotEmpty(message="{error.atLeastOneRecipient}")
     private String recipients;
 
+    @NotEmpty(message="{error.notBlank}")
     private String language;
 
 }

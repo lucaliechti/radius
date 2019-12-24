@@ -48,10 +48,11 @@ public class AdminController {
         }
         List<String> recipients = Arrays.asList(contactUserForm.getRecipients().split(";"));
         System.out.println("Sending email with subject \"" + contactUserForm.getSubject() + "\" to " + recipients.size() + " users");
-        List<String> failed = newsletterservice.sendMassEmail(false, contactUserForm.getSubject(), contactUserForm.getMessage(), recipients, null);
+        List<String> failed = newsletterservice.sendMassEmail(false, contactUserForm.getSubject(), contactUserForm.getMessage(), recipients, new Locale(contactUserForm.getLanguage()));
         decorateModel(model, recipients, failed);
         return "admin";
     }
+
     @RequestMapping(path="/sendNewsletter", method=POST)
     public String sendNewsletter(@ModelAttribute("newsletterForm") @Valid NewsletterForm newsletterForm, Model model,
                                  BindingResult result) {

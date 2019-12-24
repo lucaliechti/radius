@@ -280,10 +280,20 @@
                 <form:form method="POST" action="contactUsers" modelAttribute="contactUserForm">
                     <form:input path="subject" placeholder="Subject" style="margin-top: 20px;"/>
                     <form:errors path="subject"/>
+                    <p><b>Liebe/r User/in,</b></p><br>
                     <form:textarea path="message" placeholder="Message"/>
                     <form:errors path="message"/>
                     <form:hidden path="recipients"  id="recipients_users"/>
                     <form:errors path="recipients"/>
+                    <p>
+                        <form:radiobutton path="language" value="de" checked="checked"/> Deutsch
+                    </p>
+                    <p>
+                        <form:radiobutton path="language" value="fr"/> Französisch
+                    </p>
+                    <p>
+                        <form:radiobutton path="language" value="en"/> Englisch
+                    </p>
                     <input type="submit" class="btn btn-primary" value="Send" />
                     <sec:csrfInput />
                 </form:form>

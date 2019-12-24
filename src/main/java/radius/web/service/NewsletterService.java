@@ -3,9 +3,12 @@ package radius.web.service;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+import radius.User;
 import radius.data.dto.EmailSourceDto;
 import radius.data.repository.JDBCNewsletterRepository;
+import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.NewsletterRepository;
+import radius.data.repository.UserRepository;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
 
@@ -17,6 +20,7 @@ import java.util.Locale;
 public class NewsletterService {
 
     private NewsletterRepository newsletterRepository;
+    private UserRepository userRepository;
     private MessageSource messageSource;
     private ProfileDependentProperties prop;
     private EmailService emailService;
@@ -26,11 +30,13 @@ public class NewsletterService {
     private static final String NEWSLETTER_EMAIL_SUBJECT = "email.newsletter.subscribe.title";
     private static final String NEWSLETTER_EMAIL_MESSAGE = "email.newsletter.subscribe.content";
     private static final String NEWSLETTER_EMAIL_FOOTER = "email.newsletter.footer";
+    private static final String NEWSLETTER_EMAIL_DEAR = "admin.newsletter.dear";
 
-    public NewsletterService(JDBCNewsletterRepository newsletterRepository, MessageSource messageSource,
-                             ProfileDependentProperties prop, EmailService emailService,
+    public NewsletterService(JDBCNewsletterRepository newsletterRepository, JDBCUserRepository userRepository,
+                             MessageSource messageSource, ProfileDependentProperties prop, EmailService emailService,
                              JavaMailSenderImpl newsletterMailSender, JavaMailSenderImpl helloMailSender) {
         this.newsletterRepository = newsletterRepository;
+        this.userRepository = userRepository;
         this.messageSource = messageSource;
         this.prop = prop;
         this.emailService = emailService;
@@ -62,7 +68,7 @@ public class NewsletterService {
     private boolean sendSubscriptionEmail(String email, String uuid, Locale locale) {
         String subject = messageSource.getMessage(NEWSLETTER_EMAIL_SUBJECT, new Object[]{}, locale);
         String content = messageSource.getMessage(NEWSLETTER_EMAIL_MESSAGE, new Object[]{}, locale);
-        appendUnsubscribeFooterToMessage(uuid, locale, content);
+        content += unsubscribeFooter(uuid, locale);
         try {
             emailService.sendSimpleMessage(email, subject, content, newsletterMailSender);
         } catch (Exception e) {
@@ -81,7 +87,9 @@ public class NewsletterService {
         JavaMailSenderImpl sender = isNewsletter ? newsletterMailSender : helloMailSender;
         for(String recipient : recipients) {
             if(isNewsletter) {
-                appendUnsubscribeFooterToMessage(findUuidByEmail(recipient), locale, message);
+                message += unsubscribeFooter(findUuidByEmail(recipient), locale);
+            } else {
+                message = personalGreeting(recipient, locale) + message;
             }
             try {
                 emailService.sendSimpleMessage(recipient, subject, message, sender);
@@ -96,9 +104,15 @@ public class NewsletterService {
         return newsletterRepository.findUuidByEmail(email);
     }
 
-    private void appendUnsubscribeFooterToMessage(String uuid, Locale locale, String content) {
-        content += "\n\n-----------\n";
-        content += messageSource.getMessage(NEWSLETTER_EMAIL_FOOTER,
+    private String unsubscribeFooter(String uuid, Locale locale) {
+        String footer = "\n\n-----------\n";
+        return footer + messageSource.getMessage(NEWSLETTER_EMAIL_FOOTER,
                 new Object[]{prop.getUrl() + "/unsubscribe?uuid=" + uuid}, locale);
+    }
+
+    private String personalGreeting(String email, Locale locale) {
+        String dear = messageSource.getMessage(NEWSLETTER_EMAIL_DEAR, new Object[]{}, locale);
+        User user = userRepository.findUserByEmail(email);
+        return dear + " " + user.getFirstname() + " " + user.getLastname() + ",\n\n";
     }
 }
