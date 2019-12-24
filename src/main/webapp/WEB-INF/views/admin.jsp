@@ -138,7 +138,7 @@
 <spring:message code="admin.newsletter.send" var="send" />
 
 <main class="firstcontainer container">
-    <section id="leftsection" style="max-width: 1140px;margin: 0 auto;">
+    <section id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
 
         <c:if test="${successfullySent != null}">
             <p class="result success">
@@ -194,13 +194,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${newsletterRecipients}" var="recipient" >
-                        <tr>
-                            <td></td>
-                            <td>${recipient.email}</td>
-                            <td>${recipient.source}</td>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach items="${newsletterRecipients}" var="recipient" >
+                            <tr>
+                                <td></td>
+                                <td>${recipient.email}</td>
+                                <td>${recipient.source}</td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
                 <form:form method="POST" action="sendNewsletter" modelAttribute="newsletterForm">
@@ -252,28 +252,28 @@
 
                 <table id="usertable" class="table table-striped table-bordered table-sm">
                     <thead>
-                    <tr>
-                        <th></th>
-                        <th>Vorname</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Email bestätigt</th>
-                        <th>Status</th>
-                        <th>Letzte Änderung</th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th>Vorname</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Email bestätigt</th>
+                            <th>Status</th>
+                            <th>Letzte Änderung</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${users}" var="user" >
-                        <tr>
-                            <td></td>
-                            <td>${user.firstname}</td>
-                            <td>${user.lastname}</td>
-                            <td>${user.email}</td>
-                            <td><spring:message code="question.${user.enabled}"/></td>
-                            <td><spring:message code="status.${user.status}"/></td>
-                            <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach items="${users}" var="user" >
+                            <tr>
+                                <td></td>
+                                <td>${user.firstname}</td>
+                                <td>${user.lastname}</td>
+                                <td>${user.email}</td>
+                                <td><spring:message code="question.${user.enabled}"/></td>
+                                <td><spring:message code="status.${user.status}"/></td>
+                                <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
 
@@ -328,12 +328,13 @@
                         <li>Keine Antwort</li>
                     </ul>
                 </figure>
-
             </section>
+
             <section class="leftsection-content-element" id="registrationmap">
                 <h2>Where come from?</h2>
                 <div id="map"></div>
             </section>
+
             <section class="leftsection-content-element" id="votes">
                 <h2>
                     Im Moment ist Abstimmung: <spring:message code="question.${special}"/>
@@ -341,6 +342,30 @@
                 <p>
                     Anzahl Abstimmungen: ${nrvotes}
                 </p>
+            </section>
+
+            <section class="leftsection-content-element" id="matches">
+                <h2>
+                    Matches
+                </h2>
+                <table id="matchingtable" class="table table-striped table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Zeit</th>
+                            <th>User 1</th>
+                            <th>User 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${matches}" var="match" >
+                            <tr>
+                                <td><fmt:formatDate value="${match.dateCreated()}" pattern = "yyyy-MM-dd"/></td>
+                                <td>${match.email1()}</td>
+                                <td>${match.email2()}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </section>
         </section>
     </section>

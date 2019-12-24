@@ -2,6 +2,10 @@ $(document).ready(function() {
     var recipientUsers = $('#recipients_users');
     var recipientNewsletter = $('#recipients_newsletter');
 
+    $('#matchingtable').DataTable({
+        "lengthMenu": [ 10, 20, 50, 100 ]
+    });
+
     var usertable = $('#usertable').DataTable({
         "columnDefs": [ {
             orderable: false,

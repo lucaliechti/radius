@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.form.NewsletterForm;
 import radius.web.components.RealWorldProperties;
+import radius.web.service.MatchingService;
 import radius.web.service.NewsletterService;
 import radius.web.service.SurveyService;
 import radius.web.service.UserService;
@@ -25,13 +26,15 @@ public class AdminController {
     private NewsletterService newsletterservice;
     private UserService userService;
     private SurveyService surveyService;
+    private MatchingService matchingService;
     private RealWorldProperties realWorld;
 
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           RealWorldProperties real) {
+                           MatchingService matchingService, RealWorldProperties real) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
         this.surveyService = surveyService;
+        this.matchingService = matchingService;
         this.realWorld = real;
     }
 
@@ -47,8 +50,11 @@ public class AdminController {
             return "admin";
         }
         List<String> recipients = Arrays.asList(contactUserForm.getRecipients().split(";"));
-        System.out.println("Sending email with subject \"" + contactUserForm.getSubject() + "\" to " + recipients.size() + " users");
-        List<String> failed = newsletterservice.sendMassEmail(false, contactUserForm.getSubject(), contactUserForm.getMessage(), recipients, new Locale(contactUserForm.getLanguage()));
+        List<String> failed = newsletterservice.sendMassEmail(false,
+                contactUserForm.getSubject(),
+                contactUserForm.getMessage(),
+                recipients,
+                new Locale(contactUserForm.getLanguage()));
         decorateModel(model, recipients, failed);
         return "admin";
     }
@@ -60,8 +66,11 @@ public class AdminController {
             return "admin";
         }
         List<String> recipients = Arrays.asList(newsletterForm.getRecipients().split(";"));
-        System.out.println("Sending newsletter with subject \"" + newsletterForm.getSubject() + "\" to " + recipients.size() + " users, footer will be " + newsletterForm.getLanguage());
-        List<String> failed = newsletterservice.sendMassEmail(true, newsletterForm.getSubject(), newsletterForm.getMessage(), recipients, new Locale(newsletterForm.getLanguage()));
+        List<String> failed = newsletterservice.sendMassEmail(true,
+                newsletterForm.getSubject(),
+                newsletterForm.getMessage(),
+                recipients,
+                new Locale(newsletterForm.getLanguage()));
         decorateModel(model, recipients, failed);
         return "admin";
     }
@@ -78,6 +87,8 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("matches", matchingService.allMatches().stream().
+                filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList()));
         model.addAttribute("regionDensity", userService.regionDensity());
         model.addAttribute("surveyStats", surveyService.statistics());
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());

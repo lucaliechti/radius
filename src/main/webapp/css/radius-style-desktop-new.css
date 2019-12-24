@@ -434,7 +434,8 @@ input[type="button"] {
 
 /*LL: admin page*/
 div #usertable_info,
-div #newslettertable_info {
+div #newslettertable_info,
+div #matchingtable_info {
     font-family: 'Fira Sans Condensed', sans-serif;
     font-size: 18px;
     font-weight: 300;
