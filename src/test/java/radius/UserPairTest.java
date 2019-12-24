@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collections;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -46,7 +45,7 @@ public class UserPairTest {
 		);
 		UserPair userPair = UserPair.of(user1, user2);
 
-		assertEquals(20, userPair.numberOfDisagreements());
+		assertEquals(20, userPair.disagreementScore());
 		//assertFalse(MatchingController.Edge.optFromUserPair(userPair, Instant.ofEpochSecond(0)).isPresent());
 	}
 }

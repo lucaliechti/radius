@@ -203,6 +203,11 @@
             <version>5.5.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.3.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>radius</finalName>
@@ -287,6 +292,8 @@
             <properties>
                 <db.conf.file>/config/database_dev.properties</db.conf.file>
                 <radius.url>http://localhost:8080/radius</radius.url>
+                <matching.sendemails>false</matching.sendemails>
+                <matching.schedule>0 * * * * *</matching.schedule>
             </properties>
         </profile>
         <profile>
@@ -297,6 +304,8 @@
             <properties>
                 <db.conf.file>/config/database_prod.properties</db.conf.file>
                 <radius.url>https://radius-schweiz.ch</radius.url>
+                <matching.sendemails>true</matching.sendemails>
+                <matching.schedule>0 30 6 * * 1,4</matching.schedule>
             </properties>
         </profile>
     </profiles>

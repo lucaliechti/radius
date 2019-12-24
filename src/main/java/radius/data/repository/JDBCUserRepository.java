@@ -24,7 +24,7 @@ public class JDBCUserRepository implements UserRepository {
 	private String currentVote;
 
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email ORDER BY users.pkey ASC";
-	private static final String FIND_MATCHABLE_USERS =  "SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE status = ? AND enabled = TRUE AND answered = TRUE AND banned = FALSE";
+	private static final String FIND_MATCHABLE_USERS =  "SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE status = 'WAITING' AND enabled = TRUE AND banned = FALSE";
 	private static final String FIND_USER_BY_EMAIL = 	"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE users.email = ?";
 	private static final String FIND_USER_BY_UUID =		"SELECT email FROM users WHERE uuid = ?";
 	private static final String FIND_UUID_BY_EMAIL = 	"SELECT uuid FROM users WHERE email = ?";
@@ -55,7 +55,7 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public List<User> matchableUsers() {
-		return jdbcTemplate.query(FIND_MATCHABLE_USERS, new UserRowMapper(), currentVote, User.UserStatus.WAITING);
+		return jdbcTemplate.query(FIND_MATCHABLE_USERS, new UserRowMapper(), currentVote);
 	}
 
 	@Override

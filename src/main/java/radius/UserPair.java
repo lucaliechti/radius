@@ -1,23 +1,17 @@
 package radius;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableSet;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Immutable class containing a pair of users which could potentially be matched.
- */
 @AutoValue
 public abstract class UserPair {
-	private static final int MINIMAL_NUMBER_OF_DISAGREEMENTS = 3;
 
 	public abstract User user1();
 
@@ -35,48 +29,38 @@ public abstract class UserPair {
 		return commonLocations;
 	}
 
-	//TODO: Change name of function, it is now misleading
-	public int numberOfDisagreements() {
+	public double disagreementScore() {
 		List<User.TernaryAnswer> answers1 = user1().getRegularanswers();
 		List<User.TernaryAnswer> answers2 = user2().getRegularanswers();
 
-		int matchScore = 0;
-		final int DISAGREEMENT_WEIGHT = 10; //using ints for now so nothing changes downstream
-		final int AGREEMENT_WEIGHT = 3;
+		double disagreementScore = 0.0;
+		final double DISAGREEMENT_WEIGHT = 1.0;
+		final double AGREEMENT_WEIGHT = 0.1;
 
 		for (int i = 0; i < answers1.size(); i++) {
 			if (answers1.get(i) == User.TernaryAnswer.TRUE && answers2.get(i) == User.TernaryAnswer.FALSE ||
 			    answers1.get(i) == User.TernaryAnswer.FALSE && answers2.get(i) == User.TernaryAnswer.TRUE) {
-				matchScore += DISAGREEMENT_WEIGHT;
+				disagreementScore += DISAGREEMENT_WEIGHT;
 			}
 			else if (answers1.get(i) == answers2.get(i) && !(answers1.get(i) == User.TernaryAnswer.DONTCARE)) {
-				matchScore -= AGREEMENT_WEIGHT;
+				disagreementScore -= AGREEMENT_WEIGHT;
 			}
 		}
 
-		return matchScore;
+		return disagreementScore;
 	}
 
-	public double totalDaysUnmodified(Instant now) {
-		return (ChronoUnit.SECONDS.between(user1().getDateModified().toInstant(), now) + ChronoUnit.SECONDS.between(user2().getDateModified().toInstant(), now)) / (1.0 * ChronoUnit.DAYS.getDuration().getSeconds());
+	public double waitingTime(Instant now) {
+		return (ChronoUnit.SECONDS.between(user1().getDateModified().toInstant(), now)
+				+ ChronoUnit.SECONDS.between(user2().getDateModified().toInstant(), now))
+			/ (1.0 * ChronoUnit.DAYS.getDuration().getSeconds());
 	}
 
-	public boolean compatible() {
-		if (commonLanguages().isEmpty()) {
-			// no common languages
+	public boolean compatible(double minimalDisagreementScore) {
+		if (commonLanguages().isEmpty() || commonLocations().isEmpty()) {
 			return false;
 		}
-
-		if (commonLocations().isEmpty()) {
-			// no common locations
-			return false;
-		}
-
-		if (numberOfDisagreements() < MINIMAL_NUMBER_OF_DISAGREEMENTS) {
-			return false;
-		}
-
-		return true;
+		return !(disagreementScore() < minimalDisagreementScore);
 	}
 
 	public static UserPair of(User user1, User user2) {

@@ -16,4 +16,7 @@ public class ProfileDependentProperties {
     @Value("${radius.url}")
     String url;
 
+    @Value("${matching.sendemails}")
+    boolean sendEmails;
+
 }

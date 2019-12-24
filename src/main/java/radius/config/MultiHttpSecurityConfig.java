@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -65,31 +62,6 @@ public class MultiHttpSecurityConfig {
 			final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
 			authProvider.setUserDetailsService(userDetailsService);
 			return authProvider;
-		}
-	}
-
-	@Configuration
-	@PropertySource("classpath:config/matcher.properties")
-	@Order(1)
-	public static class ApiConfiguration extends WebSecurityConfigurerAdapter {
-		@Autowired
-		Environment env;
-
-		@Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.inMemoryAuthentication()
-				.passwordEncoder(passwordEncoder())
-				.withUser(env.getProperty("matcher.user")).password(passwordEncoder().encode(env.getProperty("matcher.pass"))).roles("MATCHER");
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.antMatcher("/api/**")
-				.authorizeRequests()
-				.anyRequest().hasRole("MATCHER").and()
-				.httpBasic().and()
-				.csrf().disable()
-				.requiresChannel().anyRequest().requiresSecure();
 		}
 	}
 
