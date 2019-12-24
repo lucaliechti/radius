@@ -223,35 +223,45 @@
             </p>
          </c:if>
       </section>
-        <section id="profile-deco-newsletter" class="profile-resume">
-           <h2>
-              <spring:message code="newsletter.title"/>
-           </h2>
-            <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
-                <div class="form-group">
-                   <form:label path="email">
-                      <spring:message code="home.register.email"/>
-                   </form:label>
+           <section id="profile-deco-newsletter" class="profile-resume">
+              <h2>
+                 <spring:message code="newsletter.title"/>
+              </h2>
+               <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
                    <div class="form-group">
-                      <form:input path="email" class="form-control"/>
+                      <form:label path="email">
+                         <spring:message code="home.register.email"/>
+                      </form:label>
+                      <div class="form-group">
+                         <form:input path="email" class="form-control"/>
+                      </div>
+                      <div class="feedback-error" id="register-feedback-newsletter-email">
+                         <form:errors path="email"/>
+                      </div>
                    </div>
-                   <div class="feedback-error" id="register-feedback-newsletter-email">
-                      <form:errors path="email"/>
-                   </div>
-                </div>
-                <input type="submit" class="btn btn-primary" value="${feed}" />
-                <p><spring:message code="newsletter.description"/></p>
-                <sec:csrfInput />
-            </form:form>
-        </section>
+                   <input class="ohnohoney" id="repeat-email" name="repeat-email" type="text" value="" autocomplete="off"/>
+                   <input type="submit" class="btn btn-primary" value="${feed}" />
+                   <p><spring:message code="newsletter.description"/></p>
+                   <sec:csrfInput />
+               </form:form>
+           </section>
    </section>
 </main>
 
 <script>
-   var form = document.querySelector('#registrationForm');
-   var repeat = document.querySelector('#repeat-password');
-   form.addEventListener("submit", function(event) {
-      if(repeat.value.length !== 0) {
+   var registrationForm = document.querySelector('#registrationForm');
+   var repeatPassword = document.querySelector('#repeat-password');
+   registrationForm.addEventListener("submit", function(event) {
+      if(repeatPassword.value.length !== 0) {
+         event.preventDefault();
+         return false;
+      }
+      return true;
+   });
+   var newsletterForm = document.querySelector('#newsletterForm');
+   var repeatEmail = document.querySelector('#repeat-email');
+   newsletterForm.addEventListener("submit", function(event) {
+      if(repeatEmail.value.length !== 0) {
          event.preventDefault();
          return false;
       }
