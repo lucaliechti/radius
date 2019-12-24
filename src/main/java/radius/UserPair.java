@@ -57,10 +57,14 @@ public abstract class UserPair {
 	}
 
 	public boolean compatible(double minimalDisagreementScore) {
-		if (commonLanguages().isEmpty() || commonLocations().isEmpty()) {
+		if (commonLanguages().isEmpty() || commonLocations().isEmpty() || bothPrivate()) {
 			return false;
 		}
 		return !(disagreementScore() < minimalDisagreementScore);
+	}
+
+	private boolean bothPrivate() {
+		return user1().isPrivateUser() && user2().isPrivateUser();
 	}
 
 	public static UserPair of(User user1, User user2) {

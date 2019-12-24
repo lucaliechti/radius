@@ -25,6 +25,7 @@ public class UserPairTest {
 				ImmutableList.of("DE", "FR"),
 				ImmutableList.of("FALSE", "TRUE", "DONTCARE", "DONTCARE", "DONTCARE"),
 				Collections.emptyList(),
+				false,
 				Timestamp.from(Instant.ofEpochSecond(0)),
 				"d42f2b69-f065-457d-9a57-069b2e3b1da1"
 		);
@@ -40,6 +41,7 @@ public class UserPairTest {
 				ImmutableList.of("DE", "FR"),
 				ImmutableList.of("TRUE", "FALSE", "DONTCARE", "DONTCARE", "DONTCARE"),
 				Collections.emptyList(),
+				false,
 				Timestamp.from(Instant.ofEpochSecond(0)),
 				"4d23cebd-2d6b-46b4-87eb-24d76fbe13fc"
 		);

@@ -26,6 +26,7 @@ public class User {
 	private List<String> languages;
 	private List<TernaryAnswer> regularanswers;
 	private List<TernaryAnswer> specialanswers;
+	private boolean privateUser;
 	private String uuid;
 	private Timestamp dateModified;
 
@@ -52,6 +53,7 @@ public class User {
 		List<String> languages,
 		List<String> regularanswers,
 		List<String> specialanswers,
+		boolean privateUser,
 		Timestamp dateModified,
 		String uuid
 	) {
@@ -68,6 +70,7 @@ public class User {
 		this.languages = languages;
 		this.regularanswers = regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.specialanswers = specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
+		this.privateUser = privateUser;
 		this.dateModified = dateModified;
 		this.uuid = uuid;
 	}
