@@ -47,7 +47,15 @@ public class UserPairTest {
 		);
 		UserPair userPair = UserPair.of(user1, user2);
 
-		assertEquals(20, userPair.disagreementScore());
-		//assertFalse(MatchingController.Edge.optFromUserPair(userPair, Instant.ofEpochSecond(0)).isPresent());
+		assertEquals(2, userPair.disagreements(MatchingMode.REGULAR));
+		assertEquals(0, userPair.disagreements(MatchingMode.SPECIAL));
+		assertFalse(Edge.optionalFromUserPair(
+				userPair,
+				Instant.ofEpochSecond(0),
+				false,
+				2,
+				1,
+				MatchingMode.SPECIAL
+		).isPresent());
 	}
 }

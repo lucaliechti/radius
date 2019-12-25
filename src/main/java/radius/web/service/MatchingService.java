@@ -13,18 +13,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import radius.Edge;
-import radius.HalfEdge;
-import radius.User;
-import radius.UserPair;
+import radius.*;
 import radius.data.form.MeetingFeedbackForm;
 import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.MatchingRepository;
 import radius.data.repository.UserRepository;
-import radius.web.components.ConfigurationProperties;
-import radius.web.components.CountrySpecificProperties;
-import radius.web.components.EmailService;
-import radius.web.components.ProfileDependentProperties;
+import radius.web.components.*;
 
 import java.time.Instant;
 import java.util.*;
@@ -45,11 +39,12 @@ public class MatchingService {
     private CountrySpecificProperties countryProperties;
     private ConfigurationProperties configProperties;
     private ProfileDependentProperties profileProperties;
+    private RealWorldProperties realWorld;
 
     public MatchingService(JDBCUserRepository userRepo, MatchingRepository matchRepo, MessageSource messageSource,
                            EmailService emailService, JavaMailSenderImpl matchingMailSender,
                            CountrySpecificProperties countryProperties, ConfigurationProperties configProperties,
-                           ProfileDependentProperties profileProperties) {
+                           ProfileDependentProperties profileProperties, RealWorldProperties realWorld) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
         this.messageSource = messageSource;
@@ -58,24 +53,33 @@ public class MatchingService {
         this.countryProperties = countryProperties;
         this.configProperties = configProperties;
         this.profileProperties = profileProperties;
+        this.realWorld = realWorld;
     }
 
     @Scheduled(cron = "${matching.schedule}")
     public void matchUsers() {
         if(configProperties.isActive()) {
-            List<User> usersToMatch = userRepo.matchableUsers();
-            List<Edge> edges = allEdges(usersToMatch);
-            MatchingAlgorithm.Matching<String, DefaultWeightedEdge> matching = calculateMatching(edges);
-            matching.getEdges().forEach(this::applyMatch);
-            log.info("Matched  " + matching.getEdges().size() * 2 + " out of " + usersToMatch.size() + " waiting users.");
+            if(realWorld.isSpecialIsActive()) {
+                match(MatchingMode.SPECIAL);
+            }
+            match(MatchingMode.REGULAR);
         }
+    }
+
+    private void match(MatchingMode mode) {
+        List<User> usersToMatch = userRepo.matchableUsers();
+        List<Edge> edges = allEdges(usersToMatch, mode);
+        MatchingAlgorithm.Matching<String, DefaultWeightedEdge> matching = calculateMatching(edges);
+        matching.getEdges().forEach(this::applyMatch);
+        log.info("Matched  " + matching.getEdges().size() * 2 + " out of " + usersToMatch.size() + " waiting users."
+            + " (Mode = " + mode + ")");
     }
 
     private void applyMatch(DefaultWeightedEdge edge) {
         String[] matchedUsers = edge.toString().substring(1, edge.toString().length()-1).split(" : ");
         User user1 = userRepo.findUserByEmail(matchedUsers[0]);
         User user2 = userRepo.findUserByEmail(matchedUsers[1]);
-        match(UserPair.of(user1, user2));
+        persistMatch(UserPair.of(user1, user2));
         if(profileProperties.isSendEmails()) {
             emailUserAboutMatch(user1, user2);
             emailUserAboutMatch(user2, user1);
@@ -92,7 +96,7 @@ public class MatchingService {
         return weightedMatching.getMatching();
     }
 
-    private List<Edge> allEdges(List<User> users) {
+    private List<Edge> allEdges(List<User> users, MatchingMode mode) {
         Instant now = Instant.now();
         Map<String, Set<String>> existingMatches = alreadyMatched();
         List<Edge> edges = new ArrayList<>();
@@ -102,10 +106,13 @@ public class MatchingService {
                         existingMatches.get(users.get(i).getEmail()).contains(users.get(j).getEmail())) {
                     continue;
                 }
-                Edge.optionalFromUserPair(UserPair.of(users.get(i), users.get(j)),
+                Edge.optionalFromUserPair(
+                        UserPair.of(users.get(i), users.get(j)),
                         now,
                         configProperties.isWaitingTime(),
-                        configProperties.getMinimumScore())
+                        configProperties.getMinDisagreementsRegular(),
+                        configProperties.getMinDisagreementsSpecial(),
+                        mode)
                     .ifPresent(edges::add);
             }
         }
@@ -152,7 +159,7 @@ public class MatchingService {
         }
     }
 
-    public void match(UserPair userPair) {
+    public void persistMatch(UserPair userPair) {
         userPair.user1().setStatus(User.UserStatus.MATCHED);
         userPair.user2().setStatus(User.UserStatus.MATCHED);
         userRepo.updateExistingUser(userPair.user1());

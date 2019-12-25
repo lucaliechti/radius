@@ -118,9 +118,6 @@ public class User {
 	}
 
 	public static String convertAnswerToString(TernaryAnswer answer) {
-		if (answer == null) {
-			return null;
-		}
 		switch (answer) {
 			case TRUE:
 				return "TRUE";

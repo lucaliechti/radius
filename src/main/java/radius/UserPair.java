@@ -29,38 +29,70 @@ public abstract class UserPair {
 		return commonLocations;
 	}
 
-	public double disagreementScore() {
-		List<User.TernaryAnswer> answers1 = user1().getRegularanswers();
-		List<User.TernaryAnswer> answers2 = user2().getRegularanswers();
+	public double disagreementScore(MatchingMode mode, boolean factorWaitingTime, Instant now) {
+		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1().getRegularanswers() :
+				user1().getSpecialanswers();
+		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.SPECIAL) ? user2().getRegularanswers() :
+				user2().getSpecialanswers();
+
+		if(answers1.isEmpty() || answers2.isEmpty()) {
+			return 0.0;
+		}
 
 		double disagreementScore = 0.0;
 		final double DISAGREEMENT_WEIGHT = 1.0;
 		final double AGREEMENT_WEIGHT = 0.1;
-
 		for (int i = 0; i < answers1.size(); i++) {
-			if (answers1.get(i) == User.TernaryAnswer.TRUE && answers2.get(i) == User.TernaryAnswer.FALSE ||
-			    answers1.get(i) == User.TernaryAnswer.FALSE && answers2.get(i) == User.TernaryAnswer.TRUE) {
+			if (answersDisagree(answers1.get(i), answers2.get(i))) {
 				disagreementScore += DISAGREEMENT_WEIGHT;
 			}
-			else if (answers1.get(i) == answers2.get(i) && !(answers1.get(i) == User.TernaryAnswer.DONTCARE)) {
+			else if (answersAgree(answers1.get(i), answers2.get(i))) {
 				disagreementScore -= AGREEMENT_WEIGHT;
 			}
 		}
-
-		return disagreementScore;
+		return disagreementScore + (factorWaitingTime ? 1-(Math.sqrt(1/waitingTime(now))) : 0.0);
 	}
 
-	public double waitingTime(Instant now) {
+	private double waitingTime(Instant now) {
 		return (ChronoUnit.SECONDS.between(user1().getDateModified().toInstant(), now)
 				+ ChronoUnit.SECONDS.between(user2().getDateModified().toInstant(), now))
 			/ (1.0 * ChronoUnit.DAYS.getDuration().getSeconds());
 	}
 
-	public boolean compatible(double minimalDisagreementScore) {
+	public boolean compatible(MatchingMode mode, int minDisagreementsRegular, int minDisagreementsSpecial) {
 		if (commonLanguages().isEmpty() || commonLocations().isEmpty() || bothPrivate()) {
 			return false;
 		}
-		return !(disagreementScore() < minimalDisagreementScore);
+		return !(disagreements(mode) < (mode.equals(MatchingMode.SPECIAL) ? minDisagreementsSpecial :
+				minDisagreementsRegular));
+	}
+
+	public int disagreements(MatchingMode mode) {
+		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1().getRegularanswers() :
+				user1().getSpecialanswers();
+		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2().getRegularanswers() :
+				user2().getSpecialanswers();
+
+		if(answers1.isEmpty() || answers2.isEmpty()) {
+			return 0;
+		}
+
+		int disagreements = 0;
+		for (int i = 0; i < answers1.size(); i++) {
+			if (answersDisagree(answers1.get(i), answers2.get(i))) {
+				disagreements++;
+			}
+		}
+		return disagreements;
+	}
+
+	private boolean answersDisagree(User.TernaryAnswer answer1, User.TernaryAnswer answer2) {
+		return !answer1.equals(User.TernaryAnswer.DONTCARE) && !answer2.equals(User.TernaryAnswer.DONTCARE)
+				&& !answer1.equals(answer2);
+	}
+
+	private boolean answersAgree(User.TernaryAnswer answer1, User.TernaryAnswer answer2) {
+		return answer1.equals(answer2) && !answer1.equals(User.TernaryAnswer.DONTCARE);
 	}
 
 	private boolean bothPrivate() {

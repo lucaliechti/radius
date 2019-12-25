@@ -11,13 +11,16 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:config/config.properties")
 public class ConfigurationProperties {
 
-    @Value("${matching.minimum.disagreement.score}")
-    private double minimumScore;
-
     @Value("${matching.factor.waitingtime}")
     private boolean waitingTime;
 
     @Value("${matching.active}")
     private boolean active;
+
+    @Value("${matching.minimum.disagreements.regular}")
+    private int minDisagreementsRegular;
+
+    @Value("${matching.minimum.disagreements.special}")
+    private int minDisagreementsSpecial;
 
 }

@@ -13,13 +13,19 @@ public class Edge {
     private String end;
     private double weight;
 
-    public static Optional<Edge> optionalFromUserPair(UserPair userPair, Instant now, boolean waitingTime, double min) {
-        if (userPair.compatible(min)) {
-            return Optional.of(new Edge(userPair.user1().getEmail(), userPair.user2().getEmail(),
-                    userPair.disagreementScore() + (waitingTime ? (1-(1/userPair.waitingTime(now))) : 0.0 )));
+    public static Optional<Edge> optionalFromUserPair(UserPair userPair, Instant now, boolean waitingTime,
+                                                      int minDisagreementsRegular, int minDisagreementsSpecial,
+                                                      MatchingMode mode) {
+        if (userPair.compatible(mode, minDisagreementsRegular, minDisagreementsSpecial)) {
+            return Optional.of(
+                new Edge(
+                    userPair.user1().getEmail(),
+                    userPair.user2().getEmail(),
+                    userPair.disagreementScore(mode, waitingTime, now)
+                )
+            );
         } else {
             return Optional.empty();
         }
     }
-
 }
