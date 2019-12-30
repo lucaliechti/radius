@@ -1,5 +1,6 @@
 package radius.validation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -10,7 +11,7 @@ import java.util.Arrays;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
-//conditional validation: https://medium.com/@crb3/spring-boot-conditional-validation-example-2dd23af22539
+@Slf4j
 public class ConditionalSurveyValidator implements ConstraintValidator<Conditional, Object> {
 
     private String selected;
@@ -71,16 +72,13 @@ public class ConditionalSurveyValidator implements ConstraintValidator<Condition
                 }
             }
         } catch (IllegalAccessException e) {
-            System.out.println("Accessor method is not available for class: " + object.getClass().getName() + ", exception: " + e);
-            e.printStackTrace();
+            log.error("Accessor method is not available for class: " + object.getClass().getName() + ", exception: " + e);
             return false;
         } catch (NoSuchMethodException e) {
-            System.out.println("Field or method is not present on class: " + object.getClass().getName() + ", exception: " + e);
-            e.printStackTrace();
+            log.error("Field or method is not present on class: " + object.getClass().getName() + ", exception: " + e);
             return false;
         } catch (InvocationTargetException e) {
-            System.out.println("An exception occurred while accessing class: " + object.getClass().getName() + ", exception: " + e);
-            e.printStackTrace();
+            log.error("An exception occurred while accessing class: " + object.getClass().getName() + ", exception: " + e);
             return false;
         }
         return valid;

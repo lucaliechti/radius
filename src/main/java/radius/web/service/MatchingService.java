@@ -70,19 +70,21 @@ public class MatchingService {
         List<User> usersToMatch = userRepo.matchableUsers();
         List<Edge> edges = allEdges(usersToMatch, mode);
         MatchingAlgorithm.Matching<String, DefaultWeightedEdge> matching = calculateMatching(edges);
-        matching.getEdges().forEach(this::applyMatch);
+        matching.getEdges().forEach(e -> applyMatch(e, mode));
         log.info("Matched  " + matching.getEdges().size() * 2 + " out of " + usersToMatch.size() + " waiting users."
             + " (Mode = " + mode + ")");
     }
 
-    private void applyMatch(DefaultWeightedEdge edge) {
+    private void applyMatch(DefaultWeightedEdge edge, MatchingMode mode) {
         String[] matchedUsers = edge.toString().substring(1, edge.toString().length()-1).split(" : ");
         User user1 = userRepo.findUserByEmail(matchedUsers[0]);
         User user2 = userRepo.findUserByEmail(matchedUsers[1]);
-        persistMatch(UserPair.of(user1, user2));
+        persistMatch(UserPair.of(user1, user2), mode);
         if(profileProperties.isSendEmails()) {
             emailUserAboutMatch(user1, user2);
             emailUserAboutMatch(user2, user1);
+        } else {
+            log.info("Suppressing email to " + user1.getEmail() + " and " + user2.getEmail() + ".");
         }
     }
 
@@ -159,12 +161,12 @@ public class MatchingService {
         }
     }
 
-    public void persistMatch(UserPair userPair) {
+    public void persistMatch(UserPair userPair, MatchingMode mode) {
         userPair.user1().setStatus(User.UserStatus.MATCHED);
         userPair.user2().setStatus(User.UserStatus.MATCHED);
         userRepo.updateExistingUser(userPair.user1());
         userRepo.updateExistingUser(userPair.user2());
-        matchRepo.createMatch(userPair);
+        matchRepo.createMatch(userPair, mode);
     }
 
     public void emailUserAboutMatch(User user, User match) {

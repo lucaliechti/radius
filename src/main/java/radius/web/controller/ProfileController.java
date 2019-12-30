@@ -3,6 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,8 @@ public class ProfileController {
 			return "answers";
 		} else {
 			model.addAttribute("user", user);
-			List<String> answers = user.getRegularAnswersAsListOfStrings().stream().map(String::toLowerCase)
-					.collect(Collectors.toList());
+			List<String> answers = user.getRegularanswers().stream().map(User::convertAnswerToString).
+					filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
 			model.addAttribute("answers", answers);
 			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
 			model.addAttribute("history", matchingService.allMatchesForUser(email));

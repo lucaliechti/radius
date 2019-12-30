@@ -3,8 +3,6 @@ package radius.data.repository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 import radius.User;
-import radius.HalfEdge;
-import radius.UserPair;
 import radius.exceptions.EmailAlreadyExistsException;
 import radius.exceptions.UserHasMatchesException;
 

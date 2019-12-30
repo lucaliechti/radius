@@ -32,10 +32,12 @@ public abstract class UserPair {
 	public double disagreementScore(MatchingMode mode, boolean factorWaitingTime, Instant now) {
 		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1().getRegularanswers() :
 				user1().getSpecialanswers();
-		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.SPECIAL) ? user2().getRegularanswers() :
+		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2().getRegularanswers() :
 				user2().getSpecialanswers();
 
-		if(answers1.isEmpty() || answers2.isEmpty()) {
+		if(answers1 == null || answers2 == null
+				|| answers1.isEmpty() || answers2.isEmpty()
+				|| answers1.size() != answers2.size()) {
 			return 0.0;
 		}
 
@@ -50,7 +52,11 @@ public abstract class UserPair {
 				disagreementScore -= AGREEMENT_WEIGHT;
 			}
 		}
-		return disagreementScore + (factorWaitingTime ? 1-(Math.sqrt(1/waitingTime(now))) : 0.0);
+		return disagreementScore + (factorWaitingTime ? weighted(waitingTime(now)) : 0.0);
+	}
+
+	private double weighted(double waitingTime) {
+		return (Math.atan(waitingTime/3 - 3) + Math.atan(3)) / (Math.PI/2 + Math.atan(3));
 	}
 
 	private double waitingTime(Instant now) {
@@ -73,7 +79,9 @@ public abstract class UserPair {
 		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2().getRegularanswers() :
 				user2().getSpecialanswers();
 
-		if(answers1.isEmpty() || answers2.isEmpty()) {
+		if(answers1 == null || answers2 == null
+				|| answers1.isEmpty() || answers2.isEmpty()
+				|| answers1.size() != answers2.size()) {
 			return 0;
 		}
 

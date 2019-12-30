@@ -1,6 +1,7 @@
 package radius.data.repository;
 
 import radius.HalfEdge;
+import radius.MatchingMode;
 import radius.User;
 import radius.UserPair;
 
@@ -20,6 +21,6 @@ public interface MatchingRepository {
 
 	List<HalfEdge> allMatchesForUser(String email);
 
-	void createMatch(UserPair userPair);
+	void createMatch(UserPair userPair, MatchingMode mode);
 	
 }

@@ -115,7 +115,8 @@ public class JDBCUserRepository implements UserRepository {
 
 	@Override
 	public void updateExistingUser(User user) {
-		String regularAnswers = String.join(";", user.getRegularAnswersAsListOfStrings());
+		String regularAnswers = user.getRegularanswers().stream().map(User::convertAnswerToString)
+				.collect(Collectors.joining(";"));
 		String lang = String.join(";", user.getLanguages());
 		String loc = user.locationString();
 		String status = user.getStatus().name();

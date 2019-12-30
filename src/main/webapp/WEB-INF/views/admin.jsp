@@ -354,6 +354,7 @@
                             <th>Zeit</th>
                             <th>User 1</th>
                             <th>User 2</th>
+                            <th>Modus</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -362,6 +363,7 @@
                                 <td><fmt:formatDate value="${match.dateCreated()}" pattern = "yyyy-MM-dd"/></td>
                                 <td>${match.email1()}</td>
                                 <td>${match.email2()}</td>
+                                <td>${match.mode()}</td>
                             </tr>
                         </c:forEach>
                     </tbody>

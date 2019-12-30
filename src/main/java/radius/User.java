@@ -75,12 +75,6 @@ public class User {
 		this.uuid = uuid;
 	}
 
-	public List<String> getRegularAnswersAsListOfStrings() {
-		return regularanswers.stream().map(User::convertAnswerToString).collect(Collectors.toList());
-	}
-	public List<String> getSpecialAnswersAsListOfStrings() {
-		return specialanswers.stream().map(User::convertAnswerToString).collect(Collectors.toList());
-	}
 	public void setRegularanswers(List<String> answers) {
 		regularanswers = answers.stream().map(User::convertAnswer).collect(Collectors.toList());
 	}

@@ -27,8 +27,12 @@ public class AnswerService {
         user.setStatus(User.UserStatus.WAITING);
         user.setLanguages(answerForm.getLanguages());
         user.setMotivation(answerForm.getMotivation());
-        user.setRegularanswers(answerForm.getRegularanswers());
-        user.setSpecialanswers(answerForm.getSpecialanswers());
+        try {
+            user.setRegularanswers(answerForm.getRegularanswers());
+        } catch (NullPointerException npe) { user.setRegularanswers(Collections.emptyList()); }
+        try {
+            user.setSpecialanswers(answerForm.getSpecialanswers());
+        } catch (NullPointerException npe) { user.setSpecialanswers(Collections.emptyList()); }
         user.setLocations(Arrays.stream(answerForm.getLocations().split(";")).map(Integer::valueOf)
                 .collect(Collectors.toList()));
     }
@@ -68,8 +72,10 @@ public class AnswerService {
         form.setMotivation(user.getMotivation());
         form.setLanguages(user.getLanguages());
         form.setLocations(user.locationString());
-        form.setRegularanswers(user.getRegularAnswersAsListOfStrings());
-        form.setSpecialanswers(user.getSpecialAnswersAsListOfStrings());
+        form.setRegularanswers(user.getRegularanswers().stream().map(User::convertAnswerToString)
+                .collect(Collectors.toList()));
+        form.setSpecialanswers(user.getSpecialanswers().stream().map(User::convertAnswerToString)
+                .collect(Collectors.toList()));
         return form;
     }
 

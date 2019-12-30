@@ -16,13 +16,15 @@ public abstract class HalfEdge {
 	public abstract Optional<Boolean> meetingConfirmed();
 	public abstract Timestamp dateCreated();
 	public abstract Optional<Timestamp> dateInactive();
+	public abstract String mode();
 
-	public static HalfEdge of(String email1, String email2, boolean active, Optional<Boolean> meetingConfirmed, Timestamp dateCreated, Optional<Timestamp> dateInactive) {
+	public static HalfEdge of(String email1, String email2, boolean active, Optional<Boolean> meetingConfirmed,
+							  Timestamp dateCreated, Optional<Timestamp> dateInactive, String mode) {
 		checkNotNull(email1);
 		checkNotNull(email2);
 		checkNotNull(dateCreated);
 		dateInactive.ifPresent(Preconditions::checkNotNull);
 
-		return new AutoValue_HalfEdge(email1, email2, active, meetingConfirmed, dateCreated, dateInactive);
+		return new AutoValue_HalfEdge(email1, email2, active, meetingConfirmed, dateCreated, dateInactive, mode);
 	}
 }

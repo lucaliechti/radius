@@ -85,28 +85,35 @@
 
       <section class="leftsection-title" id="page-title">
          <h2>
-            <spring:message code="home.title"/>
+            <spring:message code="home.welcome.title"/>
          </h2>
           <p style="margin-top: 10px;"> <!-- lets test this here -->
               <spring:message code="home.welcome.details"/>
           </p>
       </section>
       <section class="leftsection-content">
-         <section class="leftsection-content-element" id="">
+         <section class="leftsection-content-element" id="special">
             <h2>
-               Was sind die wichtigsten Fragen der Schweiz?
+               <spring:message code="home.news.special.title"/>
             </h2>
             <p>
-               Radius ist eine Plattform, die eine einfache Möglichkeit bietet, persönlich und konstruktiv mit politisch Andersdenkenden zu diskutieren.<br>
-               Wir wollen wissen: Welche politischen Fragen bewegen Sie? Worüber würden Sie sich gerne mit jemand Andersdenkendem unterhalten? Lassen Sie es uns in der <a href="<c:url value='/survey' />">Umfrage</a> wissen!
+               <spring:message code="home.news.special.details"/>
             </p>
          </section>
-         <section class="leftsection-content-element" id="">
+         <section class="leftsection-content-element" id="survey">
             <h2>
-               <spring:message code="home.crowdfunding.title"/>
+               <spring:message code="home.news.survey.title"/>
             </h2>
             <p>
-               <spring:message code="home.crowdfunding.details"/>
+               <spring:message code="home.news.survey.details"/>
+            </p>
+         </section>
+         <section class="leftsection-content-element" id="crowdfunding">
+            <h2>
+               <spring:message code="home.news.crowdfunding.title"/>
+            </h2>
+            <p>
+               <spring:message code="home.news.crowdfunding.details"/>
             </p>
          </section>
       </section>
