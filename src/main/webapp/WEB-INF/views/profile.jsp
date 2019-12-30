@@ -37,19 +37,32 @@
       <p><b><spring:message code="profile.canton"/>:</b> <c:if test="${user.canton != null}"><spring:message code="canton.${user.canton}"/></c:if>
       <p><b><spring:message code="profile.motivation"/>:</b> ${user.motivation}
    </section>
-   <section class="leftsection-content-element" id="radiusdata">
+   <section class="leftsection-content-element" id="nationalvotes">
       <div class="editable">
-      <h2><spring:message code="profile.radiusdata"/></h2>
-      <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
-   </div>
-   <c:if test="${not empty answers}">
-      <c:forEach begin="1" end="${nrQ}" varStatus="loop">
-         <p><b><spring:message code="q${loop.index}"/></b>
-         <br>
-         <spring:message code="question.${answers[loop.index-1]}"/>
-      </c:forEach>
-   </c:if>
-   </section>	
+         <h2><spring:message code="profile.specialanswers"/></h2>
+         <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+      </div>
+      <c:if test="${not empty specialanswers}">
+         <c:forEach begin="1" end="${nrSQ}" varStatus="loop">
+            <p><b><spring:message code="questions.special.${vote}.${loop.index}"/></b>
+            <br>
+            <spring:message code="question.${specialanswers[loop.index-1]}"/>
+         </c:forEach>
+      </c:if>
+   </section>
+   <section class="leftsection-content-element" id="regularanswers">
+      <div class="editable">
+         <h2><spring:message code="profile.regularanswers"/></h2>
+         <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+      </div>
+      <c:if test="${not empty answers}">
+         <c:forEach begin="1" end="${nrQ}" varStatus="loop">
+            <p><b><spring:message code="q${loop.index}"/></b>
+            <br>
+            <spring:message code="question.${answers[loop.index-1]}"/>
+         </c:forEach>
+      </c:if>
+   </section>
    <section class="leftsection-content-element" id="additionaldata">
          <div class="editable">
       <h2>

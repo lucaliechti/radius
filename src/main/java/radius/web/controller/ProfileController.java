@@ -60,9 +60,16 @@ public class ProfileController {
 			List<String> answers = user.getRegularanswers().stream().map(User::convertAnswerToString).
 					filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
 			model.addAttribute("answers", answers);
+			if(real.isSpecialIsActive()) {
+				List<String> specialanswers = user.getSpecialanswers().stream().map(User::convertAnswerToString).
+						filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
+				model.addAttribute("specialanswers", specialanswers);
+			}
 			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
 			model.addAttribute("history", matchingService.allMatchesForUser(email));
 			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
+			model.addAttribute("nrSQ", real.getNumberOfVotes());
+			model.addAttribute("vote", real.getCurrentVote());
 		}
 		return "profile";
 	}

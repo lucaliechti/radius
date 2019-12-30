@@ -25,7 +25,7 @@
 	}
 	#leftsection {
 		flex: 0 1 auto;
-		margin-top: calc(3*20px);
+		margin-top: 30px !important;
 		margin-bottom: 5%;
 		margin-left: 5%;
 		margin-right: 5%;
@@ -251,34 +251,4 @@
 	#menuToggle input:checked~ul {
 		transform: none;
 	}
-
-    /*
-    section .profile-resume {
-        border-bottom: none;
-    }
-    #edit-profile-leftsection {
-        padding-right: 0;
-        padding-bottom: 20px;
-    }
-    #edit-profile-rightsection {
-        border-left: none;
-        padding-left: 0;
-        width: 100%
-    }
-    */
-
-    /*
-    .col-50-left {
-        flex: 1 0 100%;
-        padding-right: 0;
-        padding-bottom: 20px;
-    }
-    .col-50-right {
-        flex: 1 0 100%;
-        padding-left: 0;
-        border: none;
-        border-top: 2px solid black;
-        padding-top: 20px;
-    }
-    */
 }
