@@ -81,8 +81,8 @@ public class MatchingService {
         User user2 = userRepo.findUserByEmail(matchedUsers[1]);
         persistMatch(UserPair.of(user1, user2), mode);
         if(profileProperties.isSendEmails()) {
-            emailUserAboutMatch(user1, user2);
-            emailUserAboutMatch(user2, user1);
+            emailUserAboutMatch(user1, user2, mode);
+            emailUserAboutMatch(user2, user1, mode);
         } else {
             log.info("Suppressing email to " + user1.getEmail() + " and " + user2.getEmail() + ".");
         }
@@ -169,7 +169,7 @@ public class MatchingService {
         matchRepo.createMatch(userPair, mode);
     }
 
-    public void emailUserAboutMatch(User user, User match) {
+    public void emailUserAboutMatch(User user, User match, MatchingMode mode) {
         try {
             UserPair up = UserPair.of(user, match);
             String matchingLanguages = matchingLanguages(up, user);
@@ -181,9 +181,10 @@ public class MatchingService {
                             user.getLastname(),
                             match.getFirstname(),
                             match.getLastname(),
-                            String.join(", ", countryProperties.prettyLocations(new ArrayList<Integer>(up.commonLocations()))),
+                            String.join(", ", countryProperties.prettyLocations(new ArrayList<>(up.commonLocations()))),
                             matchingLanguages,
-                            match.getEmail()},
+                            match.getEmail(),
+                            disagreedUponQuestions(user, match, mode, user.preferredLocale())},
                             user.preferredLocale()),
                     matchingMailSender
             );
@@ -200,5 +201,28 @@ public class MatchingService {
             languages.add(messageSource.getMessage("language." + lang, new Object[]{}, user.preferredLocale()));
         }
         return String.join(", ", languages);
+    }
+
+    private String disagreedUponQuestions(User user, User match, MatchingMode mode, Locale loc) {
+        List<String> questions = new ArrayList<>();
+        List<Integer> disagreed = disagreedQuestions(user, match, mode);
+        String messageSourcePrefix = mode == MatchingMode.REGULAR ? "q" : "questions.special." + realWorld.getCurrentVote() + ".";
+        disagreed.forEach(q -> questions.add("- " + messageSource.getMessage(messageSourcePrefix+(q+1), new Object[]{}, loc)));
+        return String.join("\n",questions);
+    }
+
+    private List<Integer> disagreedQuestions(User user1, User user2, MatchingMode mode) {
+        ArrayList<Integer> disagree = new ArrayList();
+        List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1.getRegularanswers() :
+                user1.getSpecialanswers();
+        List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2.getRegularanswers() :
+                user2.getSpecialanswers();
+        for(int i = 0; i < answers1.size(); i++) {
+            if((answers1.get(i) == User.TernaryAnswer.TRUE && answers2.get(i) == User.TernaryAnswer.FALSE)
+            || (answers1.get(i) == User.TernaryAnswer.FALSE && answers2.get(i) == User.TernaryAnswer.TRUE)) {
+                disagree.add(i);
+            }
+        }
+        return disagree;
     }
 }
