@@ -19,4 +19,7 @@ public class ProfileDependentProperties {
     @Value("${matching.sendemails}")
     boolean sendEmails;
 
+    @Value("${security.requireSSL}")
+    boolean requireSSL;
+
 }

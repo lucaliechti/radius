@@ -80,8 +80,6 @@
           </div>
    </c:if>
 
-   <!-- UNBEDINGT machen, dass die Fragen anders heissen: wenn nur normale Fragen, dann "Antworten", ansonsten "Reguläre Antworten" oder sowas -->
-
    <div class="form-group leftsection-content-element" id="register-questions">
       <label for="regularanswers" class="label-title"><spring:message code="answers.answers"/></label>
       <c:forEach begin="1" end="${nrQ}" varStatus="loop">
@@ -104,6 +102,17 @@
       <div class="feedback-error" id="regularanswers-feedback-error">
          <form:errors path="regularanswers"/>
       </div>
+       <br>
+       <p>
+       <c:choose>
+           <c:when test="${special}">
+               <spring:message code="answers.answers.hint.special"/>
+           </c:when>
+           <c:otherwise>
+               <spring:message code="answers.answers.hint.regular"/>
+           </c:otherwise>
+       </c:choose>
+       </p>
    </div>
 
    <div class="form-group leftsection-content-element" id="register-locations">
