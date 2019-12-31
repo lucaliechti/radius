@@ -118,13 +118,11 @@ section .login-resume {
 
 div.editable-rightsection {
 	display: flex;
-	align-items: center;
 	justify-content: space-between;
 }
 
 div.editable {
 	display: flex;
-	align-items: center;
 	justify-content: left;
 }
 
@@ -462,11 +460,11 @@ div #matchingtable_info {
 
 /* ICONS */
 .editing-icons {
-	width: 35px;
+	width: 30px;
 }
 
 .editing-icons-div {
-	padding-left: 20px;
+	padding-left: 10px;
 }
 
 /* SWISS FLAGS */

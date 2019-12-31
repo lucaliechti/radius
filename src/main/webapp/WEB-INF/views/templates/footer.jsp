@@ -7,7 +7,13 @@
 
 	<footer id="footer">
 		<div class="footer-left">
-			<p><!-- <a href="#"><spring:message code="footer.media"/></a> | --><a href="<c:url value='/support' />"><spring:message code="footer.support"/></a> | <a href="<c:url value='/imprint' />"><spring:message code="footer.imprint"/></a> | <a href="<c:url value='/privacy' />"><spring:message code="footer.privacy"/></a> | <spring:message code="footer.contact"/>: info@radius-schweiz.ch</p>
+			<p>
+				<a href="<c:url value='/media'/>"><spring:message code="footer.media"/></a> |
+				<a href="<c:url value='/support' />"><spring:message code="footer.support"/></a> |
+				<a href="<c:url value='/imprint' />"><spring:message code="footer.imprint"/></a> |
+				<a href="<c:url value='/privacy' />"><spring:message code="footer.privacy"/></a> |
+				<spring:message code="footer.contact"/>: info@radius-schweiz.ch
+			</p>
 		</div>
 		<div class="footer-right">
 			<ul id="s-icons">

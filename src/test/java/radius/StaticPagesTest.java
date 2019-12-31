@@ -45,4 +45,10 @@ public class StaticPagesTest {
         mockMvc.perform(get("/support/"))
                 .andExpect(view().name("support"));
     }
+    @Test
+    public void getMedia() throws Exception {
+        MockMvc mockMvc = standaloneSetup(staticPagesController).build();
+        mockMvc.perform(get("/media/"))
+                .andExpect(view().name("media"));
+    }
 }

@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <jsp:include page="templates/header.jsp" />
 
@@ -25,8 +26,9 @@
 <!-- preparing variables -->
 <spring:message code="status.meeting.confirm" var="confirm" />
 <c:forEach items="${commonlanguages}" var="lang" varStatus="stat">
-  <c:set var="languages">${stat.first ? "" : languages}<spring:message code="language.${lang}"/>${stat.last ? "" : ", "}</c:set>
+  <c:set var="languages">${stat.first ? "" : languages}<spring:message code="language.${lang}"/>${stat.last ? "" : ","}</c:set>
 </c:forEach>
+<c:set var="languages">${fn:replace(languages, ',', ', ')}</c:set>
   
       <section class="leftsection-title" id="page-title">
          <h2><spring:message code="status.title"/></h2>
