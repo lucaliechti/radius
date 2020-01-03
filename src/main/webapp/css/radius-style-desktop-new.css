@@ -86,7 +86,6 @@ main {
 	border: 2px solid black;
 	padding: 20px;
 	margin: 5%;
-	margin-top: calc(3*20px);
 }
 
 .fullwidth-section-only-vertical {
@@ -250,7 +249,7 @@ input[type="radio"] {
 	border: none;
 	line-height: 1.4;
 }
-label {
+label.answer {
 	white-space:nowrap;
 }
 th, td {

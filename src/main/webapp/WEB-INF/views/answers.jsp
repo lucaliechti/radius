@@ -57,15 +57,15 @@
                 <p>
                    <spring:message code="questions.special.${currentVote}.${loop.index}"/>
                 </p>
-                <label>
+                <label class="answer">
                    <form:radiobutton path="specialanswers[${loop.index-1}]" value="TRUE"/>
                    <spring:message code="question.true"/>
                 </label>
-                <label>
+                <label class="answer">
                     <form:radiobutton path="specialanswers[${loop.index-1}]" value="FALSE"/>
                     <spring:message code="question.false"/>
                 </label>
-                <label>
+                <label class="answer">
                     <form:radiobutton path="specialanswers[${loop.index-1}]" value="DONTCARE"/>
                     <spring:message code="question.dontcare"/>
                 </label>
@@ -88,15 +88,15 @@
           <p>
               <spring:message code="q${loop.index}"/>
           </p>
-          <label>
+          <label class="answer">
               <form:radiobutton path="regularanswers[${loop.index-1}]" value="TRUE"/>
               <spring:message code="question.true"/>
           </label>
-          <label>
+          <label class="answer">
               <form:radiobutton path="regularanswers[${loop.index-1}]" value="FALSE"/>
               <spring:message code="question.false"/>
           </label>
-          <label>
+          <label class="answer">
               <form:radiobutton path="regularanswers[${loop.index-1}]" value="DONTCARE"/>
               <spring:message code="question.dontcare"/>
           </label>
