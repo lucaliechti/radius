@@ -111,7 +111,7 @@
    </section>
    <section id="rightsection">
 
-    <jsp:include page="history.jsp" /><!-- TODO: separate history and testimonials page -->
+    <jsp:include page="history.jsp" />
 
    </section>
 </main>

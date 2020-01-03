@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.web.servlet.LocaleResolver;
 import radius.web.components.ModelDecorator;
 import radius.web.controller.HomeController;
 import radius.web.service.AnswerService;
@@ -18,7 +19,9 @@ public class HomeControllerTest {
 		UserService mockUserService = mock(UserService.class);
 		AnswerService mockAnswerService = mock(AnswerService.class);
 		ModelDecorator mockModelDecorator = mock(ModelDecorator.class);
-		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelDecorator);
+		LocaleResolver mockLocaleResolver = mock(LocaleResolver.class);
+		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelDecorator,
+				mockLocaleResolver);
 		MockMvc mockMvc = standaloneSetup(controller).build();
 		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}

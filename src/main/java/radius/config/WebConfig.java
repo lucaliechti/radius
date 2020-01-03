@@ -3,15 +3,10 @@ package radius.config;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.Validator;
-
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.CacheControl;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -40,8 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver(){
-	//TODO: We would like to change the locale depending on which site a user is on: schweiz, svizzera, suisse. This works, but gives Exceptions.
-	//System.out.println(r.getRequestURL().toString());
     	CookieLocaleResolver resolver = new CookieLocaleResolver();
     	resolver.setDefaultLocale(new Locale("de"));
     	resolver.setCookieName("radiusLocale");
