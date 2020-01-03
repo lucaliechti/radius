@@ -83,6 +83,10 @@
             </p>
          </c:if>
 
+      <div class="result mobileonly">
+         <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
+      </div>
+
       <section class="leftsection-title" id="page-title">
          <h2>
             <spring:message code="home.welcome.title"/>

@@ -250,7 +250,9 @@ input[type="radio"] {
 	border: none;
 	line-height: 1.4;
 }
-
+label {
+	white-space:nowrap;
+}
 th, td {
     padding-right: 15px;
     text-align: left;
@@ -690,4 +692,8 @@ table.dataTable tbody td.select-checkbox::before, table.dataTable tbody td.selec
 
 table.dataTable tbody th, table.dataTable tbody td {
 	padding: 0.1px 0.1px !important;
+}
+
+.mobileonly{
+	display: none;
 }

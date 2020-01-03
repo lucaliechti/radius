@@ -19,6 +19,7 @@
 
 <!-- preparing variables -->
 <spring:message code="answers.motivation.ph" var="motivationph" />
+<spring:message code="answers.answer" var="answer" />
 
 <form:form method="POST" action="answers" modelAttribute="answerForm">
    <div class="form-group leftsection-content-element" id="register-motivation">
@@ -53,21 +54,22 @@
             <label for="specialanswers" class="label-title special"><spring:message code="questions.special"/></label>
 
             <c:forEach begin="1" end="${nrV}" varStatus="loop">
-                 <p>
-                    <spring:message code="questions.special.${currentVote}.${loop.index}"/>
-                 </p>
-                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="TRUE"/>
-                 <label>
-                    <spring:message code="question.true"/>
-                 </label>
-                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="FALSE"/>
-                 <label>
+                <p>
+                   <spring:message code="questions.special.${currentVote}.${loop.index}"/>
+                </p>
+                <label>
+                   <form:radiobutton path="specialanswers[${loop.index-1}]" value="TRUE"/>
+                   <spring:message code="question.true"/>
+                </label>
+                <label>
+                    <form:radiobutton path="specialanswers[${loop.index-1}]" value="FALSE"/>
                     <spring:message code="question.false"/>
-                 </label>
-                 <form:radiobutton path="specialanswers[${loop.index-1}]" value="DONTCARE"/>
-                 <label>
+                </label>
+                <label>
+                    <form:radiobutton path="specialanswers[${loop.index-1}]" value="DONTCARE"/>
                     <spring:message code="question.dontcare"/>
-                 </label>
+                </label>
+                <hr style="height:6px; visibility:hidden;" />
             </c:forEach>
 
             <div class="feedback-error" id="specialanswers-feedback-error">
@@ -83,26 +85,26 @@
    <div class="form-group leftsection-content-element" id="register-questions">
       <label for="regularanswers" class="label-title"><spring:message code="answers.answers"/></label>
       <c:forEach begin="1" end="${nrQ}" varStatus="loop">
-        <p>
-           <spring:message code="q${loop.index}"/>
-        </p>
-        <form:radiobutton path="regularanswers[${loop.index-1}]" value="TRUE"/>
-        <label>
-           <spring:message code="question.true"/>
-        </label>
-        <form:radiobutton path="regularanswers[${loop.index-1}]" value="FALSE"/>
-        <label>
-           <spring:message code="question.false"/>
-        </label>
-        <form:radiobutton path="regularanswers[${loop.index-1}]" value="DONTCARE"/>
-        <label>
-           <spring:message code="question.dontcare"/>
-        </label>
+          <p>
+              <spring:message code="q${loop.index}"/>
+          </p>
+          <label>
+              <form:radiobutton path="regularanswers[${loop.index-1}]" value="TRUE"/>
+              <spring:message code="question.true"/>
+          </label>
+          <label>
+              <form:radiobutton path="regularanswers[${loop.index-1}]" value="FALSE"/>
+              <spring:message code="question.false"/>
+          </label>
+          <label>
+              <form:radiobutton path="regularanswers[${loop.index-1}]" value="DONTCARE"/>
+              <spring:message code="question.dontcare"/>
+          </label>
+          <hr style="height:6px; visibility:hidden;" />
       </c:forEach>
       <div class="feedback-error" id="regularanswers-feedback-error">
          <form:errors path="regularanswers"/>
       </div>
-       <br>
        <p>
        <c:choose>
            <c:when test="${special}">
@@ -130,7 +132,7 @@
       <div class="feedback-error" id="answers-feedback-location">
          <form:errors path="locations"/>
       </div>
-        <input type="submit" class="btn btn-primary" value="Answer" />
+        <input type="submit" class="btn btn-primary" value='${answer}' />
    		<sec:csrfInput />
    		</form:form>
    </div>

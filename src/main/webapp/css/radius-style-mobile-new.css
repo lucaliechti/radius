@@ -25,7 +25,7 @@
 	}
 	#leftsection {
 		flex: 0 1 auto;
-		margin-top: 30px !important;
+		margin-top: 5% !important;
 		margin-bottom: 5%;
 		margin-left: 5%;
 		margin-right: 5%;
@@ -81,6 +81,18 @@
 	}
 	.fullwidth-section {
 		flex-wrap: wrap;
+	}
+	.mobileonly {
+		display: inline;
+		margin-bottom: 5%;
+		text-align: center;
+		background-color: #006F68;
+		padding: 0.42em 0.6em 0.38em 0.6em;
+	}
+	.mobileonly a {
+		font-size: 18px !important;
+		color: white;
+		text-decoration: none;
 	}
 
 /*
