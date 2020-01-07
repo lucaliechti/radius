@@ -6,6 +6,7 @@ import radius.data.form.UserForm;
 import radius.web.service.ConfigService;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -27,13 +28,17 @@ public class ModelDecorator {
         return homeAttributes;
     }
 
-    public Map<String, Object> answerAttributes() {
+    public Map<String, Object> answerAttributes(Locale locale) {
         HashMap<String, Object> answerAttributes = new HashMap<>();
         answerAttributes.put("lang", countryProperties.getLanguages());
         answerAttributes.put("nrQ", configService.numberOfRegularQuestions());
         answerAttributes.put("special", configService.specialActive());
         answerAttributes.put("nrV", configService.numberOfVotes());
         answerAttributes.put("currentVote", configService.currentVote());
+        answerAttributes.put("regularQuestions", configService.regularQuestions(locale));
+        if(configService.specialActive()) {
+            answerAttributes.put("specialQuestions", configService.specialQuestions(locale));
+        }
         return answerAttributes;
     }
 

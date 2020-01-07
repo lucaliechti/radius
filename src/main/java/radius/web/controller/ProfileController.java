@@ -3,6 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class ProfileController {
 	}
 
 	@RequestMapping(method=GET)
-	public String profile(@RequestParam(value="login", required=false) String loggedin, Model model) {
+	public String profile(@RequestParam(value="login", required=false) String loggedin, Model model, Locale locale) {
 		if(loggedin != null) {
 			model.addAttribute("loggedin", "user has just logged in");
 		}
@@ -64,12 +65,14 @@ public class ProfileController {
 				List<String> specialanswers = user.getSpecialanswers().stream().map(User::convertAnswerToString).
 						filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
 				model.addAttribute("specialanswers", specialanswers);
+				model.addAttribute("specialquestions", configService.specialQuestions(locale));
 			}
 			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
 			model.addAttribute("history", matchingService.allMatchesForUser(email));
 			model.addAttribute("nrQ", configService.numberOfRegularQuestions());
 			model.addAttribute("nrSQ", configService.numberOfVotes());
 			model.addAttribute("vote", configService.currentVote());
+			model.addAttribute("regularquestions", configService.regularQuestions(locale));
 		}
 		return "profile";
 	}

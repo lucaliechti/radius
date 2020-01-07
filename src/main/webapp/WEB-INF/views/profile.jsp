@@ -44,7 +44,7 @@
       </div>
       <c:if test="${not empty specialanswers}">
          <c:forEach begin="1" end="${nrSQ}" varStatus="loop">
-            <p><b><spring:message code="questions.special.${vote}.${loop.index}"/></b>
+            <p><b>${specialquestions[loop.index-1]}</b>
             <br>
             <spring:message code="question.${specialanswers[loop.index-1]}"/>
          </c:forEach>
@@ -57,7 +57,7 @@
       </div>
       <c:if test="${not empty answers}">
          <c:forEach begin="1" end="${nrQ}" varStatus="loop">
-            <p><b><spring:message code="q${loop.index}"/></b>
+            <p><b>${regularquestions[loop.index-1]}</b>
             <br>
             <spring:message code="question.${answers[loop.index-1]}"/>
          </c:forEach>

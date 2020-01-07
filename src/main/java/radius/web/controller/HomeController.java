@@ -43,11 +43,11 @@ public class HomeController {
 	@RequestMapping(value={"/", "/home"}, method=GET)
 	public String home(@RequestParam(value="logout", required=false) String loggedout,
 					   @RequestParam(value="error", required=false) String error, Model model,
-					   HttpServletRequest request, HttpServletResponse response) {
+					   HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		log.info("In the HomeController class");
 		setLocaleBasedOnURL(request, response);
 		if(userIsAuthenticated()) {
-			return prepareModelAndRedirectLoggedInUser(model);
+			return prepareModelAndRedirectLoggedInUser(model, locale);
 		}
 		if(loggedout != null) {
 			model.addAttribute("loggedout", Boolean.TRUE);
@@ -83,11 +83,11 @@ public class HomeController {
 	}
 
 	@RequestMapping(value="/status", method=GET)
-	public String status(Model model) {
-		return prepareModelAndRedirectLoggedInUser(model);
+	public String status(Model model, Locale locale) {
+		return prepareModelAndRedirectLoggedInUser(model, locale);
 	}
 
-	private String prepareModelAndRedirectLoggedInUser(Model model) {
+	private String prepareModelAndRedirectLoggedInUser(Model model, Locale locale) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(!optionalUser.isPresent()) {
@@ -102,7 +102,7 @@ public class HomeController {
 			return "home";
 		}
 		else if(!answerService.userHasValidlyAnswered(user)) {
-			model.addAllAttributes(modelDecorator.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes(locale));
 			model.addAttribute("answerForm", answerService.newFormFromUser(user));
 			return "answers";
 		} else {

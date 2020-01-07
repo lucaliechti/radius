@@ -47,12 +47,12 @@ public class AnswerController {
 	}
 
 	@RequestMapping(method=GET)
-	public String answer(Model model) {
+	public String answer(Model model, Locale locale) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userService.findUserByEmail(email).get();
 		model.addAttribute("answerForm", answerService.userHasValidlyAnswered(user) ?
 				answerService.newFormFromUser(user) : new AnswerForm());
-		model.addAllAttributes(modelDecorator.answerAttributes());
+		model.addAllAttributes(modelDecorator.answerAttributes(locale));
 		return "answers";
 	}
 	
@@ -60,11 +60,11 @@ public class AnswerController {
 	public String answer(@Valid @ModelAttribute("answerForm") AnswerForm answerForm, BindingResult result, Model model,
 			Locale locale)  {
 		if(result.hasErrors()) {
-			model.addAllAttributes(modelDecorator.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes(locale));
 			return "answers";
 		} else if(!answerService.validlyAnsweredForm(answerForm)) {
 			provideFeedback(result, locale);
-			model.addAllAttributes(modelDecorator.answerAttributes());
+			model.addAllAttributes(modelDecorator.answerAttributes(locale));
 			return "answers";
 		} else {
 			String email = SecurityContextHolder.getContext().getAuthentication().getName();

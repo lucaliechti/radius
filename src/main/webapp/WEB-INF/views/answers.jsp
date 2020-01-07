@@ -55,7 +55,7 @@
 
             <c:forEach begin="1" end="${nrV}" varStatus="loop">
                 <p>
-                   <spring:message code="questions.special.${currentVote}.${loop.index}"/>
+                   ${specialQuestions[loop.index-1]}
                 </p>
                 <label class="answer">
                    <form:radiobutton path="specialanswers[${loop.index-1}]" value="TRUE"/>
@@ -86,7 +86,7 @@
       <label for="regularanswers" class="label-title"><spring:message code="answers.answers"/></label>
       <c:forEach begin="1" end="${nrQ}" varStatus="loop">
           <p>
-              <spring:message code="q${loop.index}"/>
+            ${regularQuestions[loop.index-1]}
           </p>
           <label class="answer">
               <form:radiobutton path="regularanswers[${loop.index-1}]" value="TRUE"/>
