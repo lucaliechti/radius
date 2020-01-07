@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import radius.User;
 import radius.User.TernaryAnswer;
 import radius.data.form.AnswerForm;
-import radius.web.components.ConfigurationProperties;
-import radius.web.components.RealWorldProperties;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,12 +13,10 @@ import java.util.stream.Collectors;
 @Service
 public class AnswerService {
 
-    private RealWorldProperties realWorld;
-    private ConfigurationProperties config;
+    private ConfigService configService;
 
-    public AnswerService(RealWorldProperties realWorld, ConfigurationProperties configurationProperties) {
-        this.realWorld = realWorld;
-        this.config = configurationProperties;
+    public AnswerService(ConfigService configService) {
+        this.configService = configService;
     }
 
     public void updateUserFromAnswerForm(User user, AnswerForm answerForm) {
@@ -40,8 +36,8 @@ public class AnswerService {
     public boolean validlyAnsweredForm(AnswerForm form) {
         List<TernaryAnswer> regular = tryConvertAnswers(form.getRegularanswers());
         List<TernaryAnswer> special = tryConvertAnswers(form.getSpecialanswers());
-        return validAnswers(regular, realWorld.getNumberOfRegularQuestions(), config.getMinDisagreementsRegular())
-                || validAnswers(special, realWorld.getNumberOfVotes(), config.getMinDisagreementsSpecial());
+        return validAnswers(regular, configService.numberOfRegularQuestions(), configService.matchingMinimumDisagreementsRegular())
+                || validAnswers(special, configService.numberOfVotes(), configService.matchingMinimumDisagreementsSpecial());
     }
 
     private List<TernaryAnswer> tryConvertAnswers(List<String> input) {
@@ -53,8 +49,8 @@ public class AnswerService {
     }
 
     public boolean userHasValidlyAnswered(User user) {
-        return validAnswers(user.getRegularanswers(), realWorld.getNumberOfRegularQuestions(), config.getMinDisagreementsRegular())
-        || validAnswers(user.getSpecialanswers(), realWorld.getNumberOfVotes(), config.getMinDisagreementsSpecial());
+        return validAnswers(user.getRegularanswers(), configService.numberOfRegularQuestions(), configService.matchingMinimumDisagreementsRegular())
+        || validAnswers(user.getSpecialanswers(), configService.numberOfVotes(), configService.matchingMinimumDisagreementsSpecial());
     }
 
     private boolean validAnswers(List<TernaryAnswer> answers, int nrAnswers, int requiredDisagreements) {

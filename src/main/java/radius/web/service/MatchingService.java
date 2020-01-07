@@ -37,29 +37,27 @@ public class MatchingService {
     private EmailService emailService;
     private JavaMailSenderImpl matchingMailSender;
     private CountrySpecificProperties countryProperties;
-    private ConfigurationProperties configProperties;
+    private ConfigService configService;
     private ProfileDependentProperties profileProperties;
-    private RealWorldProperties realWorld;
 
     public MatchingService(JDBCUserRepository userRepo, MatchingRepository matchRepo, MessageSource messageSource,
                            EmailService emailService, JavaMailSenderImpl matchingMailSender,
-                           CountrySpecificProperties countryProperties, ConfigurationProperties configProperties,
-                           ProfileDependentProperties profileProperties, RealWorldProperties realWorld) {
+                           CountrySpecificProperties countryProperties, ConfigService configService,
+                           ProfileDependentProperties profileProperties) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
         this.messageSource = messageSource;
         this.emailService = emailService;
         this.matchingMailSender = matchingMailSender;
         this.countryProperties = countryProperties;
-        this.configProperties = configProperties;
+        this.configService = configService;
         this.profileProperties = profileProperties;
-        this.realWorld = realWorld;
     }
 
     @Scheduled(cron = "${matching.schedule}")
     public void matchUsers() {
-        if(configProperties.isActive()) {
-            if(realWorld.isSpecialIsActive()) {
+        if(configService.matchingActive()) {
+            if(configService.specialActive()) {
                 match(MatchingMode.SPECIAL);
             }
             match(MatchingMode.REGULAR);
@@ -111,9 +109,9 @@ public class MatchingService {
                 Edge.optionalFromUserPair(
                         UserPair.of(users.get(i), users.get(j)),
                         now,
-                        configProperties.isWaitingTime(),
-                        configProperties.getMinDisagreementsRegular(),
-                        configProperties.getMinDisagreementsSpecial(),
+                        configService.matchingFactorWaitingTime(),
+                        configService.matchingMinimumDisagreementsRegular(),
+                        configService.matchingMinimumDisagreementsSpecial(),
                         mode)
                     .ifPresent(edges::add);
             }
@@ -206,7 +204,7 @@ public class MatchingService {
     private String disagreedUponQuestions(User user, User match, MatchingMode mode, Locale loc) {
         List<String> questions = new ArrayList<>();
         List<Integer> disagreed = disagreedQuestions(user, match, mode);
-        String messageSourcePrefix = mode == MatchingMode.REGULAR ? "q" : "questions.special." + realWorld.getCurrentVote() + ".";
+        String messageSourcePrefix = mode == MatchingMode.REGULAR ? "q" : "questions.special." + configService.currentVote() + ".";
         disagreed.forEach(q -> questions.add("- " + messageSource.getMessage(messageSourcePrefix+(q+1), new Object[]{}, loc)));
         return String.join("\n",questions);
     }

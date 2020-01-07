@@ -16,7 +16,6 @@ import radius.exceptions.UserHasMatchesException;
 import radius.web.components.CountrySpecificProperties;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
-import radius.web.components.RealWorldProperties;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public class UserService {
     private UserRepository userRepo;
     private MatchingRepository matchRepo;
     private CountrySpecificProperties countryProperties;
-    private RealWorldProperties realWorld;
+    private ConfigService configService;
     private EmailService emailService;
     private JavaMailSenderImpl helloMailSender;
     private ProfileDependentProperties prop;
@@ -38,13 +37,13 @@ public class UserService {
     private static final String EMAIL_CONFIRM_MESSAGE = "email.confirm.content";
 
     public UserService(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo,
-                       CountrySpecificProperties countryProperties, RealWorldProperties realWorld,
+                       CountrySpecificProperties countryProperties, ConfigService configService,
                        EmailService emailService, JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop,
                        MessageSource messageSource, PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
         this.countryProperties = countryProperties;
-        this.realWorld = realWorld;
+        this.configService = configService;
         this.emailService = emailService;
         this.helloMailSender = helloMailSender;
         this.prop = prop;
@@ -71,8 +70,8 @@ public class UserService {
 
     public void updateExistingUser(User user) {
         userRepo.updateExistingUser(user);
-        if (realWorld.isSpecialIsActive() && user.getSpecialanswers().size() > 0) {
-            userRepo.updateVotes(user.getEmail(), realWorld.getCurrentVote(), user.getSpecialanswers());
+        if (configService.specialActive() && user.getSpecialanswers().size() > 0) {
+            userRepo.updateVotes(user.getEmail(), configService.currentVote(), user.getSpecialanswers());
         }
     }
 

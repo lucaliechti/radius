@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import radius.exceptions.EmailAlreadyExistsException;
-import radius.web.components.RealWorldProperties;
 import radius.web.controller.AnswerController;
+import radius.web.service.ConfigService;
 import radius.web.service.UserService;
 
 import java.util.Optional;
@@ -67,9 +67,9 @@ public class AnswerIntegrationTest {
     @Test
     @WithMockUser
     public void onlyRegularQuestions() throws Exception {
-        RealWorldProperties mockRealWorld = mock(RealWorldProperties.class);
-        doReturn(true).when(mockRealWorld).isSpecialIsActive();
-        ReflectionTestUtils.setField(answerController, "realWorld", mockRealWorld);
+        ConfigService mockConfigService = mock(ConfigService.class);
+        doReturn(true).when(mockConfigService).specialActive();
+        ReflectionTestUtils.setField(answerController, "configService", mockConfigService);
 
         mockMvc = standaloneSetup(answerController).build();
 
@@ -78,7 +78,7 @@ public class AnswerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("answers"));
 
-        doReturn(false).when(mockRealWorld).isSpecialIsActive();
+        doReturn(false).when(mockConfigService).specialActive();
 
         mockMvc.perform(post("/answers/")
                 .param("regularanswers", "TRUE,FALSE,DONTCARE,TRUE,FALSE"))
@@ -91,8 +91,8 @@ public class AnswerIntegrationTest {
     public void validForm() throws Exception {
         mockMvc = standaloneSetup(answerController).build();
 
-        mockMvc.perform(post("/answers")
-                .param("regularanswers", "TRUE,FALSE,DONTCARE,TRUE,FALSE")
+        mockMvc.perform(post("/answers/")
+                .param("regularanswers", "TRUE,FALSE,DONTCARE,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE")
                 .param("locations", "1;2;3")
                 .param("languages", "DE,FR"))
                 .andExpect(status().isOk())

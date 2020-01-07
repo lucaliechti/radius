@@ -3,6 +3,7 @@ package radius.web.components;
 import org.springframework.stereotype.Component;
 import radius.data.dto.EmailDto;
 import radius.data.form.UserForm;
+import radius.web.service.ConfigService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +12,11 @@ import java.util.Map;
 public class ModelDecorator {
 
     private CountrySpecificProperties countryProperties;
-    private RealWorldProperties realWorld;
+    private ConfigService configService;
 
-    public ModelDecorator(CountrySpecificProperties countryProperties, RealWorldProperties realWorld) {
+    public ModelDecorator(CountrySpecificProperties countryProperties, ConfigService configService) {
         this.countryProperties = countryProperties;
-        this.realWorld = realWorld;
+        this.configService = configService;
     }
 
     public Map<String, Object> homeAttributes() {
@@ -29,10 +30,10 @@ public class ModelDecorator {
     public Map<String, Object> answerAttributes() {
         HashMap<String, Object> answerAttributes = new HashMap<>();
         answerAttributes.put("lang", countryProperties.getLanguages());
-        answerAttributes.put("nrQ", realWorld.getNumberOfRegularQuestions());
-        answerAttributes.put("special", realWorld.isSpecialIsActive());
-        answerAttributes.put("nrV", realWorld.getNumberOfVotes());
-        answerAttributes.put("currentVote", realWorld.getCurrentVote());
+        answerAttributes.put("nrQ", configService.numberOfRegularQuestions());
+        answerAttributes.put("special", configService.specialActive());
+        answerAttributes.put("nrV", configService.numberOfVotes());
+        answerAttributes.put("currentVote", configService.currentVote());
         return answerAttributes;
     }
 

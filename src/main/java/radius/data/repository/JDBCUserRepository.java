@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import radius.User;
 import radius.exceptions.EmailAlreadyExistsException;
-import radius.web.components.RealWorldProperties;
+import radius.web.service.ConfigService;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Repository
 public class JDBCUserRepository implements UserRepository {
 
-	private RealWorldProperties real;
 	private JdbcTemplate jdbcTemplate;
 	private String currentVote;
 
@@ -42,10 +41,9 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String REGION_DENSITY =		"SELECT locations FROM users";
 
 	@Autowired
-    public void init(DataSource jdbcdatasource, RealWorldProperties prop) {
+    public void init(DataSource jdbcdatasource, ConfigService configService) {
         this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
-        this.real = prop;
-        this.currentVote = real.isSpecialIsActive() ? real.getCurrentVote() : "NO_VOTE";
+        this.currentVote = configService.specialActive() ? configService.currentVote() : "NO_VOTE";
     }
 
 	@Override

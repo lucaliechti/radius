@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.CountrySpecificProperties;
-import radius.web.components.RealWorldProperties;
 import radius.web.service.AnswerService;
+import radius.web.service.ConfigService;
 import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
@@ -29,15 +29,15 @@ public class ProfileController {
 	private AnswerService answerService;
 	private MatchingService matchingService;
 	private CountrySpecificProperties countryProperties;
-	private RealWorldProperties real;
+	private ConfigService configService;
 
 	@Autowired
 	public ProfileController(UserService userService, CountrySpecificProperties countryProperties,
-							 RealWorldProperties real, MatchingService matchingService, AnswerService answerService) {
+							 ConfigService configService, MatchingService matchingService, AnswerService answerService) {
 		this.userService = userService;
 		this.answerService = answerService;
 		this.countryProperties = countryProperties;
-		this.real = real;
+		this.configService = configService;
 		this.matchingService = matchingService;
 	}
 
@@ -60,16 +60,16 @@ public class ProfileController {
 			List<String> answers = user.getRegularanswers().stream().map(User::convertAnswerToString).
 					filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
 			model.addAttribute("answers", answers);
-			if(real.isSpecialIsActive()) {
+			if(configService.specialActive()) {
 				List<String> specialanswers = user.getSpecialanswers().stream().map(User::convertAnswerToString).
 						filter(Objects::nonNull).map(String::toLowerCase).collect(Collectors.toList());
 				model.addAttribute("specialanswers", specialanswers);
 			}
 			model.addAttribute("locations", countryProperties.prettyLocations(user.getLocations()));
 			model.addAttribute("history", matchingService.allMatchesForUser(email));
-			model.addAttribute("nrQ", real.getNumberOfRegularQuestions());
-			model.addAttribute("nrSQ", real.getNumberOfVotes());
-			model.addAttribute("vote", real.getCurrentVote());
+			model.addAttribute("nrQ", configService.numberOfRegularQuestions());
+			model.addAttribute("nrSQ", configService.numberOfVotes());
+			model.addAttribute("vote", configService.currentVote());
 		}
 		return "profile";
 	}

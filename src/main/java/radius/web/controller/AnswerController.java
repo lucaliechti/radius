@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.ModelDecorator;
-import radius.web.components.RealWorldProperties;
 import radius.web.service.AnswerService;
+import radius.web.service.ConfigService;
 import radius.web.service.UserService;
 
 @Controller
 @RequestMapping(value="/answers")
 public class AnswerController {
-	
-	private RealWorldProperties realWorld;
+
+	private ConfigService configService;
 	private MessageSource validationMessages;
 	private UserService userService;
 	private ModelDecorator modelDecorator;
@@ -37,9 +37,9 @@ public class AnswerController {
 	private static final String ERROR_AT_LEAST_ONE_SET = "error.answerOneSetOfQuestions";
 
 	@Autowired
-	public AnswerController(RealWorldProperties _realWorld, MessageSource validationMessageSource,
+	public AnswerController(ConfigService configService, MessageSource validationMessageSource,
 							UserService userService, ModelDecorator modelDecorator, AnswerService answerService) {
-		this.realWorld = _realWorld;
+		this.configService = configService;
 		this.validationMessages = validationMessageSource;
 		this.userService = userService;
 		this.modelDecorator = modelDecorator;
@@ -77,7 +77,7 @@ public class AnswerController {
 	}
 
 	private void provideFeedback (BindingResult result, Locale locale) {
-		if(!realWorld.isSpecialIsActive()) {
+		if(!configService.specialActive()) {
 			addFieldError(result,"regularanswers", ERROR_ANSWER_REGULAR_QUESTIONS, locale);
 		} else {
 			addFieldError(result, "regularanswers", ERROR_AT_LEAST_ONE_SET, locale);
