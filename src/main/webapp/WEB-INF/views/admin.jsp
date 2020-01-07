@@ -136,6 +136,9 @@
 
 <!-- variables -->
 <spring:message code="admin.newsletter.send" var="send" />
+<c:set var="phde">🥔🥔🥔</c:set>
+<c:set var="phfr">🥐🥐🥐</c:set>
+<c:set var="phen">🥫🥫🥫</c:set>
 
 <main class="firstcontainer container">
     <section id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
@@ -149,6 +152,12 @@
         <c:if test="${failedRecipients != null}">
             <p class="result error">
                 Mails an folgende Adressen konnten nicht zugestellt werden:<br> ${failedRecipients}
+            </p>
+        </c:if>
+
+        <c:if test="${configupdate_success != null}">
+            <p class="result success">
+                    Configuration updated successfully.<br>
             </p>
         </c:if>
 
@@ -335,15 +344,6 @@
                 <div id="map"></div>
             </section>
 
-            <section class="leftsection-content-element" id="votes">
-                <h2>
-                    Im Moment ist Abstimmung: <spring:message code="question.${special}"/>
-                </h2>
-                <p>
-                    Anzahl Abstimmungen: ${nrvotes}
-                </p>
-            </section>
-
             <section class="leftsection-content-element" id="matches">
                 <h2>
                     Matches
@@ -368,6 +368,132 @@
                         </c:forEach>
                     </tbody>
                 </table>
+            </section>
+            <section class="leftsection-content-element" id="config">
+                <h2>
+                    Edit Configuration
+                </h2>
+                <form:form method="POST" action="updateConfiguration" modelAttribute="configurationForm">
+                    <div class="form-group">
+                        <div style="display: inline-block; margin-right: 30px;">
+                            <p>Special is active</p>
+                            <label class="answer">
+                                <form:radiobutton path="specialActive" value="TRUE"/>
+                                <spring:message code="question.true"/>
+                            </label>
+                            <label class="answer">
+                                <form:radiobutton path="specialActive" value="FALSE"/>
+                                <spring:message code="question.false"/>
+                            </label>
+                            <div class="feedback-error">
+                                <form:errors path="specialActive"/>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; margin-right: 30px;">
+                            <p>Matching is active</p>
+                            <label class="answer">
+                                <form:radiobutton path="matchingActive" value="TRUE"/>
+                                <spring:message code="question.true"/>
+                            </label>
+                            <label class="answer">
+                                <form:radiobutton path="matchingActive" value="FALSE"/>
+                                <spring:message code="question.false"/>
+                            </label>
+                            <div class="feedback-error">
+                                <form:errors path="matchingActive"/>
+                            </div>
+                        </div>
+
+                        <div style="display: inline-block; margin-right: 30px;">
+                            <p>Factor waiting time</p>
+                            <label class="answer">
+                                <form:radiobutton path="matchingFactorWaitingTime" value="TRUE"/>
+                                <spring:message code="question.true"/>
+                            </label>
+                            <label class="answer">
+                                <form:radiobutton path="matchingFactorWaitingTime" value="FALSE"/>
+                                <spring:message code="question.false"/>
+                            </label>
+                            <div class="feedback-error">
+                                <form:errors path="matchingFactorWaitingTime"/>
+                            </div>
+                        </div><br><br>
+
+                        <div style="display: inline-block;">
+                            <label>Nr. of questions (regular)</label>
+                            <form:input type="number" path="numberOfRegularQuestions" class="form-control"/>
+                            <form:errors path="numberOfRegularQuestions" class="feedback-error"/>
+                        </div>
+                        <div style="display: inline-block;">
+                            <label>Nr. of questions (special)</label>
+                            <form:input type="number" path="numberOfVotes" class="form-control" style="border: #f00 solid 2px;"/>
+                            <form:errors path="numberOfVotes" class="feedback-error"/>
+                        </div><br>
+
+                        <div style="display: inline-block;">
+                            <label>Min. disagreements (regular)</label>
+                            <form:input type="number" path="matchingMinimumDisagreementsRegular" class="form-control"/>
+                            <form:errors path="matchingMinimumDisagreementsRegular" class="feedback-error"/>
+                        </div>
+                        <div style="display: inline-block;">
+                            <label>Min. disagreements (special)</label>
+                            <form:input type="number" path="matchingMinimumDisagreementsSpecial" class="form-control" style="border: #f00 solid 2px;"/>
+                            <form:errors path="matchingMinimumDisagreementsSpecial" class="feedback-error"/>
+                        </div><br>
+
+                        <div style="display: inline-block;">
+                            <label>Current Vote</label>
+                            <form:input path="currentVote" class="form-control"/>
+                            <form:errors path="currentVote" class="feedback-error"/>
+                        </div><br><br>
+
+                        <c:if test="${configurationForm.specialActive}">
+                            <p><b style="color: #f00;">Special Questions</b></p>
+                            <c:forEach begin="1" end="${configurationForm.numberOfVotes}" varStatus="questionloop">
+                                <p>${questionloop.index}</p>
+                                <c:forEach begin="1" end="3" varStatus="languageloop">
+                                    <label class="answer">
+                                        <c:choose>
+                                            <c:when test="${languageloop.index == 1}"><c:set var="ph" value="${phde}"/></c:when>
+                                            <c:otherwise>
+                                                <c:choose>
+                                                    <c:when test="${languageloop.index == 2}"><c:set var="ph" value="${phfr}"/></c:when>
+                                                    <c:otherwise><c:set var="ph" value="${phen}"/></c:otherwise>
+                                                </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <form:input path="specialQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline-block;border: #f00 solid 2px;"/>
+                                    </label>
+                                </c:forEach>
+                                <br>
+                            </c:forEach>
+                            <br><br>
+                        </c:if>
+
+                        <p><b>Regular Questions</b></p>
+                        <c:forEach begin="1" end="${configurationForm.numberOfRegularQuestions}" varStatus="questionloop">
+                            <p>${questionloop.index}</p>
+                            <c:forEach begin="1" end="3" varStatus="languageloop">
+                                <label class="answer">
+                                    <c:choose>
+                                        <c:when test="${languageloop.index == 1}"><c:set var="ph" value="${phde}"/></c:when>
+                                        <c:otherwise>
+                                            <c:choose>
+                                                <c:when test="${languageloop.index == 2}"><c:set var="ph" value="${phfr}"/></c:when>
+                                                <c:otherwise><c:set var="ph" value="${phen}"/></c:otherwise>
+                                            </c:choose>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <form:input path="regularQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline;"/>
+                                </label>
+                            </c:forEach>
+                            <br>
+                        </c:forEach>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Update Configuration" />
+                    <sec:csrfInput />
+                </form:form>
             </section>
         </section>
     </section>

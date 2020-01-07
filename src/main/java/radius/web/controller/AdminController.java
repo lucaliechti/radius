@@ -5,12 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import radius.data.form.ConfigurationForm;
 import radius.data.form.NewsletterForm;
-import radius.web.components.RealWorldProperties;
-import radius.web.service.MatchingService;
-import radius.web.service.NewsletterService;
-import radius.web.service.SurveyService;
-import radius.web.service.UserService;
+import radius.web.service.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -18,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
@@ -27,19 +25,31 @@ public class AdminController {
     private UserService userService;
     private SurveyService surveyService;
     private MatchingService matchingService;
-    private RealWorldProperties realWorld;
+    private ConfigService configService;
 
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           MatchingService matchingService, RealWorldProperties real) {
+                           MatchingService matchingService, ConfigService configService) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
         this.surveyService = surveyService;
         this.matchingService = matchingService;
-        this.realWorld = real;
+        this.configService = configService;
     }
 
     @RequestMapping(path="/admin")
     public String admin() {
+        return "admin";
+    }
+
+    @RequestMapping(path="/updateConfiguration", method=POST)
+    public String updateConfiguration(@ModelAttribute("configurationForm") @Valid ConfigurationForm form, Model model,
+                                      BindingResult result) {
+        if(result.hasErrors()) {
+            return "admin";
+        }
+        configService.updateConfig(form);
+        model.addAttribute("configupdate_success", Boolean.TRUE);
+        model.addAttribute("configurationForm", configService.getForm());
         return "admin";
     }
 
@@ -85,16 +95,32 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(path="/updateConfiguration", method=GET)
+    public String getUpdateConfiguration() {
+        return "admin";
+    }
+
+    @RequestMapping(path="/contactUsers", method=GET)
+    public String getContactUsers() {
+        return "admin";
+    }
+
+    @RequestMapping(path="/sendNewsletter", method=GET)
+    public String getSendNewsletter() {
+        return "admin";
+    }
+
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("configurationForm", configService.getForm());
         model.addAttribute("matches", matchingService.allMatches().stream().
                 filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList()));
         model.addAttribute("regionDensity", userService.regionDensity());
         model.addAttribute("surveyStats", surveyService.statistics());
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
         model.addAttribute("users", userService.allUsers());
-        model.addAttribute("special", realWorld.isSpecialIsActive());
-        model.addAttribute("nrvotes", realWorld.getNumberOfVotes());
+        model.addAttribute("special", configService.specialActive());
+        model.addAttribute("nrvotes", configService.numberOfVotes());
         model.addAttribute("newsletterForm", new NewsletterForm());
         model.addAttribute("contactUserForm", new NewsletterForm());
     }

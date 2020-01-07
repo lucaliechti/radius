@@ -379,6 +379,7 @@ p.error {
 input[type="text"],
 input[type="password"],
 input[type="search"], /*LL: admin page table*/
+input[type="number"],
 textarea {
 	border: #006F68 solid 2px;
 	padding: 5px;
