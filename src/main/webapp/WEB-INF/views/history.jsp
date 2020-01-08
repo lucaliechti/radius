@@ -6,9 +6,9 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <section id="profile-name" class="profile-resume">
-    <div class="editable-rightsection">
+    <div class="editable">
         <h2><spring:message code="status.profile" /></h2>
-        <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div><!-- <a href="#"><img src="img/icon-logout.png" class="editing-icons"></a>--></div>
+        <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
     </div>
     <p>
         ${user.firstname} ${user.lastname}

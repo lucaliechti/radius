@@ -46,7 +46,7 @@
                         </c:otherwise>
                     </c:choose>
                 </div> -->
-            <div class="editable"><h2><spring:message code="status.yourstatus"/>: <b><spring:message code="status.${user.status}"/></b></h2></div>
+            <div><h2><spring:message code="status.yourstatus"/>: <b><spring:message code="status.${user.status}"/></b></h2></div>
             <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages}" argumentSeparator=";"/><br><br>
             <c:choose>
             <c:when test="${user.status != 'MATCHED'}">

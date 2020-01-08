@@ -35,7 +35,6 @@
 		flex: 0 1 auto;
 	}
 	#profile-history {
-		border-top: 2px solid #000;
 		padding-top: 20px;
 	}
 	#logo-home {
@@ -88,6 +87,9 @@
 	}
 	#fullwidth-section {
 		margin-top: var(--section-margin-outside);
+	}
+	div.editable {
+		justify-content: space-between;
 	}
 
 /*
