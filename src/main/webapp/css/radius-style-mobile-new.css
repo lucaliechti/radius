@@ -1,8 +1,3 @@
-@font-face {
-	font-family: Fira Sans Condensed;
-	src: url(font/FiraSansCondensed-Light.woff);
-}
-
 @media all and (max-width: 650px) {
 	#language-select {
 		position: static;

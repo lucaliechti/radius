@@ -2,7 +2,6 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,6 @@ import java.util.Optional;
 
 @Controller
 @ComponentScan("radius.config")
-@Slf4j
 public class HomeController {
 
 	private UserService userService;
@@ -44,7 +42,6 @@ public class HomeController {
 	public String home(@RequestParam(value="logout", required=false) String loggedout,
 					   @RequestParam(value="error", required=false) String error, Model model,
 					   HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		log.info("In the HomeController class");
 		setLocaleBasedOnURL(request, response);
 		if(userIsAuthenticated()) {
 			return prepareModelAndRedirectLoggedInUser(model, locale);

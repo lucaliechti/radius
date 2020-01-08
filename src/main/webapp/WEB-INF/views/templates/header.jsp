@@ -12,9 +12,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
     
     <title>Radius</title>
-    
-    <!-- fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed|Fira+Sans+Condensed:300|Saira+Semi+Condensed" rel="stylesheet">
 
 	<!-- jQuery -->
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
