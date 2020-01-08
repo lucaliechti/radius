@@ -29,7 +29,7 @@ function showOrHideSection(checkbox, section) {
 <spring:message code="survey.send" var="send" />
 
 <main class="firstcontainer container">
-   <section class="fullwidth-section">
+    <section id="fullwidth-section">
       <section class="container leftsection-content-element" id="survey">
 
         <c:if test="${surveyFailure != null}">
@@ -74,7 +74,7 @@ function showOrHideSection(checkbox, section) {
          <div class="form-group leftsection-content-element" id="survey-newsletter">
             <div class="form-group">
                <form:label path="emailN">
-                  <h1><spring:message code="survey.newsletter.header"/></h1>
+                  <h2><spring:message code="survey.newsletter.header"/></h2>
                   <p><form:checkbox path="newsletter" id="checkbox-newsletter" onchange="showOrHideSection($('#checkbox-newsletter'), 'hiddenNewsletter')"/> <spring:message code="survey.newsletter.explanation"/></p><br>
                </form:label>
                <div id="hiddenNewsletter" >
@@ -97,7 +97,7 @@ function showOrHideSection(checkbox, section) {
          <div class="form-group leftsection-content-element" id="survey-registration">
             <div class="form-group">
                 <form:label path="firstName">
-                    <h1><spring:message code="survey.register.header"/></h1>
+                    <h2><spring:message code="survey.register.header"/></h2>
                     <p><form:checkbox path="registration" id="checkbox-registration" onchange="showOrHideSection($('#checkbox-registration'), 'hiddenRegistration')"/> <spring:message code="survey.register.explanation"/></p><br>
                 </form:label>
                 <div id="hiddenRegistration">

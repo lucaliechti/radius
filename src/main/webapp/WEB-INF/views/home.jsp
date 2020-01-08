@@ -87,7 +87,7 @@
          <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
       </div>
 
-      <section class="leftsection-title" id="page-title">
+      <section class="leftsection-title" id="hometitle">
          <h2>
             <spring:message code="home.welcome.title"/>
          </h2>

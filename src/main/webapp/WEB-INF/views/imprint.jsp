@@ -8,7 +8,7 @@
 <jsp:include page="templates/header.jsp" />
 
 <main class="firstcontainer container">
-   <section class="fullwidth-section">
+   <section id="fullwidth-section">
          <section class="leftsection-content-element" id="">
             <h2>
                <spring:message code="imprint.title"/>

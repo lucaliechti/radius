@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <jsp:include page="templates/header.jsp" />
 <main class="firstcontainer container">
-   <section class="fullwidth-section">
+   <section id="fullwidth-section">
       <section class="leftsection-content-element" id="">
 
           <c:if test="${sentIfExists != null}">

@@ -38,7 +38,7 @@
             </section>
         </section>
     </section>
-    <section id="broadrightsection">
+    <section id="rightsection" class="broad">
         <section>
             <h2>
                 <spring:message code="media.contact.title"/>

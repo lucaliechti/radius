@@ -1,3 +1,10 @@
+:root {
+	--section-margin-outside: 5%;
+	--section-margin-top-desktop: calc(3*20px);
+	--section-margin-between-desktop: 20px;
+	--section-margin-between-mobile: 5%;
+}
+
 @font-face {
 	font-family: Fira Sans Condensed;
 	src: url(FiraSansCondensed-Light.woff);
@@ -18,8 +25,6 @@ body {
 	flex-direction: column;
 }
 
-.firstcontainer { }
-
 .container {
 	flex: 1 1 auto;
 	/*max-width: 1140px; this is magic */
@@ -33,14 +38,13 @@ main {
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
-	margin-top: calc(3*20px);
-	margin-bottom: 5%;
-	margin-left: 5%;
-	margin-right: 10px;
+	margin: var(--section-margin-outside);
+	margin-top: var(--section-margin-top-desktop);
+	margin-right: calc(var(--section-margin-between-desktop)/2);
 }
 
 .leftsection-title {
-	margin-bottom: 20px;
+	margin-bottom: var(--section-margin-between-desktop);
 }
 
 .leftsection-content {
@@ -53,6 +57,10 @@ main {
 	padding: 20px;
 }
 
+.leftsection-title h2 {
+	margin-bottom: 0;
+}
+
 .leftsection-content-element {
 	border: none;
 	margin: 0;
@@ -63,46 +71,22 @@ main {
 	flex: 0 0 250px;
 	border: 2px solid black;
 	padding: 20px;
-	margin-top: calc(3*20px);
-	margin-bottom: 5%;
-	margin-left: 10px;
-	margin-right: 5%;
+	margin: var(--section-margin-outside);
+	margin-top: var(--section-margin-top-desktop);
+	margin-left: calc(var(--section-margin-between-desktop)/2);
 }
 
-#broadrightsection { /* LL, awkward */
-	display: inline-block;
-	flex: 0 0 25%;
-	border: 2px solid black;
-	padding: 20px;
-	margin-top: calc(3*20px);
-	margin-bottom: 5%;
-	margin-left: 10px;
-	margin-right: 5%;
+.broad {
+	flex: 0 0 25% !important;
 }
 
-.fullwidth-section {
-	display: flex;
-	flex: 1 1 auto;
-	border: 2px solid black;
-	padding: 20px;
-	margin: 5%;
-}
-
-.fullwidth-section-only-vertical {
+#fullwidth-section {
 	display: block;
 	flex: 1 1 auto;
 	border: 2px solid black;
 	padding: 20px;
-	margin: 5%;
-	margin-top: calc(3*20px);
-}
-
-#leftsection-bottom {
-	display: block;
-}
-
-#leftsection-top {
-	display: block;
+	margin: var(--section-margin-outside);
+	margin-top: var(--section-margin-top-desktop);
 }
 
 section .profile-resume,
@@ -112,8 +96,6 @@ section .login-resume {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
-
-.leftsection-content-element {}
 
 div.editable-rightsection {
 	display: flex;
@@ -209,10 +191,6 @@ h6 {
 h2 {
     font-weight: 300;
 	margin-bottom: 10px;
-}
-
-.leftsection-title h2 {
-	margin-bottom: 0;
 }
 
 h2,
@@ -330,7 +308,7 @@ a:visited {
 
 /*LL: I am using these in some places, but not in feedback elements*/
 p.result {
-	margin-bottom: 20px;
+	margin-bottom: var(--section-margin-between-desktop);
     color: white;
     padding: 5 8 5px;
 }
@@ -410,23 +388,6 @@ input[type="button"] {
 	background-color: #006F68;
 	padding: 0.42em 0.6em 0.38em 0.6em;
 	margin-bottom: 6px; /*LL*/
-}
-
-/***** HTML ELEMENTS *****/
-
-.leftsection-title {
-	margin-bottom: 20px;
-}
-
-.leftsection-title,
-.leftsection-content {
-	border: 2px solid;
-	padding: 20px;
-}
-
-.leftsection-content-element {
-	border: none;
-	margin: 0;
 }
 
 /*extra für registration*/

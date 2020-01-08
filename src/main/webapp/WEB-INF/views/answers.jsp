@@ -12,7 +12,7 @@
 <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"></script>
 
 <main class="firstcontainer container">
-<section class="fullwidth-section-only-vertical">
+<section id="fullwidth-section">
  
 <h1><spring:message code="answers.title"/></h1>
 <p style="margin-bottom: 10px;"><spring:message code="answers.subtitle"/></p>
