@@ -198,6 +198,15 @@ public class UserService {
         return true;
     }
 
+    public boolean setUserPrivate(String username) {
+        try {
+            userRepo.setPrivate(username);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public List<User> matchableUsers() {
         try {
             return userRepo.matchableUsers();

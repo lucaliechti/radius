@@ -36,4 +36,6 @@ public interface UserRepository {
     List<String> regionDensity();
 
     void banUser(String username);
+
+    void setPrivate(String username);
 }

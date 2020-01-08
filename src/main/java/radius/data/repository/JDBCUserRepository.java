@@ -41,6 +41,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String UPDATE_LAST_LOGIN = 	"UPDATE users SET lastlogin = ? WHERE email = ?";
 	private static final String REGION_DENSITY =		"SELECT locations FROM users";
 	private static final String BAN_USER = 				"UPDATE users SET banned = TRUE WHERE email = ?";
+	private static final String SET_PRIVATE =			"UPDATE users SET private = TRUE WHERE email = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, ConfigService configService) {
@@ -188,6 +189,11 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void banUser(String email) {
 		jdbcTemplate.update(BAN_USER, email);
+	}
+
+	@Override
+	public void setPrivate(String email) {
+		jdbcTemplate.update(SET_PRIVATE, email);
 	}
 }
 

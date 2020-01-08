@@ -285,6 +285,7 @@
                             <!--<th>Email bestätigt</th>-->
                             <th>Status</th>
                             <th>Letzte Änderung</th>
+                            <th>Privat</th>
                             <th>Sperren</th>
                             <th>Löschen</th>
                         </tr>
@@ -300,7 +301,20 @@
                                 <td><spring:message code="status.${user.status}"/></td>
                                 <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
                                 <td>
-                                    <a href="<c:url value='/banUser?uuid=${user.uuid}'/>" class="adminbutton ban" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">sperren</a>
+                                    <c:choose>
+                                        <c:when test="${user.privateUser}">👪👪</c:when>
+                                        <c:otherwise>
+                                            <a href="<c:url value='/setPrivate?uuid=${user.uuid}'/>" class="adminbutton private" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">privat</a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${user.banned}">🔒🔒</c:when>
+                                        <c:otherwise>
+                                            <a href="<c:url value='/banUser?uuid=${user.uuid}'/>" class="adminbutton ban" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">sperren</a>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                                 <td>
                                     <a href="<c:url value='/deleteUser?uuid=${user.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">löschen</a>

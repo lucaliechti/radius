@@ -71,6 +71,20 @@ public class AdminController {
         return "admin";
     }
 
+    @RequestMapping(path="/setPrivate", method=GET)
+    public String setPrivate(@RequestParam(value = "uuid") String uuid, Model model) {
+        Optional<String> optionalUser = userService.findEmailByUuid(uuid);
+        if(optionalUser.isPresent()) {
+            if(userService.setUserPrivate(optionalUser.get())) {
+                model.addAttribute("success", Boolean.TRUE);
+            } else {
+                model.addAttribute("failure", Boolean.TRUE);
+            }
+        }
+        model.addAttribute("users", userService.allUsers());
+        return "admin";
+    }
+
     @RequestMapping(path="/unsubscribeNewsletter", method=GET)
     public String unsubscribeNewsletter(@RequestParam(value = "uuid") String uuid, Model model) {
         if(newsletterservice.unsubscribe(uuid)){
