@@ -15,4 +15,7 @@ public class EmailSourceDto {
     @NotEmpty
     private String source;
 
+    @NotEmpty
+    private String uuid;
+
 }

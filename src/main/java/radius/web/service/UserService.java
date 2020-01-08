@@ -189,6 +189,15 @@ public class UserService {
         return true;
     }
 
+    public boolean banUser(String username) {
+        try {
+            userRepo.banUser(username);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public List<User> matchableUsers() {
         try {
             return userRepo.matchableUsers();

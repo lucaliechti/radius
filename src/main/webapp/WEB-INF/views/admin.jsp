@@ -143,6 +143,18 @@
 <main class="firstcontainer container">
     <section id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
 
+        <c:if test="${success != null}">
+            <p class="result success">
+                 Aktion erfolgreich ausgeführt.<br>
+            </p>
+        </c:if>
+
+        <c:if test="${failure != null}">
+            <p class="result error">
+                Ein Fehler ist aufgetreten. Versuchen Sie es nochmal.<br>
+            </p>
+        </c:if>
+
         <c:if test="${successfullySent != null}">
             <p class="result success">
                 ${successfullySent} Mails wurden erfolgreich gesendet.<br>
@@ -200,6 +212,7 @@
                             <th></th>
                             <th>Email</th>
                             <th>Source</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -208,6 +221,9 @@
                                 <td></td>
                                 <td>${recipient.email}</td>
                                 <td>${recipient.source}</td>
+                                <td>
+                                    <a href="<c:url value='/unsubscribeNewsletter?uuid=${recipient.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">delete</a>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -266,9 +282,11 @@
                             <th>Vorname</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Email bestätigt</th>
+                            <!--<th>Email bestätigt</th>-->
                             <th>Status</th>
                             <th>Letzte Änderung</th>
+                            <th>Sperren</th>
+                            <th>Löschen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,9 +296,15 @@
                                 <td>${user.firstname}</td>
                                 <td>${user.lastname}</td>
                                 <td>${user.email}</td>
-                                <td><spring:message code="question.${user.enabled}"/></td>
+                                <!--<td><spring:message code="question.${user.enabled}"/></td>-->
                                 <td><spring:message code="status.${user.status}"/></td>
                                 <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
+                                <td>
+                                    <a href="<c:url value='/banUser?uuid=${user.uuid}'/>" class="adminbutton ban" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">sperren</a>
+                                </td>
+                                <td>
+                                    <a href="<c:url value='/deleteUser?uuid=${user.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">löschen</a>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>

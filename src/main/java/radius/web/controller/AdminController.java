@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.form.ConfigurationForm;
 import radius.data.form.NewsletterForm;
 import radius.web.service.*;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -38,6 +40,45 @@ public class AdminController {
 
     @RequestMapping(path="/admin")
     public String admin() {
+        return "admin";
+    }
+
+    @RequestMapping(path="/banUser", method=GET)
+    public String banUser(@RequestParam(value = "uuid") String uuid, Model model) {
+        Optional<String> optionalUser = userService.findEmailByUuid(uuid);
+        if(optionalUser.isPresent()) {
+            if(userService.banUser(optionalUser.get())) {
+                model.addAttribute("success", Boolean.TRUE);
+            } else {
+                model.addAttribute("failure", Boolean.TRUE);
+            }
+        }
+        model.addAttribute("users", userService.allUsers());
+        return "admin";
+    }
+
+    @RequestMapping(path="/deleteUser", method=GET)
+    public String deleteUser(@RequestParam(value = "uuid") String uuid, Model model) {
+        Optional<String> optionalUser = userService.findEmailByUuid(uuid);
+        if(optionalUser.isPresent()) {
+            if(userService.deleteUser(optionalUser.get())) {
+                model.addAttribute("success", Boolean.TRUE);
+            } else {
+                model.addAttribute("failure", Boolean.TRUE);
+            }
+        }
+        model.addAttribute("users", userService.allUsers());
+        return "admin";
+    }
+
+    @RequestMapping(path="/unsubscribeNewsletter", method=GET)
+    public String unsubscribeNewsletter(@RequestParam(value = "uuid") String uuid, Model model) {
+        if(newsletterservice.unsubscribe(uuid)){
+            model.addAttribute("success", Boolean.TRUE);
+        } else {
+            model.addAttribute("failure", Boolean.TRUE);
+        }
+        model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
         return "admin";
     }
 

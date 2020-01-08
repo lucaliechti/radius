@@ -60,7 +60,8 @@ public class JDBCNewsletterRepository implements NewsletterRepository {
         public EmailSourceDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new EmailSourceDto(
                 rs.getString("email"),
-                rs.getString("source")
+                rs.getString("source"),
+                rs.getString("uuid")
             );
         }
     }

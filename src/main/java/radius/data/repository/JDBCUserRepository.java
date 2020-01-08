@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import radius.User;
 import radius.exceptions.EmailAlreadyExistsException;
+import radius.exceptions.UserHasMatchesException;
 import radius.web.service.ConfigService;
 
 import javax.sql.DataSource;
@@ -39,6 +40,7 @@ public class JDBCUserRepository implements UserRepository {
 	private static final String DELETE_USER = 			"DELETE FROM users WHERE email = ?";
 	private static final String UPDATE_LAST_LOGIN = 	"UPDATE users SET lastlogin = ? WHERE email = ?";
 	private static final String REGION_DENSITY =		"SELECT locations FROM users";
+	private static final String BAN_USER = 				"UPDATE users SET banned = TRUE WHERE email = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, ConfigService configService) {
@@ -153,9 +155,13 @@ public class JDBCUserRepository implements UserRepository {
 	}
 
 	@Override
-	public void deleteUser(String email) {
-		jdbcTemplate.update(DELETE_AUTHORITIES, email);
-		jdbcTemplate.update(DELETE_USER, email);
+	public void deleteUser(String email) throws UserHasMatchesException {
+		try {
+			jdbcTemplate.update(DELETE_AUTHORITIES, email);
+			jdbcTemplate.update(DELETE_USER, email);
+		} catch (Exception e) {
+			throw new UserHasMatchesException();
+		}
 	}
 
 	@Override
@@ -177,6 +183,11 @@ public class JDBCUserRepository implements UserRepository {
 	public List<String> regionDensity() {
 		List<Map<String, Object>> locations = jdbcTemplate.queryForList(REGION_DENSITY);
 		return locations.stream().map(map -> (String) map.get("locations")).collect(Collectors.toList());
+	}
+
+	@Override
+	public void banUser(String email) {
+		jdbcTemplate.update(BAN_USER, email);
 	}
 }
 

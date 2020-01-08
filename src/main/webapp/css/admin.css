@@ -104,3 +104,14 @@ figure {
     margin-right: 8px;
     opacity: 0.7;
 }
+.adminbutton,
+.adminbutton:visited {
+    color: white;
+    text-decoration: none;
+}
+.ban {
+    background-color: #D02643;
+}
+.delete {
+    background-color: #000;
+}

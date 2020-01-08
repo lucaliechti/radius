@@ -40,7 +40,7 @@ $(document).ready(function() {
 });
 
 var USER_EMAIL_COLUMN = 3;
-var USER_STATUS_COLUMN = 5;
+var USER_STATUS_COLUMN = 4;
 var NEWSLETTER_EMAIL_COLUMN = 1;
 var NEWSLETTER_SOURCE_COLUMN = 2;
 
