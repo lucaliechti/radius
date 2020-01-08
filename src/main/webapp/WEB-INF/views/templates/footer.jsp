@@ -17,9 +17,9 @@
 		</div>
 		<div class="footer-right">
 			<ul id="s-icons">
-        		<a href="https://www.facebook.com/radius.schweiz"><li><img src="img/icon_f.png" class="icon"></li></a>
+        		<a href="https://facebook.com/radius.schweiz"><li><img src="img/icon_f.png" class="icon"></li></a>
         		<a href="https://twitter.com/Radius_Schweiz"><li><img src="img/icon_t.png" class="icon"></li></a>
-        		<a href="https://www.instagram.com/radius_ch/"><li><img src="img/icon_i.png" class="icon"></li></a>
+        		<a href="https://github.com/lucaliechti/radius"><li><img src="img/icon_g.png" class="icon"></li></a>
     		</ul>
     	</div>
     </footer>
