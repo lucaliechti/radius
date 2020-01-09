@@ -83,6 +83,7 @@ public class NewsletterService {
 
     public List<String> sendMassEmail(boolean isNewsletter, String subject, String message, List<String> recipients,
                                       Locale locale) {
+        String originalMessage = message;
         ArrayList<String> failedRecipients = new ArrayList<>();
         JavaMailSenderImpl sender = isNewsletter ? newsletterMailSender : helloMailSender;
         for(String recipient : recipients) {
@@ -96,6 +97,7 @@ public class NewsletterService {
             } catch (Exception e) {
                 failedRecipients.add(recipient);
             }
+            message = originalMessage;
         }
         return failedRecipients;
     }
