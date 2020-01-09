@@ -9,3 +9,4 @@ robots.txt
 radius.iml
 .gitsecret/keys/random_seed
 !*.secret
+*.pdf

@@ -39,7 +39,21 @@
         </section>
     </section>
     <section id="rightsection" class="broad">
-        <section>
+        <section class="leftsection-content-element" id="releases">
+            <h2>
+                <spring:message code="media.release.title"/>
+            </h2>
+            <p>
+                <spring:message code="media.release.20200107"/>
+            </p>
+            <p>
+                <spring:message code="media.release.20180917"/>
+            </p>
+            <p>
+                <spring:message code="media.release.20180806"/>
+            </p>
+        </section>
+        <section class="leftsection-content-element" id="request">
             <h2>
                 <spring:message code="media.contact.title"/>
             </h2>

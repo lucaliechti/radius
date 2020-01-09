@@ -28,21 +28,17 @@ public class HomeController {
 	private UserService userService;
 	private AnswerService answerService;
 	private ModelDecorator modelDecorator;
-	private LocaleResolver localeResolver;
 
 	public HomeController(UserService userService, AnswerService answerService, ModelDecorator modelDecorator,
 						  LocaleResolver resolver) {
 		this.userService = userService;
 		this.answerService = answerService;
 		this.modelDecorator = modelDecorator;
-		this.localeResolver = resolver;
 	}
 	
 	@RequestMapping(value={"/", "/home"}, method=GET)
 	public String home(@RequestParam(value="logout", required=false) String loggedout,
-					   @RequestParam(value="error", required=false) String error, Model model,
-					   HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		setLocaleBasedOnURL(request, response);
+					   @RequestParam(value="error", required=false) String error, Model model, Locale locale) {
 		if(userIsAuthenticated()) {
 			return prepareModelAndRedirectLoggedInUser(model, locale);
 		}
@@ -57,17 +53,6 @@ public class HomeController {
 		}
 		model.addAllAttributes(modelDecorator.homeAttributes());
 		return "home";
-	}
-
-	private void setLocaleBasedOnURL(HttpServletRequest request, HttpServletResponse response) {
-		String requestURL = request.getRequestURL().toString();
-		Locale loc = new Locale("de");
-		if(requestURL.contains("radius-suisse.ch")) {
-			loc = new Locale("fr");
-		} else if(requestURL.contains("radius-svizzera.ch")) {
-			loc = new Locale("en");
-		}
-		localeResolver.setLocale(request, response, loc);
 	}
 
 	@RequestMapping(value={"/", "/home"}, method=POST)
