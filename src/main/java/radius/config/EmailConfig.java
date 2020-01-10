@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
@@ -15,38 +14,37 @@ public class EmailConfig {
 
     @Value("${email.host}")
     private String host;
-
     @Value("${email.port}")
     private int port;
 
-    private Environment env;
+    @Value("${email.hello.user}")
+    private String helloUser;
+    @Value("${email.hello.pass}")
+    private String helloPass;
 
-    public EmailConfig(Environment env) {
-        this.env = env;
-    }
-	
+    @Value("${email.matching.user}")
+    private String matchingUser;
+    @Value("${email.matching.pass}")
+    private String matchingPass;
+
+    @Value("${email.newsletter.user}")
+    private String newsletterUser;
+    @Value("${email.newsletter.pass}")
+    private String newsletterPass;
+
     @Bean
     public JavaMailSenderImpl helloMailSender() {
-        String user = env.getProperty("email.hello.user");
-        String pass = env.getProperty("email.hello.pass");
-    	JavaMailSenderImpl mailSender = createMailSender(host, port, user, pass);
-        return mailSender;
+        return createMailSender(host, port, helloUser, helloPass);
     }
     
     @Bean
     public JavaMailSenderImpl matchingMailSender() {
-        String user = env.getProperty("email.matching.user");
-        String pass = env.getProperty("email.matching.pass");
-        JavaMailSenderImpl mailSender = createMailSender(host, port, user, pass);
-        return mailSender;
+        return createMailSender(host, port, matchingUser, matchingPass);
     }
 
     @Bean
     public JavaMailSenderImpl newsletterMailSender() {
-        String user = env.getProperty("email.newsletter.user");
-        String pass = env.getProperty("email.newsletter.pass");
-        JavaMailSenderImpl mailSender = createMailSender(host, port, user, pass);
-        return mailSender;
+        return createMailSender(host, port, newsletterUser, newsletterPass);
     }
 
 	private JavaMailSenderImpl createMailSender(String host, int port, String user, String pass) {

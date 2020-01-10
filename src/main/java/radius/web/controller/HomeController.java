@@ -2,7 +2,6 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,21 +15,17 @@ import radius.web.components.ModelDecorator;
 import radius.web.service.AnswerService;
 import radius.web.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 import java.util.Optional;
 
 @Controller
-@ComponentScan("radius.config")
 public class HomeController {
 
 	private UserService userService;
 	private AnswerService answerService;
 	private ModelDecorator modelDecorator;
 
-	public HomeController(UserService userService, AnswerService answerService, ModelDecorator modelDecorator,
-						  LocaleResolver resolver) {
+	public HomeController(UserService userService, AnswerService answerService, ModelDecorator modelDecorator) {
 		this.userService = userService;
 		this.answerService = answerService;
 		this.modelDecorator = modelDecorator;

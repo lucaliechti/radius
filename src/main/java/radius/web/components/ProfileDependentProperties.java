@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:config/profile.properties")
 public class ProfileDependentProperties {
 
-    @Value("${db.conf.file}")
-    String dbfile;
+    @Value("${environment}")
+    String environment;
 
     @Value("${radius.url}")
     String url;

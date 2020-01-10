@@ -19,9 +19,7 @@ public class HomeControllerTest {
 		UserService mockUserService = mock(UserService.class);
 		AnswerService mockAnswerService = mock(AnswerService.class);
 		ModelDecorator mockModelDecorator = mock(ModelDecorator.class);
-		LocaleResolver mockLocaleResolver = mock(LocaleResolver.class);
-		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelDecorator,
-				mockLocaleResolver);
+		HomeController controller = new HomeController(mockUserService, mockAnswerService, mockModelDecorator);
 		MockMvc mockMvc = standaloneSetup(controller).build();
 		mockMvc.perform(get("/")).andExpect(view().name("home"));
 	}
