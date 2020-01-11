@@ -20,8 +20,24 @@
 <script type="text/javascript" src="js/ms.js"></script>
 
 <script>
-    $(document).ready(function() {
-        var map = L.map('map').setView([46.75, 8.25], 8);
+    regionalDensities = regionDensityAsJS();
+
+    function regionDensityAsJS() {
+        jsArray = [];
+        <c:forEach items="${regionDensity}" var="answer">
+        jsArray.push(${answer});
+        </c:forEach>
+        return jsArray;
+    }
+
+    function getCount(id) {
+        return regionalDensities[id-1];
+    }
+
+    var map;
+
+    function prepareMap() {
+        map = L.map('map').setView([46.75, 8.25], 8);
 
         var tl = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 8,
@@ -72,20 +88,6 @@
             return div;
         };
         legend.addTo(map);
-    });
-
-    regionalDensities = regionDensityAsJS();
-
-    function regionDensityAsJS() {
-        jsArray = [];
-        <c:forEach items="${regionDensity}" var="answer">
-            jsArray.push(${answer});
-        </c:forEach>
-        return jsArray;
-    }
-
-    function getCount(id) {
-        return regionalDensities[id-1];
     }
 </script>
 
@@ -98,6 +100,7 @@
         for(i = 0; i < survey.length; i++) {
             document.getElementById('survey_' + i).innerHTML = survey[i];
         }
+        document.getElementById("defaultTab").click();
     });
 
     var survey = [
@@ -132,6 +135,20 @@
     var MAXIMUM_WIDTH = 700;
     var MAXIMUM_ANSWERS = maxAnswers();
     var WIDTH_PER_ANSWER = MAXIMUM_WIDTH/MAXIMUM_ANSWERS;
+
+    function showSection(evt, sectionName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(sectionName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
 </script>
 
 <!-- variables -->
@@ -174,13 +191,18 @@
         </c:if>
 
         <section class="leftsection-title" id="page-title">
-            <h2>
-                <spring:message code="admin.title"/>
-            </h2>
+            <div class="tab">
+                <button class="tablinks" onclick="showSection(event, 'newsletter')" id="defaultTab">Newsletter</button>
+                <button class="tablinks" onclick="showSection(event, 'users')">Users</button>
+                <button class="tablinks" onclick="showSection(event, 'survey')">Survey</button>
+                <button class="tablinks" onclick="showSection(event, 'registrationmap'); if(!map) { prepareMap() }">Geography</button>
+                <button class="tablinks" onclick="showSection(event, 'matches')">Matches</button>
+                <button class="tablinks" onclick="showSection(event, 'config')">Configuration</button>
+            </div>
         </section>
 
         <section class="leftsection-content">
-            <section class="leftsection-content-element" id="newsletter">
+            <section class="tabcontent" id="newsletter">
                 <h2>
                     <spring:message code="admin.newsletter.title"/>
                 </h2>
@@ -249,7 +271,7 @@
                 </form:form>
             </section>
 
-            <section class="leftsection-content-element" id="users">
+            <section class="tabcontent" id="users">
                 <h2>
                     <spring:message code="admin.users.title"/>
                 </h2>
@@ -282,7 +304,6 @@
                             <th>Vorname</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <!--<th>Email bestätigt</th>-->
                             <th>Status</th>
                             <th>Letzte Änderung</th>
                             <th>Privat</th>
@@ -297,7 +318,6 @@
                                 <td>${user.firstname}</td>
                                 <td>${user.lastname}</td>
                                 <td>${user.email}</td>
-                                <!--<td><spring:message code="question.${user.enabled}"/></td>-->
                                 <td><spring:message code="status.${user.status}"/></td>
                                 <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
                                 <td>
@@ -346,7 +366,7 @@
                 </form:form>
             </section>
 
-            <section class="leftsection-content-element" id="survey">
+            <section class="tabcontent" id="survey">
                 <h2>
                     <spring:message code="survey.title"/>
                 </h2>
@@ -377,12 +397,12 @@
                 </figure>
             </section>
 
-            <section class="leftsection-content-element" id="registrationmap">
+            <section class="tabcontent" id="registrationmap">
                 <h2>Where come from?</h2>
                 <div id="map"></div>
             </section>
 
-            <section class="leftsection-content-element" id="matches">
+            <section class="tabcontent" id="matches">
                 <h2>
                     Matches
                 </h2>
@@ -407,7 +427,8 @@
                     </tbody>
                 </table>
             </section>
-            <section class="leftsection-content-element" id="config">
+
+            <section class="tabcontent" id="config">
                 <h2>
                     Edit Configuration
                 </h2>
