@@ -26,8 +26,4 @@ public class StaticPagesController {
         return "support";
     }
 
-    @RequestMapping(value="/media")
-    public String media() {
-        return "media";
-    }
 }

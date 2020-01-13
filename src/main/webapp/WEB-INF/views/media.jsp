@@ -20,21 +20,11 @@
                 <h2>
                     <spring:message code="media.section.title"/>
                 </h2>
+                <c:forEach items="${mentions}" var="mention">
                 <p>
-                    <spring:message code="media.link.neo1"/>
+                    <fmt:formatDate value="${mention.date}" type="date" dateStyle="medium"/>, ${mention.medium}: <a href="${mention.link}"><spring:message code="media.mention.type.${mention.type}"/></a> (<spring:message code="language.${mention.language}"/>)
                 </p>
-                <p>
-                    <spring:message code="media.link.20min"/>
-                </p>
-                <p>
-                    <spring:message code="media.link.toxic"/>
-                </p>
-                <p>
-                    <spring:message code="media.link.radio32"/>
-                </p>
-                <p>
-                    <spring:message code="media.link.rtn"/>
-                </p>
+                </c:forEach>
             </section>
         </section>
     </section>

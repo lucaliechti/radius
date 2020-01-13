@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.form.ConfigurationForm;
+import radius.data.form.MentionForm;
 import radius.data.form.NewsletterForm;
 import radius.web.service.*;
 
@@ -28,14 +29,16 @@ public class AdminController {
     private SurveyService surveyService;
     private MatchingService matchingService;
     private ConfigService configService;
+    private MentionService mentionService;
 
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           MatchingService matchingService, ConfigService configService) {
+                           MatchingService matchingService, ConfigService configService, MentionService mentionService) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
         this.surveyService = surveyService;
         this.matchingService = matchingService;
         this.configService = configService;
+        this.mentionService = mentionService;
     }
 
     @RequestMapping(path="/admin")
@@ -165,8 +168,24 @@ public class AdminController {
         return "admin";
     }
 
+    @RequestMapping(path="/addMention", method=POST)
+    public String addMention(@ModelAttribute("mentionForm") @Valid MentionForm form, Model model, BindingResult result) {
+        if(result.hasErrors()) {
+            return "admin";
+        }
+        try {
+            mentionService.addMention(form);
+            model.addAttribute("success", Boolean.TRUE);
+        } catch (Exception e) {
+            model.addAttribute("failure", Boolean.TRUE);
+        }
+        List<MentionForm> ls = mentionService.allMentions();
+        return "admin";
+    }
+
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("mentionForm", new MentionForm());
         model.addAttribute("configurationForm", configService.getForm());
         model.addAttribute("matches", matchingService.allMatches().stream().
                 filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList()));

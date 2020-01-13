@@ -198,6 +198,7 @@
                 <button class="tablinks" onclick="showSection(event, 'registrationmap'); if(!map) { prepareMap() }">Geography</button>
                 <button class="tablinks" onclick="showSection(event, 'matches')">Matches</button>
                 <button class="tablinks" onclick="showSection(event, 'config')">Configuration</button>
+                <button class="tablinks" onclick="showSection(event, 'press')">Press</button>
             </div>
         </section>
 
@@ -551,6 +552,76 @@
                         </c:forEach>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Update Configuration" />
+                    <sec:csrfInput />
+                </form:form>
+            </section>
+
+            <section class="tabcontent" id="press">
+                <h2>Add new media mention</h2>
+                <form:form method="POST" action="addMention" modelAttribute="mentionForm">
+                    <div class="form-group" style="display: inline-block;margin-right: 10px;">
+                        <form:label path="date">
+                            Date
+                        </form:label>
+                        <div class="form-group">
+                            <form:input type="date" path="date" min="2017-07-09" class="form-control" style="display:inline-block;"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="date"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: inline-block;margin-right: 10px;">
+                        <form:label path="medium">
+                            Medium
+                        </form:label>
+                        <div class="form-group">
+                            <form:input path="medium" class="form-control"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="medium"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: inline-block;margin-right: 10px;">
+                        <form:label path="type">
+                            Typ
+                        </form:label>
+                        <div class="form-group">
+                            <form:select class="dropdown-input" path="type">
+                                <form:option value="ARTICLE" label="Article"/>
+                                <form:option value="INTERVIEW" label="Interview"/>
+                            </form:select>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="type"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: inline-block;">
+                        <form:label path="language">
+                            Language
+                        </form:label>
+                        <div class="form-group">
+                            <form:select class="dropdown-input" path="language">
+                                <form:option value="DE" label="German"/>
+                                <form:option value="FR" label="French"/>
+                                <form:option value="EN" label="English"/>
+                            </form:select>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="language"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <form:label path="link">
+                            Link
+                        </form:label>
+                        <div class="form-group">
+                            <form:input path="link" class="form-control"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="link"/>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Add media mention" />
                     <sec:csrfInput />
                 </form:form>
             </section>
