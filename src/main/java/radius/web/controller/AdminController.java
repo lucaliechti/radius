@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.form.ConfigurationForm;
 import radius.data.form.MentionForm;
 import radius.data.form.NewsletterForm;
+import radius.data.form.QuestionForm;
 import radius.web.service.*;
 
 import javax.validation.Valid;
@@ -46,7 +47,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/banUser", method=GET)
+    @RequestMapping(path="/edit/ban", method=GET)
     public String banUser(@RequestParam(value = "uuid") String uuid, Model model) {
         Optional<String> optionalUser = userService.findEmailByUuid(uuid);
         if(optionalUser.isPresent()) {
@@ -60,7 +61,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/deleteUser", method=GET)
+    @RequestMapping(path="/edit/delete", method=GET)
     public String deleteUser(@RequestParam(value = "uuid") String uuid, Model model) {
         Optional<String> optionalUser = userService.findEmailByUuid(uuid);
         if(optionalUser.isPresent()) {
@@ -74,7 +75,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/setPrivate", method=GET)
+    @RequestMapping(path="/edit/private", method=GET)
     public String setPrivate(@RequestParam(value = "uuid") String uuid, Model model) {
         Optional<String> optionalUser = userService.findEmailByUuid(uuid);
         if(optionalUser.isPresent()) {
@@ -88,7 +89,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/unsubscribeNewsletter", method=GET)
+    @RequestMapping(path="/edit/unsubscribe", method=GET)
     public String unsubscribeNewsletter(@RequestParam(value = "uuid") String uuid, Model model) {
         if(newsletterservice.unsubscribe(uuid)){
             model.addAttribute("success", Boolean.TRUE);
@@ -99,7 +100,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/updateConfiguration", method=POST)
+    @RequestMapping(path="/update/configuration", method=POST)
     public String updateConfiguration(@ModelAttribute("configurationForm") @Valid ConfigurationForm form, Model model,
                                       BindingResult result) {
         if(result.hasErrors()) {
@@ -111,7 +112,19 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/contactUsers", method=POST)
+    @RequestMapping(path="/update/questions", method=POST)
+    public String updateQuestions(@ModelAttribute("questionForm") @Valid QuestionForm form, Model model,
+                                  BindingResult result) {
+        if(result.hasErrors()) {
+            return "admin";
+        }
+        configService.updateQuestions(form);
+        model.addAttribute("configupdate_success", Boolean.TRUE);
+        model.addAttribute("configurationForm", configService.getForm());
+        return "admin";
+    }
+
+    @RequestMapping(path="/mail/users", method=POST)
     public String contactUsers(@ModelAttribute("contactUserForm") @Valid NewsletterForm contactUserForm, Model model,
                                BindingResult result) {
         if(result.hasErrors()) {
@@ -127,7 +140,7 @@ public class AdminController {
         return "admin";
     }
 
-    @RequestMapping(path="/sendNewsletter", method=POST)
+    @RequestMapping(path="/mail/newsletter", method=POST)
     public String sendNewsletter(@ModelAttribute("newsletterForm") @Valid NewsletterForm newsletterForm, Model model,
                                  BindingResult result) {
         if(result.hasErrors() || newsletterForm.getLanguage() == null) {
@@ -153,22 +166,27 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path="/updateConfiguration", method=GET)
-    public String getUpdateConfiguration() {
+    @RequestMapping(path="/update/**", method=GET)
+    public String getUpdate() {
         return "admin";
     }
 
-    @RequestMapping(path="/contactUsers", method=GET)
-    public String getContactUsers() {
+    @RequestMapping(path="/mail/**", method=GET)
+    public String getMail() {
         return "admin";
     }
 
-    @RequestMapping(path="/sendNewsletter", method=GET)
-    public String getSendNewsletter() {
+    @RequestMapping(path="/edit/**", method=GET)
+    public String getEdit() {
         return "admin";
     }
 
-    @RequestMapping(path="/addMention", method=POST)
+    @RequestMapping(path="/press/**", method=GET)
+    public String getPress() {
+        return "admin";
+    }
+
+    @RequestMapping(path="/press/mention", method=POST)
     public String addMention(@ModelAttribute("mentionForm") @Valid MentionForm form, Model model, BindingResult result) {
         if(result.hasErrors()) {
             return "admin";
@@ -187,6 +205,7 @@ public class AdminController {
     public void prepare(Model model) {
         model.addAttribute("mentionForm", new MentionForm());
         model.addAttribute("configurationForm", configService.getForm());
+        model.addAttribute("questionForm", configService.getQuestionForm());
         model.addAttribute("matches", matchingService.allMatches().stream().
                 filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList()));
         model.addAttribute("regionDensity", userService.regionDensity());

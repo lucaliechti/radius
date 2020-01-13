@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.CountrySpecificProperties;
+import radius.web.components.ModelDecorator;
 import radius.web.service.AnswerService;
 import radius.web.service.ConfigService;
 import radius.web.service.MatchingService;
@@ -31,15 +32,18 @@ public class ProfileController {
 	private MatchingService matchingService;
 	private CountrySpecificProperties countryProperties;
 	private ConfigService configService;
+	private ModelDecorator decorator;
 
 	@Autowired
 	public ProfileController(UserService userService, CountrySpecificProperties countryProperties,
-							 ConfigService configService, MatchingService matchingService, AnswerService answerService) {
+							 ConfigService configService, MatchingService matchingService, AnswerService answerService,
+							 ModelDecorator decorator) {
 		this.userService = userService;
 		this.answerService = answerService;
 		this.countryProperties = countryProperties;
 		this.configService = configService;
 		this.matchingService = matchingService;
+		this.decorator = decorator;
 	}
 
 	@RequestMapping(method=GET)
@@ -53,8 +57,8 @@ public class ProfileController {
 			model.addAttribute("not_enabled", true);
 			return "home";
 		} else if(!answerService.userHasValidlyAnswered(user)) {
-			model.addAttribute("lang", countryProperties.getLanguages());
-			model.addAttribute("answerForm", new AnswerForm());
+			model.addAllAttributes(decorator.answerAttributes(locale));
+			model.addAttribute("answerForm", answerService.newFormFromUser(user));
 			return "answers";
 		} else {
 			model.addAttribute("user", user);

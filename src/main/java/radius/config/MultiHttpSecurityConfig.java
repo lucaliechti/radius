@@ -39,8 +39,7 @@ public class MultiHttpSecurityConfig {
 			http
 				.authorizeRequests()
 				.antMatchers("/profile", "/answers", "/status", "/toggleStatus").authenticated()
-				.antMatchers("/admin/**", "/updateConfiguration/**", "/contactUsers/**",
-						"/sendNewsletter/**", "/banUser**", "/deleteUser**", "/setPrivate**", "/unsubscribeNewsletter**",
+				.antMatchers("/admin/**", "/update/**", "/mail/**", "/edit/**", "/press/**",
 						"/actuator/**", "/health/**").hasRole("ADMIN")
 				.anyRequest().permitAll();
 

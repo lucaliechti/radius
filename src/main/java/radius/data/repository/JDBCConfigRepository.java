@@ -2,9 +2,11 @@ package radius.data.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import radius.data.form.ConfigurationForm;
+import radius.data.form.QuestionForm;
 
 import javax.sql.DataSource;
 import java.sql.Array;
@@ -46,12 +48,7 @@ public class JDBCConfigRepository implements ConfigRepository {
     private static final int NUMBER_LANGUAGES = 3;
 
     @Override
-    public void updateConfig(ConfigurationForm form) throws SQLException {
-        updateConfiguration(form);
-        updateQuestions(form);
-    }
-
-    private void updateConfiguration(ConfigurationForm form) {
+    public void updateConfiguration(ConfigurationForm form) throws SQLException {
         jdbcTemplate.update(SET_CONFIGURATION_VALUE, form.isMatchingFactorWaitingTime(), MATCHING_FACTOR_WAITING_TIME);
         jdbcTemplate.update(SET_CONFIGURATION_VALUE, form.isMatchingActive(), MATCHING_ACTIVE);
         jdbcTemplate.update(SET_CONFIGURATION_VALUE, form.getMatchingMinimumDisagreementsRegular(), MATCHING_MINIMUM_DISAGREEMENTS_REGULAR);
@@ -63,15 +60,17 @@ public class JDBCConfigRepository implements ConfigRepository {
         jdbcTemplate.update(SET_CONFIGURATION_VALUE, form.getCurrentVote(), CURRENT_VOTE);
     }
 
-    private void updateQuestions(ConfigurationForm form) throws SQLException {
-        List<List<String>> regular = padOrCrop(form.getRegularQuestions(), form.getNumberOfRegularQuestions());
+    @Override
+    public void updateQuestions(QuestionForm form) throws SQLException {
+        ConfigurationForm config = getConfig();
+        List<List<String>> regular = padOrCrop(form.getRegularQuestions(), config.getNumberOfRegularQuestions());
         jdbcTemplate.update(SET_QUESTIONS, convertToSQLArray(regular), "regular");
-        if(form.isSpecialActive()) {
-            List<List<String>> special = padOrCrop(form.getSpecialQuestions(), form.getNumberOfVotes());
-            if (questionExists(form.getCurrentVote())) {
-                jdbcTemplate.update(SET_QUESTIONS, convertToSQLArray(special), form.getCurrentVote());
+        if(config.isSpecialActive()) {
+            List<List<String>> special = padOrCrop(form.getSpecialQuestions(), config.getNumberOfVotes());
+            if (questionExists(config.getCurrentVote())) {
+                jdbcTemplate.update(SET_QUESTIONS, convertToSQLArray(special), config.getCurrentVote());
             } else {
-                jdbcTemplate.update(INSERT_QUESTIONS, form.getCurrentVote(), convertToSQLArray(special));
+                jdbcTemplate.update(INSERT_QUESTIONS, config.getCurrentVote(), convertToSQLArray(special));
             }
         }
     }
@@ -106,15 +105,24 @@ public class JDBCConfigRepository implements ConfigRepository {
             int questionsSpecial = getInt(CURRENT_NUMBER_QUESTIONS_SPECIAL);
             String currentVote = getString(CURRENT_VOTE);
 
-            List<List<String>> regularQuestions = get2DArray(GET_QUESTIONS, new Object[]{"regular"});
-            List<List<String>> specialQuestions = specialActive ?
-                    get2DArray(GET_QUESTIONS, new Object[]{currentVote}) : new ArrayList<>();
-
-            return new ConfigurationForm(regularQuestions, specialQuestions, waitingtime, matchingActive,
-                    disagreementsRegular, disagreementsSpecial, specialActive, questionsSpecial, questionsRegular,
-                    currentVote);
+            return new ConfigurationForm(waitingtime, matchingActive, disagreementsRegular, disagreementsSpecial,
+                    specialActive, questionsSpecial, questionsRegular, currentVote);
         } catch (NullPointerException npe) {
             log.error("Parsing error when loading configuration");
+            return null;
+        }
+    }
+
+    @Override
+    public QuestionForm getQuestions() throws SQLException {
+        try {
+            ConfigurationForm form = getConfig();
+            List<List<String>> regularQuestions = get2DArray(GET_QUESTIONS, new Object[]{"regular"});
+            List<List<String>> specialQuestions = form.isSpecialActive() ?
+                    get2DArray(GET_QUESTIONS, new Object[]{form.getCurrentVote()}) : new ArrayList<>();
+            return new QuestionForm(regularQuestions, specialQuestions);
+        } catch (NullPointerException npe) {
+            log.error("Parsing error when loading questions");
             return null;
         }
     }
@@ -136,15 +144,15 @@ public class JDBCConfigRepository implements ConfigRepository {
     }
 
     private List<List<String>> get2DArray(String query, Object[] params) throws SQLException {
-        Array result = jdbcTemplate.queryForObject(query, params, Array.class);
         try {
+            Array result = jdbcTemplate.queryForObject(query, params, Array.class);
             String[][] questions = (String[][]) Objects.requireNonNull(result).getArray();
             List<List<String>> list = new ArrayList<>();
             for (String[] strings : questions) {
                 list.add(new ArrayList<>(Arrays.asList(strings)));
             }
             return list;
-        } catch (ClassCastException cce) {
+        } catch (ClassCastException | EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
     }

@@ -35,17 +35,7 @@
       </section>
       <section class="leftsection-content">
          <section class="leftsection-content-element" id="status-info">
-            <div class="subsection"> <!--
-                <div class="subsection">
-                    <c:choose>
-                        <c:when test="${user.status != 'INACTIVE'}">
-                            <img src="img/icon-done.png" class="illustration-info">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="img/icon-info.png" class="illustration-info">
-                        </c:otherwise>
-                    </c:choose>
-                </div> -->
+            <div class="subsection">
             <div><h2><spring:message code="status.yourstatus"/>: <b><spring:message code="status.${user.status}"/></b></h2></div>
             <p><spring:message code="status.${user.status}.detail" arguments="${match.firstname};${match.lastname};${match.firstname};${match.lastname};${match.email};${commonlocations};${languages}" argumentSeparator=";"/><br><br>
             <c:choose>
@@ -95,7 +85,6 @@
          </section>
          
          <section class="leftsection-content-element" id="search-settings">
-            <!-- <div class="subsection"><img src="img/icon-info.png" class="illustration-info"></div> -->
             <div class="subsection">
                <div class="editable">
                   <h2><spring:message code="status.yoursearch"/></h2>

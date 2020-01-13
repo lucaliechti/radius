@@ -6,16 +6,11 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class ConfigurationForm {
-
-    @NotEmpty(message="{error.atLeastOne}")
-    private List<List<String>> regularQuestions;
-    private List<List<String>> specialQuestions;
 
     @NotNull(message="{error.notBlank}")
     private boolean matchingFactorWaitingTime;

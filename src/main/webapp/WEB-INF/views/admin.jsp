@@ -15,9 +15,9 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css"/>
 <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 <!-- other stuff -->
-<link rel="stylesheet" type="text/css" href="css/admin.css"/>
-<script type="text/javascript" src="js/admin.js"></script>
-<script type="text/javascript" src="js/ms.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/admin.css"/>
+<script type="text/javascript" src="/js/admin.js"></script>
+<script type="text/javascript" src="/js/ms.js"></script>
 
 <script>
     regionalDensities = regionDensityAsJS();
@@ -149,6 +149,14 @@
         document.getElementById(sectionName).style.display = "block";
         evt.currentTarget.className += " active";
     }
+
+    function enableDisableForm(configField){
+        if($('#' + configField).is("[disabled]")) {
+            $('#' + configField).removeAttr("disabled")
+        } else {
+            $('#' + configField).attr('disabled', 'disabled');
+        }
+    }
 </script>
 
 <!-- variables -->
@@ -186,7 +194,7 @@
 
         <c:if test="${configupdate_success != null}">
             <p class="result success">
-                    Configuration updated successfully.<br>
+                Configuration updated successfully.<br>
             </p>
         </c:if>
 
@@ -198,6 +206,7 @@
                 <button class="tablinks" onclick="showSection(event, 'registrationmap'); if(!map) { prepareMap() }">Geography</button>
                 <button class="tablinks" onclick="showSection(event, 'matches')">Matches</button>
                 <button class="tablinks" onclick="showSection(event, 'config')">Configuration</button>
+                <button class="tablinks" onclick="showSection(event, 'questions')">Questions</button>
                 <button class="tablinks" onclick="showSection(event, 'press')">Press</button>
             </div>
         </section>
@@ -245,13 +254,13 @@
                                 <td>${recipient.email}</td>
                                 <td>${recipient.source}</td>
                                 <td>
-                                    <a href="<c:url value='/unsubscribeNewsletter?uuid=${recipient.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">delete</a>
+                                    <a href="<c:url value='/edit/unsubscribe?uuid=${recipient.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">delete</a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                <form:form method="POST" action="sendNewsletter" modelAttribute="newsletterForm">
+                <form:form method="POST" action="/mail/newsletter" modelAttribute="newsletterForm">
                     <form:input path="subject" placeholder="Subject" style="margin-top: 20px;"/>
                     <form:errors path="subject"/>
                     <form:textarea path="message" placeholder="Message"/>
@@ -325,7 +334,7 @@
                                     <c:choose>
                                         <c:when test="${user.privateUser}">👪👪</c:when>
                                         <c:otherwise>
-                                            <a href="<c:url value='/setPrivate?uuid=${user.uuid}'/>" class="adminbutton private" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">privat</a>
+                                            <a href="<c:url value='/edit/private?uuid=${user.uuid}'/>" class="adminbutton private" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">privat</a>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
@@ -333,19 +342,19 @@
                                     <c:choose>
                                         <c:when test="${user.banned}">🔒🔒</c:when>
                                         <c:otherwise>
-                                            <a href="<c:url value='/banUser?uuid=${user.uuid}'/>" class="adminbutton ban" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">sperren</a>
+                                            <a href="<c:url value='/edit/ban?uuid=${user.uuid}'/>" class="adminbutton ban" onClick="return confirm('Diese Aktion kann nur manuell rückgängig gemacht werden. Sicher?');">sperren</a>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="<c:url value='/deleteUser?uuid=${user.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">löschen</a>
+                                    <a href="<c:url value='/edit/delete?uuid=${user.uuid}'/>" class="adminbutton delete" onClick="return confirm('Diese Aktion kann nicht rückgängig gemacht werden. Sicher?');">löschen</a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
 
-                <form:form method="POST" action="contactUsers" modelAttribute="contactUserForm">
+                <form:form method="POST" action="/mail/users" modelAttribute="contactUserForm">
                     <form:input path="subject" placeholder="Subject" style="margin-top: 20px;"/>
                     <form:errors path="subject"/>
                     <p><b>Liebe/r User/in,</b></p><br>
@@ -431,9 +440,10 @@
 
             <section class="tabcontent" id="config">
                 <h2>
-                    Edit Configuration
+                    Edit Configuration <input type="submit" onclick="enableDisableForm('configFields');" value="on/off" />
                 </h2>
-                <form:form method="POST" action="updateConfiguration" modelAttribute="configurationForm">
+                <form:form method="POST" action="/update/configuration" modelAttribute="configurationForm">
+                    <fieldset id="configFields" disabled="disabled">
                     <div class="form-group">
                         <div style="display: inline-block; margin-right: 30px;">
                             <p>Special is active</p>
@@ -506,33 +516,24 @@
                             <label>Current Vote</label>
                             <form:input path="currentVote" class="form-control"/>
                             <form:errors path="currentVote" class="feedback-error"/>
-                        </div><br><br>
+                        </div>
+                    </div>
+                <input type="submit" class="btn btn-primary" value="Update Configuration" />
+                <sec:csrfInput />
+                </fieldset>
+                </form:form>
+            </section>
 
-                        <c:if test="${configurationForm.specialActive}">
-                            <p><b style="color: #f00;">Special Questions</b></p>
-                            <c:forEach begin="1" end="${configurationForm.numberOfVotes}" varStatus="questionloop">
-                                <p>${questionloop.index}</p>
-                                <c:forEach begin="1" end="3" varStatus="languageloop">
-                                    <label class="answer">
-                                        <c:choose>
-                                            <c:when test="${languageloop.index == 1}"><c:set var="ph" value="${phde}"/></c:when>
-                                            <c:otherwise>
-                                                <c:choose>
-                                                    <c:when test="${languageloop.index == 2}"><c:set var="ph" value="${phfr}"/></c:when>
-                                                    <c:otherwise><c:set var="ph" value="${phen}"/></c:otherwise>
-                                                </c:choose>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        <form:input path="specialQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline-block;border: #f00 solid 2px;"/>
-                                    </label>
-                                </c:forEach>
-                                <br>
-                            </c:forEach>
-                            <br><br>
-                        </c:if>
-
-                        <p><b>Regular Questions</b></p>
-                        <c:forEach begin="1" end="${configurationForm.numberOfRegularQuestions}" varStatus="questionloop">
+            <section class="tabcontent" id="questions">
+                <h2>
+                    Edit Questions <input type="submit" onclick="enableDisableForm('questionFields');" value="on/off" />
+                </h2>
+                <form:form method="POST" action="/update/questions" modelAttribute="questionForm">
+                <fieldset id= "questionFields" disabled="disabled">
+                    <div class="form-group">
+                    <c:if test="${configurationForm.specialActive}">
+                        <p><b style="color: #f00;">Special Questions</b></p>
+                        <c:forEach begin="1" end="${configurationForm.numberOfVotes}" varStatus="questionloop">
                             <p>${questionloop.index}</p>
                             <c:forEach begin="1" end="3" varStatus="languageloop">
                                 <label class="answer">
@@ -545,20 +546,43 @@
                                             </c:choose>
                                         </c:otherwise>
                                     </c:choose>
-                                    <form:input path="regularQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline;"/>
+                                    <form:input path="specialQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline-block;border: #f00 solid 2px;"/>
                                 </label>
                             </c:forEach>
                             <br>
                         </c:forEach>
+                        <br><br>
+                    </c:if>
+
+                    <p><b>Regular Questions</b></p>
+                    <c:forEach begin="1" end="${configurationForm.numberOfRegularQuestions}" varStatus="questionloop">
+                        <p>${questionloop.index}</p>
+                        <c:forEach begin="1" end="3" varStatus="languageloop">
+                            <label class="answer">
+                                <c:choose>
+                                    <c:when test="${languageloop.index == 1}"><c:set var="ph" value="${phde}"/></c:when>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${languageloop.index == 2}"><c:set var="ph" value="${phfr}"/></c:when>
+                                            <c:otherwise><c:set var="ph" value="${phen}"/></c:otherwise>
+                                        </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
+                                <form:input path="regularQuestions[${languageloop.index-1}][${questionloop.index-1}]" placeholder="${ph}" style="display: inline;"/>
+                            </label>
+                        </c:forEach>
+                        <br>
+                    </c:forEach>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Update Configuration" />
+                    <input type="submit" class="btn btn-primary" value="Update Questions" />
                     <sec:csrfInput />
+                    </fieldset>
                 </form:form>
             </section>
 
             <section class="tabcontent" id="press">
                 <h2>Add new media mention</h2>
-                <form:form method="POST" action="addMention" modelAttribute="mentionForm">
+                <form:form method="POST" action="/press/mention" modelAttribute="mentionForm">
                     <div class="form-group" style="display: inline-block;margin-right: 10px;">
                         <form:label path="date">
                             Date

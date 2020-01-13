@@ -17,8 +17,8 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
 	<!-- additional CSS -->
-    <link rel="stylesheet" type="text/css" href="css/radius-style-desktop-new.css">
-    <link rel="stylesheet" type="text/css" href="css/radius-style-mobile-new.css">
+    <link rel="stylesheet" type="text/css" href="/css/radius-style-desktop-new.css">
+    <link rel="stylesheet" type="text/css" href="/css/radius-style-mobile-new.css">
 
 	<!-- favicon -->
 	<link rel="shortcut icon" href="favicon.ico" />
@@ -30,7 +30,7 @@
 
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="home"><img id="logo-home" src="img/logo-radius.png"/></a>
+      <a href="home"><img id="logo-home" src="/img/logo-radius.png"/></a>
    </div>
    <div id="menuToggle">
       <input type="checkbox" />
