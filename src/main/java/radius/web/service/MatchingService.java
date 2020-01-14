@@ -22,6 +22,7 @@ import radius.web.components.*;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching.DEFAULT_OPTIONS;
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
@@ -39,6 +40,8 @@ public class MatchingService {
     private CountrySpecificProperties countryProperties;
     private ConfigService configService;
     private ProfileDependentProperties profileProperties;
+
+    private final String DELETED = "DELETED";
 
     public MatchingService(JDBCUserRepository userRepo, MatchingRepository matchRepo, MessageSource messageSource,
                            EmailService emailService, JavaMailSenderImpl matchingMailSender,
@@ -157,6 +160,14 @@ public class MatchingService {
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+
+    public List<HalfEdge> uniqueOrderedMatches() {
+        return allMatches().stream().
+                filter(m -> ((!DELETED.equals(m.email1()) && DELETED.equals(m.email2()))
+                        || (m.email1().compareToIgnoreCase(m.email2()) < 0 &&
+                        !(DELETED.equals(m.email1()) && !DELETED.equals(m.email2())))
+                )).collect(Collectors.toList());
     }
 
     public void persistMatch(UserPair userPair, MatchingMode mode) {
