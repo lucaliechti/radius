@@ -22,5 +22,7 @@ public interface MatchingRepository {
 	List<HalfEdge> allMatchesForUser(String email);
 
 	void createMatch(UserPair userPair, MatchingMode mode);
+
+	void invalidateMatchesForUser(String username);
 	
 }

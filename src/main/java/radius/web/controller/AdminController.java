@@ -32,6 +32,8 @@ public class AdminController {
     private ConfigService configService;
     private MentionService mentionService;
 
+    private final String DELETED = "DELETED";
+
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
                            MatchingService matchingService, ConfigService configService, MentionService mentionService) {
         this.newsletterservice = newsletterservice;
@@ -207,7 +209,10 @@ public class AdminController {
         model.addAttribute("configurationForm", configService.getForm());
         model.addAttribute("questionForm", configService.getQuestionForm());
         model.addAttribute("matches", matchingService.allMatches().stream().
-                filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList()));
+                filter(m -> ((!DELETED.equals(m.email1()) && DELETED.equals(m.email2()))
+                        || (m.email1().compareToIgnoreCase(m.email2()) < 0 &&
+                        !(DELETED.equals(m.email1()) && !DELETED.equals(m.email2())))
+                )).collect(Collectors.toList()));
         model.addAttribute("regionDensity", userService.regionDensity());
         model.addAttribute("surveyStats", surveyService.statistics());
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());

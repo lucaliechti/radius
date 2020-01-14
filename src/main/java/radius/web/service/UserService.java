@@ -182,6 +182,7 @@ public class UserService {
 
     public boolean deleteUser(String username) {
         try {
+            matchRepo.invalidateMatchesForUser(username);
             userRepo.deleteUser(username);
         } catch (UserHasMatchesException matchE) {
             return false;
@@ -205,14 +206,6 @@ public class UserService {
             return false;
         }
         return true;
-    }
-
-    public List<User> matchableUsers() {
-        try {
-            return userRepo.matchableUsers();
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
     }
 
     public void updateLastLogin(String name) {

@@ -31,6 +31,8 @@ public class JDBCMatchingRepository implements MatchingRepository {
 	private static final String CREATE_MATCH =				"INSERT INTO matches(datecreated, email1, email2, active, meetingconfirmed, matchingmode) VALUES (?, ?, ?, TRUE, FALSE, ?)";
 	private static final String ALL_MATCHES =				"SELECT * FROM matches";
 	private static final String ALL_MATCHES_FOR_USER = 		"SELECT * FROM matches WHERE email1 = ?";
+	private static final String INVALIDATE_MATCHES_FIRST =		"UPDATE matches SET email1 = 'DELETED' WHERE email1 = ?";
+	private static final String INVALIDATE_MATCHES_SECOND =		"UPDATE matches SET email2 = 'DELETED' WHERE email2 = ?";
 
 	@Autowired
     public void init(DataSource jdbcdatasource, JDBCUserRepository jdbcUserRepository) {
@@ -75,6 +77,12 @@ public class JDBCMatchingRepository implements MatchingRepository {
 				userPair.user2().getEmail(), mode.toString());
 		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(),
 				userPair.user1().getEmail(), mode.toString());
+	}
+
+	@Override
+	public void invalidateMatchesForUser(String email) {
+		jdbcTemplate.update(INVALIDATE_MATCHES_FIRST, email);
+		jdbcTemplate.update(INVALIDATE_MATCHES_SECOND, email);
 	}
 
 	private static final class MatchRowMapper implements RowMapper<HalfEdge> {
