@@ -100,7 +100,14 @@
         for(i = 0; i < survey.length; i++) {
             document.getElementById('survey_' + i).innerHTML = survey[i];
         }
-        document.getElementById("defaultTab").click();
+        <c:choose>
+        <c:when test="${activetab != null}">
+            document.getElementById("tab_${activetab}").click();
+        </c:when>
+        <c:otherwise>
+            document.getElementById("tab_newsletter").click();
+        </c:otherwise>
+        </c:choose>
     });
 
     var survey = [
@@ -200,14 +207,14 @@
 
         <section class="leftsection-title" id="page-title">
             <div class="tab">
-                <button class="tablinks" onclick="showSection(event, 'newsletter')" id="defaultTab">Newsletter</button>
-                <button class="tablinks" onclick="showSection(event, 'users')">Users</button>
-                <button class="tablinks" onclick="showSection(event, 'survey')">Survey</button>
-                <button class="tablinks" onclick="showSection(event, 'registrationmap'); if(!map) { prepareMap() }">Geography</button>
-                <button class="tablinks" onclick="showSection(event, 'matches')">Matches</button>
-                <button class="tablinks" onclick="showSection(event, 'config')">Configuration</button>
-                <button class="tablinks" onclick="showSection(event, 'questions')">Questions</button>
-                <button class="tablinks" onclick="showSection(event, 'press')">Press</button>
+                <button class="tablinks" id="tab_newsletter" onclick="showSection(event, 'newsletter')">Newsletter</button>
+                <button class="tablinks" id="tab_users" onclick="showSection(event, 'users')">Users</button>
+                <button class="tablinks" id="tab_survey" onclick="showSection(event, 'survey')">Survey</button>
+                <button class="tablinks" id="tab_registrationmap" onclick="showSection(event, 'registrationmap'); if(!map) { prepareMap() }">Geography</button>
+                <button class="tablinks" id="tab_matches" onclick="showSection(event, 'matches')">Matches</button>
+                <button class="tablinks" id="tab_config" onclick="showSection(event, 'config')">Configuration</button>
+                <button class="tablinks" id="tab_questions" onclick="showSection(event, 'questions')">Questions</button>
+                <button class="tablinks" id="tab_press" onclick="showSection(event, 'press')">Press</button>
             </div>
         </section>
 
@@ -646,6 +653,46 @@
                         </div>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Add media mention" />
+                    <sec:csrfInput />
+                </form:form>
+                <hr style="margin: 20px 0 20px 0;">
+                <h2>Add new press release</h2>
+                <form:form method="POST" action="/press/release" modelAttribute="pressreleaseForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: inline-block;margin-right: 10px;">
+                        <form:label path="date">
+                            Date
+                        </form:label>
+                        <div class="form-group">
+                            <form:input type="date" path="date" min="2017-07-09" class="form-control" style="display:block;"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="date"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: block;margin-right: 10px;">
+                        <form:label path="file_de">
+                            Upload release (German)
+                        </form:label>
+                        <div class="form-group">
+                            <form:input type="file" path="file_de" class="form-control" style="border:none;"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="file_de"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: block;margin-right: 10px;">
+                        <form:label path="file_fr">
+                            Upload release (French)
+                        </form:label>
+                        <div class="form-group">
+                            <form:input type="file" path="file_fr" class="form-control" style="border:none;"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="file_fr"/>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Add press release" />
+                    <p>(Files will be automatically renamed.)</p>
                     <sec:csrfInput />
                 </form:form>
             </section>

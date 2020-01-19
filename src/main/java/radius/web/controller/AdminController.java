@@ -1,23 +1,27 @@
 package radius.web.controller;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import radius.data.form.ConfigurationForm;
-import radius.data.form.MentionForm;
-import radius.data.form.NewsletterForm;
-import radius.data.form.QuestionForm;
+import org.springframework.web.multipart.MultipartFile;
+import radius.data.dto.PressreleaseDto;
+import radius.data.form.*;
+import radius.web.components.ProfileDependentProperties;
 import radius.web.service.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -30,16 +34,26 @@ public class AdminController {
     private SurveyService surveyService;
     private MatchingService matchingService;
     private ConfigService configService;
-    private MentionService mentionService;
+    private PressService pressService;
+    private ProfileDependentProperties profileProperties;
+
+    private SimpleDateFormat pressReleasePrefixFormat = new SimpleDateFormat("yyyyMMdd");
+    private final String RADIUS = "Radius";
+    private final String STATIC_DIRECTORY = "static";
+    private final int POSITION_GERMAN = 0;
+    private final String RELEASE_GERMAN = "Medienmitteilung";
+    private final String RELEASE_FRENCH = "Communique";
 
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           MatchingService matchingService, ConfigService configService, MentionService mentionService) {
+                           MatchingService matchingService, ConfigService configService, PressService pressService,
+                           ProfileDependentProperties profileProperties) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
         this.surveyService = surveyService;
         this.matchingService = matchingService;
         this.configService = configService;
-        this.mentionService = mentionService;
+        this.pressService = pressService;
+        this.profileProperties = profileProperties;
     }
 
     @RequestMapping(path="/admin")
@@ -58,6 +72,7 @@ public class AdminController {
             }
         }
         model.addAttribute("users", userService.allUsers());
+        model.addAttribute("activetab", "users");
         return "admin";
     }
 
@@ -73,6 +88,7 @@ public class AdminController {
         }
         model.addAttribute("users", userService.allUsers());
         model.addAttribute("matches", matchingService.uniqueOrderedMatches());
+        model.addAttribute("activetab", "users");
         return "admin";
     }
 
@@ -87,6 +103,7 @@ public class AdminController {
             }
         }
         model.addAttribute("users", userService.allUsers());
+        model.addAttribute("activetab", "users");
         return "admin";
     }
 
@@ -98,12 +115,14 @@ public class AdminController {
             model.addAttribute("failure", Boolean.TRUE);
         }
         model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
+        model.addAttribute("activetab", "newsletter");
         return "admin";
     }
 
     @RequestMapping(path="/update/configuration", method=POST)
-    public String updateConfiguration(@ModelAttribute("configurationForm") @Valid ConfigurationForm form, Model model,
-                                      BindingResult result) {
+    public String updateConfiguration(@ModelAttribute("configurationForm") @Valid ConfigurationForm form,
+                                      BindingResult result, Model model) {
+        model.addAttribute("activetab", "config");
         if(result.hasErrors()) {
             return "admin";
         }
@@ -114,8 +133,9 @@ public class AdminController {
     }
 
     @RequestMapping(path="/update/questions", method=POST)
-    public String updateQuestions(@ModelAttribute("questionForm") @Valid QuestionForm form, Model model,
-                                  BindingResult result) {
+    public String updateQuestions(@ModelAttribute("questionForm") @Valid QuestionForm form, BindingResult result,
+                                  Model model) {
+        model.addAttribute("activetab", "questions");
         if(result.hasErrors()) {
             return "admin";
         }
@@ -126,8 +146,9 @@ public class AdminController {
     }
 
     @RequestMapping(path="/mail/users", method=POST)
-    public String contactUsers(@ModelAttribute("contactUserForm") @Valid NewsletterForm contactUserForm, Model model,
-                               BindingResult result) {
+    public String contactUsers(@ModelAttribute("contactUserForm") @Valid NewsletterForm contactUserForm,
+                               BindingResult result, Model model) {
+        model.addAttribute("activetab", "users");
         if(result.hasErrors()) {
             return "admin";
         }
@@ -142,8 +163,9 @@ public class AdminController {
     }
 
     @RequestMapping(path="/mail/newsletter", method=POST)
-    public String sendNewsletter(@ModelAttribute("newsletterForm") @Valid NewsletterForm newsletterForm, Model model,
-                                 BindingResult result) {
+    public String sendNewsletter(@ModelAttribute("newsletterForm") @Valid NewsletterForm newsletterForm,
+                                 BindingResult result, Model model) {
+        model.addAttribute("activetab", "newsletter");
         if(result.hasErrors() || newsletterForm.getLanguage() == null) {
             return "admin";
         }
@@ -188,22 +210,67 @@ public class AdminController {
     }
 
     @RequestMapping(path="/press/mention", method=POST)
-    public String addMention(@ModelAttribute("mentionForm") @Valid MentionForm form, Model model, BindingResult result) {
+    public String addMention(@ModelAttribute("mentionForm") @Valid MentionForm form, BindingResult result, Model model) {
+        model.addAttribute("activetab", "press");
         if(result.hasErrors()) {
             return "admin";
         }
         try {
-            mentionService.addMention(form);
+            pressService.addMention(form);
             model.addAttribute("success", Boolean.TRUE);
         } catch (Exception e) {
             model.addAttribute("failure", Boolean.TRUE);
         }
-        List<MentionForm> ls = mentionService.allMentions();
+        return "admin";
+    }
+
+    @RequestMapping(path="/press/release", method=POST)
+    public String uploadPressRelease(@ModelAttribute("pressreleaseForm") @Valid PressreleaseForm form,
+                                     BindingResult result, Model model, HttpServletRequest request) throws IOException {
+        model.addAttribute("activetab", "press");
+        if(form.getFile_de().isEmpty()) {
+            FieldError error = new FieldError("form", "file_de",
+                    "You must upload a file.");
+            result.addError(error);
+        } else if (form.getFile_fr().isEmpty()) {
+            FieldError error = new FieldError("form", "file_fr",
+                    "You must upload a file.");
+            result.addError(error);
+        }
+        if(result.hasErrors()) {
+            return "admin";
+        }
+        PressreleaseDto dto = new PressreleaseDto();
+        dto.setDate(form.getDate());
+        String[] newLinks = new String[2];
+        String datePrefix = pressReleasePrefixFormat.format(form.getDate());
+        String baseFilePath = request.getServletContext().getRealPath("/" + STATIC_DIRECTORY + "/");
+        if(Files.notExists(Paths.get(baseFilePath))) {
+            File basePath = new File(baseFilePath);
+            basePath.mkdir();
+        }
+        for(int i = 0; i <= 1; i++) { //magic numbers
+            String releaseString = i == POSITION_GERMAN ? RELEASE_GERMAN : RELEASE_FRENCH;
+            MultipartFile file = i == POSITION_GERMAN ? form.getFile_de() : form.getFile_fr();
+            String fileEnding = FilenameUtils.getExtension(file.getOriginalFilename());
+            String newFileName = String.join(".", String.join("_", datePrefix, RADIUS, releaseString), fileEnding);
+            String newFilePath = baseFilePath + newFileName;
+            file.transferTo(new File(newFilePath));
+            newLinks[i] = String.join("/", /*profileProperties.getUrl(),*/ STATIC_DIRECTORY, newFileName);
+        }
+        dto.setLinks(newLinks);
+        try {
+            pressService.addPressrelease(dto);
+            model.addAttribute("success", Boolean.TRUE);
+        } catch (Exception e) {
+            model.addAttribute("failure", Boolean.TRUE);
+        }
         return "admin";
     }
 
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("pressreleaseForm", new PressreleaseForm());
         model.addAttribute("mentionForm", new MentionForm());
         model.addAttribute("configurationForm", configService.getForm());
         model.addAttribute("questionForm", configService.getQuestionForm());

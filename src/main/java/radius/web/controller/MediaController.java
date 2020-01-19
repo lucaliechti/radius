@@ -4,15 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import radius.data.repository.MentionRepository;
+import radius.web.service.PressService;
 
 @Controller
 public class MediaController {
 
-    private MentionRepository mentionRepo;
+    private PressService pressService;
 
-    public MediaController(MentionRepository mentionRepo) {
-        this.mentionRepo = mentionRepo;
+    public MediaController(PressService pressService) {
+        this.pressService = pressService;
     }
 
     @RequestMapping(value="/media")
@@ -22,7 +22,8 @@ public class MediaController {
 
     @ModelAttribute
     public void addMedia(Model model) {
-        model.addAttribute("mentions", mentionRepo.allMentions());
+        model.addAttribute("mentions", pressService.allMentions());
+        model.addAttribute("pressreleases", pressService.allPressreleases());
     }
 
 }

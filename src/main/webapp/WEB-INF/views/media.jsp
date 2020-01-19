@@ -33,15 +33,11 @@
             <h2>
                 <spring:message code="media.release.title"/>
             </h2>
+            <c:forEach items="${pressreleases}" var="release">
             <p>
-                <spring:message code="media.release.20200107"/>
+                <fmt:formatDate value="${release.date}" type="date" dateStyle="medium"/>: <a href="${release.links[0]}">DE</a>, <a href="${release.links[1]}">FR</a>
             </p>
-            <p>
-                <spring:message code="media.release.20180917"/>
-            </p>
-            <p>
-                <spring:message code="media.release.20180806"/>
-            </p>
+            </c:forEach>
         </section>
         <section class="leftsection-content-element" id="request">
             <h2>

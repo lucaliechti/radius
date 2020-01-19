@@ -354,6 +354,7 @@ input[type="password"],
 input[type="search"], /*LL: admin page table*/
 input[type="number"],
 input[type="date"],
+input[type="file"],
 textarea {
 	border: #006F68 solid 2px;
 	padding: 5px;
