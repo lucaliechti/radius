@@ -63,7 +63,7 @@
 		display: inline;
 		margin-bottom: var(--section-margin-between-mobile);
 		text-align: center;
-		background-color: #006F68;
+		background-color: var(--radius-color);
 		padding: 0.42em 0.6em 0.38em 0.6em;
 	}
 	.mobileonly a {
@@ -94,19 +94,19 @@
  *
  */
 	#primary-menubar {
-		background-color: #006F68;
+		background-color: var(--radius-color);
 		margin-top: 0px
 	}
 	.language-selector a {
 		padding: 0;
 		margin-left: 0;
 		color: #ffffff;
-		background-color: #006F68;
+		background-color: var(--radius-color);
 		border: none;
 	}
 	.language-selector a:hover {
 		color: #ffffff;
-		background-color: #006F68;
+		background-color: var(--radius-color);
 		border: none;
 	}
 	.language-selector a:last-child {
@@ -198,7 +198,7 @@
 		top: 62px;
 		width: 11em;
 		margin: 0;
-		background: #006F68;
+		background: var(--radius-color);
 		list-style-type: none;
 		-webkit-font-smoothing: antialiased;
 		/* to stop flickering of text in safari */
@@ -245,7 +245,7 @@
 		padding: 0.01em 0.10em 0.13em 0.28em;
 		margin-left: -2px;
 		color: #fffff;
-		background-color: #006F68;
+		background-color: var(--radius-color);
 		border: none;
 		text-decoration: none;
 	}

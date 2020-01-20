@@ -3,6 +3,10 @@
 	--section-margin-top-desktop: calc(3*20px);
 	--section-margin-between-desktop: 20px;
 	--section-margin-between-mobile: 5%;
+	--radius-color: #006F68;
+	--text-color: black;
+	--background-color: white;
+	--special-color: #ff0000;
 }
 
 @font-face {
@@ -18,7 +22,7 @@ body * {
 }
 
 body {
-	background-color: #ffffff;
+	background-color: var(--background-color);
 	height: 100%;
 	margin: 0;
 	display: flex;
@@ -53,7 +57,7 @@ main {
 
 .leftsection-title,
 .leftsection-content {
-	border: 2px solid;
+	border: 2px solid var(--text-color);
 	padding: 20px;
 }
 
@@ -69,7 +73,7 @@ main {
 #rightsection {
 	display: inline-block;
 	flex: 0 0 250px;
-	border: 2px solid black;
+	border: 2px solid var(--text-color);
 	padding: 20px;
 	margin: var(--section-margin-outside);
 	margin-top: var(--section-margin-top-desktop);
@@ -83,7 +87,7 @@ main {
 #fullwidth-section {
 	display: block;
 	flex: 1 1 auto;
-	border: 2px solid black;
+	border: 2px solid var(--text-color);
 	padding: 20px;
 	margin: var(--section-margin-outside);
 	margin-top: var(--section-margin-top-desktop);
@@ -92,7 +96,7 @@ main {
 section .profile-resume,
 section .leftsection-content-element,
 section .login-resume {
-	border-bottom: 2px solid black;
+	border-bottom: 2px solid var(--text-color);
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -127,7 +131,7 @@ section .leftsection-content-element:first-child {
 #language-select,
 #footer p,
 #login {
-	background-color: #006F68;
+	background-color: var(--radius-color);
 }
 
 #primary-menubar,
@@ -150,11 +154,13 @@ section .leftsection-content-element:first-child {
 .dropdown-input {
 	width: 100%;
 	margin-bottom: 10px;
-	border:	#006F68 solid 2px;
+	border: solid 2px var(--radius-color);
 	padding: 5px;
 	font-size: 18px;
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-weight: 300;
+	color: var(--text-color);
+	background-color: var(--background-color);
 }
 
 #menuToggle {
@@ -177,7 +183,7 @@ h6 {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-weight: 300;
 	font-size: 32px;
-	color: #006F68;
+	color: var(--radius-color);
 	margin: 0;
 	/*Vor- und Nachbreiten der Absätze*/
 	padding: 0;
@@ -193,7 +199,7 @@ ul,
 li {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 24px;
-	color: #006F68;
+	color: var(--radius-color);
 	padding: 0;
 }
 
@@ -201,7 +207,7 @@ ul,
 li {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 18px;
-	color: #000000;
+	color: var(--text-color);
 	padding: 0;
 	list-style-type: none;
 	line-height: 1.8;
@@ -218,7 +224,7 @@ input[type="radio"] {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 18px;
 	font-weight: 300;
-	color: #000000;
+	color: var(--text-color);
 	border: none;
 	line-height: 1.4;
 }
@@ -232,12 +238,12 @@ th, td {
 
 b,
 th {
-	color: #006F68;
+	color: var(--radius-color);
 	font-weight: 600;
 }
 
 a {
-	color: #006F68;
+	color: var(--radius-color);
 	text-decoration: underline;
 	font-size: inherit!important;
 }
@@ -245,7 +251,7 @@ a {
 a:hover,
 a:active,
 a:visited {
-	color: #006F68;
+	color: var(--radius-color);
 }
 
 #register-map-locations a {
@@ -253,7 +259,7 @@ a:visited {
 	text-decoration: none;
 	clear: both;
 	font-size: 18px !important;
-	border: 1px solid black;
+	border: 1px solid var(--text-color);
 	padding: 5px;
 	margin: 5px;
 	border-radius: 15px;
@@ -289,14 +295,14 @@ a:visited {
 
 /* WebKit/Blink Browsers */
 ::selection {
-	background: #006F68;
-	color: white;
+	background: var(--radius-color);
+	color: var(--background-color);
 }
 
 /* Gecko Browsers */
 ::-moz-selection {
-	background: #006F68;
-	color: white;
+	background: var(--radius-color);
+	color: var(--background-color);
 }
 
 /***** FEEDBACKS *****/
@@ -304,7 +310,7 @@ a:visited {
 /*LL: I am using these in some places, but not in feedback elements*/
 p.result {
 	margin-bottom: var(--section-margin-between-desktop);
-    color: white;
+    color: var(--background-color);
     padding: 5 8 5px;
 }
 
@@ -351,16 +357,17 @@ p.error {
 
 input[type="text"],
 input[type="password"],
-input[type="search"], /*LL: admin page table*/
+input[type="search"],
 input[type="number"],
 input[type="date"],
 input[type="file"],
 textarea {
-	border: #006F68 solid 2px;
+	border: solid 2px var(--radius-color);
 	padding: 5px;
 	width: 100%;
 	display: block;
 	margin-bottom: 10px;
+	background-color: var(--background-color);
 }
 
 .login-resume input[type="text"] {
@@ -381,8 +388,8 @@ input[type="submit"],
 input[type="button"] {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 18px;
-	color: #ffffff;
-	background-color: #006F68;
+	color: var(--background-color);
+	background-color: var(--radius-color);
 	padding: 0.42em 0.6em 0.38em 0.6em;
 	margin-bottom: 6px; /*LL*/
 }
@@ -391,7 +398,7 @@ input[type="button"] {
 .label-title {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 24px;
-	color: #006F68;
+	color: var(--radius-color);
 	padding: 0;
 }
 
@@ -402,7 +409,7 @@ div #matchingtable_info {
     font-family: 'Fira Sans Condensed', sans-serif;
     font-size: 18px;
     font-weight: 300;
-    color: #000000;
+    color: var(--text-color);
 }
 
 /***** SPECIAL ELEMENTS *****/
@@ -447,7 +454,7 @@ div #matchingtable_info {
     margin: 50px 50px;
 }
 .special {
-    color: #ff0000;
+    color: var(--special-color);
 }
 
 /***** HEADER *****/
@@ -472,19 +479,19 @@ ul#menu {
 #menu a {
 	padding: 0.22em 0.4em 0.18em 0.4em;
 	margin-left: -2px;
-	color: #006F68;
-	background-color: #ffffff;
+	color: var(--radius-color);
+	background-color: var(--background-color);
 	text-decoration: none;
 }
 
 #menu a:hover {
-	color: #ffffff;
-	background-color: #006F68;
+	color: var(--background-color);
+	background-color: var(--radius-color);
 }
 
 #menu li a:active,
 #menu li a.active {
-	border: 2px solid #006F68;
+	border: 2px solid var(--radius-color);
 }
 
 #menu,
@@ -497,7 +504,7 @@ ul#menu {
 }
 
 #menu li.current-menu-item>a {
-	border: 2px solid #006F68;
+	border: 2px solid var(--radius-color);
 }
 
 #menu li,
@@ -507,7 +514,7 @@ ul#menu {
 	font-size: 18px!important;
 	line-height: 1.4;
 	font-family: 'Fira Sans Condensed', sans-serif;
-	color: #006F68;
+	color: var(--radius-color);
 	border: 2px solid transparent;
 	padding: 0.42em 0.6em 0.38em 0.6em;
 }
@@ -515,14 +522,14 @@ ul#menu {
 #menu li:hover,
 #menu a li:hover,
 #menu a:hover li {
-	color: #ffffff;
+	color: var(--background-color);
 }
 
 #language-select a:hover,
 #language-select li a:hover,
 #language-select a:hover li {
-	color: #006F68!important;
-	background-color: #ffffff;
+	color: var(--radius-color) !important;
+	background-color: var(--background-color);
 }
 
 #language-select a,
@@ -532,9 +539,9 @@ ul#menu {
 	font-size: 18px!important;
 	line-height: 1.4;
 	font-family: 'Fira Sans Condensed', sans-serif;
-	background-color: #006F68;
-	color: #ffffff;
-	border: 2px solid #ffffff;
+	background-color: var(--radius-color);
+	color: var(--background-color);
+	border: 2px solid var(--background-color);
 	margin: 2px;
 	padding: 0.22em 0.4em 0.18em 0.4em;
 }
@@ -542,16 +549,16 @@ ul#menu {
 .navigations a {
 	padding: 0.22em 0.4em 0.18em 0.4em;
 	margin-left: -2px;
-	color: #ffffff;
-	background-color: #006F68;
-	border: 2px solid #ffffff;
+	color: var(--background-color);
+	background-color: var(--radius-color);
+	border: 2px solid var(--background-color);
 	text-decoration: none;
 }
 
 .navigations a:hover {
-	color: #006F68;
-	background-color: #ffffff;
-	border: 2px solid #ffffff;
+	color: var(--radius-color);
+	background-color: var(--background-color);
+	border: 2px solid var(--background-color);
 }
 
 .navigations,
@@ -563,19 +570,19 @@ ul#menu {
 
 #footer,
 footer p {
-	background-color: #006F68;
-	color: white;
+	background-color: var(--radius-color);
+	color: var(--background-color);
 	border: none;
 }
 
 footer a {
-	color: white;
+	color: var(--background-color);
 }
 
 footer a:hover,
 footer a:active,
 footer a:visited {
-	color: white;
+	color: var(--background-color);
 }
 
 
@@ -639,12 +646,16 @@ ul #s-icons,
 }
 
 /* overwriting styles from DataTables */
-table.dataTable tr.selected td.select-checkbox::after, table.dataTable tr.selected th.select-checkbox::after {
+table.dataTable tr.selected td.select-checkbox::after,
+table.dataTable tr.selected th.select-checkbox::after {
 	margin-top: -15px !important;
 	margin-left: -6px !important;
 }
 
-table.dataTable tbody td.select-checkbox::before, table.dataTable tbody td.select-checkbox::after, table.dataTable tbody th.select-checkbox::before, table.dataTable tbody th.select-checkbox::after {
+table.dataTable tbody td.select-checkbox::before,
+table.dataTable tbody td.select-checkbox::after,
+table.dataTable tbody th.select-checkbox::before,
+table.dataTable tbody th.select-checkbox::after {
 	top: 0.7em !important;
 }
 
