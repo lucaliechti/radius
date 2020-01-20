@@ -215,6 +215,7 @@
                 <button class="tablinks" id="tab_config" onclick="showSection(event, 'config')">Configuration</button>
                 <button class="tablinks" id="tab_questions" onclick="showSection(event, 'questions')">Questions</button>
                 <button class="tablinks" id="tab_press" onclick="showSection(event, 'press')">Press</button>
+                <button class="tablinks" id="tab_news" onclick="showSection(event, 'news')">News</button>
             </div>
         </section>
 
@@ -693,6 +694,50 @@
                     </div>
                     <input type="submit" class="btn btn-primary" value="Add press release" />
                     <p>(Files will be automatically renamed.)</p>
+                    <sec:csrfInput />
+                </form:form>
+            </section>
+            <section class="tabcontent" id="news">
+                <form:form method="POST" action="/press/publishnews" modelAttribute="newsForm">
+                    <div class="form-group" style="display: inline-block;margin-right: 10px;">
+                        <form:label path="date">
+                            Date
+                        </form:label>
+                        <div class="form-group">
+                            <form:input type="date" path="date" min="2017-07-09" class="form-control" style="display:inline-block;"/>
+                        </div>
+                        <div class="feedback-error">
+                            <form:errors path="date"/>
+                        </div>
+                    </div>
+                    <c:forEach begin="1" end="3" varStatus="loop">
+                        <c:choose>
+                            <c:when test="${loop.index == 1}"><c:set var="ph" value="${phde}"/></c:when>
+                            <c:otherwise>
+                                <c:choose>
+                                    <c:when test="${loop.index == 2}"><c:set var="ph" value="${phfr}"/></c:when>
+                                    <c:otherwise><c:set var="ph" value="${phen}"/></c:otherwise>
+                                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="form-group">
+                            <form:label path="titles[${loop.index}]">
+                                Title
+                            </form:label>
+                            <div class="form-group">
+                                <form:input path="titles[${loop.index-1}]" placeholder="${ph}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <form:label path="texts[${loop.index}]">
+                                Text
+                            </form:label>
+                            <div class="form-group">
+                                <form:textarea path="texts[${loop.index-1}]" placeholder="${ph}" class="input-paragraph form-control"/>
+                            </div>
+                        </div>
+                    </c:forEach>
+                    <input type="submit" class="btn btn-primary" value="Add news article" />
                     <sec:csrfInput />
                 </form:form>
             </section>

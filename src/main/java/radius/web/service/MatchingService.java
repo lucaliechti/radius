@@ -197,7 +197,10 @@ public class MatchingService {
                             user.preferredLocale()),
                     matchingMailSender
             );
-        } catch (Exception ignored) { }
+            log.info("Successfully sent matching email to " + user.getEmail());
+        } catch (Exception e) {
+            log.error("Could not send matching email to " + user.getEmail());
+        }
     }
 
     public List<HalfEdge> allMatchesForUser(String email) {
@@ -213,11 +216,12 @@ public class MatchingService {
     }
 
     private String disagreedUponQuestions(User user, User match, MatchingMode mode, Locale loc) {
+        int position = loc.getLanguage().equals("de") ? 0 : loc.getLanguage().equals("fr") ? 1 : 2;
         List<String> questions = new ArrayList<>();
         List<Integer> disagreed = disagreedQuestions(user, match, mode);
-        String messageSourcePrefix = mode == MatchingMode.REGULAR ? "q" : "questions.special." + configService.currentVote() + ".";
-        disagreed.forEach(q -> questions.add("- " + messageSource.getMessage(messageSourcePrefix+(q+1), new Object[]{}, loc)));
-        return String.join("\n",questions);
+        List<List<String>> questionTexts = mode == MatchingMode.REGULAR ? configService.getQuestionForm().getRegularQuestions() : configService.getQuestionForm().getSpecialQuestions();
+        disagreed.forEach(q -> questions.add("- " + questionTexts.get(position).get(q)));
+        return String.join("\n", questions);
     }
 
     private List<Integer> disagreedQuestions(User user1, User user2, MatchingMode mode) {

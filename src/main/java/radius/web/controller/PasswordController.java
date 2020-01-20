@@ -46,8 +46,8 @@ public class PasswordController {
     }
 
     @RequestMapping(value = "/reset", method=GET)
-    public String reset(Model model) {
-        model.addAllAttributes(modelDecorator.homeAttributes());
+    public String reset(Model model, Locale loc) {
+        model.addAllAttributes(modelDecorator.homeAttributes(loc));
         return "home";
     }
 
@@ -71,14 +71,15 @@ public class PasswordController {
     }
 
     @RequestMapping(value = "/reset", method=POST)
-    public String reset(@ModelAttribute("passwordForm") @Valid PasswordUuidDto dto, BindingResult result, Model model) {
+    public String reset(@ModelAttribute("passwordForm") @Valid PasswordUuidDto dto, BindingResult result, Model model,
+                        Locale loc) {
         if(result.hasErrors()) {
             return "reset";
         }
         Optional<String> optionalEmail = userService.findEmailByUuid(dto.getUuid());
         if(!optionalEmail.isPresent()) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelDecorator.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes(loc));
             return "home";
         }
         Optional<User> optionalUser = userService.findUserByEmail(optionalEmail.get());
@@ -86,12 +87,12 @@ public class PasswordController {
             boolean success = passwordService.updatePassword(optionalUser.get(), dto.getPassword());
             if (success) {
                 model.addAttribute("passwordReset", Boolean.TRUE);
-                model.addAllAttributes(modelDecorator.homeAttributes());
+                model.addAllAttributes(modelDecorator.homeAttributes(loc));
                 return "home";
             }
         }
         model.addAttribute("generic_error", Boolean.TRUE);
-        model.addAllAttributes(modelDecorator.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes(loc));
         return "home";
     }
 }

@@ -45,16 +45,16 @@ public class HomeController {
 		if(model.containsAttribute("success")) {
 			model.addAttribute("success", Boolean.TRUE);
 		}
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(locale));
 		return "home";
 	}
 
 	@RequestMapping(value={"/", "/home"}, method=POST)
-	public String login(@RequestParam(value="error", required=false) String loginerror, Model model) {
+	public String login(@RequestParam(value="error", required=false) String loginerror, Model model, Locale loc) {
 		if(loginerror != null) {
 			model.addAttribute("loginerror", Boolean.TRUE);
 		}
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 
@@ -68,13 +68,13 @@ public class HomeController {
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelDecorator.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes(locale));
 			return "home";
 		}
 		User user = optionalUser.get();
 		if(!user.isEnabled()) {
 			model.addAttribute("not_enabled", true);
-			model.addAllAttributes(modelDecorator.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes(locale));
 			return "home";
 		}
 		else if(!answerService.userHasValidlyAnswered(user)) {

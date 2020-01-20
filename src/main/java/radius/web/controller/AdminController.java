@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import radius.data.dto.PressreleaseDto;
 import radius.data.form.*;
-import radius.web.components.ProfileDependentProperties;
 import radius.web.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +34,6 @@ public class AdminController {
     private MatchingService matchingService;
     private ConfigService configService;
     private PressService pressService;
-    private ProfileDependentProperties profileProperties;
 
     private SimpleDateFormat pressReleasePrefixFormat = new SimpleDateFormat("yyyyMMdd");
     private final String RADIUS = "Radius";
@@ -45,15 +43,13 @@ public class AdminController {
     private final String RELEASE_FRENCH = "Communique";
 
     public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           MatchingService matchingService, ConfigService configService, PressService pressService,
-                           ProfileDependentProperties profileProperties) {
+                           MatchingService matchingService, ConfigService configService, PressService pressService) {
         this.newsletterservice = newsletterservice;
         this.userService = userService;
         this.surveyService = surveyService;
         this.matchingService = matchingService;
         this.configService = configService;
         this.pressService = pressService;
-        this.profileProperties = profileProperties;
     }
 
     @RequestMapping(path="/admin")
@@ -256,7 +252,7 @@ public class AdminController {
             String newFileName = String.join(".", String.join("_", datePrefix, RADIUS, releaseString), fileEnding);
             String newFilePath = baseFilePath + newFileName;
             file.transferTo(new File(newFilePath));
-            newLinks[i] = String.join("/", /*profileProperties.getUrl(),*/ STATIC_DIRECTORY, newFileName);
+            newLinks[i] = String.join("/", STATIC_DIRECTORY, newFileName);
         }
         dto.setLinks(newLinks);
         try {
@@ -268,8 +264,24 @@ public class AdminController {
         return "admin";
     }
 
+    @RequestMapping(path="press/publishnews", method=POST)
+    public String publishNews(@ModelAttribute("newsForm") @Valid NewsForm form, BindingResult result, Model model) {
+        model.addAttribute("activetab", "news");
+        if(result.hasErrors()) {
+            return "admin";
+        }
+        try {
+            pressService.addNews(form);
+            model.addAttribute("success", Boolean.TRUE);
+        } catch (Exception e) {
+            model.addAttribute("failure", Boolean.TRUE);
+        }
+        return "admin";
+    }
+
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("newsForm", new NewsForm());
         model.addAttribute("pressreleaseForm", new PressreleaseForm());
         model.addAttribute("mentionForm", new MentionForm());
         model.addAttribute("configurationForm", configService.getForm());

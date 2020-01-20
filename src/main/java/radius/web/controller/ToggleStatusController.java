@@ -18,6 +18,7 @@ import radius.web.components.ModelDecorator;
 import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -36,12 +37,12 @@ public class ToggleStatusController {
 	}
 	
 	@RequestMapping(method=GET)
-	public String toggle(Model model) {
+	public String toggle(Model model, Locale loc) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelDecorator.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";
 		}
 		User user = optionalUser.get();
@@ -56,12 +57,12 @@ public class ToggleStatusController {
 	
 	@RequestMapping(method=POST)
 	public String togglePost(@ModelAttribute("feedbackForm") @Valid MeetingFeedbackForm feedbackForm,
-							 BindingResult result, Model model) {
+							 BindingResult result, Model model, Locale loc) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
 		if(!optionalUser.isPresent()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
-			model.addAllAttributes(modelDecorator.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";
 		}
 		User user = optionalUser.get();

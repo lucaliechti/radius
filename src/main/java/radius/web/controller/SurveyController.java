@@ -85,7 +85,7 @@ public class SurveyController {
             } else {
                 model.addAttribute("registrationError", true);
             }
-            model.addAllAttributes(modelDecorator.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes(locale));
             return "home";
         }
 
@@ -98,7 +98,7 @@ public class SurveyController {
                 return "survey";
             }
         }
-        model.addAllAttributes(modelDecorator.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes(locale));
         return "home";
     }
 

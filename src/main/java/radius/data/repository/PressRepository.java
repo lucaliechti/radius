@@ -3,6 +3,7 @@ package radius.data.repository;
 import org.springframework.stereotype.Repository;
 import radius.data.dto.PressreleaseDto;
 import radius.data.form.MentionForm;
+import radius.data.form.NewsForm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,5 +18,9 @@ public interface PressRepository {
     void addPressrelease(PressreleaseDto dto) throws SQLException;
 
     List<PressreleaseDto> allPressReleases();
+
+    void saveNews(NewsForm form) throws SQLException;
+
+    List<NewsForm> allNews();
 
 }

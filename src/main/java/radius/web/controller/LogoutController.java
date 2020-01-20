@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import radius.web.components.ModelDecorator;
 
+import java.util.Locale;
+
 @Controller
 @RequestMapping(value="/logout")
 public class LogoutController {
@@ -18,9 +20,9 @@ public class LogoutController {
 	}
 	
 	@RequestMapping(method=GET)
-	public String logoutPage (Model model) {
+	public String logoutPage (Model model, Locale loc) {
 		model.addAttribute("loggedout", Boolean.TRUE);
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 }

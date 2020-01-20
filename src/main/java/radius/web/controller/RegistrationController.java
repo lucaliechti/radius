@@ -34,8 +34,8 @@ public class RegistrationController {
 	}
 
 	@RequestMapping(value="/register", method=GET)
-	public String reset(Model model) {
-		model.addAllAttributes(modelDecorator.homeAttributes());
+	public String reset(Model model, Locale loc) {
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 	
@@ -53,21 +53,21 @@ public class RegistrationController {
 		} else {
 			model.addAttribute("registrationError", true);
 		}
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(locale));
 		return "home";
 	}
 
 	@RequestMapping(value="/confirm", method=GET)
-	public String confirm(@RequestParam(value="uuid") String uuid, Model model) {
+	public String confirm(@RequestParam(value="uuid") String uuid, Model model, Locale loc) {
 		Optional<String> userEmail = userService.findEmailByUuid(uuid);
 		if(!userEmail.isPresent()) {
 			model.addAttribute("confirmation_error", true);
-			model.addAllAttributes(modelDecorator.homeAttributes());
+			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";
 		}
 		userService.enableUser(userEmail.get());
 		model.addAttribute("emailconfirmed", true);
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import radius.data.dto.PressreleaseDto;
 import radius.data.form.MentionForm;
+import radius.data.form.NewsForm;
 
 import javax.sql.DataSource;
 import java.sql.Array;
@@ -26,6 +27,8 @@ public class JDBCPressRepository implements PressRepository {
     private static final String ALL_MENTIONS = "SELECT * FROM mentions ORDER BY publicationDate DESC";
     private static final String ADD_PRESSRELEASE = "INSERT INTO pressreleases (releasedate, links) VALUES (?, ?)";
     private static final String ALL_PRESSRELEASES = "SELECT * FROM pressreleases ORDER BY releasedate DESC";
+    private static final String ADD_NEWS = "INSERT INTO news (newsdate, titles, texts) VALUES (?, ?, ?)";
+    private static final String ALL_NEWS = "SELECT * FROM news ORDER BY newsdate DESC";
 
     @Autowired
     public void init(DataSource jdbcdatasource) {
@@ -61,6 +64,20 @@ public class JDBCPressRepository implements PressRepository {
         }
     }
 
+    @Override
+    public void saveNews(NewsForm form) throws SQLException {
+        jdbcTemplate.update(ADD_NEWS, form.getDate(), convertToSQLArray(form.getTitles()), convertToSQLArray(form.getTexts()));
+    }
+
+    @Override
+    public List<NewsForm> allNews() {
+        try {
+            return jdbcTemplate.query(ALL_NEWS, new NewsRowMapper());
+        } catch (Exception e ) {
+            return Collections.emptyList();
+        }
+    }
+
     private static final class MentionRowMapper implements RowMapper<MentionForm> {
         public MentionForm mapRow(ResultSet rs, int rowNum) throws SQLException {
             MentionForm form = new MentionForm();
@@ -79,6 +96,16 @@ public class JDBCPressRepository implements PressRepository {
             dto.setDate(rs.getDate("releasedate"));
             dto.setLinks((String[]) rs.getArray("links").getArray());
             return dto;
+        }
+    }
+
+    private static final class NewsRowMapper implements RowMapper<NewsForm> {
+        public NewsForm mapRow(ResultSet rs, int rowNum) throws SQLException {
+            NewsForm form = new NewsForm();
+            form.setDate(rs.getDate("newsdate"));
+            form.setTitles((String[]) rs.getArray("titles").getArray());
+            form.setTexts((String[]) rs.getArray("texts").getArray());
+            return form;
         }
     }
 

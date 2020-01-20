@@ -91,35 +91,29 @@
          <h2>
             <spring:message code="home.welcome.title"/>
          </h2>
-          <p style="margin-top: 10px;"> <!-- lets test this here -->
+          <p style="margin-top: 10px;">
               <spring:message code="home.welcome.details"/>
           </p>
       </section>
+
+      <div class="result mobileonly">
+         <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
+      </div>
+
       <section class="leftsection-content">
-         <section class="leftsection-content-element" id="special">
-            <h2>
-               <spring:message code="home.news.special.title"/>
-            </h2>
-            <p>
-               <spring:message code="home.news.special.details"/>
-            </p>
-         </section>
-         <section class="leftsection-content-element" id="survey">
-            <h2>
-               <spring:message code="home.news.survey.title"/>
-            </h2>
-            <p>
-               <spring:message code="home.news.survey.details"/>
-            </p>
-         </section>
-         <section class="leftsection-content-element" id="crowdfunding">
-            <h2>
-               <spring:message code="home.news.crowdfunding.title"/>
-            </h2>
-            <p>
-               <spring:message code="home.news.crowdfunding.details"/>
-            </p>
-         </section>
+         <c:forEach items="${newsreel}" var="newsitem">
+            <section class="leftsection-content-element">
+               <h2 style="margin-bottom: 3px;">
+                     ${newsitem.title}
+               </h2>
+               <h5 style="font-size: 18px;margin-bottom: 10px;">
+                  <fmt:formatDate value="${newsitem.date}" type="date" dateStyle="medium"/>
+               </h5>
+               <p>
+                  ${newsitem.text}
+               </p>
+            </section>
+         </c:forEach>
       </section>
    </section>
    

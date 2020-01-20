@@ -12,6 +12,8 @@ import radius.web.components.ModelDecorator;
 import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
+import java.util.Locale;
+
 @Controller
 @RequestMapping(value="/delete")
 public class DeleteController {
@@ -27,13 +29,13 @@ public class DeleteController {
 	}
 
 	@RequestMapping(method=GET)
-	public String reset(Model model) {
-		model.addAllAttributes(modelDecorator.homeAttributes());
+	public String reset(Model model, Locale loc) {
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 
 	@RequestMapping(method=POST)
-	public String contact(Model model) {
+	public String contact(Model model, Locale loc) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		if(!matchingService.allMatchesForUser(username).isEmpty()) {
 			model.addAttribute("delete_failed", true);
@@ -42,7 +44,7 @@ public class DeleteController {
 		userService.deleteUser(username);
 		model.addAttribute("delete_success", username);
 		SecurityContextHolder.clearContext();
-		model.addAllAttributes(modelDecorator.homeAttributes());
+		model.addAllAttributes(modelDecorator.homeAttributes(loc));
 		return "home";
 	}
 }

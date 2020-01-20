@@ -30,8 +30,8 @@ public class NewsletterController {
     }
 
     @RequestMapping(path="/subscribe", method=GET)
-    public String getSubscribe(Model model) {
-        model.addAllAttributes(modelDecorator.homeAttributes());
+    public String getSubscribe(Model model, Locale loc) {
+        model.addAllAttributes(modelDecorator.homeAttributes(loc));
         return "home";
     }
 
@@ -40,30 +40,30 @@ public class NewsletterController {
                             BindingResult result, Model model, Locale loc) {
         if(result.hasErrors()) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelDecorator.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes(loc));
             return "home";
         }
         boolean success = newsletterService.subscribe(subscriptionForm.getEmail(), loc, REGISTRATION_WEBSITE);
         if(!success) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelDecorator.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes(loc));
             return "home";
         }
         model.addAttribute("newsletter_subscribe_success", Boolean.TRUE);
-        model.addAllAttributes(modelDecorator.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes(loc));
         return "home";
     }
 
     @RequestMapping(path="/unsubscribe", method=GET)
-    public String unsubscribe(@RequestParam(value = "uuid", required = true) String uuid, Model model) {
+    public String unsubscribe(@RequestParam(value = "uuid", required = true) String uuid, Model model, Locale loc) {
         boolean success = newsletterService.unsubscribe(uuid);
         if(!success) {
             model.addAttribute("generic_error", Boolean.TRUE);
-            model.addAllAttributes(modelDecorator.homeAttributes());
+            model.addAllAttributes(modelDecorator.homeAttributes(loc));
             return "home";
         }
         model.addAttribute("newsletter_unsubscribe_success", Boolean.TRUE);
-        model.addAllAttributes(modelDecorator.homeAttributes());
+        model.addAllAttributes(modelDecorator.homeAttributes(loc));
         return "home";
     }
 }
