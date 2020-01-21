@@ -112,10 +112,10 @@ figure {
 /********** tabs **********/
 .tab {
     overflow: hidden;
-    background-color: #fff;
+    background-color: var(--background-color);
 }
 .tab button {
-    background-color: inherit;
+    background-color: var(--background-color);
     float: left;
     border: none;
     outline: none;
@@ -124,14 +124,14 @@ figure {
     transition: 0.3s;
     font-family: 'Fira Sans Condensed', sans-serif;
     font-size: 18px;
-    color: #006F68;
+    color: var(--radius-color);
 }
 .tab button:hover {
     background-color: #ddd;
 }
 .tab button.active {
-    color: white;
-    background-color: #006F68;
+    color: var(--text-on-radius-color);
+    background-color: var(--radius-color);
 }
 .tabcontent {
     display: none;

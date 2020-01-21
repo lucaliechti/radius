@@ -99,19 +99,19 @@
  *
  */
 	#primary-menubar {
-		background-color: var(--radius-color);
+		background-color: var(--radius-frame-color);
 		margin-top: 0px
 	}
 	.language-selector a {
 		padding: 0;
 		margin-left: 0;
-		color: #ffffff;
-		background-color: var(--radius-color);
+		color: var(--text-on-radius-color);
+		background-color: var(--radius-frame-color);
 		border: none;
 	}
 	.language-selector a:hover {
-		color: #ffffff;
-		background-color: var(--radius-color);
+		color: var(--text-on-radius-color);
+		background-color: var(--radius-frame-color);
 		border: none;
 	}
 	.language-selector a:last-child {
@@ -175,7 +175,7 @@
 	#menuToggle input:checked~#burger span {
 		opacity: 1;
 		transform: rotate(45deg) translate(-5px, -12px);
-		background: #ffffff;
+		background: var(--text-on-radius-color);
 	}
 /*
  * But let's hide the middle one.
@@ -203,7 +203,7 @@
 		top: 62px;
 		width: 11em;
 		margin: 0;
-		background: var(--radius-color);
+		background: var(--radius-frame-color);
 		list-style-type: none;
 		-webkit-font-smoothing: antialiased;
 		/* to stop flickering of text in safari */
@@ -213,7 +213,7 @@
 	}
 	#menu a,
 	#language-select a {
-		color: #fffff;
+		color: var(--text-on-radius-color);
 		display: block!important;
 	}
 	#language-select {
@@ -222,7 +222,7 @@
 		padding: 10px 20px 20px;
 	}
 	#menu #language-select li a {
-		border: 2px solid #ffffff;
+		border: 2px solid var(--text-on-radius-color);
 		padding: 0.22em 0.4em 0.18em 0.4em;
 	}
 	#menu li,
@@ -230,7 +230,7 @@
 		border: none;
 		display: block;
 		margin: 0;
-		color: white;
+		color: var(--text-on-radius-color);
 		padding: 10px 20px;
 	}
 	#menu li a:active,
@@ -249,8 +249,8 @@
 	#language-select a {
 		padding: 0.01em 0.10em 0.13em 0.28em;
 		margin-left: -2px;
-		color: #fffff;
-		background-color: var(--radius-color);
+		color: var(--text-on-radius-color);
+		background-color: var(--radius-frame-color);
 		border: none;
 		text-decoration: none;
 	}

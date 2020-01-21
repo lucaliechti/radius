@@ -3,12 +3,33 @@
 	--section-margin-top-desktop: calc(3*20px);
 	--section-margin-between-desktop: 20px;
 	--section-margin-between-mobile: 5%;
+
 	--radius-color: #006F68;
 	--text-color: black;
 	--background-color: white;
-	--special-color: #ff0000;
+	--radius-frame-color: #006F68;
+	--text-on-radius-color: white;
+	--special-color: red;
 }
 
+#logo-home {
+	width: auto;
+	height: 24px;
+	content: url(../img/logo-radius.png);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+	--radius-color: #45B29D;
+	--text-color: white;
+	--background-color: #121212;
+	}
+	#logo-home {
+		width: auto;
+		height: 30px; /*30px für white */
+		content: url(../img/logo-radius-white.png);
+	}
+}
 @font-face {
 	font-family: Fira Sans Condensed;
 	src: url(font/FiraSansCondensed-Light.woff);
@@ -118,7 +139,7 @@ section .leftsection-content-element:first-child {
 #language-select,
 #footer p,
 #login {
-	background-color: var(--radius-color);
+	background-color: var(--radius-frame-color);
 }
 #primary-menubar,
 #secondary-menubar {
@@ -245,12 +266,6 @@ a:visited {
 	display: none;
 }
 
-#logo-home {
-	width: auto;
-	height: 24px;
-	content: url(../img/logo-radius.png);
-}
-
 /* WebKit/Blink Browsers */
 ::selection {
 	background: var(--radius-color);
@@ -266,7 +281,7 @@ a:visited {
 /***** FEEDBACKS *****/
 p.result {
 	margin-bottom: var(--section-margin-between-desktop);
-    color: var(--background-color);
+    color: var(--text-on-radius-color);
     padding: 5 8 5px;
 }
 
@@ -340,7 +355,7 @@ input[type="submit"],
 input[type="button"] {
 	font-family: 'Fira Sans Condensed', sans-serif;
 	font-size: 18px;
-	color: var(--background-color);
+	color: var(--text-on-radius-color);
 	background-color: var(--radius-color);
 	padding: 0.42em 0.6em 0.38em 0.6em;
 	margin-bottom: 6px; /*LL*/
@@ -422,7 +437,7 @@ ul#menu {
 }
 
 #menu a:hover {
-	color: var(--background-color);
+	color: var(--text-on-radius-color);
 	background-color: var(--radius-color);
 }
 
@@ -465,8 +480,8 @@ ul#menu {
 #language-select a:hover,
 #language-select li a:hover,
 #language-select a:hover li {
-	color: var(--radius-color) !important;
-	background-color: var(--background-color);
+	color: var(--radius-frame-color) !important;
+	background-color: var(--text-on-radius-color);
 }
 
 #language-select a,
@@ -476,9 +491,9 @@ ul#menu {
 	font-size: 18px!important;
 	line-height: 1.4;
 	font-family: 'Fira Sans Condensed', sans-serif;
-	background-color: var(--radius-color);
-	color: var(--background-color);
-	border: 2px solid var(--background-color);
+	background-color: var(--radius-frame-color);
+	color: var(--text-on-radius-color);
+	border: 2px solid var(--text-on-radius-color);
 	margin: 2px;
 	padding: 0.22em 0.4em 0.18em 0.4em;
 }
@@ -507,19 +522,19 @@ ul#menu {
 
 #footer,
 footer p {
-	background-color: var(--radius-color);
-	color: var(--background-color);
+	background-color: var(--radius-frame-color);
+	color: var(--text-on-radius-color);
 	border: none;
 }
 
 footer a {
-	color: var(--background-color);
+	color: var(--text-on-radius-color);
 }
 
 footer a:hover,
 footer a:active,
 footer a:visited {
-	color: var(--background-color);
+	color: var(--text-on-radius-color);
 }
 
 
@@ -596,7 +611,8 @@ table.dataTable tbody th.select-checkbox::after {
 	top: 0.7em !important;
 }
 
-table.dataTable tbody th, table.dataTable tbody td {
+table.dataTable tbody th, table.dataTable tbody td , table.dataTable tbody tr {
+	background-color: var(--background-color) !important;
 	padding: 0.1px 0.1px !important;
 }
 
