@@ -28,7 +28,9 @@ public class User {
 	private List<TernaryAnswer> specialanswers;
 	private boolean privateUser;
 	private String uuid;
+	private Timestamp dateCreated;
 	private Timestamp dateModified;
+	private Timestamp lastLogin;
 
 	public User(String firstName, String lastName, String canton, String email, String password) {
 		this.firstname = firstName;
@@ -54,7 +56,9 @@ public class User {
 		List<String> regularanswers,
 		List<String> specialanswers,
 		boolean privateUser,
+		Timestamp dateCreated,
 		Timestamp dateModified,
+		Timestamp lastLogin,
 		String uuid
 	) {
 		this.firstname = firstname;
@@ -71,7 +75,9 @@ public class User {
 		this.regularanswers = regularanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.specialanswers = specialanswers.stream().map(User::convertAnswer).collect(Collectors.toList());
 		this.privateUser = privateUser;
+		this.dateCreated = dateCreated;
 		this.dateModified = dateModified;
+		this.lastLogin = lastLogin;
 		this.uuid = uuid;
 	}
 

@@ -61,12 +61,14 @@
 	}
 	.mobileonly {
 		display: inline;
+	}
+	.fakebutton {
 		margin-bottom: var(--section-margin-between-mobile);
 		text-align: center;
 		background-color: var(--radius-color);
 		padding: 0.42em 0.6em 0.38em 0.6em;
 	}
-	.mobileonly a {
+	.fakebutton a {
 		font-size: 18px !important;
 		color: white;
 		text-decoration: none;
@@ -85,6 +87,9 @@
 	}
 	div.editable {
 		justify-content: space-between;
+	}
+	.section-admin {
+		margin: 20px!important;
 	}
 
 /*

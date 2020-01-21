@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import radius.HalfEdge;
 import radius.User;
 import radius.UserPair;
+import radius.data.dto.StatisticsDto;
 import radius.data.form.MeetingFeedbackForm;
 import radius.data.form.UserForm;
 import radius.data.repository.*;
@@ -17,6 +18,8 @@ import radius.web.components.CountrySpecificProperties;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -221,5 +224,26 @@ public class UserService {
             Arrays.stream(values).forEach(code -> registeredUsers[code-1]++);
         } );
         return registeredUsers;
+    }
+
+    public StatisticsDto getStatistics() {
+        Instant now = Instant.now();
+        Instant weekAgo = now.minus(7, ChronoUnit.DAYS);
+        Instant monthAgo = now.minus(30, ChronoUnit.DAYS);
+        StatisticsDto dto = new StatisticsDto();
+
+        List<User> allUsers = userRepo.allUsers();
+        dto.setUsersActive((int) allUsers.stream().filter(u -> User.UserStatus.WAITING.equals(u.getStatus())).count());
+        dto.setUsersTotal(allUsers.size());
+        dto.setRegistrationsWeek((int) allUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setRegistrationsMonth((int) allUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(monthAgo) > 0).count());
+        dto.setOnlineWeek((int) allUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setOnlineMonth((int) allUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(monthAgo) > 0).count());
+
+        List<HalfEdge> matches = matchRepo.allMatches();
+        List<HalfEdge> uniqueMatches = matches.stream().filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList());
+        dto.setMatchesWeek((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setMatchesMonth((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(monthAgo) > 0).count());
+        return dto;
     }
 }

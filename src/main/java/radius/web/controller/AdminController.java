@@ -155,6 +155,7 @@ public class AdminController {
                 recipients,
                 new Locale(contactUserForm.getLanguage()));
         decorateModel(model, recipients, failed);
+        model.addAttribute("contactUserForm", new NewsletterForm());
         return "admin";
     }
 
@@ -172,6 +173,7 @@ public class AdminController {
                 recipients,
                 new Locale(newsletterForm.getLanguage()));
         decorateModel(model, recipients, failed);
+        model.addAttribute("newsletterForm", new NewsletterForm());
         return "admin";
     }
 
@@ -214,6 +216,7 @@ public class AdminController {
         try {
             pressService.addMention(form);
             model.addAttribute("success", Boolean.TRUE);
+            model.addAttribute("mentionForm", new MentionForm());
         } catch (Exception e) {
             model.addAttribute("failure", Boolean.TRUE);
         }
@@ -258,6 +261,7 @@ public class AdminController {
         try {
             pressService.addPressrelease(dto);
             model.addAttribute("success", Boolean.TRUE);
+            model.addAttribute("pressreleaseForm", new PressreleaseForm());
         } catch (Exception e) {
             model.addAttribute("failure", Boolean.TRUE);
         }
@@ -281,6 +285,7 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
+        model.addAttribute("statistics", userService.getStatistics());
         model.addAttribute("newsForm", new NewsForm());
         model.addAttribute("pressreleaseForm", new PressreleaseForm());
         model.addAttribute("mentionForm", new MentionForm());

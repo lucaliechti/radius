@@ -105,7 +105,7 @@
             document.getElementById("tab_${activetab}").click();
         </c:when>
         <c:otherwise>
-            document.getElementById("tab_newsletter").click();
+            document.getElementById("tab_statistics").click();
         </c:otherwise>
         </c:choose>
     });
@@ -173,7 +173,7 @@
 <c:set var="phen">🥫🥫🥫</c:set>
 
 <main class="firstcontainer container">
-    <section id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
+    <section class="section-admin" id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
 
         <c:if test="${success != null}">
             <p class="result success">
@@ -207,6 +207,7 @@
 
         <section class="leftsection-title" id="page-title">
             <div class="tab">
+                <button class="tablinks" id="tab_statistics" onclick="showSection(event, 'statistics')">Statistics</button>
                 <button class="tablinks" id="tab_newsletter" onclick="showSection(event, 'newsletter')">Newsletter</button>
                 <button class="tablinks" id="tab_users" onclick="showSection(event, 'users')">Users</button>
                 <button class="tablinks" id="tab_survey" onclick="showSection(event, 'survey')">Survey</button>
@@ -220,6 +221,56 @@
         </section>
 
         <section class="leftsection-content">
+            <section class="tabcontent" id="statistics">
+                <h2>
+                    Statistics
+                </h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 100px;"></th>
+                        <th style="width: 65px;text-align: right;">active</th>
+                        <th style="width: 65px;text-align: right;">total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Users</td>
+                        <td style="text-align: right;">${statistics.usersActive}</td>
+                        <td style="text-align: right;">${statistics.usersTotal}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;"></th>
+                            <th style="width: 65px;text-align: right;">7 days</th>
+                            <th style="width: 65px;text-align: right;">1 month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Registrations</td>
+                            <td style="text-align: right;">${statistics.registrationsWeek}</td>
+                            <td style="text-align: right;">${statistics.registrationsMonth}</td>
+                        </tr>
+                        <tr>
+                            <td>Matches</td>
+                            <td style="text-align: right;">${statistics.matchesWeek}</td>
+                            <td style="text-align: right;">${statistics.matchesMonth}</td>
+                        </tr>
+                        <tr>
+                            <td>Users online</td>
+                            <td style="text-align: right;">${statistics.onlineWeek}</td>
+                            <td style="text-align: right;">${statistics.onlineMonth}</td>
+                        </tr>
+                    </tbody>
+                </table><br>
+                <div class="feedback-error mobileonly" id="admin-mobile-hint">
+                    Log in to the desktop version to see the full admin panel.
+                </div>
+            </section>
             <section class="tabcontent" id="newsletter">
                 <h2>
                     <spring:message code="admin.newsletter.title"/>

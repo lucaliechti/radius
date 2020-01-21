@@ -27,6 +27,8 @@ public class UserPairTest {
 				Collections.emptyList(),
 				false,
 				Timestamp.from(Instant.ofEpochSecond(0)),
+				Timestamp.from(Instant.ofEpochSecond(0)),
+				Timestamp.from(Instant.ofEpochSecond(0)),
 				"d42f2b69-f065-457d-9a57-069b2e3b1da1"
 		);
 		User user2 = new User(
@@ -42,6 +44,8 @@ public class UserPairTest {
 				ImmutableList.of("TRUE", "FALSE", "DONTCARE", "DONTCARE", "DONTCARE"),
 				Collections.emptyList(),
 				false,
+				Timestamp.from(Instant.ofEpochSecond(0)),
+				Timestamp.from(Instant.ofEpochSecond(0)),
 				Timestamp.from(Instant.ofEpochSecond(0)),
 				"4d23cebd-2d6b-46b4-87eb-24d76fbe13fc"
 		);

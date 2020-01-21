@@ -83,7 +83,7 @@
             </p>
          </c:if>
 
-      <div class="result mobileonly">
+      <div class="result mobileonly fakebutton">
          <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
       </div>
 
@@ -96,7 +96,7 @@
           </p>
       </section>
 
-      <div class="result mobileonly">
+      <div class="result mobileonly fakebutton">
          <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
       </div>
 

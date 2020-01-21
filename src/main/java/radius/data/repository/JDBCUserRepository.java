@@ -98,7 +98,9 @@ public class JDBCUserRepository implements UserRepository {
 				regularanswers,
 				specialanswers,
 				rs.getBoolean("private"),
+				rs.getTimestamp("datecreate"),
 				rs.getTimestamp("datemodify"),
+				rs.getTimestamp("lastlogin"),
 				rs.getString("uuid")
 			);
 		}
