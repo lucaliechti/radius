@@ -40,7 +40,7 @@
    <section class="leftsection-content-element" id="nationalvotes">
       <div class="editable">
          <h2><spring:message code="profile.specialanswers"/></h2>
-         <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+         <div class="editing-icons-div"><a href="answers"><i class="material-icons">create</i></a></div>
       </div>
       <c:if test="${not empty specialanswers}">
          <c:forEach begin="1" end="${nrSQ}" varStatus="loop">
@@ -53,7 +53,7 @@
    <section class="leftsection-content-element" id="regularanswers">
       <div class="editable">
          <h2><spring:message code="profile.regularanswers"/></h2>
-         <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+         <div class="editing-icons-div"><a href="answers"><i class="material-icons">create</i></a></div>
       </div>
       <c:if test="${not empty answers}">
          <c:forEach begin="1" end="${nrQ}" varStatus="loop">
@@ -68,7 +68,7 @@
       <h2>
          <spring:message code="profile.additionaldata"/>
       </h2>
-      <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+      <div class="editing-icons-div"><a href="answers"><i class="material-icons">create</i></a></div>
    </div>
    
    <p><b><spring:message code="profile.languages"/>:</b> <c:forEach items="${user.languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach>

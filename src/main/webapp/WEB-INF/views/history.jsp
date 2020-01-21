@@ -8,7 +8,7 @@
 <section id="profile-name" class="profile-resume">
     <div class="editable">
         <h2><spring:message code="status.profile" /></h2>
-        <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+        <div class="editing-icons-div"><a href="answers"><i class="material-icons">create</i></a></div>
     </div>
     <p>
         ${user.firstname} ${user.lastname}

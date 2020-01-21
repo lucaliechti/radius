@@ -444,7 +444,7 @@
                         <c:forEach items="${surveyStats}" var="question" varStatus="loop">
                             <div class="row">
                                 <div class="chart">
-                                    <span id="survey_${loop.index}" class="block" style="color: #000000; font-family: 'Fira Sans Condensed', sans-serif;"></span>
+                                    <span id="survey_${loop.index}" class="block" style="color: var(--text-color); font-family: 'Fira Sans Condensed', sans-serif;"></span>
                                     <span class="block">
                                         <span class="value">${question[0]}</span>
                                     </span>

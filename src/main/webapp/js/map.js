@@ -62,7 +62,7 @@ function selectDeselect(region) {
             region = gl.getLayer("radius_" + region.feature.id);
             selectDeselect(region);
         });
-        reg.innerHTML = region.feature.properties.name + "\t";
+        reg.innerHTML = "<i class='material-icons' style='font-size: 18px !important;'>clear</i> " + region.feature.properties.name + "\t";
     }
 	$('#locations').val([...selectedRegions].join(';'));
 	region.feature.properties.selected = !region.feature.properties.selected

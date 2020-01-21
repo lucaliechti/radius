@@ -13,14 +13,12 @@
 	font-family: Fira Sans Condensed;
 	src: url(font/FiraSansCondensed-Light.woff);
 }
-
 html,
 body * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
-
 body {
 	background-color: var(--background-color);
 	height: 100%;
@@ -28,12 +26,10 @@ body {
 	display: flex;
 	flex-direction: column;
 }
-
 .container {
 	flex: 1 1 auto;
 	/*max-width: 1140px; this is magic */
 }
-
 main {
 	display: flex;
 }
@@ -46,25 +42,20 @@ main {
 	margin-top: var(--section-margin-top-desktop);
 	margin-right: calc(var(--section-margin-between-desktop)/2);
 }
-
 .leftsection-title {
 	margin-bottom: var(--section-margin-between-desktop);
 }
-
 .leftsection-content {
 	flex-grow: 1;
 }
-
 .leftsection-title,
 .leftsection-content {
 	border: 2px solid var(--text-color);
 	padding: 20px;
 }
-
 .leftsection-title h2 {
 	margin-bottom: 0;
 }
-
 .leftsection-content-element {
 	border: none;
 	margin: 0;
@@ -79,7 +70,6 @@ main {
 	margin-top: var(--section-margin-top-desktop);
 	margin-left: calc(var(--section-margin-between-desktop)/2);
 }
-
 .broad {
 	flex: 0 0 25% !important;
 }
@@ -111,13 +101,11 @@ div.editable {
 	display: flex;
 	align-items: center;
 }
-
 section .profile-resume:last-child,
 section .leftsection-content-element:last-child {
 	border-bottom: none!important;
 	padding-bottom: 0;
 }
-
 section .profile-resume:first-child,
 section .login-resume:first-child,
 section .leftsection-content-element:first-child {
@@ -127,30 +115,25 @@ section .leftsection-content-element:first-child {
 #primary-menubar {
 	margin-top: calc(3*29px);
 }
-
 #language-select,
 #footer p,
 #login {
 	background-color: var(--radius-color);
 }
-
 #primary-menubar,
 #secondary-menubar {
 	display: flex;
 	align-items: center;
 	flex: 0 0 auto;
 }
-
 #home,
 #language-select {
 	padding: 15px 5vw;
 	flex: 1 0 auto;
 }
-
 #language-select {
 	text-align: right;
 }
-
 .dropdown-input {
 	width: 100%;
 	margin-bottom: 10px;
@@ -162,19 +145,16 @@ section .leftsection-content-element:first-child {
 	color: var(--text-color);
 	background-color: var(--background-color);
 }
-
 #menuToggle {
 	display: inline-block;
 	flex: 0 0 auto;
 }
-
 ul#menu li {
 	margin: 0;
 	padding: 0;
 }
 
 /*Fonts*/
-
 h1,
 h3,
 h4,
@@ -188,12 +168,10 @@ h6 {
 	/*Vor- und Nachbreiten der Absätze*/
 	padding: 0;
 }
-
 h2 {
     font-weight: 300;
 	margin-bottom: 10px;
 }
-
 h2,
 ul,
 li {
@@ -202,7 +180,6 @@ li {
 	color: var(--radius-color);
 	padding: 0;
 }
-
 ul,
 li {
 	font-family: 'Fira Sans Condensed', sans-serif;
@@ -235,13 +212,11 @@ th, td {
     padding-right: 15px;
     text-align: left;
 }
-
 b,
 th {
 	color: var(--radius-color);
 	font-weight: 600;
 }
-
 a {
 	color: var(--radius-color);
 	text-decoration: underline;
@@ -255,7 +230,6 @@ a:visited {
 }
 
 #register-map-locations a {
-	/* Ortschaften bei registration*/
 	text-decoration: none;
 	clear: both;
 	font-size: 18px !important;
@@ -264,22 +238,6 @@ a:visited {
 	margin: 5px;
 	border-radius: 15px;
 	display: inline-block;
-}
-
-#register-map-locations a:before {
-	/* Ortschaften bei registration */
-	background-image: url('../img/icon-close.png');
-	background-size: 15px 15px;
-	display: inline-block;
-	width: 15px;
-	height: 15px;
-	content: "";
-	padding-right: 7px;
-	background-repeat: no-repeat;
-}
-
-#register-map-locations a:after {
-	padding-right: 10px;
 }
 
 /*hide mobile menu*/
@@ -306,8 +264,6 @@ a:visited {
 }
 
 /***** FEEDBACKS *****/
-
-/*LL: I am using these in some places, but not in feedback elements*/
 p.result {
 	margin-bottom: var(--section-margin-between-desktop);
     color: var(--background-color);
@@ -321,15 +277,12 @@ p.success {
 p.error {
 	background-color: #D02643;
 }
-
-/*LL: New, because if I use p.error I get problems with the padding*/
 .feedback-error {
 	color: #D02643;
 	font-family: 'Fira Sans Condensed', sans-serif;
 }
 
 /* MAP */
-
 #register-map-locations {
 	margin-top: 10px;
 }
@@ -341,7 +294,6 @@ p.error {
 }
 
 /* FORMS */
-
 #form {
 	display: flex;
 	margin-top: 10px;
@@ -415,21 +367,6 @@ div #matchingtable_info {
 /***** SPECIAL ELEMENTS *****/
 
 /* ILLUSTRATIONS */
-.illustration-info { /*kreisli mit symbol drin*/
-	width: 10vw;
-	display: inline;
-	margin-right: 40px;
-}
-
-.illustration-deco {
-	width: 10vw;
-}
-
-/* ICONS */
-.editing-icons {
-	width: 30px;
-}
-
 .editing-icons-div {
 	padding-left: 10px;
 }

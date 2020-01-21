@@ -88,7 +88,7 @@
             <div class="subsection">
                <div class="editable">
                   <h2><spring:message code="status.yoursearch"/></h2>
-                  <div class="editing-icons-div"><a href="answers"><img src="img/icon-edit.png" class="editing-icons"></a></div>
+                  <div class="editing-icons-div"><a href="answers"><i class="material-icons">create</i></a></div>
                </div>
                <p>
                <spring:message code="status.search.languages"/>: <b><c:forEach items="${user.languages}" var="item" varStatus="loop"><spring:message code="language.${item}"/>${!loop.last ? ', ' : ''}</c:forEach></b><br>

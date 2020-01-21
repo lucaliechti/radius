@@ -16,6 +16,9 @@
 	<!-- jQuery -->
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
+    <!-- Material icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 	<!-- additional CSS -->
     <link rel="stylesheet" type="text/css" href="/css/radius-style-desktop-new.css">
     <link rel="stylesheet" type="text/css" href="/css/radius-style-mobile-new.css">
