@@ -474,7 +474,10 @@
             <section class="tabcontent" id="matches">
                 <h2>
                     Matches
-                </h2>
+                </h2><br>
+                <div class="result fakebutton">
+                    <a href="/runMatching" class="matchingbutton"><i class="material-icons" style="font-size:40px">flight_takeoff</i></a>
+                </div><br><br>
                 <table id="matchingtable" class="table table-striped table-bordered table-sm">
                     <thead>
                         <tr>

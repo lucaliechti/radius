@@ -409,6 +409,14 @@ div #matchingtable_info {
     color: var(--special-color);
 }
 
+.matchingbutton {
+	background-color:var(--text-color);
+	color:var(--special-color)!important;
+	padding: 20px;
+	padding-top:40px;
+	margin:20px 0;
+}
+
 /***** HEADER *****/
 
 #language-select {

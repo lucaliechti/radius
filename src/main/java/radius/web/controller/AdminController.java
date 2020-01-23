@@ -283,6 +283,19 @@ public class AdminController {
         return "admin";
     }
 
+    @RequestMapping(path="/runMatching")
+    public String runMatching(Model model) {
+        model.addAttribute("activetab", "matches");
+        try {
+            matchingService.matchUsers();
+            model.addAttribute("success", Boolean.TRUE);
+        } catch (Exception e) {
+            model.addAttribute("failure", Boolean.TRUE);
+        }
+        model.addAttribute("matches", matchingService.uniqueOrderedMatches());
+        return "admin";
+    }
+
     @ModelAttribute
     public void prepare(Model model) {
         model.addAttribute("statistics", userService.getStatistics());
