@@ -86,9 +86,6 @@ function showOrHideSection(checkbox, section) {
                <div class="feedback-error" id="survey-feedback-email">
                   <form:errors path="emailN"/>
                </div>
-               <p>
-                  <spring:message code="home.register.hint"/>
-               </p>
                </div>
             </div>
          </div>
@@ -102,7 +99,7 @@ function showOrHideSection(checkbox, section) {
                 </form:label>
                 <div id="hiddenRegistration">
                 <form:label path="firstName">
-                  <spring:message code="home.register.fn"/>
+                  <spring:message code="home.register.fn"/>*
                 </form:label>
                 <div class="col-10">
                     <form:input path="firstName" class="form-control" style="max-width:600px;"/>
@@ -112,7 +109,7 @@ function showOrHideSection(checkbox, section) {
                 </div>
             <div class="form-group">
                <form:label path="lastName">
-                  <spring:message code="home.register.ln"/>
+                  <spring:message code="home.register.ln"/>*
                </form:label>
                <div>
                   <form:input path="lastName" class="form-control" style="max-width:600px;"/>
@@ -134,7 +131,7 @@ function showOrHideSection(checkbox, section) {
             </div>
             <div class="form-group">
                <form:label path="emailR">
-                  <spring:message code="home.register.email"/>
+                  <spring:message code="home.register.email"/>*
                </form:label>
                <div>
                   <form:input path="emailR" class="form-control" style="max-width:600px;"/>
@@ -145,7 +142,7 @@ function showOrHideSection(checkbox, section) {
             </div>
             <div class="form-group">
                <form:label path="password">
-                  <spring:message code="home.register.pw"/>
+                  <spring:message code="home.register.pw"/>*
                </form:label>
                <div>
                   <form:input path="password" type="password" class="form-control" style="max-width:600px;"/>

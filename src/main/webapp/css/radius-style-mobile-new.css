@@ -1,4 +1,9 @@
 @media all and (max-width: 650px) {
+	@media (prefers-color-scheme: dark) {
+		#logo-home {
+			height: 24px;
+		}
+	}
 	#language-select {
 		position: static;
 		left: auto;
@@ -90,6 +95,9 @@
 	}
 	.section-admin {
 		margin: 20px!important;
+	}
+	.leftsection-title {
+		margin-bottom: var(--section-margin-between-mobile);
 	}
 
 /*

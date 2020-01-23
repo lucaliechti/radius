@@ -162,7 +162,7 @@
          <form:form method="POST" action="register" modelAttribute="registrationForm">
             <div class="form-group">
                <form:label path="firstName">
-                  <spring:message code="home.register.fn"/>
+                  <spring:message code="home.register.fn"/>*
                </form:label>
                <div class="form-group">
                   <form:input path="firstName" class="form-control"/>
@@ -173,7 +173,7 @@
             </div>
             <div class="form-group">
                <form:label path="lastName">
-                  <spring:message code="home.register.ln"/>
+                  <spring:message code="home.register.ln"/>*
                </form:label>
                <div class="form-group">
                   <form:input path="lastName" class="form-control"/>
@@ -195,7 +195,7 @@
             </div>
             <div class="form-group">
                <form:label path="email">
-                  <spring:message code="home.register.email"/>
+                  <spring:message code="home.register.email"/>*
                </form:label>
                <div class="form-group">
                   <form:input path="email" class="form-control"/>
@@ -206,7 +206,7 @@
             </div>
             <div class="form-group">
                <form:label path="password">
-                  <spring:message code="home.register.pw"/>
+                  <spring:message code="home.register.pw"/>*
                </form:label>
                <div class="form-group">
                   <form:input path="password" type="password" class="form-control"/>
@@ -235,7 +235,7 @@
                <form:form method="POST" action="subscribe" modelAttribute="newsletterForm">
                    <div class="form-group">
                       <form:label path="email">
-                         <spring:message code="home.register.email"/>
+                         <spring:message code="home.register.email"/>*
                       </form:label>
                       <div class="form-group">
                          <form:input path="email" class="form-control"/>

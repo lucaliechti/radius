@@ -26,7 +26,7 @@
 	}
 	#logo-home {
 		width: auto;
-		height: 30px; /*30px für white */
+		height: 30px;
 		content: url(../img/logo-radius-white.png);
 	}
 }

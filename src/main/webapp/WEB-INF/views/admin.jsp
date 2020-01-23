@@ -245,8 +245,8 @@
                     <thead>
                         <tr>
                             <th style="width: 100px;"></th>
-                            <th style="width: 65px;text-align: right;">7 days</th>
-                            <th style="width: 65px;text-align: right;">1 month</th>
+                            <th style="width: 65px;text-align: right;">7d</th>
+                            <th style="width: 65px;text-align: right;">30d</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -348,21 +348,21 @@
                     <input type="checkbox" id="checkbox_waiting" onclick="selectDeselect(
                         $('#checkbox_waiting').prop('checked'),
                         $('#usertable').DataTable(),
-                        'Aktiv',
+                        'WAITING',
                         USER_STATUS_COLUMN);"> waiting</input>
                 </p>
                 <p>
                     <input type="checkbox" id="checkbox_inactive" onclick="selectDeselect(
                         $('#checkbox_inactive').prop('checked'),
                         $('#usertable').DataTable(),
-                        'Inaktiv',
+                        'INACTIVE',
                         USER_STATUS_COLUMN);"> inactive</input>
                 </p>
                 <p style="margin-bottom: 20px;">
                     <input type="checkbox" id="checkbox_matched" onclick="selectDeselect(
                         $('#checkbox_matched').prop('checked'),
                         $('#usertable').DataTable(),
-                        'Partner/in gefunden!',
+                        'MATCHED',
                         USER_STATUS_COLUMN);"> matched</input>
                 </p>
 
@@ -387,7 +387,7 @@
                                 <td>${user.firstname}</td>
                                 <td>${user.lastname}</td>
                                 <td>${user.email}</td>
-                                <td><spring:message code="status.${user.status}"/></td>
+                                <td>${user.status}</td>
                                 <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
                                 <td>
                                     <c:choose>
