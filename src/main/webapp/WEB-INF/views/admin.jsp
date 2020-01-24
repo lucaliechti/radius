@@ -370,11 +370,11 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Vorname</th>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th style="width : 120px;">Name</th>
+                            <th>Fragen</th>
+                            <th>Sp.</th>
                             <th>Status</th>
-                            <th>Letzte Änderung</th>
+                            <th>Geändert</th>
                             <th>Privat</th>
                             <th>Sperren</th>
                             <th>Löschen</th>
@@ -384,9 +384,23 @@
                         <c:forEach items="${users}" var="user" >
                             <tr>
                                 <td></td>
-                                <td>${user.firstname}</td>
-                                <td>${user.lastname}</td>
-                                <td>${user.email}</td>
+                                <td>${user.firstname} ${user.lastname}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${user.regularanswers.size() > 0}">
+                                            <c:forEach items="${user.regularanswers}" var="answer"><div class="square ${answer}"></div><div class="separator"></div></c:forEach>
+                                        </c:when>
+                                        <c:otherwise></c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${user.specialanswers.size() > 0}">
+                                            <div class="square separator"></div><c:forEach items="${user.specialanswers}" var="answer"><div class="square ${answer}"></div><div class="separator"></div></c:forEach>
+                                        </c:when>
+                                        <c:otherwise></c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td>${user.status}</td>
                                 <td><fmt:formatDate value="${user.dateModified}" pattern = "yyyy-MM-dd"/></td>
                                 <td>
