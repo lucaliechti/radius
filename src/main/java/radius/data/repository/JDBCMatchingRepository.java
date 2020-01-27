@@ -25,7 +25,7 @@ public class JDBCMatchingRepository implements MatchingRepository {
 	private JdbcTemplate jdbcTemplate;
 
 	private static final String GET_CURRENT_MATCH_EMAIL =	"SELECT email2 FROM matches WHERE email1 = ? AND active = TRUE";
-	private static final String DEACTIVATE_OLD_MATCHES =	"UPDATE matches SET active = FALSE, dateinactive = ? WHERE email1 = ?";
+	private static final String DEACTIVATE_OLD_MATCHES =	"UPDATE matches SET active = FALSE, dateinactive = ? WHERE email1 = ? AND active = TRUE";
 	private static final String CONFIRM_HALF_EDGE = 		"UPDATE matches SET meetingconfirmed = TRUE WHERE email1 = ? AND active = TRUE";
 	private static final String UNCONFIRM_HALF_EDGE = 		"UPDATE matches SET meetingconfirmed = FALSE WHERE email1 = ? AND active = TRUE";
 	private static final String CREATE_MATCH =				"INSERT INTO matches(datecreated, email1, email2, active, meetingconfirmed, matchingmode) VALUES (?, ?, ?, TRUE, FALSE, ?)";

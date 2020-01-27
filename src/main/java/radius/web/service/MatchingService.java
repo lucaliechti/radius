@@ -175,6 +175,8 @@ public class MatchingService {
         userPair.user2().setStatus(User.UserStatus.MATCHED);
         userRepo.updateExistingUser(userPair.user1());
         userRepo.updateExistingUser(userPair.user2());
+        deactivateOldMatchesFor(userPair.user1().getEmail());
+        deactivateOldMatchesFor(userPair.user2().getEmail());
         matchRepo.createMatch(userPair, mode);
     }
 
