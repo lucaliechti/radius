@@ -157,6 +157,7 @@ figure {
 .separator {
     width:1px;
     background:var(--background-color);
+	display:inline-block;
 }
 .TRUE {
     background:var(--color-true);
