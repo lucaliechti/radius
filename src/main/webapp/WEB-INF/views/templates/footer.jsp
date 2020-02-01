@@ -5,8 +5,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-	<footer id="footer">
-		<div class="footer-left">
+	<footer>
+		<div>
 			<p>
 				<a href="<c:url value='/media'/>"><spring:message code="footer.media"/></a> |
 				<a href="<c:url value='/support' />"><spring:message code="footer.support"/></a> |
@@ -15,7 +15,7 @@
 				<spring:message code="footer.contact"/>: info@radius-schweiz.ch
 			</p>
 		</div>
-		<div class="footer-right">
+		<div>
 			<ul id="s-icons">
         		<a href="https://facebook.com/radius.schweiz"><li><img src="img/icon_f.png" class="icon"></li></a>
         		<a href="https://twitter.com/Radius_Schweiz"><li><img src="img/icon_t.png" class="icon"></li></a>

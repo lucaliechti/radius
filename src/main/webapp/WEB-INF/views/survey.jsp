@@ -147,7 +147,7 @@ function showOrHideSection(checkbox, section) {
                <div>
                   <form:input path="password" type="password" class="form-control" style="max-width:600px;"/>
                </div>
-                <input class="ohnohoney" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
+                <input class="repeat" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
                <div class="feedback-error" id="survey-feedback-password">
                   <form:errors path="password"/>
                </div>

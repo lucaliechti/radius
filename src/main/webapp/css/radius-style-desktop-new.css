@@ -44,7 +44,6 @@ body {
 	background-color: var(--background-color);
 	height: 100%;
 	margin: 0;
-	display: flex;
 	flex-direction: column;
 }
 .container {
@@ -322,6 +321,11 @@ p.error {
 	flex: 0 0 auto;
 }
 
+input[type="submit"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+
 input[type="text"],
 input[type="password"],
 input[type="search"],
@@ -528,66 +532,22 @@ ul#menu {
 
 /***** FOOTER *****/
 
-#footer,
-footer p {
-	background-color: var(--radius-frame-color);
-	color: var(--text-on-radius-color);
-	border: none;
-}
-
-footer a {
-	color: var(--text-on-radius-color);
-}
-
-footer a:hover,
-footer a:active,
-footer a:visited {
-	color: var(--text-on-radius-color);
-}
-
-
-#footer {
-	padding: 20px 5vw;
-	flex: 0 0 auto;
-}
-
-#footer p {
-	margin: 0;
-	padding: 0;
-}
-
-#footer {
+footer {
 	display: flex;
 	justify-content: space-between;
+	padding: 20px 5vw;
+	bottom: 0;
 }
 
-#footer,
-#footer p {
-	border: none;
+footer,
+footer a, footer a:hover, footer a:active, footer a:visited,
+footer p {
+	color: var(--text-on-radius-color);
+	background-color: var(--radius-frame-color);
 }
 
-#contact {
-	margin: 20px 5vw;
-	flex: 1 0 auto;
-	display: inline;
-}
-
-#s-icons a {
-	text-decoration: underline;
-}
-
-#s-icons li a {
-	display: inline-block;
-	margin: 0;
-	padding: 0px;
-}
-
-ul #s-icons,
 #s-icons {
 	display: flex;
-	flex: 0 0 auto;
-	margin: 0;
-	list-style: none;
 }
 
 .icon {
@@ -595,7 +555,7 @@ ul #s-icons,
 	margin-left: 10px;
 }
 
-.ohnohoney{
+.repeat{
 	opacity: 0;
 	position: absolute;
 	top: 0;

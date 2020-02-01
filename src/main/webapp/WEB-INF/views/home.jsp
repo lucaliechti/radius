@@ -211,7 +211,7 @@
                <div class="form-group">
                   <form:input path="password" type="password" class="form-control"/>
                </div>
-               <input class="ohnohoney" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
+               <input class="repeat" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
                <div class="feedback-error" id="register-feedback-password">
                   <form:errors path="password"/>
                </div>
@@ -244,7 +244,7 @@
                          <form:errors path="email"/>
                       </div>
                    </div>
-                   <input class="ohnohoney" id="repeat-email" name="repeat-email" type="text" value="" autocomplete="off"/>
+                   <input class="repeat" id="repeat-email" name="repeat-email" type="text" value="" autocomplete="off"/>
                    <input type="submit" class="btn btn-primary" value="${feed}" />
                    <p><spring:message code="newsletter.description"/></p>
                    <sec:csrfInput />
