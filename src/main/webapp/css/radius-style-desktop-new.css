@@ -44,10 +44,11 @@ body {
 	background-color: var(--background-color);
 	height: 100%;
 	margin: 0;
+	display: flex;
 	flex-direction: column;
 }
 .container {
-	flex: 1 1 auto;
+	flex: 1 0 auto;
 	/*max-width: 1140px; this is magic */
 }
 main {
@@ -534,9 +535,9 @@ ul#menu {
 
 footer {
 	display: flex;
+	flex: 0 0 auto;
 	justify-content: space-between;
 	padding: 20px 5vw;
-	bottom: 0;
 }
 
 footer,
@@ -563,25 +564,6 @@ footer p {
 	height: 0;
 	width: 0;
 	z-index: -1;
-}
-
-/* overwriting styles from DataTables */
-table.dataTable tr.selected td.select-checkbox::after,
-table.dataTable tr.selected th.select-checkbox::after {
-	margin-top: -15px !important;
-	margin-left: -6px !important;
-}
-
-table.dataTable tbody td.select-checkbox::before,
-table.dataTable tbody td.select-checkbox::after,
-table.dataTable tbody th.select-checkbox::before,
-table.dataTable tbody th.select-checkbox::after {
-	top: 0.7em !important;
-}
-
-table.dataTable tbody th, table.dataTable tbody td , table.dataTable tbody tr {
-	background-color: var(--background-color) !important;
-	padding: 0.1px 0.1px !important;
 }
 
 .mobileonly{

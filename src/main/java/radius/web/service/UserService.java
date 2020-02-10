@@ -1,8 +1,10 @@
 package radius.web.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import radius.HalfEdge;
@@ -23,6 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -35,6 +38,7 @@ public class UserService {
     private ProfileDependentProperties prop;
     private MessageSource messageSource;
     private PasswordEncoder encoder;
+    private NewsletterRepository newsletterRepo;
 
     private static final String EMAIL_CONFIRM_SUBJECT = "email.confirm.title";
     private static final String EMAIL_CONFIRM_MESSAGE = "email.confirm.content";
@@ -42,7 +46,7 @@ public class UserService {
     public UserService(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo,
                        CountrySpecificProperties countryProperties, ConfigService configService,
                        EmailService emailService, JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop,
-                       MessageSource messageSource, PasswordEncoder encoder) {
+                       MessageSource messageSource, PasswordEncoder encoder, JDBCNewsletterRepository newsletterRepo) {
         this.userRepo = userRepo;
         this.matchRepo = matchRepo;
         this.countryProperties = countryProperties;
@@ -52,6 +56,7 @@ public class UserService {
         this.prop = prop;
         this.messageSource = messageSource;
         this.encoder = encoder;
+        this.newsletterRepo = newsletterRepo;
     }
 
     public void activateUser(User user) {
@@ -154,6 +159,7 @@ public class UserService {
         User user = new User(firstName, lastName, canton.equals("NONE") ? null : canton, email, password);
         try {
             saveNewUser(user);
+            log.info("Saved new user " + user.getFirstname() + " " + user.getLastname() + " with email " + user.getEmail());
         } catch (EmailAlreadyExistsException e) {
             return false;
         }
@@ -187,6 +193,7 @@ public class UserService {
         try {
             matchRepo.invalidateMatchesForUser(username);
             userRepo.deleteUser(username);
+            log.info("Deleted user " + username);
         } catch (UserHasMatchesException matchE) {
             return false;
         }
@@ -232,18 +239,33 @@ public class UserService {
         Instant monthAgo = now.minus(30, ChronoUnit.DAYS);
         StatisticsDto dto = new StatisticsDto();
 
-        List<User> allUsers = userRepo.allUsers();
-        dto.setUsersActive((int) allUsers.stream().filter(u -> User.UserStatus.WAITING.equals(u.getStatus())).count());
-        dto.setUsersTotal(allUsers.size());
-        dto.setRegistrationsWeek((int) allUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(weekAgo) > 0).count());
-        dto.setRegistrationsMonth((int) allUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(monthAgo) > 0).count());
-        dto.setOnlineWeek((int) allUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(weekAgo) > 0).count());
-        dto.setOnlineMonth((int) allUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(monthAgo) > 0).count());
+        List<User> allEnabledUsers = userRepo.allUsers().stream().filter(User::isEnabled).collect(Collectors.toList());
+        dto.setUsersActive((int) allEnabledUsers.stream().filter(u -> User.UserStatus.WAITING.equals(u.getStatus())).count());
+        dto.setUsersTotal(allEnabledUsers.size());
+        dto.setRegistrationsWeek((int) allEnabledUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setRegistrationsMonth((int) allEnabledUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(monthAgo) > 0).count());
+        dto.setOnlineWeek((int) allEnabledUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setOnlineMonth((int) allEnabledUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(monthAgo) > 0).count());
 
         List<HalfEdge> matches = matchRepo.allMatches();
         List<HalfEdge> uniqueMatches = matches.stream().filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList());
         dto.setMatchesWeek((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(weekAgo) > 0).count());
         dto.setMatchesMonth((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(monthAgo) > 0).count());
         return dto;
+    }
+
+    @Scheduled(cron = "0 0/10 * * * *")
+    private void deleteUnconfirmedUsers() {
+        Instant tenMinutesAgo = Instant.now().minus(10, ChronoUnit.MINUTES);
+        List<User> unconfirmedUsers = userRepo.allUsers().stream().filter(u -> !u.isEnabled()).collect(Collectors.toList());
+        List<User> older = unconfirmedUsers.stream().filter(u -> u.getDateCreated().toInstant().compareTo(tenMinutesAgo) < 0).collect(Collectors.toList());
+        for(User u : older) {
+            deleteUser(u.getEmail());
+            try {
+                if (newsletterRepo.alreadySubscribed(u.getEmail())) {
+                    newsletterRepo.unsubscribe(newsletterRepo.findUuidByEmail(u.getEmail()));
+                }
+            } catch (Exception ignored) { }
+        }
     }
 }

@@ -277,6 +277,7 @@ public class AdminController {
         try {
             pressService.addNews(form);
             model.addAttribute("success", Boolean.TRUE);
+            model.addAttribute("newsForm", new NewsForm());
         } catch (Exception e) {
             model.addAttribute("failure", Boolean.TRUE);
         }
