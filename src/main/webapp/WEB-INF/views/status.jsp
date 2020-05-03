@@ -14,10 +14,14 @@
    
          <c:choose>
          <c:when test="${success == 0}">
-           	<p class="result error"><spring:message code="status.change.feedback.error"/><br></p>
+             <div class="alert alert-danger" role="alert">
+                <spring:message code="status.change.feedback.error"/>
+             </div>
          </c:when>
          <c:when test="${success == 1}">
-            <p class="result success"><spring:message code="status.change.feedback.success"/><br></p>
+             <div class="alert alert-success" role="alert">
+                <spring:message code="status.change.feedback.success"/>
+            </div>
          </c:when>
          <c:otherwise>
          </c:otherwise>

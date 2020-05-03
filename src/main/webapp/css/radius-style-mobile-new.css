@@ -84,7 +84,7 @@
 	.leftsection-title#hometitle {
 		display: block;
 	}
-	p.result {
+	.alert {
 		margin-bottom: var(--section-margin-between-mobile);
 	}
 	#fullwidth-section {

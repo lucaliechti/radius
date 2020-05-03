@@ -32,11 +32,11 @@ function showOrHideSection(checkbox, section) {
     <section id="fullwidth-section">
       <section class="container leftsection-content-element" id="survey">
 
-        <c:if test="${surveyFailure != null}">
-           <p class="result error">
-              <spring:message code="home.feedback.error.generic"/><br>
-           </p>
-        </c:if>
+          <c:if test="${surveyFailure != null}">
+              <div class="alert alert-danger" role="alert">
+                  <spring:message code="home.feedback.error.generic"/><br>
+              </div>
+          </c:if>
 
          <h2><spring:message code="survey.header"/></h2>
          <p><spring:message code="survey.explanation"/></p><br>

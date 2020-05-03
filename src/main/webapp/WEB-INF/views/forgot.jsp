@@ -10,15 +10,15 @@
       <section class="leftsection-content-element" id="">
 
           <c:if test="${sentIfExists != null}">
-             <p class="result success">
+             <div class="alert alert-success" role="alert">
                 <spring:message code="forgot.sent"/><br>
-             </p>
+             </div>
           </c:if>
 
          <c:if test="${error != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="home.feedback.error.generic"/><br>
-            </p>
+            </div>
          </c:if>
 
          <h2>

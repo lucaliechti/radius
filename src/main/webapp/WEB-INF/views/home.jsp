@@ -12,78 +12,78 @@
         <!-- only while the survey is on -->
 
         <c:if test="${newsletter_subscribe_success != null}">
-           <p class="result success">
-              <spring:message code="home.feedback.success.newsletter.subscribe"/><br>
-           </p>
+            <div class="alert alert-success" role="alert">
+               <spring:message code="home.feedback.success.newsletter.subscribe"/><br>
+            </div>
         </c:if>
 
         <c:if test="${newsletter_unsubscribe_success != null}">
-           <p class="result success">
-              <spring:message code="home.feedback.success.newsletter.unsubscribe"/><br>
-           </p>
+            <div class="alert alert-success" role="alert">
+               <spring:message code="home.feedback.success.newsletter.unsubscribe"/><br>
+            </div>
         </c:if>
 
         <c:if test="${surveySuccess != null}">
-           <p class="result success">
-              <spring:message code="survey.feedback.success"/><br>
-           </p>
+            <div class="alert alert-success" role="alert">
+               <spring:message code="survey.feedback.success"/><br>
+            </div>
         </c:if>
    
          <c:if test="${waitForEmailConfirmation != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                <spring:message code="home.feedback.success.waitforemail"/><br>
-            </p>
+            </div>
          </c:if>
 
          <c:if test="${passwordReset != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                <spring:message code="home.feedback.success.passwordreset"/><br>
-            </p>
+            </div>
          </c:if>
          
          <c:if test="${loggedout != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                <spring:message code="home.feedback.success.logout"/><br>
-            </p>
+            </div>
          </c:if>
 
          <c:if test="${emailconfirmed != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                <spring:message code="home.feedback.success.mailconfirmed"/><br>
-            </p>
+            </div>
+         </c:if>
+
+         <c:if test="${delete_success != null}">
+            <div class="alert alert-success" role="alert">
+               <spring:message code="home.feedback.success.delete"/><br>
+            </div>
          </c:if>
                   
          <c:if test="${loginerror != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="home.feedback.success.loginerror"/><br>
-            </p>
-         </c:if>
-         
-         <c:if test="${delete_success != null}">
-            <p class="result success">
-               <spring:message code="home.feedback.success.delete"/><br>
-            </p>
+            </div>
          </c:if>
          
          <c:if test="${not_enabled != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="home.feedback.error.notenabled"/><br>
-            </p>
+            </div>
          </c:if>
          
          <c:if test="${confirmation_error != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="home.feedback.error.confirmation"/><br>
-            </p>
+            </div>
          </c:if>
 
          <c:if test="${generic_error != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="home.feedback.error.generic"/><br>
-            </p>
+            </div>
          </c:if>
 
-      <div class="result mobileonly fakebutton">
+      <div class="mobileonly fakebutton">
          <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
       </div>
 
@@ -96,7 +96,7 @@
           </p>
       </section>
 
-      <div class="result mobileonly fakebutton">
+      <div class="mobileonly fakebutton">
          <a href="#rightsection"><spring:message code="home.mobile.loginregister"/> &darr;</a>
       </div>
 

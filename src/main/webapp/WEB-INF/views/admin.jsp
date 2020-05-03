@@ -64,26 +64,25 @@
         }).addTo(map);
 
         function getColor(d) {
-            return d >= 100 ? '#800026' :
-                d >= 50  ? '#BD0026' :
-                d >= 20  ? '#E31A1C' :
-                d >= 10  ? '#FC4E2A' :
-                d >= 5   ? '#FD8D3C' :
-                d >= 2   ? '#FEB24C' :
-                d >= 1   ? '#FED976' :
+            return d >= 100 ? '#BD0026' :
+                d >= 50  ? '#E31A1C' :
+                d >= 20  ? '#FC4E2A' :
+                d >= 10  ? '#FD8D3C' :
+                d >= 5   ? '#FEB24C' :
+                d >= 2   ? '#FED976' :
                 '#FFEDA0';
         }
 
         var legend = L.control({position: 'topright'});
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'info maplegend'),
-                grades = [0, 1, 2, 5, 10, 20, 50, 100],
+                grades = [0, 2, 5, 10, 20, 50, 100],
                 labels = [];
 
             for (var i = 0; i < grades.length; i++) {
                 div.innerHTML +=
                     '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                    grades[i] + (grades[i + 1] ? '&ndash;' + (grades[i + 1]-1) + '<br>' : '+');
             }
             return div;
         };
@@ -176,33 +175,33 @@
     <section class="section-admin" id="leftsection" style="max-width: 1140px;margin: 0 auto;margin-bottom: 20px;">
 
         <c:if test="${success != null}">
-            <p class="result success">
-                 Aktion erfolgreich ausgeführt.<br>
-            </p>
+            <div class="alert alert-success" role="alert">
+                Aktion erfolgreich ausgeführt.<br>
+            </div>
         </c:if>
 
         <c:if test="${failure != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                 Ein Fehler ist aufgetreten. Versuchen Sie es nochmal.<br>
-            </p>
+            </div>
         </c:if>
 
         <c:if test="${successfullySent != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                 ${successfullySent} Mails wurden erfolgreich gesendet.<br>
-            </p>
+            </div>
         </c:if>
 
         <c:if test="${failedRecipients != null}">
-            <p class="result error">
+            <div class="alert alert-warning" role="alert">
                 Mails an folgende Adressen konnten nicht zugestellt werden:<br> ${failedRecipients}
-            </p>
+            </div>
         </c:if>
 
         <c:if test="${configupdate_success != null}">
-            <p class="result success">
+            <div class="alert alert-success" role="alert">
                 Configuration updated successfully.<br>
-            </p>
+            </div>
         </c:if>
 
         <section class="leftsection-title" id="page-title">
@@ -267,7 +266,7 @@
                         </tr>
                     </tbody>
                 </table><br>
-                <div class="feedback-error mobileonly" id="admin-mobile-hint">
+                <div class="warning mobileonly" style="color: var(--special-color); font-size:18px;font-family: 'Fira Sans Condensed', sans-serif;" id="admin-mobile-hint">
                     Log in to the desktop version to see the full admin panel.
                 </div>
             </section>

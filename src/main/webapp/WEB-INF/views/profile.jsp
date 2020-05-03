@@ -17,9 +17,9 @@
 <section id="leftsection">
 
          <c:if test="${delete_failed != null}">
-            <p class="result error">
+            <div class="alert alert-danger" role="alert">
                <spring:message code="profile.feedback.error.deletefailed"/><br>
-            </p>
+            </div>
          </c:if>
          
 <section id="leftsection-content">
