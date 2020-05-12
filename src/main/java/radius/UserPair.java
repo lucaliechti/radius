@@ -1,6 +1,7 @@
 package radius;
 
-import com.google.auto.value.AutoValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -8,32 +9,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+@Getter
+@AllArgsConstructor
+public class UserPair {
 
-@AutoValue
-public abstract class UserPair {
-
-	public abstract User user1();
-
-	public abstract User user2();
+	private User user1;
+	private User user2;
 
 	public Set<String> commonLanguages() {
-		Set<String> commonLanguages = new HashSet<>(user1().getLanguages());
-		commonLanguages.retainAll(user2().getLanguages());
+		Set<String> commonLanguages = new HashSet<>(user1.getLanguages());
+		commonLanguages.retainAll(user2.getLanguages());
 		return commonLanguages;
 	}
 
 	public Set<Integer> commonLocations() {
-		Set<Integer> commonLocations = new HashSet<Integer>(user1().getLocations());
-		commonLocations.retainAll(user2().getLocations());
+		Set<Integer> commonLocations = new HashSet<>(user1.getLocations());
+		commonLocations.retainAll(user2.getLocations());
 		return commonLocations;
 	}
 
 	public double disagreementScore(MatchingMode mode, boolean factorWaitingTime, Instant now) {
-		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1().getRegularanswers() :
-				user1().getSpecialanswers();
-		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2().getRegularanswers() :
-				user2().getSpecialanswers();
+		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1.getRegularanswers() :
+				user1.getSpecialanswers();
+		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2.getRegularanswers() :
+				user2.getSpecialanswers();
 
 		if(answers1 == null || answers2 == null
 				|| answers1.isEmpty() || answers2.isEmpty()
@@ -60,8 +59,8 @@ public abstract class UserPair {
 	}
 
 	private double waitingTime(Instant now) {
-		return (ChronoUnit.SECONDS.between(user1().getDateModified().toInstant(), now)
-				+ ChronoUnit.SECONDS.between(user2().getDateModified().toInstant(), now))
+		return (ChronoUnit.SECONDS.between(user1.getDateModified().toInstant(), now)
+				+ ChronoUnit.SECONDS.between(user2.getDateModified().toInstant(), now))
 			/ (1.0 * ChronoUnit.DAYS.getDuration().getSeconds());
 	}
 
@@ -74,10 +73,10 @@ public abstract class UserPair {
 	}
 
 	public int disagreements(MatchingMode mode) {
-		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1().getRegularanswers() :
-				user1().getSpecialanswers();
-		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2().getRegularanswers() :
-				user2().getSpecialanswers();
+		List<User.TernaryAnswer> answers1 = mode.equals(MatchingMode.REGULAR) ? user1.getRegularanswers() :
+				user1.getSpecialanswers();
+		List<User.TernaryAnswer> answers2 = mode.equals(MatchingMode.REGULAR) ? user2.getRegularanswers() :
+				user2.getSpecialanswers();
 
 		if(answers1 == null || answers2 == null
 				|| answers1.isEmpty() || answers2.isEmpty()
@@ -104,13 +103,7 @@ public abstract class UserPair {
 	}
 
 	private boolean bothPrivate() {
-		return user1().isPrivateUser() && user2().isPrivateUser();
+		return user1.isPrivateUser() && user2.isPrivateUser();
 	}
 
-	public static UserPair of(User user1, User user2) {
-		checkNotNull(user1);
-		checkNotNull(user2);
-
-		return new AutoValue_UserPair(user1, user2);
-	}
 }

@@ -1,6 +1,5 @@
 package radius.web.service;
 
-import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
@@ -80,7 +79,7 @@ public class MatchingService {
         String[] matchedUsers = edge.toString().substring(1, edge.toString().length()-1).split(" : ");
         User user1 = userRepo.findUserByEmail(matchedUsers[0]);
         User user2 = userRepo.findUserByEmail(matchedUsers[1]);
-        persistMatch(UserPair.of(user1, user2), mode);
+        persistMatch(new UserPair(user1, user2), mode);
         if(profileProperties.isSendEmails()) {
             emailUserAboutMatch(user1, user2, mode);
             emailUserAboutMatch(user2, user1, mode);
@@ -110,7 +109,7 @@ public class MatchingService {
                     continue;
                 }
                 Edge.optionalFromUserPair(
-                        UserPair.of(users.get(i), users.get(j)),
+                        new UserPair(users.get(i), users.get(j)),
                         now,
                         configService.matchingFactorWaitingTime(),
                         configService.matchingMinimumDisagreementsRegular(),
@@ -119,16 +118,16 @@ public class MatchingService {
                     .ifPresent(edges::add);
             }
         }
-        return ImmutableList.copyOf(edges);
+        return edges;
     }
 
     private Map<String, Set<String>> alreadyMatched() {
         Map<String, Set<String>> result = new HashMap<>();
         for (HalfEdge halfEdge : allMatches()) {
-            if (!result.containsKey(halfEdge.email1())) {
-                result.put(halfEdge.email1(), new HashSet<>());
+            if (!result.containsKey(halfEdge.getEmail1())) {
+                result.put(halfEdge.getEmail1(), new HashSet<>());
             }
-            result.get(halfEdge.email1()).add(halfEdge.email2());
+            result.get(halfEdge.getEmail1()).add(halfEdge.getEmail2());
         }
         return result;
     }
@@ -164,25 +163,25 @@ public class MatchingService {
 
     public List<HalfEdge> uniqueOrderedMatches() {
         return allMatches().stream().
-                filter(m -> ((!DELETED.equals(m.email1()) && DELETED.equals(m.email2()))
-                        || (m.email1().compareToIgnoreCase(m.email2()) < 0 &&
-                        !(DELETED.equals(m.email1()) && !DELETED.equals(m.email2())))
+                filter(m -> ((!DELETED.equals(m.getEmail1()) && DELETED.equals(m.getEmail2()))
+                        || (m.getEmail1().compareToIgnoreCase(m.getEmail2()) < 0 &&
+                        !(DELETED.equals(m.getEmail1()) && !DELETED.equals(m.getEmail2())))
                 )).collect(Collectors.toList());
     }
 
     public void persistMatch(UserPair userPair, MatchingMode mode) {
-        userPair.user1().setStatus(User.UserStatus.MATCHED);
-        userPair.user2().setStatus(User.UserStatus.MATCHED);
-        userRepo.updateExistingUser(userPair.user1());
-        userRepo.updateExistingUser(userPair.user2());
-        deactivateOldMatchesFor(userPair.user1().getEmail());
-        deactivateOldMatchesFor(userPair.user2().getEmail());
+        userPair.getUser1().setStatus(User.UserStatus.MATCHED);
+        userPair.getUser2().setStatus(User.UserStatus.MATCHED);
+        userRepo.updateExistingUser(userPair.getUser1());
+        userRepo.updateExistingUser(userPair.getUser2());
+        deactivateOldMatchesFor(userPair.getUser1().getEmail());
+        deactivateOldMatchesFor(userPair.getUser2().getEmail());
         matchRepo.createMatch(userPair, mode);
     }
 
     public void emailUserAboutMatch(User user, User match, MatchingMode mode) {
         try {
-            UserPair up = UserPair.of(user, match);
+            UserPair up = new UserPair(user, match);
             String matchingLanguages = matchingLanguages(up, user);
             emailService.sendSimpleMessage(
                     user.getEmail(),

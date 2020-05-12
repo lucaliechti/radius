@@ -1,11 +1,11 @@
 package radius;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,9 +21,9 @@ public class UserPairTest {
 				"",
 				true,
 				false,
-				ImmutableList.of(1, 2, 3),
-				ImmutableList.of("DE", "FR"),
-				ImmutableList.of("FALSE", "TRUE", "DONTCARE", "DONTCARE", "DONTCARE"),
+				List.of(1, 2, 3),
+				List.of("DE", "FR"),
+				List.of("FALSE", "TRUE", "DONTCARE", "DONTCARE", "DONTCARE"),
 				Collections.emptyList(),
 				false,
 				Timestamp.from(Instant.ofEpochSecond(0)),
@@ -39,9 +39,9 @@ public class UserPairTest {
 				"",
 				true,
 				false,
-				ImmutableList.of(1, 2, 3),
-				ImmutableList.of("DE", "FR"),
-				ImmutableList.of("TRUE", "FALSE", "DONTCARE", "DONTCARE", "DONTCARE"),
+				List.of(1, 2, 3),
+				List.of("DE", "FR"),
+				List.of("TRUE", "FALSE", "DONTCARE", "DONTCARE", "DONTCARE"),
 				Collections.emptyList(),
 				false,
 				Timestamp.from(Instant.ofEpochSecond(0)),
@@ -49,7 +49,7 @@ public class UserPairTest {
 				Timestamp.from(Instant.ofEpochSecond(0)),
 				"4d23cebd-2d6b-46b4-87eb-24d76fbe13fc"
 		);
-		UserPair userPair = UserPair.of(user1, user2);
+		UserPair userPair = new UserPair(user1, user2);
 
 		assertEquals(2, userPair.disagreements(MatchingMode.REGULAR));
 		assertEquals(0, userPair.disagreements(MatchingMode.SPECIAL));

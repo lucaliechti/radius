@@ -19,8 +19,8 @@ public class Edge {
         if (userPair.compatible(mode, minDisagreementsRegular, minDisagreementsSpecial)) {
             return Optional.of(
                 new Edge(
-                    userPair.user1().getEmail(),
-                    userPair.user2().getEmail(),
+                    userPair.getUser1().getEmail(),
+                    userPair.getUser2().getEmail(),
                     userPair.disagreementScore(mode, waitingTime, now)
                 )
             );

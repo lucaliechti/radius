@@ -73,10 +73,10 @@ public class JDBCMatchingRepository implements MatchingRepository {
 
 	@Override
 	public void createMatch(UserPair userPair, MatchingMode mode) {
-		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user1().getEmail(),
-				userPair.user2().getEmail(), mode.toString());
-		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.user2().getEmail(),
-				userPair.user1().getEmail(), mode.toString());
+		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.getUser1().getEmail(),
+				userPair.getUser2().getEmail(), mode.toString());
+		jdbcTemplate.update(CREATE_MATCH, OffsetDateTime.now(), userPair.getUser2().getEmail(),
+				userPair.getUser1().getEmail(), mode.toString());
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class JDBCMatchingRepository implements MatchingRepository {
 
 	private static final class MatchRowMapper implements RowMapper<HalfEdge> {
 		public HalfEdge mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return HalfEdge.of(
+			return new HalfEdge(
 					rs.getString("email1"),
 					rs.getString("email2"),
 					rs.getBoolean("active"),

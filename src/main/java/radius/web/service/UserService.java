@@ -141,7 +141,7 @@ public class UserService {
         if(user.getStatus() == User.UserStatus.MATCHED) {
             User match = matchRepo.getCurrentMatchFor(user.getEmail());
             userSpecificAttributes.put("match", match);
-            UserPair up = UserPair.of(user, match);
+            UserPair up = new UserPair(user, match);
             userSpecificAttributes.put("commonlocations",
                     String.join(", ", countryProperties.prettyLocations(new ArrayList<>(up.commonLocations()))));
             userSpecificAttributes.put("commonlanguages", up.commonLanguages());
@@ -248,9 +248,9 @@ public class UserService {
         dto.setOnlineMonth((int) allEnabledUsers.stream().filter(u -> u.getLastLogin() != null && u.getLastLogin().toInstant().compareTo(monthAgo) > 0).count());
 
         List<HalfEdge> matches = matchRepo.allMatches();
-        List<HalfEdge> uniqueMatches = matches.stream().filter(m -> m.email1().compareToIgnoreCase(m.email2()) < 0).collect(Collectors.toList());
-        dto.setMatchesWeek((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(weekAgo) > 0).count());
-        dto.setMatchesMonth((int) uniqueMatches.stream().filter(m -> m.dateCreated().toInstant().compareTo(monthAgo) > 0).count());
+        List<HalfEdge> uniqueMatches = matches.stream().filter(m -> m.getEmail1().compareToIgnoreCase(m.getEmail2()) < 0).collect(Collectors.toList());
+        dto.setMatchesWeek((int) uniqueMatches.stream().filter(m -> m.getDateCreated().toInstant().compareTo(weekAgo) > 0).count());
+        dto.setMatchesMonth((int) uniqueMatches.stream().filter(m -> m.getDateCreated().toInstant().compareTo(monthAgo) > 0).count());
         return dto;
     }
 
