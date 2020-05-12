@@ -10,6 +10,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 import radius.web.components.CompositeLocaleResolver;
 
 @Configuration
@@ -42,6 +44,15 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/img/**")
 				.addResourceLocations("/img/")
 				.setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS));
+	}
+
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		resolver.setPrefix("/WEB-INF/views/");
+		resolver.setSuffix(".jsp");
+		resolver.setViewClass(JstlView.class);
+		registry.viewResolver(resolver);
 	}
 
 	@Bean
