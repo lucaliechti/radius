@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
 <head>
@@ -28,9 +27,6 @@
 </head>
 <body>
 
-<!-- preparing variables -->
-<spring:message code="logout.title.short" var="logout" />
-
 <nav role="navigation" id="primary-menubar">
    <div id="home">
       <a href="home"><div id="logo-home"></div></a>
@@ -44,16 +40,10 @@
       </div>
       <ul id="menu" class="menupoint navigations">
          <li><a href="<c:url value='/about' />"><spring:message code="about.title"/></a></li>
-         <li><a href="<c:url value='/survey' />"><spring:message code="survey.title"/></a></li>
-         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/status' />"><spring:message code="status.title"/></a></li></sec:authorize>
-         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/profile' />"><spring:message code="profile.title"/></a></li></sec:authorize>
-         <sec:authorize access="hasAnyRole('ADMIN')"><li><a href="<c:url value='/admin' />"><spring:message code="admin.title"/></a></li></sec:authorize>
-         <sec:authorize access="isAuthenticated()"><li><a href="<c:url value='/logout' />"><spring:message code="logout.title.short"/></a></li></sec:authorize>
          <li>
             <ul id="language-select" class="menupoint navigations">
                <li><a href="?lang=de">DE</a></li>
                <li><a href="?lang=fr">FR</a></li>
-               <!-- <li><a href="?lang=it">IT</a></li> -->
                <li><a href="?lang=en">EN</a></li>
             </ul>
          </li>

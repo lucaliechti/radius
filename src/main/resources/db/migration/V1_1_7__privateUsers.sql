@@ -1,1 +1,0 @@
-ALTER TABLE users ADD COLUMN private boolean NOT NULL DEFAULT FALSE;
