@@ -2,6 +2,7 @@ package radius.web.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,17 +19,12 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-	private UserService userService;
-	private AnswerService answerService;
-	private ModelDecorator modelDecorator;
-
-	public HomeController(UserService userService, AnswerService answerService, ModelDecorator modelDecorator) {
-		this.userService = userService;
-		this.answerService = answerService;
-		this.modelDecorator = modelDecorator;
-	}
+	private final UserService userService;
+	private final AnswerService answerService;
+	private final ModelDecorator modelDecorator;
 	
 	@RequestMapping(value={"/", "/home"}, method=GET)
 	public String home(@RequestParam(value="logout", required=false) String loggedout,
@@ -66,7 +62,7 @@ public class HomeController {
 	private String prepareModelAndRedirectLoggedInUser(Model model, Locale locale) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(!optionalUser.isPresent()) {
+		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes(locale));
 			return "home";

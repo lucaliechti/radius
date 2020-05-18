@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import radius.data.repository.JDBCSurveyRepository;
 import radius.data.repository.SurveyRepository;
@@ -8,14 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class SurveyService {
 
-    private SurveyRepository surveyRepository;
-
-    public SurveyService(JDBCSurveyRepository surveyRepository) {
-        this.surveyRepository = surveyRepository;
-    }
+    private final SurveyRepository surveyRepository;
 
     public boolean saveAnswers(List<Integer> questions, List<String> answers, boolean newsletter, boolean registration) {
         try {

@@ -7,14 +7,13 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import radius.data.form.AnswerForm;
 import radius.User;
 import radius.web.components.CountrySpecificProperties;
 import radius.web.components.ModelDecorator;
@@ -24,27 +23,16 @@ import radius.web.service.MatchingService;
 import radius.web.service.UserService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping(value="/profile")
 public class ProfileController {
 
-	private UserService userService;
-	private AnswerService answerService;
-	private MatchingService matchingService;
-	private CountrySpecificProperties countryProperties;
-	private ConfigService configService;
-	private ModelDecorator decorator;
-
-	@Autowired
-	public ProfileController(UserService userService, CountrySpecificProperties countryProperties,
-							 ConfigService configService, MatchingService matchingService, AnswerService answerService,
-							 ModelDecorator decorator) {
-		this.userService = userService;
-		this.answerService = answerService;
-		this.countryProperties = countryProperties;
-		this.configService = configService;
-		this.matchingService = matchingService;
-		this.decorator = decorator;
-	}
+	private final UserService userService;
+	private final AnswerService answerService;
+	private final MatchingService matchingService;
+	private final CountrySpecificProperties countryProperties;
+	private final ConfigService configService;
+	private final ModelDecorator decorator;
 
 	@RequestMapping(method=GET)
 	public String profile(@RequestParam(value="login", required=false) String loggedin, Model model, Locale locale) {

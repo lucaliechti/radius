@@ -1,11 +1,11 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import radius.User;
-import radius.data.repository.JDBCUserRepository;
 import radius.data.repository.UserRepository;
 import radius.web.components.EmailService;
 import radius.web.components.ProfileDependentProperties;
@@ -13,29 +13,19 @@ import radius.web.components.ProfileDependentProperties;
 import java.util.Locale;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class PasswordService {
 
-    private JavaMailSenderImpl helloMailSender;
-    private EmailService emailService;
-    private UserRepository userRepo;
-    private MessageSource messageSource;
-    private ProfileDependentProperties prop;
-    private PasswordEncoder encoder;
+    private final JavaMailSenderImpl helloMailSender;
+    private final EmailService emailService;
+    private final UserRepository userRepo;
+    private final MessageSource messageSource;
+    private final ProfileDependentProperties prop;
+    private final PasswordEncoder encoder;
 
     private static final String EMAIL_FORGOT_SUBJECT = "email.forgot.title";
     private static final String EMAIL_FORGOT_MESSAGE = "email.forgot.content";
-
-    public PasswordService(JavaMailSenderImpl helloMailSender, EmailService emailService,
-                           JDBCUserRepository userRepo, MessageSource messageSource,
-                           ProfileDependentProperties prop, PasswordEncoder encoder) {
-        this.helloMailSender = helloMailSender;
-        this.emailService = emailService;
-        this.userRepo = userRepo;
-        this.messageSource = messageSource;
-        this.prop = prop;
-        this.encoder = encoder;
-    }
 
     public boolean updatePassword(User user, String plaintextPassword) {
         user.setPassword(encoder.encode(plaintextPassword));

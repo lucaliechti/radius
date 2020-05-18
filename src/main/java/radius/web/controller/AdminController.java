@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,31 +27,22 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
+@RequiredArgsConstructor
 public class AdminController {
 
-    private NewsletterService newsletterservice;
-    private UserService userService;
-    private SurveyService surveyService;
-    private MatchingService matchingService;
-    private ConfigService configService;
-    private PressService pressService;
+    private final NewsletterService newsletterservice;
+    private final UserService userService;
+    private final SurveyService surveyService;
+    private final MatchingService matchingService;
+    private final ConfigService configService;
+    private final PressService pressService;
 
-    private SimpleDateFormat pressReleasePrefixFormat = new SimpleDateFormat("yyyyMMdd");
+    private final SimpleDateFormat pressReleasePrefixFormat = new SimpleDateFormat("yyyyMMdd");
     private final String RADIUS = "Radius";
     private final String STATIC_DIRECTORY = "static";
     private final int POSITION_GERMAN = 0;
     private final String RELEASE_GERMAN = "Medienmitteilung";
     private final String RELEASE_FRENCH = "Communique";
-
-    public AdminController(NewsletterService newsletterservice, UserService userService, SurveyService surveyService,
-                           MatchingService matchingService, ConfigService configService, PressService pressService) {
-        this.newsletterservice = newsletterservice;
-        this.userService = userService;
-        this.surveyService = surveyService;
-        this.matchingService = matchingService;
-        this.configService = configService;
-        this.pressService = pressService;
-    }
 
     @RequestMapping(path="/admin")
     public String admin() {

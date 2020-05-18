@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,17 +22,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
+@RequiredArgsConstructor
 public class PasswordController {
 
-    private UserService userService;
-    private PasswordService passwordService;
-    private ModelDecorator modelDecorator;
-
-    public PasswordController(UserService userService, PasswordService passwordService, ModelDecorator modelDecorator) {
-        this.userService = userService;
-        this.passwordService = passwordService;
-        this.modelDecorator = modelDecorator;
-    }
+    private final UserService userService;
+    private final PasswordService passwordService;
+    private final ModelDecorator modelDecorator;
 
     @RequestMapping(value = "/forgot", method=GET)
     public String forgot(@RequestParam(value = "uuid", required = false) String uuid, Model model) {
@@ -77,7 +73,7 @@ public class PasswordController {
             return "reset";
         }
         Optional<String> optionalEmail = userService.findEmailByUuid(dto.getUuid());
-        if(!optionalEmail.isPresent()) {
+        if(optionalEmail.isEmpty()) {
             model.addAttribute("generic_error", Boolean.TRUE);
             model.addAllAttributes(modelDecorator.homeAttributes(loc));
             return "home";

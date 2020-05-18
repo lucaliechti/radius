@@ -3,6 +3,7 @@ package radius.web.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,18 +16,13 @@ import radius.web.service.UserService;
 import java.util.Locale;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping(value="/delete")
 public class DeleteController {
 
-	private ModelDecorator modelDecorator;
-	private UserService userService;
-	private MatchingService matchingService;
-
-	public DeleteController(ModelDecorator modelDecorator, UserService userService, MatchingService matchingService) {
-		this.modelDecorator = modelDecorator;
-		this.userService = userService;
-		this.matchingService = matchingService;
-	}
+	private final ModelDecorator modelDecorator;
+	private final UserService userService;
+	private final MatchingService matchingService;
 
 	@RequestMapping(method=GET)
 	public String reset(Model model, Locale loc) {

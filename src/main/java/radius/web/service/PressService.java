@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import radius.data.dto.NewsDto;
@@ -15,14 +16,11 @@ import java.util.List;
 import java.util.Locale;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class PressService {
 
-    private PressRepository pressRepo;
-
-    public PressService(JDBCPressRepository pressRepo) {
-        this.pressRepo = pressRepo;
-    }
+    private final PressRepository pressRepo;
 
     public void addMention(MentionForm form) {
         pressRepo.addMention(form);

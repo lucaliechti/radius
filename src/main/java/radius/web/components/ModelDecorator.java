@@ -1,5 +1,6 @@
 package radius.web.components;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import radius.data.dto.EmailDto;
 import radius.data.form.UserForm;
@@ -10,19 +11,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Component
 public class ModelDecorator {
 
-    private CountrySpecificProperties countryProperties;
-    private ConfigService configService;
-    private PressService pressService;
-
-    public ModelDecorator(CountrySpecificProperties countryProperties, ConfigService configService,
-                          PressService pressService) {
-        this.countryProperties = countryProperties;
-        this.configService = configService;
-        this.pressService = pressService;
-    }
+    private final CountrySpecificProperties countryProperties;
+    private final ConfigService configService;
+    private final PressService pressService;
 
     public Map<String, Object> homeAttributes(Locale locale) {
         HashMap<String, Object> homeAttributes = new HashMap<>();

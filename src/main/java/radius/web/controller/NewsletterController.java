@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,17 +18,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
+@RequiredArgsConstructor
 public class NewsletterController {
 
-    private ModelDecorator modelDecorator;
-    private NewsletterService newsletterService;
+    private final ModelDecorator modelDecorator;
+    private final NewsletterService newsletterService;
 
     private static final String REGISTRATION_WEBSITE = "Website";
-
-    public NewsletterController(ModelDecorator modelDecorator, NewsletterService newsletterService) {
-         this.modelDecorator = modelDecorator;
-         this.newsletterService = newsletterService;
-    }
 
     @RequestMapping(path="/subscribe", method=GET)
     public String getSubscribe(Model model, Locale loc) {

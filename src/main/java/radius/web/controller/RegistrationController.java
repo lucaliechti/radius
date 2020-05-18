@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,18 +21,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
+@RequiredArgsConstructor
 public class RegistrationController {
 	
-	private CountrySpecificProperties countryProperties;
-	private ModelDecorator modelDecorator;
-	private UserService userService;
-
-	public RegistrationController(CountrySpecificProperties countryProperties, ModelDecorator modelDecorator,
-								  UserService userService) {
-		this.countryProperties = countryProperties;
-		this.modelDecorator = modelDecorator;
-		this.userService = userService;
-	}
+	private final CountrySpecificProperties countryProperties;
+	private final ModelDecorator modelDecorator;
+	private final UserService userService;
 
 	@RequestMapping(value="/register", method=GET)
 	public String reset(Model model, Locale loc) {
@@ -60,7 +55,7 @@ public class RegistrationController {
 	@RequestMapping(value="/confirm", method=GET)
 	public String confirm(@RequestParam(value="uuid") String uuid, Model model, Locale loc) {
 		Optional<String> userEmail = userService.findEmailByUuid(uuid);
-		if(!userEmail.isPresent()) {
+		if(userEmail.isEmpty()) {
 			model.addAttribute("confirmation_error", true);
 			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";

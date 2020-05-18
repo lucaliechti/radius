@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.MatchingAlgorithm;
@@ -27,34 +28,21 @@ import static org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatch
 import static org.jgrapht.alg.matching.blossom.v5.ObjectiveSense.MAXIMIZE;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 @PropertySource("classpath:config/profile.properties")
 public class MatchingService {
 
-    private UserRepository userRepo;
-    private MatchingRepository matchRepo;
-    private MessageSource messageSource;
-    private EmailService emailService;
-    private JavaMailSenderImpl matchingMailSender;
-    private CountrySpecificProperties countryProperties;
-    private ConfigService configService;
-    private ProfileDependentProperties profileProperties;
+    private final UserRepository userRepo;
+    private final MatchingRepository matchRepo;
+    private final MessageSource messageSource;
+    private final EmailService emailService;
+    private final JavaMailSenderImpl matchingMailSender;
+    private final CountrySpecificProperties countryProperties;
+    private final ConfigService configService;
+    private final ProfileDependentProperties profileProperties;
 
     private final String DELETED = "DELETED";
-
-    public MatchingService(JDBCUserRepository userRepo, MatchingRepository matchRepo, MessageSource messageSource,
-                           EmailService emailService, JavaMailSenderImpl matchingMailSender,
-                           CountrySpecificProperties countryProperties, ConfigService configService,
-                           ProfileDependentProperties profileProperties) {
-        this.userRepo = userRepo;
-        this.matchRepo = matchRepo;
-        this.messageSource = messageSource;
-        this.emailService = emailService;
-        this.matchingMailSender = matchingMailSender;
-        this.countryProperties = countryProperties;
-        this.configService = configService;
-        this.profileProperties = profileProperties;
-    }
 
     @Scheduled(cron = "${matching.schedule}")
     public void matchUsers() {

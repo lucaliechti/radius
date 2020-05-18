@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import radius.User;
 import radius.User.TernaryAnswer;
@@ -10,14 +11,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class AnswerService {
 
-    private ConfigService configService;
-
-    public AnswerService(ConfigService configService) {
-        this.configService = configService;
-    }
+    private final ConfigService configService;
 
     public void updateUserFromAnswerForm(User user, AnswerForm answerForm) {
         user.setStatus(User.UserStatus.WAITING);

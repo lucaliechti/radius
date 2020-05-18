@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import javax.validation.Valid;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,25 +23,19 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping(value="/toggleStatus")
 public class ToggleStatusController {
 
-	private UserService userService;
-	private ModelDecorator modelDecorator;
-	private MatchingService matchingService;
-
-	public ToggleStatusController(UserService userService, ModelDecorator modelDecorator,
-								  MatchingService matchingService) {
-		this.userService = userService;
-		this.modelDecorator = modelDecorator;
-		this.matchingService = matchingService;
-	}
+	private final UserService userService;
+	private final ModelDecorator modelDecorator;
+	private final MatchingService matchingService;
 	
 	@RequestMapping(method=GET)
 	public String toggle(Model model, Locale loc) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(!optionalUser.isPresent()) {
+		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";
@@ -60,7 +55,7 @@ public class ToggleStatusController {
 							 BindingResult result, Model model, Locale loc) {
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> optionalUser = userService.findUserByEmail(email);
-		if(!optionalUser.isPresent()) {
+		if(optionalUser.isEmpty()) {
 			model.addAttribute("generic_error", Boolean.TRUE);
 			model.addAllAttributes(modelDecorator.homeAttributes(loc));
 			return "home";

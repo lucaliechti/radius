@@ -6,7 +6,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.util.Locale;
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,27 +24,18 @@ import radius.web.service.ConfigService;
 import radius.web.service.UserService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping(value="/answers")
 public class AnswerController {
 
-	private ConfigService configService;
-	private MessageSource validationMessages;
-	private UserService userService;
-	private ModelDecorator modelDecorator;
-	private AnswerService answerService;
+	private final ConfigService configService;
+	private final MessageSource validationMessageSource;
+	private final UserService userService;
+	private final ModelDecorator modelDecorator;
+	private final AnswerService answerService;
 
 	private static final String ERROR_ANSWER_REGULAR_QUESTIONS = "error.answerRegularQuestions";
 	private static final String ERROR_AT_LEAST_ONE_SET = "error.answerOneSetOfQuestions";
-
-	@Autowired
-	public AnswerController(ConfigService configService, MessageSource validationMessageSource,
-							UserService userService, ModelDecorator modelDecorator, AnswerService answerService) {
-		this.configService = configService;
-		this.validationMessages = validationMessageSource;
-		this.userService = userService;
-		this.modelDecorator = modelDecorator;
-		this.answerService = answerService;
-	}
 
 	@RequestMapping(method=GET)
 	public String answer(Model model, Locale locale) {
@@ -87,7 +78,7 @@ public class AnswerController {
 
 	private void addFieldError(BindingResult result, String field, String message, Locale loc) {
 		FieldError error = new FieldError("answerForm", field,
-				validationMessages.getMessage(message, new String[]{}, loc));
+		validationMessageSource.getMessage(message, new String[]{}, loc));
 		result.addError(error);
 	}
 }

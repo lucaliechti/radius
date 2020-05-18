@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,38 +27,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    private UserRepository userRepo;
-    private MatchingRepository matchRepo;
-    private CountrySpecificProperties countryProperties;
-    private ConfigService configService;
-    private EmailService emailService;
-    private JavaMailSenderImpl helloMailSender;
-    private ProfileDependentProperties prop;
-    private MessageSource messageSource;
-    private PasswordEncoder encoder;
-    private NewsletterRepository newsletterRepo;
+    private final UserRepository userRepo;
+    private final MatchingRepository matchRepo;
+    private final CountrySpecificProperties countryProperties;
+    private final ConfigService configService;
+    private final EmailService emailService;
+    private final JavaMailSenderImpl helloMailSender;
+    private final ProfileDependentProperties prop;
+    private final MessageSource messageSource;
+    private final PasswordEncoder encoder;
+    private final NewsletterRepository newsletterRepo;
 
     private static final String EMAIL_CONFIRM_SUBJECT = "email.confirm.title";
     private static final String EMAIL_CONFIRM_MESSAGE = "email.confirm.content";
-
-    public UserService(JDBCUserRepository userRepo, JDBCMatchingRepository matchRepo,
-                       CountrySpecificProperties countryProperties, ConfigService configService,
-                       EmailService emailService, JavaMailSenderImpl helloMailSender, ProfileDependentProperties prop,
-                       MessageSource messageSource, PasswordEncoder encoder, JDBCNewsletterRepository newsletterRepo) {
-        this.userRepo = userRepo;
-        this.matchRepo = matchRepo;
-        this.countryProperties = countryProperties;
-        this.configService = configService;
-        this.emailService = emailService;
-        this.helloMailSender = helloMailSender;
-        this.prop = prop;
-        this.messageSource = messageSource;
-        this.encoder = encoder;
-        this.newsletterRepo = newsletterRepo;
-    }
 
     public void activateUser(User user) {
         user.setStatus(User.UserStatus.WAITING);

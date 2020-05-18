@@ -1,5 +1,6 @@
 package radius.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,25 +23,18 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class SurveyController {
 
-    private CountrySpecificProperties countryProperties;
-    private ModelDecorator modelDecorator;
-    private SurveyService surveyService;
-    private NewsletterService newsletterService;
-    private UserService userService;
+    private final CountrySpecificProperties countryProperties;
+    private final ModelDecorator modelDecorator;
+    private final SurveyService surveyService;
+    private final NewsletterService newsletterService;
+    private final UserService userService;
+
     private static final int SURVEY_SIZE = 15;
     private static final String REGISTRATION_SURVEY = "Survey Winter 2019/2020";
-
-    public SurveyController(CountrySpecificProperties countryProperties, ModelDecorator modelDecorator,
-                            SurveyService surveyService, NewsletterService newsletterService, UserService userService) {
-        this.countryProperties = countryProperties;
-        this.modelDecorator = modelDecorator;
-        this.surveyService = surveyService;
-        this.newsletterService = newsletterService;
-        this.userService = userService;
-    }
 
     @RequestMapping(value="/survey", method=GET)
     public String survey() {

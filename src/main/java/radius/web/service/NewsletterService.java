@@ -1,5 +1,6 @@
 package radius.web.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
@@ -16,33 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@RequiredArgsConstructor
 @Service
 public class NewsletterService {
 
-    private NewsletterRepository newsletterRepository;
-    private UserRepository userRepository;
-    private MessageSource messageSource;
-    private ProfileDependentProperties prop;
-    private EmailService emailService;
-    private JavaMailSenderImpl newsletterMailSender;
-    private JavaMailSenderImpl helloMailSender;
+    private final NewsletterRepository newsletterRepository;
+    private final UserRepository userRepository;
+    private final MessageSource messageSource;
+    private final ProfileDependentProperties prop;
+    private final EmailService emailService;
+    private final JavaMailSenderImpl newsletterMailSender;
+    private final JavaMailSenderImpl helloMailSender;
 
     private static final String NEWSLETTER_EMAIL_SUBJECT = "email.newsletter.subscribe.title";
     private static final String NEWSLETTER_EMAIL_MESSAGE = "email.newsletter.subscribe.content";
     private static final String NEWSLETTER_EMAIL_FOOTER = "email.newsletter.footer";
     private static final String NEWSLETTER_EMAIL_DEAR = "admin.newsletter.dear";
-
-    public NewsletterService(JDBCNewsletterRepository newsletterRepository, JDBCUserRepository userRepository,
-                             MessageSource messageSource, ProfileDependentProperties prop, EmailService emailService,
-                             JavaMailSenderImpl newsletterMailSender, JavaMailSenderImpl helloMailSender) {
-        this.newsletterRepository = newsletterRepository;
-        this.userRepository = userRepository;
-        this.messageSource = messageSource;
-        this.prop = prop;
-        this.emailService = emailService;
-        this.newsletterMailSender = newsletterMailSender;
-        this.helloMailSender = helloMailSender;
-    }
 
     public boolean unsubscribe(String uuid) {
         try {
