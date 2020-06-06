@@ -369,7 +369,7 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th style="width : 120px;">Name</th>
+                            <th style="width : 120px;">Email</th>
                             <th>Fragen</th>
                             <th>Sp.</th>
                             <th>Status</th>
@@ -383,7 +383,7 @@
                         <c:forEach items="${users}" var="user" >
                             <tr>
                                 <td></td>
-                                <td>${user.firstname} ${user.lastname}</td>
+                                <td>${user.email}</td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${user.regularanswers.size() > 0}">
@@ -503,10 +503,10 @@
                     <tbody>
                         <c:forEach items="${matches}" var="match" >
                             <tr>
-                                <td><fmt:formatDate value="${match.dateCreated()}" pattern = "yyyy-MM-dd"/></td>
-                                <td>${match.email1()}</td>
-                                <td>${match.email2()}</td>
-                                <td>${match.mode()}</td>
+                                <td><fmt:formatDate value="${match.dateCreated}" pattern = "yyyy-MM-dd"/></td>
+                                <td>${match.email1}</td>
+                                <td>${match.email2}</td>
+                                <td>${match.mode}</td>
                             </tr>
                         </c:forEach>
                     </tbody>
