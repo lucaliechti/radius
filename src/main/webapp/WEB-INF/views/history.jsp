@@ -19,11 +19,11 @@
     <h2><spring:message code="status.history" /></h2>
     <c:choose>
         <c:when test="${history.size() == 0}">
-            <p><spring:message code="profile.history.none"/>
+            <p><spring:message code="profile.history.none"/>(datec
         </c:when>
         <c:otherwise>
             <c:forEach items="${history}" var="meeting" varStatus="loop">
-                <p><fmt:formatDate value="${meeting.getDateCreated()}" type="date" dateStyle="medium"/>: <b>${meeting.email2()}</b><br><br>
+                <p><fmt:formatDate value="${meeting.dateCreated}" type="date" dateStyle="medium"/>: <b>${meeting.email2}</b><br><br>
             </c:forEach>
         </c:otherwise>
     </c:choose>
