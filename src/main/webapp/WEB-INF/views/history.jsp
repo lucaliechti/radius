@@ -23,7 +23,7 @@
         </c:when>
         <c:otherwise>
             <c:forEach items="${history}" var="meeting" varStatus="loop">
-                <p><fmt:formatDate value="${meeting.dateCreated()}" type="date" dateStyle="medium"/>: <b>${meeting.email2()}</b><br><br>
+                <p><fmt:formatDate value="${meeting.getDateCreated()}" type="date" dateStyle="medium"/>: <b>${meeting.email2()}</b><br><br>
             </c:forEach>
         </c:otherwise>
     </c:choose>
