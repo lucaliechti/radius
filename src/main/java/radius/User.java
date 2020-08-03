@@ -90,6 +90,12 @@ public class User {
 	public Locale preferredLocale() {
 		return new Locale(languages.contains("DE") ? "de" : (languages.contains("FR") ? "fr" : "en"));
 	}
+	public int answeredRegularQuestions() {
+		return (int) regularanswers.stream().filter(answer -> !answer.equals(TernaryAnswer.DONTCARE)).count();
+	}
+	public int answeredSpecialQuestions() {
+		return (int) specialanswers.stream().filter(answer -> !answer.equals(TernaryAnswer.DONTCARE)).count();
+	}
 
 	public static UserStatus convertStatus(String status) {
 		switch (status) {

@@ -387,7 +387,7 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${user.regularanswers.size() > 0}">
-                                            <c:forEach items="${user.regularanswers}" var="answer"><div class="square ${answer}"></div><div class="separator"></div></c:forEach>
+                                            ${user.answeredRegularQuestions()} / ${configurationForm.numberOfRegularQuestions}
                                         </c:when>
                                         <c:otherwise></c:otherwise>
                                     </c:choose>
@@ -395,7 +395,7 @@
                                 <td>
                                     <c:choose>
                                         <c:when test="${user.specialanswers.size() > 0}">
-                                            <div class="square separator"></div><c:forEach items="${user.specialanswers}" var="answer"><div class="square ${answer}"></div><div class="separator"></div></c:forEach>
+                                            ${user.answeredSpecialQuestions()} / ${configurationForm.numberOfVotes}
                                         </c:when>
                                         <c:otherwise></c:otherwise>
                                     </c:choose>

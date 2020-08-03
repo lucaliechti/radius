@@ -149,25 +149,6 @@ figure {
     from {opacity: 0;}
     to {opacity: 1;}
 }
-.square {
-    width:10px;
-    height:10px;
-    display:inline-block;
-}
-.separator {
-    width:1px;
-    background:var(--background-color);
-	display:inline-block;
-}
-.TRUE {
-    background:var(--color-true);
-}
-.FALSE {
-    background:var(--color-false);
-}
-.DONTCARE {
-    background:var(--color-dontcare);
-}
 
 /* overwriting styles from DataTables */
 table.dataTable tr.selected td.select-checkbox::after,
