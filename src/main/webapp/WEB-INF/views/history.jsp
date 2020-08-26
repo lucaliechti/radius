@@ -19,7 +19,7 @@
     <h2><spring:message code="status.history" /></h2>
     <c:choose>
         <c:when test="${history.size() == 0}">
-            <p><spring:message code="profile.history.none"/>(datec
+            <p><spring:message code="profile.history.none"/>
         </c:when>
         <c:otherwise>
             <c:forEach items="${history}" var="meeting" varStatus="loop">
