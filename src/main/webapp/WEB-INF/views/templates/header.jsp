@@ -33,7 +33,7 @@
 
 <nav role="navigation" id="primary-menubar">
    <div id="home">
-      <a href="home"><div id="logo-home"></div></a>
+      <a href="/"><div id="logo-home"></div></a>
    </div>
    <div id="menuToggle">
       <input type="checkbox" />

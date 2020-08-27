@@ -25,7 +25,6 @@ public class LoginTimeAwareAuthenticationSuccessHandler implements Authenticatio
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         userService.updateLastLogin(authentication.getName());
-        System.out.println(authentication.getAuthorities());
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             redirectStrategy.sendRedirect(request, response, "/admin");
         } else {

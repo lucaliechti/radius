@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class JDBCUserRepository implements UserRepository {
 
 	private JdbcTemplate jdbcTemplate;
-	private String currentVote;
+	private ConfigService configService;
 
 	private static final String FIND_ALL_USERS =		"SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email ORDER BY users.pkey ASC";
 	private static final String FIND_MATCHABLE_USERS =  "SELECT * FROM users LEFT JOIN (SELECT * FROM votes WHERE votenr = ?) AS currentvotes ON users.email = currentvotes.email WHERE status = 'WAITING' AND enabled = TRUE AND banned = FALSE";
@@ -46,22 +46,22 @@ public class JDBCUserRepository implements UserRepository {
 	@Autowired
     public void init(DataSource jdbcdatasource, ConfigService configService) {
         this.jdbcTemplate = new JdbcTemplate(jdbcdatasource);
-        this.currentVote = configService.specialActive() ? configService.currentVote() : "NO_VOTE";
+        this.configService = configService;
     }
 
 	@Override
 	public List<User> allUsers() {
-		return jdbcTemplate.query(FIND_ALL_USERS, new UserRowMapper(), currentVote);
+		return jdbcTemplate.query(FIND_ALL_USERS, new UserRowMapper(), currentVote());
 	}
 
 	@Override
 	public List<User> matchableUsers() {
-		return jdbcTemplate.query(FIND_MATCHABLE_USERS, new UserRowMapper(), currentVote);
+		return jdbcTemplate.query(FIND_MATCHABLE_USERS, new UserRowMapper(), currentVote());
 	}
 
 	@Override
 	public User findUserByEmail(String email) throws EmptyResultDataAccessException {
-		return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, new UserRowMapper(), currentVote, email);
+		return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, new UserRowMapper(), currentVote(), email);
 	}
 
 	private static final class UserRowMapper implements RowMapper<User> {
@@ -196,6 +196,10 @@ public class JDBCUserRepository implements UserRepository {
 	@Override
 	public void setPrivate(String email) {
 		jdbcTemplate.update(SET_PRIVATE, email);
+	}
+
+	private String currentVote() {
+		return configService.specialActive() ? configService.currentVote() : "NO_VOTE";
 	}
 }
 

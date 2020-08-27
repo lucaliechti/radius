@@ -4,6 +4,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import radius.User;
 import radius.web.components.ModelDecorator;
-import radius.web.service.AnswerService;
-import radius.web.service.UserService;
+import radius.web.service.*;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -25,10 +26,26 @@ public class HomeController {
 	private final UserService userService;
 	private final AnswerService answerService;
 	private final ModelDecorator modelDecorator;
-	
-	@RequestMapping(value={"/", "/home"}, method=GET)
-	public String home(@RequestParam(value="logout", required=false) String loggedout,
-					   @RequestParam(value="error", required=false) String error, Model model, Locale locale) {
+
+	@RequestMapping(value="/", method=GET)
+	public String home(Model model, Locale locale) {
+		if(userIsAuthenticated()) {
+			if (userIsAdmin()) {
+				model.addAllAttributes(modelDecorator.adminAttributes());
+				return "admin";
+			}
+			return prepareModelAndRedirectLoggedInUser(model, locale);
+		}
+		if(model.containsAttribute("success")) {
+			model.addAttribute("success", Boolean.TRUE);
+		}
+		model.addAllAttributes(modelDecorator.homeAttributes(locale));
+		return "home";
+	}
+
+	@RequestMapping(value="/home", method=GET)
+	public String frontPage(@RequestParam(value="logout", required=false) String loggedout,
+							@RequestParam(value="error", required=false) String error, Model model, Locale locale) {
 		if(userIsAuthenticated()) {
 			return prepareModelAndRedirectLoggedInUser(model, locale);
 		}
@@ -84,8 +101,14 @@ public class HomeController {
 	}
 
 	private boolean userIsAuthenticated() {
-		return SecurityContextHolder.getContext().getAuthentication() != null &&
-			SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
-			!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth != null
+			&& auth.isAuthenticated()
+			&& !(auth instanceof AnonymousAuthenticationToken);
+	}
+
+	private boolean userIsAdmin() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return userIsAuthenticated() && auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import radius.data.dto.PressreleaseDto;
 import radius.data.form.*;
+import radius.web.components.ModelDecorator;
 import radius.web.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,10 +33,10 @@ public class AdminController {
 
     private final NewsletterService newsletterservice;
     private final UserService userService;
-    private final SurveyService surveyService;
     private final MatchingService matchingService;
     private final ConfigService configService;
     private final PressService pressService;
+    private final ModelDecorator modelDecorator;
 
     private final SimpleDateFormat pressReleasePrefixFormat = new SimpleDateFormat("yyyyMMdd");
     private final String RADIUS = "Radius";
@@ -291,21 +292,7 @@ public class AdminController {
 
     @ModelAttribute
     public void prepare(Model model) {
-        model.addAttribute("statistics", userService.getStatistics());
-        model.addAttribute("newsForm", new NewsForm());
-        model.addAttribute("pressreleaseForm", new PressreleaseForm());
-        model.addAttribute("mentionForm", new MentionForm());
-        model.addAttribute("configurationForm", configService.getForm());
-        model.addAttribute("questionForm", configService.getQuestionForm());
-        model.addAttribute("matches", matchingService.uniqueOrderedMatches());
-        model.addAttribute("regionDensity", userService.regionDensity());
-        model.addAttribute("surveyStats", surveyService.statistics());
-        model.addAttribute("newsletterRecipients", newsletterservice.allRecipients());
-        model.addAttribute("users", userService.allUsers());
-        model.addAttribute("special", configService.specialActive());
-        model.addAttribute("nrvotes", configService.numberOfVotes());
-        model.addAttribute("newsletterForm", new NewsletterForm());
-        model.addAttribute("contactUserForm", new NewsletterForm());
+        model.addAllAttributes(modelDecorator.adminAttributes());
     }
 
 }
