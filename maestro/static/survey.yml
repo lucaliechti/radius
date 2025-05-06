@@ -1,0 +1,10 @@
+url: http://localhost:8080/
+---
+- launchApp
+- assertVisible:
+      text: '.*Willkommen bei Radius.*'
+- tapOn: Umfrage
+- assertVisible:
+    text: '.*Was sind die wichtigsten Fragen der Schweiz.*'
+- assertNotVisible:
+      text: '.*Willkommen bei Radius.*'

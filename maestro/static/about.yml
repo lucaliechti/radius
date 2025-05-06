@@ -1,0 +1,10 @@
+url: http://localhost:8080/
+---
+- launchApp
+- assertVisible:
+      text: '.*Willkommen bei Radius.*'
+- tapOn: Über Radius
+- assertVisible:
+    text: '.*Spielregeln.*'
+- assertNotVisible:
+      text: '.*Willkommen bei Radius.*'

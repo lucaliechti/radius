@@ -1,0 +1,7 @@
+url: http://localhost:8080/
+---
+- runFlow: ./login/login.yml
+- runFlow: ./login/loginWrongPW.yml
+- runFlow: ./login/logout.yml
+- runFlow: ./static/about.yml
+- runFlow: ./static/survey.yml
