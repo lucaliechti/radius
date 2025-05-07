@@ -6,10 +6,10 @@ url: http://localhost:8080/
     text: ".*Willkommen bei Radius.*"
 - tapOn:
     id: "username"
-- inputText: ${output.login.email}
+- inputText: ${output.users.user1email}
 - tapOn:
     id: "password"
-- inputText: ${output.login.wrongPassword}
+- inputText: ${output.users.user1wrongPassword}
 - tapOn: Einloggen
 - assertNotVisible:
     text: ".*Registrierung abschliessen.*"

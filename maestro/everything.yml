@@ -1,7 +1,20 @@
 url: http://localhost:8080/
 ---
+
+# create users
+- runFlow: ./users/create1.yml
+- runFlow: ./users/create2.yml
+
+# manually set enabled to true for both of them in the db
+
+# login and logout
 - runFlow: ./login/login.yml
 - runFlow: ./login/loginWrongPW.yml
 - runFlow: ./login/logout.yml
+
+# routes to static sites
 - runFlow: ./static/about.yml
 - runFlow: ./static/survey.yml
+
+# delete users
+#- runFlow: ./users/delete.yml

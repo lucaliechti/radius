@@ -1,0 +1,22 @@
+url: http://localhost:8080/
+---
+- runScript: ../constants.js
+- launchApp
+- assertVisible:
+      text: ".*Willkommen bei Radius.*"
+- tapOn:
+    id: "firstName"
+- inputText: ${output.users.user2firstName}
+- tapOn:
+    id: "lastName"
+- inputText: ${output.users.user2lastName}
+- tapOn:
+    id: "regEmail"
+- inputText: ${output.users.user2email}
+- scroll
+- tapOn:
+    id: "regPassword"
+- inputText: ${output.users.user2password}
+- tapOn: "Registrieren"
+- assertVisible:
+    text: ".*Die Registrierung war erfolgreich.*"
