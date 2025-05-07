@@ -139,8 +139,8 @@ public class UserService {
         String firstName = registrationForm.getFirstName();
         String lastName = registrationForm.getLastName();
         String canton = registrationForm.getCanton();
-        String email = registrationForm.getEmail();
-        String password = registrationForm.getPassword();
+        String email = registrationForm.getRegEmail();
+        String password = registrationForm.getRegPassword();
         assert canton != null;
         User user = new User(firstName, lastName, canton.equals("NONE") ? null : canton, email, password);
         try {

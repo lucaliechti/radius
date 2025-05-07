@@ -70,8 +70,8 @@ public class SurveyController {
             userForm.setFirstName(surveyForm.getFirstName());
             userForm.setLastName(surveyForm.getLastName());
             userForm.setCanton(surveyForm.getCanton());
-            userForm.setEmail(surveyForm.getEmailR());
-            userForm.setPassword(surveyForm.getPassword());
+            userForm.setRegEmail(surveyForm.getEmailR());
+            userForm.setRegPassword(surveyForm.getPassword());
 
             boolean registrationSuccess = userService.registerNewUserFromUserForm(userForm, locale);
             if(registrationSuccess) {

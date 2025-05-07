@@ -194,26 +194,26 @@
                </div>
             </div>
             <div class="form-group">
-               <form:label path="email">
+               <form:label path="regEmail">
                   <spring:message code="home.register.email"/>*
                </form:label>
                <div class="form-group">
-                  <form:input path="email" class="form-control"/>
+                  <form:input path="regEmail" class="form-control"/>
                </div>
                <div class="feedback-error" id="register-feedback-email">
-                  <form:errors path="email"/>
+                  <form:errors path="regEmail"/>
                </div>
             </div>
             <div class="form-group">
-               <form:label path="password">
+               <form:label path="regPassword">
                   <spring:message code="home.register.pw"/>*
                </form:label>
                <div class="form-group">
-                  <form:input path="password" type="password" class="form-control"/>
+                  <form:input path="regPassword" type="password" class="form-control"/>
                </div>
                <input class="repeat" id="repeat-password" name="repeat-password" type="text" value="" autocomplete="off"/>
                <div class="feedback-error" id="register-feedback-password">
-                  <form:errors path="password"/>
+                  <form:errors path="regPassword"/>
                </div>
             </div>
             <input type="submit" class="btn btn-primary" value="${register}" />

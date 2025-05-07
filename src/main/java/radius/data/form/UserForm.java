@@ -12,10 +12,10 @@ import javax.validation.constraints.Size;
 public class UserForm {
 
 	@Email(message="{error.email}")
-	private String email;
+	private String regEmail;
 	
 	@Size(min=8, message="{error.sizePW}")
-	private String password;
+	private String regPassword;
 	
 	@NotEmpty(message="{error.notBlank}")
 	private String firstName;
