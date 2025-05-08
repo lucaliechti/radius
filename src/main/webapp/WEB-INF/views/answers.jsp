@@ -132,7 +132,7 @@
       <div class="feedback-error" id="answers-feedback-location">
          <form:errors path="locations"/>
       </div>
-        <input type="submit" class="btn btn-primary" value='${answer}' />
+        <input id="submit-answers" type="submit" class="btn btn-primary" value='${answer}' />
    		<sec:csrfInput />
    		</form:form>
    </div>
