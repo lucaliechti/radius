@@ -489,7 +489,7 @@
                     Matches
                 </h2><br>
                 <div class="result fakebutton">
-                    <a href="/runMatching" class="matchingbutton"><i class="material-icons" style="font-size:40px">flight_takeoff</i></a>
+                    <a href="/runMatching" class="matchingbutton" id="matchingbutton"><i class="material-icons" style="font-size:40px">flight_takeoff</i></a>
                 </div><br><br>
                 <table id="matchingtable" class="table table-striped table-bordered table-sm">
                     <thead>
