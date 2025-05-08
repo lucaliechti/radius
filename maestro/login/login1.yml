@@ -12,6 +12,8 @@ url: http://localhost:8080/
 - inputText: ${output.users.user1password}
 - tapOn: Einloggen
 - assertVisible:
-    text: ".*Registrierung abschliessen.*"
+    text: ".*Admin.*"
+- assertVisible:
+    text: ".*Statistics.*"
 - assertNotVisible:
     text: ".*Willkommen bei Radius.*"

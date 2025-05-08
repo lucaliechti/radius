@@ -3,7 +3,7 @@ url: http://localhost:8080/
 - runScript: ../constants.js
 - launchApp
 - assertVisible:
-      text: ".*Willkommen bei Radius.*"
+    text: ".*Willkommen bei Radius.*"
 - tapOn:
     id: "firstName"
 - inputText: ${output.users.user2firstName}
@@ -13,7 +13,12 @@ url: http://localhost:8080/
 - tapOn:
     id: "regEmail"
 - inputText: ${output.users.user2email}
-- scroll
+- runFlow:
+    when:
+      notVisible:
+        id: "regPassword"
+    commands:
+      - scroll
 - tapOn:
     id: "regPassword"
 - inputText: ${output.users.user2password}

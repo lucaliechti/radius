@@ -1,5 +1,5 @@
 url: http://localhost:8080/
 ---
-- runFlow: ./login.yml
+- runFlow: ./login1.yml
 - tapOn: Logout
 - assertVisible: ".*Sie haben sich erfolgreich ausgeloggt.*"

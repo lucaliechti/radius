@@ -1,0 +1,31 @@
+url: http://localhost:8080/
+---
+- runFlow: ../login/login1.yml
+
+- tapOn: Matches
+- assertVisible:
+    text: ".*Showing 0 to 0 of 0 entries.*"
+- tapOn:
+    id: "matchingbutton"
+- assertVisible:
+    text: ".*Aktion erfolgreich ausgeführt.*"
+- assertVisible:
+    text: ".*Showing 1 to 1 of 1 entries.*"
+
+#- tapOn: Configuration
+#- tapOn: on/off
+#- tapOn:
+#    id: matchingActive1
+#- tapOn: "Update Configuration"
+#- assertVisible:
+#    text: ".*Configuration updated successfully.*"
+
+#- tapOn: Matches
+#- assertVisible:
+#    text: ".*Showing 0 to 0 of 0 entries.*"
+#- tapOn:
+#    id: "matchingbutton"
+#- assertVisible:
+#    text: ".*Aktion erfolgreich ausgeführt.*"
+#- assertVisible:
+#    text: ".*Showing 1 to 1 of 1 entries.*"

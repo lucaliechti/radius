@@ -1,0 +1,36 @@
+url: http://localhost:8080/
+---
+- runFlow: ../login/login1.yml
+- assertVisible:
+    text: ".*Statistics.*"
+- tapOn: Profil
+- assertVisible:
+    text: ".*Registrierung abschliessen.*"
+- tapOn:
+    id: "motivation"
+- inputText: ${output.users.user1motivation}
+- tapOn:
+    id: "lang_DE"
+- scrollUntilVisible:
+    element:
+      id: "regularanswers11"
+- tapOn:
+    id: "specialanswers01"
+- tapOn:
+    id: "specialanswers11"
+- tapOn:
+    id: "regularanswers01"
+- tapOn:
+    id: "regularanswers11"
+- scrollUntilVisible:
+    element:
+      id: "submit-answers"
+- tapOn:
+    point: 350, 350
+- tapOn:
+    point: 400, 400
+- tapOn:
+    point: 450, 450
+- tapOn: "Absenden"
+- assertVisible:
+    text: ".*Ihr Status ist aktiv.*"

@@ -256,7 +256,7 @@
                 <radius.url>http://localhost:8080</radius.url>
                 <security.requireSSL>false</security.requireSSL>
                 <matching.sendemails>false</matching.sendemails>
-                <matching.schedule>0 * * * * *</matching.schedule>
+                <matching.schedule>0 59 23 * * *</matching.schedule>
             </properties>
         </profile>
         <profile>

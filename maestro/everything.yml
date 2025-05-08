@@ -5,16 +5,27 @@ url: http://localhost:8080/
 - runFlow: ./users/create1.yml
 - runFlow: ./users/create2.yml
 
-# manually set enabled to true for both of them in the db
+# immediately after create2 finishes, run 01_activate_users.sql
 
-# login and logout
-- runFlow: ./login/login.yml
-- runFlow: ./login/loginWrongPW.yml
-- runFlow: ./login/logout.yml
+# answer questions
+- runFlow: ./users/answer1.yml
+- runFlow: ./users/answer2.yml
+
+# run matching
+- runFlow: ./matching/run.yml
+
+# assert matched state
+
+# admin pages
+
+# change configuration
 
 # routes to static sites
 - runFlow: ./static/about.yml
 - runFlow: ./static/survey.yml
 
-# delete users
-#- runFlow: ./users/delete.yml
+# other
+- runFlow: ./login/loginWrongPW.yml
+- runFlow: ./login/logout.yml
+
+# reset state with 02_reset.sql

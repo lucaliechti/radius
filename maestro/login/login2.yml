@@ -6,14 +6,14 @@ url: http://localhost:8080/
     text: ".*Willkommen bei Radius.*"
 - tapOn:
     id: "username"
-- inputText: ${output.users.user1email}
+- inputText: ${output.users.user2email}
 - tapOn:
     id: "password"
-- inputText: ${output.users.user1wrongPassword}
+- inputText: ${output.users.user2password}
 - tapOn: Einloggen
-- assertNotVisible:
+- assertVisible:
     text: ".*Registrierung abschliessen.*"
 - assertNotVisible:
     text: ".*Admin.*"
-- assertVisible:
-    text: ".*Beim Login ist ein Fehler aufgetreten.*"
+- assertNotVisible:
+    text: ".*Willkommen bei Radius.*"
