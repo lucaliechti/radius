@@ -11,6 +11,7 @@ url: http://localhost:8080/
     text: ".*Aktion erfolgreich ausgeführt.*"
 - assertVisible:
     text: ".*Showing 1 to 1 of 1 entries.*"
+- tapOn: Logout
 
 #- tapOn: Configuration
 #- tapOn: on/off

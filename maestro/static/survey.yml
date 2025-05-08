@@ -1,6 +1,7 @@
 url: http://localhost:8080/
 ---
-- launchApp
+- tapOn:
+    id: "home"
 - assertVisible:
       text: '.*Willkommen bei Radius.*'
 - tapOn: Umfrage

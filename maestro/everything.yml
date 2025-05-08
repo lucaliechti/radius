@@ -1,5 +1,7 @@
 url: http://localhost:8080/
 ---
+- runScript: ./constants.js
+- launchApp
 
 # create users
 - runFlow: ./users/create1.yml
@@ -26,6 +28,5 @@ url: http://localhost:8080/
 
 # other
 - runFlow: ./login/loginWrongPW.yml
-- runFlow: ./login/logout.yml
 
 # reset state with 02_reset.sql

@@ -1,7 +1,5 @@
 url: http://localhost:8080/
 ---
-- runScript: ../constants.js
-- launchApp
 - assertVisible:
     text: ".*Willkommen bei Radius.*"
 - tapOn:

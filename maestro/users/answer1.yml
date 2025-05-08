@@ -34,3 +34,4 @@ url: http://localhost:8080/
 - tapOn: "Absenden"
 - assertVisible:
     text: ".*Ihr Status ist aktiv.*"
+- tapOn: Logout
